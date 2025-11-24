@@ -10,7 +10,7 @@ import type { NonLinkButtonProperties } from '@structure/source/components/butto
 // Dependencies - Theme
 import { buttonTheme as structureButtonTheme } from '@structure/source/components/buttons/ButtonTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Animation
 import { motion, animate, AnimatePresence, useMotionValue } from 'motion/react';
@@ -77,7 +77,7 @@ export const AnimatedButton = React.forwardRef<HTMLElement, AnimatedButtonProper
     const componentTheme = useComponentTheme();
 
     // Merge the structure theme with project theme
-    const buttonTheme = mergeComponentTheme(structureButtonTheme, componentTheme?.Button);
+    const buttonTheme = mergeTheme(structureButtonTheme, componentTheme?.Button);
 
     // Get icon size className from theme based on button size
     const buttonSize = buttonProperties.size || buttonTheme.configuration.defaultVariant.size || 'Base';

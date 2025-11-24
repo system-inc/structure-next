@@ -8,106 +8,86 @@ import React from 'react';
  * selectively override or extend structure's default component themes.
  */
 
-// Theme configuration structure for components with variants and sizes/sides.
-export interface ComponentThemeConfiguration<
-    TVariants extends Record<string, string> = Record<string, string>,
-    TSizes extends Record<string, string> = Record<string, string>,
-    TConfiguration extends Record<string, unknown> = Record<string, unknown>,
-> {
-    variants: TVariants;
-    sizes?: TSizes; // Optional, not all components use sizes
-    sides?: TSizes; // Optional, some components use sides (like Drawer)
-    configuration: TConfiguration;
-}
-
-// Deep partial type for component theme configurations - allows partial overrides at every level.
-// Also allows adding new variants/sizes/sides beyond what's defined in the base structure theme.
-export type DeepPartialComponentTheme<T extends ComponentThemeConfiguration> = {
-    variants?: Partial<T['variants']> & Record<string, string>; // Allow additional custom variants
-    sizes?: Partial<T['sizes']> & Record<string, string>; // Allow additional custom sizes
-    sides?: Partial<T['sides']> & Record<string, string>; // Allow additional custom sides (for Drawer)
-    configuration?: Partial<T['configuration']>;
+// Generic deep partial type for ANY theme configuration - automatically handles all properties
+// Works with standard properties (variants, sizes, sides, positions, iconSizes) and custom properties
+// (variantItemClasses, overlayClasses, etc.) without manual type definitions
+export type DeepPartialTheme<T> = {
+    [K in keyof T]?: K extends 'configuration'
+        ? Partial<T[K]> // Shallow merge configuration
+        : K extends 'compoundVariants'
+          ? T[K] // Special handling for Badge - replace entire array
+          : T[K] extends Partial<Record<string, string>>
+            ? Partial<T[K]> & Record<string, string> // Hard override + allow custom keys
+            : T[K]; // Pass through other properties
 };
 
 /**
- * Merges a project theme override with a structure theme base.
+ * Generic theme merge function - works with ANY theme configuration structure.
+ *
+ * Automatically handles:
+ * - Standard properties (variants, sizes, sides, positions, iconSizes)
+ * - Custom properties (variantItemClasses, overlayClasses, etc.)
+ * - Configuration object (shallow merge)
+ * - Array properties like compoundVariants (replace strategy)
  *
  * Strategy:
- * - **Variants**: Hard override (project completely replaces variant classNames)
- * - **Sizes**: Hard override (project completely replaces size classNames)
- * - **Sides**: Hard override (project completely replaces side classNames, used by Drawer)
- * - **Configuration**: Shallow merge (project selectively overrides config properties)
+ * - **Configuration**: Shallow merge (selectively override config properties)
+ * - **All other properties**: Hard override (completely replace with spread merge)
  *
- * This prevents Tailwind class conflicts (e.g., bg-blue-600 vs bg-purple-600 in same variant)
- * while allowing granular configuration overrides.
+ * This prevents Tailwind class conflicts while maintaining type safety.
  *
- * @param structureTheme - The default theme provided by structure
- * @param projectTheme - Optional project theme overrides
+ * @param baseTheme - The base theme (structure or already-merged theme)
+ * @param overrideTheme - Optional theme overrides (project or instance level)
  * @returns Merged theme configuration
  *
  * @example
- * const buttonTheme = mergeComponentTheme(
- *   structureButtonTheme,
- *   ProjectSettings.theme?.components?.Button
- * );
- *
- * // Structure provides:
- * // { variants: { Primary: 'bg-blue-600' }, configuration: { baseClasses: '...' } }
- *
- * // Project overrides:
- * // { variants: { Primary: 'bg-purple-600' }, configuration: { disabledClasses: '...' } }
- *
- * // Result:
- * // {
- * //   variants: { Primary: 'bg-purple-600' },  // Hard override
- * //   configuration: { baseClasses: '...', disabledClasses: '...' }  // Merged
- * // }
+ * // Works with any theme structure
+ * const buttonTheme = mergeTheme(structureButtonTheme, componentTheme?.Button);
+ * const tabsTheme = mergeTheme(structureTabsTheme, instanceTheme);
+ * const dialogTheme = mergeTheme(structureDialogTheme, projectTheme);
  */
-export function mergeComponentTheme<T extends ComponentThemeConfiguration>(
-    structureTheme: T,
-    projectTheme?: DeepPartialComponentTheme<T>,
-): T {
-    // No project theme? Return structure theme as-is
-    if(!projectTheme) {
-        return structureTheme;
+export function mergeTheme<T extends object>(baseTheme: T, overrideTheme?: DeepPartialTheme<T>): T {
+    // No override theme? Return base theme as-is
+    if(!overrideTheme) {
+        return baseTheme;
     }
 
-    return {
-        // Spread all properties from structure theme first (includes iconSizes and any other properties)
-        ...structureTheme,
+    // Start with a copy of the base theme
+    const merged = { ...baseTheme } as Record<string, unknown>;
 
-        // Hard override: Variants completely replace (no className merging)
-        // This prevents conflicts like 'bg-blue-600 bg-purple-600' in same element
-        variants: {
-            ...structureTheme.variants,
-            ...projectTheme.variants,
-        },
+    // Iterate through all override properties
+    for(const key in overrideTheme) {
+        const overrideValue = overrideTheme[key as keyof typeof overrideTheme];
+        const baseValue = (baseTheme as Record<string, unknown>)[key];
 
-        // Hard override: Sizes completely replace (no className merging)
-        // Only merge if sizes exist on structure theme
-        ...(structureTheme.sizes && {
-            sizes: {
-                ...structureTheme.sizes,
-                ...projectTheme.sizes,
-            },
-        }),
+        if(key === 'configuration') {
+            // Shallow merge configuration - allows selective property overrides
+            merged[key] = {
+                ...(baseValue as Record<string, unknown>),
+                ...(overrideValue as Record<string, unknown>),
+            };
+        }
+        else if(
+            typeof baseValue === 'object' &&
+            baseValue !== null &&
+            typeof overrideValue === 'object' &&
+            overrideValue !== null &&
+            !Array.isArray(baseValue)
+        ) {
+            // Hard override for object properties (variants, sizes, etc.)
+            // Spread both to merge keys while allowing complete replacement
+            merged[key] = {
+                ...(baseValue as Record<string, unknown>),
+                ...(overrideValue as Record<string, unknown>),
+            };
+        }
+        else {
+            // Direct replacement for arrays (compoundVariants) and other types
+            merged[key] = overrideValue;
+        }
+    }
 
-        // Hard override: Sides completely replace (no className merging)
-        // Only merge if sides exist on structure theme (used by Drawer)
-        ...(structureTheme.sides && {
-            sides: {
-                ...structureTheme.sides,
-                ...projectTheme.sides,
-            },
-        }),
-
-        // Shallow merge: Configuration properties selectively override
-        // Allows project to change just disabledClasses without redefining all config
-        configuration: {
-            ...structureTheme.configuration,
-            ...projectTheme.configuration,
-        },
-    } as T;
+    return merged as T;
 }
 
 // Function to conditionally apply theme className to an icon

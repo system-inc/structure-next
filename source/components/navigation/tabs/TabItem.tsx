@@ -21,7 +21,6 @@ export interface TabItemProperties
     className?: string;
     children: React.ReactNode;
 }
-
 export const TabItem = React.forwardRef<React.ComponentRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(
     function TabItem({ className, children, ...radixTabTriggerProperties }, reference) {
         const tabsContext = React.useContext(TabsContext);

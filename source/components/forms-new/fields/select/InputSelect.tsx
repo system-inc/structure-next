@@ -7,7 +7,7 @@ import React from 'react';
 import { inputSelectTheme as structureInputSelectTheme } from './InputSelectTheme';
 import type { InputSelectVariant, InputSelectSize } from './InputSelectTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -25,7 +25,7 @@ export const InputSelect = React.forwardRef<HTMLSelectElement, InputSelectProper
     const componentTheme = useComponentTheme();
 
     // Merge structure theme with project overrides
-    const theme = mergeComponentTheme(structureInputSelectTheme, componentTheme?.InputSelect);
+    const theme = mergeTheme(structureInputSelectTheme, componentTheme?.InputSelect);
 
     // Apply default variant/size if not specified
     const finalVariant = variant ?? theme.configuration.defaultVariant?.variant;

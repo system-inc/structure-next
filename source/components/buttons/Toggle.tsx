@@ -12,7 +12,7 @@ import type { PopoverProperties } from '@structure/source/components/popovers/Po
 import { toggleTheme as structureToggleTheme } from '@structure/source/components/buttons/ToggleTheme';
 import type { ToggleVariant, ToggleSize } from '@structure/source/components/buttons/ToggleTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
@@ -82,7 +82,7 @@ export const Toggle = React.forwardRef<React.ElementRef<typeof RadixToggle.Root>
     const componentTheme = useComponentTheme();
 
     // Merge the structure theme with project theme (if set by the layout provider)
-    const toggleTheme = mergeComponentTheme(structureToggleTheme, componentTheme?.Toggle);
+    const toggleTheme = mergeTheme(structureToggleTheme, componentTheme?.Toggle);
 
     // Get icon size className from theme based on iconSize (takes precedence) or size
     const iconSizeClassName = iconSize

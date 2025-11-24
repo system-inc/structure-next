@@ -67,17 +67,6 @@ export interface TabsThemeConfiguration {
     };
 }
 
-// Type - Deep Partial Tabs Theme (for per-instance or project overrides)
-// Allows partial overrides at every level, including the per-variant configuration objects
-export type DeepPartialTabsTheme = {
-    variants?: Partial<Record<TabsVariant, string>> & Record<string, string>; // Allow additional custom variants
-    variantItemClasses?: Partial<Record<TabsVariant, string>> & Record<string, string>;
-    variantItemWrapperClasses?: Partial<Record<TabsVariant, string>> & Record<string, string>;
-    variantItemActiveClasses?: Partial<Record<TabsVariant, string>> & Record<string, string>;
-    sizes?: Partial<Record<TabsSize, string>> & Record<string, string>; // Allow additional custom sizes
-    configuration?: Partial<TabsThemeConfiguration['configuration']>;
-};
-
 // Tabs Theme - Structure Default
 export const tabsTheme: TabsThemeConfiguration = {
     // Variants

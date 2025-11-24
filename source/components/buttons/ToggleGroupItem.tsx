@@ -13,7 +13,7 @@ import { toggleTheme as structureToggleTheme } from '@structure/source/component
 import type { ToggleVariant, ToggleSize } from '@structure/source/components/buttons/ToggleTheme';
 import type { ToggleGroupVariant } from '@structure/source/components/buttons/ToggleGroupTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
@@ -103,7 +103,7 @@ export const ToggleGroupItem = React.forwardRef<
     const componentTheme = useComponentTheme();
 
     // Merge the structure theme with project theme (if set by the layout provider)
-    const toggleTheme = mergeComponentTheme(structureToggleTheme, componentTheme?.Toggle);
+    const toggleTheme = mergeTheme(structureToggleTheme, componentTheme?.Toggle);
 
     // Use context variant/size as fallback, then explicit props, then theme defaults
     const effectiveVariant = variant || toggleGroupContext.itemVariant;

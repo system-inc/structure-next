@@ -19,27 +19,27 @@ import type { InputTextThemeConfiguration } from '@structure/source/components/f
 import type { InputTextAreaThemeConfiguration } from '@structure/source/components/forms-new/fields/text-area/InputTextAreaTheme';
 import type { InputCheckboxThemeConfiguration } from '@structure/source/components/forms-new/fields/checkbox/InputCheckboxTheme';
 import type { InputSelectThemeConfiguration } from '@structure/source/components/forms-new/fields/select/InputSelectTheme';
-import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import type { DeepPartialTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Type - Component Theme Context Value
 interface ComponentThemeContextValue {
-    Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
-    Toggle?: DeepPartialComponentTheme<ToggleThemeConfiguration>;
-    ToggleGroup?: DeepPartialComponentTheme<ToggleGroupThemeConfiguration>;
-    Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
-    Tabs?: DeepPartialComponentTheme<TabsThemeConfiguration>;
-    Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
-    Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
-    Drawer?: DeepPartialComponentTheme<DrawerThemeConfiguration>;
-    Badge?: DeepPartialComponentTheme<BadgeThemeConfiguration>;
-    Notice?: DeepPartialComponentTheme<NoticeThemeConfiguration>;
-    Card?: DeepPartialComponentTheme<CardThemeConfiguration>;
-    InputText?: DeepPartialComponentTheme<InputTextThemeConfiguration>;
-    InputTextArea?: DeepPartialComponentTheme<InputTextAreaThemeConfiguration>;
-    InputCheckbox?: DeepPartialComponentTheme<InputCheckboxThemeConfiguration>;
-    InputSelect?: DeepPartialComponentTheme<InputSelectThemeConfiguration>;
+    Button?: DeepPartialTheme<ButtonThemeConfiguration>;
+    Toggle?: DeepPartialTheme<ToggleThemeConfiguration>;
+    ToggleGroup?: DeepPartialTheme<ToggleGroupThemeConfiguration>;
+    Link?: DeepPartialTheme<LinkThemeConfiguration>;
+    Tabs?: DeepPartialTheme<TabsThemeConfiguration>;
+    Popover?: DeepPartialTheme<PopoverThemeConfiguration>;
+    Dialog?: DeepPartialTheme<DialogThemeConfiguration>;
+    Drawer?: DeepPartialTheme<DrawerThemeConfiguration>;
+    Badge?: DeepPartialTheme<BadgeThemeConfiguration>;
+    Notice?: DeepPartialTheme<NoticeThemeConfiguration>;
+    Card?: DeepPartialTheme<CardThemeConfiguration>;
+    InputText?: DeepPartialTheme<InputTextThemeConfiguration>;
+    InputTextArea?: DeepPartialTheme<InputTextAreaThemeConfiguration>;
+    InputCheckbox?: DeepPartialTheme<InputCheckboxThemeConfiguration>;
+    InputSelect?: DeepPartialTheme<InputSelectThemeConfiguration>;
     // Future component themes:
-    // Table?: DeepPartialComponentTheme<TableThemeConfiguration>;
+    // Table?: DeepPartialTheme<TableThemeConfiguration>;
 }
 
 // Context - Component Theme

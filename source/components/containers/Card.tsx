@@ -5,7 +5,7 @@ import React from 'react';
 import { cardTheme as structureCardTheme } from './CardTheme';
 import type { CardVariant, CardSize } from './CardTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
@@ -25,7 +25,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function Ca
     const componentTheme = useComponentTheme();
 
     // Merge structure theme with project theme
-    const cardTheme = mergeComponentTheme(structureCardTheme, componentTheme?.Card);
+    const cardTheme = mergeTheme(structureCardTheme, componentTheme?.Card);
 
     // Create variant className function
     const cardVariantClassNames = createVariantClassNames(cardTheme.configuration.baseClasses, {

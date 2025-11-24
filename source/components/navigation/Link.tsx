@@ -12,7 +12,7 @@ import type { LinkProps as NextLinkProperties } from 'next/link';
 import { linkTheme as structureLinkTheme } from '@structure/source/components/navigation/LinkTheme';
 import type { LinkVariant } from '@structure/source/components/navigation/LinkTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
@@ -33,7 +33,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function
     const componentTheme = useComponentTheme();
 
     // Merge the structure theme with project theme (if set by the layout provider)
-    const linkTheme = mergeComponentTheme(structureLinkTheme, componentTheme?.Link);
+    const linkTheme = mergeTheme(structureLinkTheme, componentTheme?.Link);
 
     // Create link variant class names function using the merged theme
     const linkVariantClassNames = createVariantClassNames(linkTheme.configuration.baseClasses, {

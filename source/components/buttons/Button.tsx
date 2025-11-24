@@ -13,7 +13,7 @@ import type { PopoverProperties } from '@structure/source/components/popovers/Po
 import { buttonTheme as structureButtonTheme } from '@structure/source/components/buttons/ButtonTheme';
 import type { ButtonVariant, ButtonSize } from '@structure/source/components/buttons/ButtonTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Assets
 import { SpinnerIcon } from '@phosphor-icons/react';
@@ -102,7 +102,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
 
     // Merge the structure theme with project theme (if set by the layout provider)
     // Layouts can opt into using the project's Button styles, otherwise will default to structure styles
-    const buttonTheme = mergeComponentTheme(structureButtonTheme, componentTheme?.Button);
+    const buttonTheme = mergeTheme(structureButtonTheme, componentTheme?.Button);
 
     // Get icon size className from theme based on iconSize (takes precedence) or size
     const iconSizeClassName = iconSize

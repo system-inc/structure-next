@@ -7,7 +7,7 @@ import React from 'react';
 import { inputTextAreaTheme as structureInputTextAreaTheme } from './InputTextAreaTheme';
 import type { InputTextAreaVariant, InputTextAreaSize, InputTextAreaResize } from './InputTextAreaTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -39,7 +39,7 @@ export const InputTextArea = React.forwardRef<HTMLTextAreaElement, InputTextArea
     const componentTheme = useComponentTheme();
 
     // Merge structure theme with project overrides
-    const theme = mergeComponentTheme(structureInputTextAreaTheme, componentTheme?.InputTextArea);
+    const theme = mergeTheme(structureInputTextAreaTheme, componentTheme?.InputTextArea);
 
     // Apply default variant/size/resize if not specified
     const finalVariant = variant ?? theme.configuration.defaultVariant?.variant;

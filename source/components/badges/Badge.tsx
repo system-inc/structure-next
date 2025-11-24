@@ -7,7 +7,7 @@ import React from 'react';
 import { badgeTheme as structureBadgeTheme } from '@structure/source/components/badges/BadgeTheme';
 import type { BadgeVariant, BadgeKind, BadgeSize } from '@structure/source/components/badges/BadgeTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
@@ -40,7 +40,7 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function 
 ) {
     // Get theme from context and merge with structure theme
     const componentTheme = useComponentTheme();
-    const badgeTheme = mergeComponentTheme(structureBadgeTheme, componentTheme?.Badge);
+    const badgeTheme = mergeTheme(structureBadgeTheme, componentTheme?.Badge);
 
     // Apply defaults from theme configuration
     const variant = variantProperty || badgeTheme.configuration.defaultVariant.variant;

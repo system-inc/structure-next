@@ -10,7 +10,7 @@ import { Drawer as VaulDrawer } from 'vaul';
 import { drawerTheme as structureDrawerTheme } from './DrawerTheme';
 import type { DrawerSide, DrawerVariant } from './DrawerTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Context
 import { DrawerContext, DrawerNestedContext, useIsNestedDrawer } from './DrawerContext';
@@ -65,7 +65,7 @@ export function DrawerRoot(properties: DrawerRootProperties) {
     const componentTheme = useComponentTheme();
 
     // Merge the structure theme with project theme
-    const drawerTheme = mergeComponentTheme(structureDrawerTheme, componentTheme?.Drawer);
+    const drawerTheme = mergeTheme(structureDrawerTheme, componentTheme?.Drawer);
 
     // Determine variant and side with defaults from configuration
     const variant = properties.variant ?? drawerTheme.configuration.defaultVariant?.variant;

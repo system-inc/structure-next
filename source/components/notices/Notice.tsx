@@ -5,7 +5,7 @@ import React from 'react';
 import { noticeTheme as structureNoticeTheme } from '@structure/source/components/notices/NoticeTheme';
 import type { NoticeVariant, NoticeSize } from '@structure/source/components/notices/NoticeTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
@@ -27,7 +27,7 @@ export interface NoticeProperties extends Omit<React.HTMLAttributes<HTMLDivEleme
 export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(function (properties, reference) {
     // Get theme from context and merge with structure theme
     const componentTheme = useComponentTheme();
-    const noticeTheme = mergeComponentTheme(structureNoticeTheme, componentTheme?.Notice);
+    const noticeTheme = mergeTheme(structureNoticeTheme, componentTheme?.Notice);
 
     // Apply defaults from theme configuration
     const variant = properties.variant || noticeTheme.configuration.defaultVariant.variant;

@@ -8,7 +8,7 @@ import * as RadixCheckbox from '@radix-ui/react-checkbox';
 import { inputCheckboxTheme as structureInputCheckboxTheme } from './InputCheckboxTheme';
 import type { InputCheckboxVariant, InputCheckboxSize } from './InputCheckboxTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
@@ -44,7 +44,7 @@ export const InputCheckbox = React.forwardRef<React.ComponentRef<typeof RadixChe
         const componentTheme = useComponentTheme();
 
         // Merge structure theme with project overrides
-        const theme = mergeComponentTheme(structureInputCheckboxTheme, componentTheme?.InputCheckbox);
+        const theme = mergeTheme(structureInputCheckboxTheme, componentTheme?.InputCheckbox);
 
         // Apply default variant/size if not specified
         const finalVariant = variant ?? theme.configuration.defaultVariant?.variant;

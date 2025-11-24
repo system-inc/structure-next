@@ -11,7 +11,7 @@ import { Drawer } from '@structure/source/components/drawers/Drawer';
 import { dialogTheme as structureDialogTheme } from './DialogTheme';
 import type { DialogVariant, DialogPosition, DialogSize } from './DialogTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Context
 import { DialogContext } from './DialogContext';
@@ -65,7 +65,7 @@ export function DialogRoot(properties: DialogRootProperties) {
     const componentTheme = useComponentTheme();
 
     // Merge the structure theme with project theme
-    const dialogTheme = mergeComponentTheme(structureDialogTheme, componentTheme?.Dialog);
+    const dialogTheme = mergeTheme(structureDialogTheme, componentTheme?.Dialog);
 
     // Determine variant, position, and size with defaults from configuration
     const variant = properties.variant ?? dialogTheme.configuration?.defaultVariant?.variant;

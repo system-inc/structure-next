@@ -11,7 +11,7 @@ import type {
     TabsThemeConfiguration,
 } from '@structure/source/components/navigation/tabs/TabsTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme, type DeepPartialTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Main Components
 import * as RadixTabPrimitive from '@radix-ui/react-tabs';
@@ -43,6 +43,7 @@ export interface BaseTabsProperties {
     className?: string;
     variant?: TabsVariant;
     size?: TabsSize;
+    theme?: DeepPartialTheme<TabsThemeConfiguration>; // Per-instance theme overrides
 }
 
 // Component - Tabs
@@ -52,14 +53,25 @@ export interface TabsProperties
 
 export const TabsRoot = React.forwardRef<React.ComponentRef<typeof RadixTabPrimitive.Root>, TabsProperties>(
     function Tabs(
-        { className, variant, size, activationMode: activationModeProperty, ...radixTabRootProperties },
+        {
+            className,
+            variant,
+            size,
+            theme: instanceTheme,
+            activationMode: activationModeProperty,
+            ...radixTabRootProperties
+        },
         reference,
     ) {
         // Get component theme from context
         const componentTheme = useComponentTheme();
 
-        // Merge the structure theme with project theme (if set by the layout provider)
-        const tabsTheme = mergeComponentTheme(structureTabsTheme, componentTheme?.Tabs);
+        // Merge themes in order: structure → project → instance
+        // Each layer can override the previous, with instance having highest priority
+        let tabsTheme = mergeTheme(structureTabsTheme, componentTheme?.Tabs);
+        if(instanceTheme) {
+            tabsTheme = mergeTheme(tabsTheme, instanceTheme);
+        }
 
         // Apply defaults from theme if not provided
         const effectiveVariant = variant || tabsTheme.configuration.defaultVariant.variant;

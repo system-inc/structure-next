@@ -1,12 +1,13 @@
 // Dependencies - Theme
 import { Theme } from '@structure/source/theme/ThemeTypes';
-import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import type { DeepPartialTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
 import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
 import type { CardThemeConfiguration } from '@structure/source/components/containers/CardTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
 import type { DrawerThemeConfiguration } from '@structure/source/components/drawers/DrawerTheme';
+import type { TabsThemeConfiguration } from '@structure/source/components/navigation/tabs/TabsTheme';
 
 // Types
 interface ApiService {
@@ -74,12 +75,13 @@ export interface StructureSettingsInterface {
     theme?: {
         defaultTheme: Theme;
         components?: {
-            Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
-            Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
-            Card?: DeepPartialComponentTheme<CardThemeConfiguration>;
-            Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
-            Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
-            Drawer?: DeepPartialComponentTheme<DrawerThemeConfiguration>;
+            Link?: DeepPartialTheme<LinkThemeConfiguration>;
+            Button?: DeepPartialTheme<ButtonThemeConfiguration>;
+            Card?: DeepPartialTheme<CardThemeConfiguration>;
+            Popover?: DeepPartialTheme<PopoverThemeConfiguration>;
+            Dialog?: DeepPartialTheme<DialogThemeConfiguration>;
+            Drawer?: DeepPartialTheme<DrawerThemeConfiguration>;
+            Tabs?: DeepPartialTheme<TabsThemeConfiguration>;
         };
     };
     assets: {

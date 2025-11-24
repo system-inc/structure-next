@@ -10,7 +10,7 @@ import type { PopoverProperties } from '@structure/source/components/popovers/Po
 // Dependencies - Theme
 import { popoverTheme as structurePopoverTheme } from '@structure/source/components/popovers/PopoverTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
@@ -23,7 +23,7 @@ export function Tip(properties: TipProperties) {
     const componentTheme = useComponentTheme();
 
     // Merge the structure theme with project theme (if set by the layout provider)
-    const popoverTheme = mergeComponentTheme(structurePopoverTheme, componentTheme?.Popover);
+    const popoverTheme = mergeTheme(structurePopoverTheme, componentTheme?.Popover);
 
     // Determine variant and size with smart defaults
     // If variant is "Tip" and no size specified, default to "Tip" size
