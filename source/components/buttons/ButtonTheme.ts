@@ -16,12 +16,10 @@ export const buttonCommonLayoutClassNames =
     // Flex layout with spacing between icons and text
     `inline-flex items-center justify-center gap-2`;
 
-// Common behavior: text handling, cursor, transitions, disabled states
+// Common behavior: text handling, transitions, disabled states
 export const buttonCommonBehaviorClassNames = mergeClassNames(
     // Text behavior
     'whitespace-nowrap select-none',
-    // Cursor
-    'cursor-pointer',
     // Animation
     'transition-colors ease-out',
     // Disabled states (works for both button[disabled] and a[aria-disabled])
@@ -398,8 +396,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
     // Configuration
     configuration: {
-        // Base classes (empty = unstyled by default, variants include their own base styles)
-        baseClasses: '',
+        // Base classes applied to all buttons regardless of variant
+        baseClasses: 'cursor-pointer',
 
         // Focus ring for keyboard navigation (empty = variants handle their own focus)
         focusClasses: '',

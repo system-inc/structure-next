@@ -159,7 +159,7 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
 
                 <HorizontalRule />
 
-                <div className="flex items-center justify-between gap-3 pt-2">
+                <div className="flex items-center justify-between gap-3 pt-3 pr-2 pb-2">
                     <div className="flex items-center gap-2.5 pl-3">
                         <CircleHalfIcon className="size-4" />
                         <p className="text-sm font-medium">Appearance</p>

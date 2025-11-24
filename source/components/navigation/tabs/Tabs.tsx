@@ -25,9 +25,10 @@ import { mergeClassNames, createVariantClassNames } from '@structure/source/util
 // Dependencies - TabItem
 import { TabItem } from '@structure/source/components/navigation/tabs/TabItem';
 
-// Tabs Context - Provides size and theme to TabItems
+// Tabs Context - Provides size, variant, and theme to TabItems
 export const TabsContext = React.createContext<{
     size?: TabsSize;
+    variant?: TabsVariant;
     tabGroupId: string;
     currentValue: string | undefined;
     theme: TabsThemeConfiguration;
@@ -92,6 +93,7 @@ export const TabsRoot = React.forwardRef<React.ComponentRef<typeof RadixTabPrimi
                 <TabsContext.Provider
                     value={{
                         size: effectiveSize,
+                        variant: effectiveVariant,
                         tabGroupId,
                         currentValue: radixTabRootProperties.value,
                         theme: tabsTheme,

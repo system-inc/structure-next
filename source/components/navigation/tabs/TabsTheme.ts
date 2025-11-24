@@ -10,25 +10,6 @@
 // Dependencies - Utilities
 import { mergeClassNames } from '../../../utilities/style/ClassName';
 
-// Layout styles for tabs wrapper (container around all tabs)
-export const tabsWrapperLayoutClassNames = mergeClassNames(
-    // Flexbox layout
-    'z-0 flex',
-    // Animation
-    'transition-colors',
-);
-
-// Common tab item styles: interaction behavior and layout
-export const tabItemCommonClassNames = mergeClassNames(
-    // Layout
-    'group relative flex cursor-pointer',
-    // Animation
-    'transition-colors',
-);
-
-// Layout styles for tabs with text content
-export const tabItemTextLayoutClassNames = 'inline-flex items-center';
-
 // Tabs Variants Interface - Source of truth for all tabs variants
 // Structure defines its base variants here, and projects can augment to add custom variants
 // Example in project code:
@@ -38,7 +19,7 @@ export const tabItemTextLayoutClassNames = 'inline-flex items-center';
 //     }
 //   }
 export interface TabsVariants {
-    A: 'A';
+    Bubble: 'Bubble';
 }
 
 // Type - Tabs Variant (derived from TabsVariants interface)
@@ -54,14 +35,10 @@ export type TabsVariant = keyof TabsVariants;
 //     }
 //   }
 export interface TabsSizes {
+    ExtraSmall: 'ExtraSmall';
     Small: 'Small';
     Base: 'Base';
     Large: 'Large';
-    ExtraSmall: 'ExtraSmall';
-    IconSmall: 'IconSmall';
-    Icon: 'Icon';
-    IconLarge: 'IconLarge';
-    IconExtraSmall: 'IconExtraSmall';
 }
 
 // Type - Tabs Size (derived from TabsSizes interface)
@@ -73,12 +50,14 @@ export type TabsSize = keyof TabsSizes;
 // Project extensions are optional (Partial)
 export interface TabsThemeConfiguration {
     variants: Partial<Record<TabsVariant, string>>;
+    variantItemClasses: Partial<Record<TabsVariant, string>>; // Per-variant classes for TabItem element
+    variantItemWrapperClasses: Partial<Record<TabsVariant, string>>; // Per-variant wrapper classes for children
+    variantItemActiveClasses: Partial<Record<TabsVariant, string>>; // Per-variant active indicator classes
     sizes: Partial<Record<TabsSize, string>>;
-    iconSizes: Partial<Record<TabsSize, string>>;
     configuration: {
-        baseClasses: string; // Applied to Tabs wrapper (minimal, variant adds styling)
-        itemBaseClasses: string; // Applied to all TabItems (minimal, variant adds styling)
-        itemActiveClasses: string; // Applied to active TabItem background indicator
+        baseClasses: string; // Applied to Tabs wrapper (minimal)
+        itemBaseClasses: string; // Applied to all TabItems (minimal, shared interaction states)
+        itemActiveClasses: string; // Applied to active indicator (minimal, variant adds specific styling)
         defaultVariant: {
             variant?: TabsVariant;
             size?: TabsSize;
@@ -90,77 +69,73 @@ export interface TabsThemeConfiguration {
 export const tabsTheme: TabsThemeConfiguration = {
     // Variants
     variants: {
-        // Variant A - Default tabs styling with pill background
+        // Variant Bubble - Default tabs styling with pill background
         // Use for: Standard tab navigation with rounded pill design and background container
         // Features: Light background container, animated active state indicator, smooth transitions
-        A: mergeClassNames(
-            tabsWrapperLayoutClassNames,
+        Bubble: mergeClassNames(
+            // Layout
+            'z-0 flex',
+            // Animation
+            'transition-colors',
             // Background and padding for wrapper
             'gap-1 rounded-full background--5 p-0.5',
         ),
     },
 
-    // Sizes - Define padding, typography, and spacing for TabItems
-    sizes: {
-        // Text tabs (with labels)
-        ExtraSmall: mergeClassNames(tabItemTextLayoutClassNames, 'gap-0.5 p-px text-xs'),
-        Small: mergeClassNames(tabItemTextLayoutClassNames, 'gap-1 p-2 text-xs'),
-        Base: mergeClassNames(tabItemTextLayoutClassNames, 'gap-2.5 px-5 py-2 text-sm'),
-        Large: mergeClassNames(tabItemTextLayoutClassNames, 'gap-3 px-6 py-3 text-sm font-medium'),
-
-        // Icon-only tabs (no text, just icon)
-        IconExtraSmall: mergeClassNames('p-px'),
-        IconSmall: mergeClassNames('p-2'),
-        Icon: mergeClassNames('p-3'),
-        IconLarge: mergeClassNames('p-3.5'),
+    // Per-variant classes for TabItem element
+    variantItemClasses: {
+        Bubble: mergeClassNames(
+            // Layout
+            'group relative flex',
+            // Interaction
+            'cursor-pointer transition-colors',
+            // Colors
+            'content--2 hover:content--0 data-[state=active]:content--0',
+            // Shape
+            'rounded-full',
+        ),
     },
 
-    // Icon dimensions for TabItem icons
-    // Maps tab sizes to their corresponding icon dimensions (applied via themeIcon utility)
-    iconSizes: {
-        // Icon dimensions for text tabs (tabs with text + icon)
-        ExtraSmall: 'size-3',
-        Small: 'size-4',
-        Base: 'size-5',
-        Large: 'size-6',
+    // Per-variant wrapper classes for TabItem children
+    // If set, TabItem wraps children in a div with these classes
+    // Used for z-index layering with animated backgrounds, or other variant-specific needs
+    variantItemWrapperClasses: {
+        Bubble: 'relative z-10 flex', // Variant Bubble needs z-index for animated background indicator, flex to properly contain children
+    },
 
-        // Icon dimensions for icon-only tabs (no text, just an icon)
-        IconExtraSmall: 'size-3',
-        IconSmall: 'size-4',
-        Icon: 'size-5',
-        IconLarge: 'size-6',
+    // Per-variant active indicator classes
+    variantItemActiveClasses: {
+        Bubble: mergeClassNames(
+            'absolute inset-0 h-full w-full border border-transparent',
+            'z-0 group-data-[state=active]:border--4 group-data-[state=active]:background--0',
+            'rounded-full', // Match the rounded corners of the tab item
+        ),
+    },
+
+    // Sizes - Define padding, typography, and spacing for TabItems
+    // Note: TabItem now uses asChild pattern, so children (typically Button components) handle their own sizing
+    // These size classes are applied to the motion.div wrapper for consistent spacing
+    // Note: Even sizes might be variant-specific in the future, but for now they're shared
+    sizes: {
+        ExtraSmall: 'inline-flex items-center gap-0.5 text-xs',
+        Small: 'inline-flex items-center gap-1 text-xs',
+        Base: 'inline-flex items-center gap-2.5 text-sm',
+        Large: 'inline-flex items-center gap-3 text-sm font-medium',
     },
 
     // Configuration
     configuration: {
-        // Base classes for Tabs wrapper (minimal, variant A adds the background)
+        // Base classes for Tabs wrapper (empty - variants define everything)
         baseClasses: '',
 
-        // Base classes for all TabItems (common interaction states)
-        itemBaseClasses: mergeClassNames(
-            tabItemCommonClassNames,
-            // Default content color
-            'content--2',
-            // Hover state
-            'hover:content--0',
-            // Active state
-            'data-[state=active]:content--0',
-            // Variant A
-            'rounded-full',
-        ),
+        // Base classes for all TabItems (empty - variants define everything)
+        itemBaseClasses: '',
 
-        // Active state background indicator for TabItem
-        // Animated background that slides between tabs using Framer Motion layoutId
-        itemActiveClasses: mergeClassNames(
-            'absolute inset-0 h-full w-full border border-transparent',
-            'z-0 group-data-[state=active]:border--4 group-data-[state=active]:background--0',
-            // Variant A
-            'rounded-full',
-        ),
+        // Base active indicator classes (empty - variants define everything)
+        itemActiveClasses: '',
 
         // Default variant and size
         defaultVariant: {
-            variant: 'A',
             size: 'Base',
         },
     },

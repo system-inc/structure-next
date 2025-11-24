@@ -12,8 +12,7 @@ import { readOnlyThemeAtom, setThemeAtom } from '@structure/source/theme/ThemePr
 
 // Dependencies - Main Components
 import { Tabs } from '@structure/source/components/navigation/tabs/Tabs';
-import { TabItem } from '@structure/source/components/navigation/tabs/TabItem';
-import type { TabsSize } from '@structure/source/components/navigation/tabs/TabsTheme';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import { LaptopIcon, SunIcon, MoonIcon } from '@phosphor-icons/react';
@@ -23,7 +22,7 @@ import { ClientOnly } from '@structure/source/utilities/react/ClientOnly';
 
 // Component - ThemeToggle
 export interface ThemeToggleProperties {
-    size?: TabsSize;
+    className?: string;
 }
 export function ThemeToggle(properties: ThemeToggleProperties) {
     // Shared State
@@ -31,27 +30,31 @@ export function ThemeToggle(properties: ThemeToggleProperties) {
     const setTheme = useSetAtom(setThemeAtom);
 
     // Defaults
-    const size = properties.size ?? 'Small';
-    const tabsDefaultValue = theme ?? Theme.OperatingSystem;
+    const currentTheme = theme ?? Theme.OperatingSystem;
 
     // Function to handle the user changing the theme
-    function handleChangeTheme(theme: Theme) {
-        setTheme(theme);
+    function handleChangeTheme(value: string) {
+        setTheme(value as Theme);
     }
 
     // Render the component
     return (
         <ClientOnly>
             <Tabs
-                size={size === 'Small' ? 'IconSmall' : 'Icon'}
-                value={tabsDefaultValue}
-                onValueChange={function (value) {
-                    handleChangeTheme(value as Theme);
-                }}
+                variant="Bubble"
+                value={currentTheme}
+                onValueChange={handleChangeTheme}
+                className={properties.className}
             >
-                <TabItem value={Theme.Light} icon={SunIcon} />
-                <TabItem value={Theme.Dark} icon={MoonIcon} />
-                <TabItem value={Theme.OperatingSystem} icon={LaptopIcon} />
+                <Tabs.TabItem value={Theme.Light}>
+                    <Button size="Icon" icon={SunIcon} />
+                </Tabs.TabItem>
+                <Tabs.TabItem value={Theme.Dark}>
+                    <Button size="Icon" icon={MoonIcon} />
+                </Tabs.TabItem>
+                <Tabs.TabItem value={Theme.OperatingSystem}>
+                    <Button size="Icon" icon={LaptopIcon} />
+                </Tabs.TabItem>
             </Tabs>
         </ClientOnly>
     );
