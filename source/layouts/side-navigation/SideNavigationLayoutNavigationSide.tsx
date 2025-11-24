@@ -4,8 +4,12 @@
 import React from 'react';
 import { useUrlPath, useUrlParameters } from '@structure/source/router/Navigation';
 
-// Dependencies - Main Components
+// Dependencies - Hooks
 import { useDrag } from '@use-gesture/react';
+import { useIsMobile } from '@structure/source/utilities/react/hooks/useIsMobile';
+
+// Dependencies - Main Components
+import { Drawer } from '@structure/source/components/drawers/Drawer';
 import {
     desktopMinimumWidth,
     defaultNavigationWidth,
@@ -60,6 +64,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     // Hooks
     const urlPath = useUrlPath();
     const urlParameters = useUrlParameters();
+    const isMobile = useIsMobile();
 
     // Shared State
     const [sideNavigationLayoutNavigationOpen, setSideNavigationLayoutNavigationOpen] = useAtom(
@@ -83,13 +88,17 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     ] = useAtom(getAtomForNavigationIsClosingByWindowResize(properties.layoutIdentifier));
 
     // State
-    const [windowInnerWidth, setWindowInnerWidth] = React.useState<number>(0);
     const [hasMounted, setHasMounted] = React.useState<boolean>(false);
+    const [windowInnerWidth, setWindowInnerWidth] = React.useState<number>(0);
 
     // References
     const containerDivReference = React.useRef<HTMLDivElement>(null);
     const containerDivWidthReference = React.useRef<number>(sideNavigationLayoutNavigationWidth);
     const containerResizeHandleDivReference = React.useRef<HTMLDivElement>(null);
+    const wasDesktopReference = React.useRef<boolean>(
+        typeof window !== 'undefined' ? window.innerWidth >= desktopMinimumWidth : true,
+    );
+    const wasNavigationOpenReference = React.useRef<boolean>(sideNavigationLayoutNavigationOpen);
 
     // Spring to animate the container
     const containerOffsetSpring = useSpring(
@@ -98,27 +107,6 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             ...sideNavigationLayoutNavigationSpringConfiguration,
         },
     );
-
-    // function () {
-    //     return {
-    //         // For Fixed layout: animate x position (leave 4px drag bar visible when closed)
-    //         x:
-    //             layout === 'Fixed'
-    //                 ? sideNavigationLayoutNavigationOpen === true
-    //                     ? 0
-    //                     : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
-    //                 : 0,
-    //         // For Flex layout: animate marginLeft position (similar to Fixed's x)
-    //         marginLeft:
-    //             layout === 'Flex'
-    //                 ? sideNavigationLayoutNavigationOpen === true
-    //                     ? 0
-    //                     : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
-    //                 : 0,
-    //         // If the navigation is open, animate the overlay to be at 1 opacity
-    //         overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
-    //     };
-    // });
 
     // Hook to handle the drag gesture on the container resize handle
     useDrag(
@@ -273,9 +261,10 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     // Effect to animate the navigation when opening, closing, or resizing
     React.useEffect(
         function () {
-            containerOffsetSpring.set(
-                sideNavigationLayoutNavigationOpen === true ? 0 : -sideNavigationLayoutNavigationWidth, // When closed, fully hide the sidebar
-            );
+            const targetPosition =
+                sideNavigationLayoutNavigationOpen === true ? 0 : -sideNavigationLayoutNavigationWidth;
+
+            containerOffsetSpring.set(targetPosition);
 
             // Mark the navigation as not closing by window resize
             setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
@@ -285,7 +274,16 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             sideNavigationLayoutNavigationWidth,
             containerOffsetSpring,
             setSideNavigationLayoutNavigationIsClosingByWindowResize,
+            isMobile,
         ],
+    );
+
+    // Effect to update tracking refs when navigation state changes
+    React.useEffect(
+        function () {
+            wasNavigationOpenReference.current = sideNavigationLayoutNavigationOpen;
+        },
+        [sideNavigationLayoutNavigationOpen],
     );
 
     // Effect to handle window resizes
@@ -294,29 +292,48 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             // Function to handle the window resize
             function handleWindowResize() {
                 const isDesktop = window.innerWidth >= desktopMinimumWidth;
+                const wasDesktop = wasDesktopReference.current;
+                const wasNavigationOpen = wasNavigationOpenReference.current;
 
-                // If the window resizes to mobile
-                if(!isDesktop) {
-                    // Mark the navigation as closing by window resize
+                // Only process if desktop/mobile state actually changed
+                if(wasDesktop === isDesktop) {
+                    // No desktop/mobile transition, ignore this resize event
+                    return;
+                }
+
+                // Detect transition from desktop to mobile
+                const transitioningToMobile = wasDesktop && !isDesktop;
+
+                // If transitioning to mobile and navigation was open, keep it open (will show as drawer)
+                if(transitioningToMobile && wasNavigationOpen) {
+                    // Keep navigation open - it will render as a drawer on mobile
+                    // Don't mark as closing by window resize
+                    setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
+                }
+                // If transitioning to mobile and navigation was closed
+                else if(transitioningToMobile && !wasNavigationOpen) {
+                    // Navigation is already closed, no action needed
                     setSideNavigationLayoutNavigationIsClosingByWindowResize(true);
-                    // console.log('Closing navigation by window resize');
-
-                    // Close the navigation
-                    setSideNavigationLayoutNavigationOpen(false);
                 }
                 // If the window resizes to desktop
-                else {
+                else if(isDesktop && !wasDesktop) {
                     // Mark the navigation as not closing by window resize
                     setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
 
-                    // If always show on desktop, force open; otherwise use preferred state
+                    // If always show on desktop, force open; otherwise respect user's choice
                     if(properties.alwaysShowNavigationOnDesktop) {
                         setSideNavigationLayoutNavigationOpen(true);
                     }
                     else {
-                        setSideNavigationLayoutNavigationOpen(!sideNavigationLayoutNavigationManuallyClosed);
+                        // Only open if it wasn't manually closed AND it was open when we left desktop
+                        // If user closed it on mobile, keep it closed when returning to desktop
+                        const shouldOpen = !sideNavigationLayoutNavigationManuallyClosed && wasNavigationOpen;
+                        setSideNavigationLayoutNavigationOpen(shouldOpen);
                     }
                 }
+
+                // Update tracking ref for desktop state (after all logic)
+                wasDesktopReference.current = isDesktop;
             }
 
             // Add the event listener
@@ -403,110 +420,103 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         ],
     );
 
-    // Effect to close navigation when the user presses the escape key on mobile
+    // Effect to close the navigation when the URL path or parameters change (mobile only)
     React.useEffect(
         function () {
-            // Function to handle keyboard events
-            function handleKeyboardEvent(event: KeyboardEvent) {
-                // If the escape key is pressed
-                if(event.key === 'Escape') {
-                    // If on mobile
-                    if(window.innerWidth < desktopMinimumWidth) {
-                        // Close the navigation
-                        setSideNavigationLayoutNavigationOpen(false);
-                    }
-                }
-            }
-
-            // Add the keyboard event listener
-            window.addEventListener('keydown', handleKeyboardEvent);
-
-            // On unmount, remove the keyboard event listener
-            return function () {
-                window.removeEventListener('keydown', handleKeyboardEvent);
-            };
-        },
-        [setSideNavigationLayoutNavigationOpen],
-    );
-
-    // Effect to close the navigation when the URL path or parameters change
-    React.useEffect(
-        function () {
-            // If on mobile
-            if(window.innerWidth < desktopMinimumWidth) {
+            // Only close on URL changes when on mobile (not just because we're on mobile)
+            // This effect runs when urlPath or urlParameters change, which indicates navigation
+            if(isMobile) {
                 // Close the navigation
                 setSideNavigationLayoutNavigationOpen(false);
             }
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- isMobile is intentionally excluded to prevent closing on resize
         [setSideNavigationLayoutNavigationOpen, urlPath, urlParameters],
     );
 
     // Render the component
     return (
         <>
-            {/* Navigation Container */}
-            <motion.div
-                ref={containerDivReference}
-                className={mergeClassNames(
-                    // Use fixed positioning for Fixed layout, relative for Flex layout
-                    layout === 'Fixed' ? 'fixed z-20' : 'relative',
-                    'flex h-full flex-col background--0',
-                    // For Flex layout, prevent flexbox from shrinking the navigation
-                    layout === 'Flex' ? 'shrink-0' : '',
-                    // Hide overflow when closed for both layouts
-                    !sideNavigationLayoutNavigationOpen ? 'overflow-hidden' : '',
-                    // If there is no header or the window is less than the desktop minimum width and the side navigation is not closing by window resize
-                    // add a border to the right (but hide it when collapsed for both layouts)
-                    (!showHeader ||
-                        (windowInnerWidth < desktopMinimumWidth &&
-                            !sideNavigationLayoutNavigationIsClosingByWindowResize)) &&
-                        sideNavigationLayoutNavigationOpen // Only show border when open
-                        ? 'border-r border--0'
-                        : '',
-                    properties.className,
-                )}
-                style={{
-                    // Both layouts: use static width (immediate updates during drag)
-                    width: sideNavigationLayoutNavigationWidth + 'px',
-                    // For Fixed layout: animate x position
-                    // For Flex layout: animate marginLeft position
-                    ...(layout === 'Fixed'
-                        ? {
-                              x: containerOffsetSpring,
-                          }
-                        : {
-                              marginLeft: containerOffsetSpring,
-                          }),
-                }}
-            >
-                {/* Wrapper for content - no ScrollArea here, let children handle their own scrolling */}
-                <div
+            {/* Mobile: Render as Drawer */}
+            {isMobile && (
+                <Drawer
+                    accessibilityTitle="Navigation"
+                    accessibilityDescription="Side navigation menu"
+                    variant="A"
+                    side="Left"
+                    open={sideNavigationLayoutNavigationOpen}
+                    onOpenChange={setSideNavigationLayoutNavigationOpen}
+                >
+                    {/* Wrapper for content - no ScrollArea here, let children handle their own scrolling */}
+                    <div className="h-full">{properties.children}</div>
+                </Drawer>
+            )}
+
+            {/* Desktop: Render as resizable sidebar */}
+            {!isMobile && (
+                <motion.div
+                    ref={containerDivReference}
                     className={mergeClassNames(
-                        'h-full',
-                        // If there is a header, add margin top for header height
-                        showHeader ? 'mt-14' : '',
-                        // If there is a header and the window is at least the desktop minimum width
-                        // add a border to the right (but only when open)
-                        showHeader && windowInnerWidth >= desktopMinimumWidth && sideNavigationLayoutNavigationOpen
+                        // Use fixed positioning for Fixed layout, relative for Flex layout
+                        layout === 'Fixed' ? 'fixed z-20' : 'relative',
+                        'flex h-full flex-col background--0',
+                        // For Flex layout, prevent flexbox from shrinking the navigation
+                        layout === 'Flex' ? 'shrink-0' : '',
+                        // Hide overflow when closed for both layouts
+                        !sideNavigationLayoutNavigationOpen ? 'overflow-hidden' : '',
+                        // If there is no header or the window is less than the desktop minimum width and the side navigation is not closing by window resize
+                        // add a border to the right (but hide it when collapsed for both layouts)
+                        (!showHeader ||
+                            (windowInnerWidth < desktopMinimumWidth &&
+                                !sideNavigationLayoutNavigationIsClosingByWindowResize)) &&
+                            sideNavigationLayoutNavigationOpen // Only show border when open
                             ? 'border-r border--0'
                             : '',
+                        properties.className,
                     )}
+                    style={{
+                        // Both layouts: use static width (immediate updates during drag)
+                        width: sideNavigationLayoutNavigationWidth + 'px',
+                        // For Fixed layout: animate x position
+                        // For Flex layout: animate marginLeft position
+                        ...(layout === 'Fixed'
+                            ? {
+                                  x: containerOffsetSpring,
+                              }
+                            : {
+                                  marginLeft: containerOffsetSpring,
+                              }),
+                    }}
                 >
-                    {properties.children}
-                </div>
+                    {/* Wrapper for content - no ScrollArea here, let children handle their own scrolling */}
+                    <div
+                        className={mergeClassNames(
+                            'h-full',
+                            // If there is a header, add margin top for header height
+                            showHeader ? 'mt-14' : '',
+                            // If there is a header and the window is at least the desktop minimum width
+                            // add a border to the right (but only when open)
+                            showHeader && windowInnerWidth >= desktopMinimumWidth && sideNavigationLayoutNavigationOpen
+                                ? 'border-r border--0'
+                                : '',
+                        )}
+                    >
+                        {properties.children}
+                    </div>
 
-                {/* Navigation Resize Handle */}
-                <div
-                    ref={containerResizeHandleDivReference}
-                    className={mergeClassNames(
-                        'absolute -right-px h-full w-1 cursor-ew-resize touch-none bg-transparent duration-500 select-none hover:bg-blue-500 active:bg-purple-500',
-                        // If there is a header, offset the handle by the height of the header (h-14 = 56px)
-                        showHeader && windowInnerWidth >= desktopMinimumWidth ? 'top-14' : '',
-                        // Always allow pointer events for drag-to-open functionality
-                        'pointer-events-auto',
-                    )}
-                ></div>
-            </motion.div>
+                    {/* Navigation Resize Handle */}
+                    <div
+                        ref={containerResizeHandleDivReference}
+                        className={mergeClassNames(
+                            'absolute -right-px h-full w-1 cursor-ew-resize touch-none bg-transparent duration-500 select-none hover:bg-blue-500 active:bg-purple-500',
+                            // If there is a header, offset the handle by the height of the header (h-14 = 56px)
+                            showHeader && windowInnerWidth >= desktopMinimumWidth ? 'top-14' : '',
+                            // Always allow pointer events for drag-to-open functionality
+                            'pointer-events-auto',
+                        )}
+                    ></div>
+                </motion.div>
+            )}
         </>
     );
 }
