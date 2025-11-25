@@ -206,31 +206,36 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             },
         ],
     },
-    // Finances - Administrator only
+    // Finances - ProductManager role
     {
         title: 'Finances',
         href: '/ops/finances',
         icon: BankIcon,
+        accessibleRoles: [AccountRole.ProductManager],
         links: [
             {
                 title: 'Payout',
                 href: '/ops/finances/payout',
+                accessibleRoles: [AccountRole.ProductManager],
             },
         ],
     },
-    // Analytics - Administrator only
+    // Analytics - Marketer role
     {
         title: 'Analytics',
         href: '/ops/analytics',
         icon: LineGraphIcon,
+        accessibleRoles: [AccountRole.Marketer],
         links: [
             {
                 title: 'Live',
                 href: '/ops/analytics/live',
+                accessibleRoles: [AccountRole.Marketer],
             },
             {
                 title: 'Reports',
                 href: '/ops/analytics/reports',
+                accessibleRoles: [AccountRole.Marketer],
             },
         ],
     },
