@@ -11,7 +11,7 @@ import { BaseError } from '@structure/source/api/errors/BaseError';
 import {
     contactListEntryCreateRequestInputSchema,
     useContactListEntryCreateRequest,
-} from '../../hooks/useContactListEntryCreateRequest';
+} from '@structure/source/modules/contact/hooks/useContactListEntryCreateRequest';
 
 // Dependencies - Main Components
 import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
@@ -26,18 +26,18 @@ import { ArrowRightIcon, SpinnerIcon } from '@phosphor-icons/react';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
-// Component - FooterContactListEntryForm
-export interface FooterContactListEntryFormProperties extends React.HTMLAttributes<HTMLFormElement> {
-    label: React.ReactNode;
+// Component - ContactListEntryForm
+export interface ContactListEntryFormProperties extends React.HTMLAttributes<HTMLFormElement> {
+    label?: React.ReactNode;
     contactListIdentifier: string;
     initialEmailAddress?: string;
 }
-export function FooterContactListEntryForm({
+export function ContactListEntryForm({
     label,
     contactListIdentifier,
     initialEmailAddress,
     ...formProperties
-}: FooterContactListEntryFormProperties) {
+}: ContactListEntryFormProperties) {
     // State
     const [isFocused, setIsFocused] = React.useState(false);
     const [submittedEmailAddress, setSubmittedEmailAddress] = React.useState<string | null>(null);
@@ -119,7 +119,7 @@ export function FooterContactListEntryForm({
                 identifier="emailAddress"
                 showMessage={false} // We'll handle field messages manually
             >
-                <form.FieldLabel>{label}</form.FieldLabel>
+                {label && <form.FieldLabel>{label}</form.FieldLabel>}
                 <div className="flex items-center gap-2">
                     <FieldInputText
                         size="Large"
@@ -146,7 +146,7 @@ export function FooterContactListEntryForm({
                         isProcessing={contactListEntryCreateRequest.isLoading}
                     />
                 </div>
-                <div className="relative h-0 overflow-visible text-xs md:max-w-3xs">
+                <div className="relative h-0 overflow-visible text-xs">
                     <MotionConfiguration
                         transition={{
                             type: 'spring',
