@@ -77,9 +77,9 @@ export const noticeTheme: NoticeThemeConfiguration = {
 
     // Icon dimensions for each notice size
     iconSizes: {
-        Small: 'h-[20px] w-[20px]', // 20px
-        Base: 'size-5', // 20px
-        Large: 'size-6', // 24px
+        Small: 'size-3.5',
+        Base: 'size-4.5',
+        Large: 'size-6',
     },
 
     // Configuration
