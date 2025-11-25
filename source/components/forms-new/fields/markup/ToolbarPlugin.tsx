@@ -158,6 +158,7 @@ export function ToolbarPlugin(properties: ToolbarPluginProperties) {
                 <div className="flex items-center gap-1">
                     <Button
                         className="rounded-xl"
+                        icon={ArrowCounterClockwiseIcon}
                         size="Icon"
                         disabled={!canUndo || properties.isDisabled}
                         onClick={function () {
@@ -165,10 +166,9 @@ export function ToolbarPlugin(properties: ToolbarPluginProperties) {
                         }}
                         aria-label="Undo"
                         variant="Ghost"
-                    >
-                        <ArrowCounterClockwiseIcon weight="bold" />
-                    </Button>
+                    />
                     <Button
+                        icon={ArrowClockwiseIcon}
                         className="rounded-xl"
                         size="Icon"
                         disabled={!canRedo || properties.isDisabled}
@@ -177,9 +177,7 @@ export function ToolbarPlugin(properties: ToolbarPluginProperties) {
                         }}
                         aria-label="Redo"
                         variant="Ghost"
-                    >
-                        <ArrowClockwiseIcon weight="bold" />
-                    </Button>
+                    />
                     <Divider />
                     <Toggle
                         className="rounded-xl"
@@ -235,14 +233,13 @@ export function ToolbarPlugin(properties: ToolbarPluginProperties) {
                     {/* Attachments */}
                     <Button
                         className="rounded-xl"
+                        icon={PaperclipIcon}
                         size="Icon"
                         aria-label="Attach file"
                         variant="Ghost"
                         onClick={() => setIsAttachmentModalOpen(true)}
                         disabled={properties.isDisabled}
-                    >
-                        <PaperclipIcon weight="bold" />
-                    </Button>
+                    />
 
                     {/* Submit form */}
                     <Button

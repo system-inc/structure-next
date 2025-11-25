@@ -191,7 +191,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                 setIsExpanded(!isExpanded);
             }}
             className={mergeClassNames(
-                'cursor-pointer rounded-lg border p-3 transition-colors',
+                'max-w-80 cursor-pointer rounded-lg border p-3 transition-colors',
                 hasAddedToCart
                     ? 'border--positive'
                     : isExpanded

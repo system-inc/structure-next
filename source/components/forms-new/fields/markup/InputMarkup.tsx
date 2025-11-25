@@ -201,6 +201,7 @@ export function InputMarkup(properties: InputMarkupProperties) {
     // Render the component
     return (
         <Card
+            variant="A"
             className={mergeClassNames(
                 'flex flex-col items-stretch gap-0 overflow-clip rounded-2xl p-0',
                 properties.className,

@@ -74,7 +74,7 @@ export function TicketList(properties: TicketListProperties) {
                         : 'before:opacity-0',
                 )}
             >
-                <ScrollArea>
+                <ScrollArea className="[&>div]:!block">
                     {properties.tickets.map((ticket, index) => (
                         <TicketListItem
                             key={ticket.id}
