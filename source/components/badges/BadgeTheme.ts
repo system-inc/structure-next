@@ -84,7 +84,7 @@ export const badgeTheme: BadgeThemeConfiguration = {
         { kind: 'Filled', variant: 'Negative', className: mergeClassNames('background--negative-muted') },
         { kind: 'Filled', variant: 'Warning', className: mergeClassNames('background--warning-muted') },
         { kind: 'Filled', variant: 'Informative', className: mergeClassNames('background--informative-muted') },
-        { kind: 'Filled', variant: 'Neutral', className: mergeClassNames('background--1') },
+        { kind: 'Filled', variant: 'Neutral', className: mergeClassNames('background--2') },
         // Outline borders (using muted variants for subtler appearance)
         { kind: 'Outline', variant: 'Positive', className: mergeClassNames('border border--positive-muted') },
         { kind: 'Outline', variant: 'Negative', className: mergeClassNames('border border--negative-muted') },
