@@ -37,6 +37,7 @@ export const autofillStyleClassNames = 'autofill:bg-transparent dark:autofill:bg
 //   }
 export interface InputTextVariants {
     A: 'A';
+    Outline: 'Outline';
     Error: 'Error';
 }
 
@@ -90,6 +91,16 @@ export const inputTextTheme: InputTextThemeConfiguration = {
             borderStyleClassNames,
             focusStyleClassNames,
             autofillStyleClassNames,
+        ),
+
+        // Variant Outline - Transparent background with border only
+        // Use for: Lighter, more subtle inputs, inline editing, or when background should show through
+        Outline: mergeClassNames(
+            commonInputTextClassNames,
+            autofillStyleClassNames,
+            // Border styling
+            borderStyleClassNames,
+            focusStyleClassNames,
         ),
 
         // Variant Error - Text input with error state
