@@ -1,6 +1,9 @@
 // Dependencies - React
 import React from 'react';
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+
 /**
  * Utilities for merging component themes between structure defaults and project overrides.
  *
@@ -103,9 +106,12 @@ export function themeIcon(
         return <span className={themeClassName} aria-hidden="true" />;
     }
 
-    // If it's already a valid React element (pre-rendered JSX), render as-is
+    // If it's already a valid React element (pre-rendered JSX), clone and merge themeClassName
     if(React.isValidElement(icon)) {
-        return icon;
+        const existingClassName = (icon.props as { className?: string })?.className;
+        return React.cloneElement(icon, {
+            className: mergeClassNames(themeClassName, existingClassName),
+        } as React.Attributes);
     }
 
     // Otherwise it's a component reference (function or forwardRef) - render it with theme className
