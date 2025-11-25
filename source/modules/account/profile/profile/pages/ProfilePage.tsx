@@ -4,6 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
+import { Card } from '@structure/source/components/containers/Card';
 import { ProfileImageSection } from '@structure/source/modules/account/profile/profile/components/ProfileImageSection';
 import { ProfileInformationForm } from '@structure/source/modules/account/profile/profile/components/ProfileInformationForm';
 import { UsernameForm } from '@structure/source/modules/account/profile/profile/components/UsernameForm';
@@ -59,8 +60,15 @@ export function ProfilePage() {
 
             {/* Forms */}
             <div className="mt-10 w-full space-y-10">
-                <ProfileInformationForm />
-                <UsernameForm />
+                <Card variant="A">
+                    <h2 className="mb-6 text-base font-medium">Details</h2>
+                    <ProfileInformationForm />
+                </Card>
+
+                <Card variant="A">
+                    <h2 className="mb-6 text-base font-medium">Username</h2>
+                    <UsernameForm />
+                </Card>
             </div>
         </>
     );

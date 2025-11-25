@@ -95,12 +95,9 @@ export function UsernameForm() {
 
     // Render the component
     return (
-        <div className="rounded-lg border border--3 p-6">
-            <h2 className="text-xl font-medium">Change Username</h2>
-
+        <>
             <Form
                 loading={!account.data && account.isLoading}
-                className="mt-6"
                 formInputs={[
                     <FormInputText
                         key="username"
@@ -188,6 +185,6 @@ export function UsernameForm() {
                     )}
                 </Dialog.Footer>
             </Dialog>
-        </div>
+        </>
     );
 }
