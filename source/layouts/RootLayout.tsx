@@ -109,12 +109,7 @@ export async function RootLayout(properties: RootLayoutProperties) {
             >
                 {/* Add a <main> tag so that any Radix-UI Portal elements get appended outside the main content */}
                 {/* Fixes any z-index issues with Popovers, etc. */}
-                <main
-                    className={mergeClassNames(
-                        'relative isolate z-0 h-dvh overflow-x-clip overflow-y-auto',
-                        properties.mainClassName,
-                    )}
-                >
+                <main className={mergeClassNames('relative isolate', properties.mainClassName)}>
                     {/* Providers - React's Context API makes values accessible to all components within their subtree */}
                     <ProvidersComponent sessionIdHttpOnlyCookieExists={sessionIdHttpOnlyCookieExists}>
                         {properties.children}
