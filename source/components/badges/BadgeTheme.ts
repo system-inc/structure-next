@@ -85,11 +85,11 @@ export const badgeTheme: BadgeThemeConfiguration = {
         { kind: 'Filled', variant: 'Warning', className: mergeClassNames('background--warning-muted') },
         { kind: 'Filled', variant: 'Informative', className: mergeClassNames('background--informative-muted') },
         { kind: 'Filled', variant: 'Neutral', className: mergeClassNames('background--1') },
-        // Outline borders
-        { kind: 'Outline', variant: 'Positive', className: mergeClassNames('border border--positive') },
-        { kind: 'Outline', variant: 'Negative', className: mergeClassNames('border border--negative') },
-        { kind: 'Outline', variant: 'Warning', className: mergeClassNames('border border--warning') },
-        { kind: 'Outline', variant: 'Informative', className: mergeClassNames('border border--informative') },
+        // Outline borders (using muted variants for subtler appearance)
+        { kind: 'Outline', variant: 'Positive', className: mergeClassNames('border border--positive-muted') },
+        { kind: 'Outline', variant: 'Negative', className: mergeClassNames('border border--negative-muted') },
+        { kind: 'Outline', variant: 'Warning', className: mergeClassNames('border border--warning-muted') },
+        { kind: 'Outline', variant: 'Informative', className: mergeClassNames('border border--informative-muted') },
         { kind: 'Outline', variant: 'Neutral', className: mergeClassNames('border border--0') },
         // Status dot colors (applied to the [data-dot] element)
         { kind: 'Status', variant: 'Positive', className: mergeClassNames('[&>[data-dot=true]]:background--positive') },
