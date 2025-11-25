@@ -14,7 +14,10 @@ import {
 import { useIsMobile } from '@structure/source/utilities/react/hooks/useIsMobile';
 
 // Dependencies - Main Components
-import { ResponsivePopoverDrawer } from '@structure/source/components/popovers/responsive/ResponsivePopoverDrawer';
+import {
+    ResponsivePopoverDrawerProperties,
+    ResponsivePopoverDrawer,
+} from '@structure/source/components/popovers/responsive/ResponsivePopoverDrawer';
 import {
     AccountNavigationResponsivePopoverDrawerTriggerButton,
     AccountNavigationResponsivePopoverDrawerTriggerButtonProperties,
@@ -23,6 +26,7 @@ import { AccountNavigation } from './AccountNavigation';
 
 // Component - AccountNavigationResponsivePopoverDrawer
 export interface AccountNavigationResponsivePopoverDrawerProperties {
+    variant?: ResponsivePopoverDrawerProperties['variant'];
     triggerClassName?: string;
     triggerVariant?: AccountNavigationResponsivePopoverDrawerTriggerButtonProperties['variant'];
     signedOutHeader?: React.ReactNode;
@@ -66,7 +70,7 @@ export function AccountNavigationResponsivePopoverDrawer(
     // Render the component
     return (
         <ResponsivePopoverDrawer
-            variant={isMobile ? 'A' : 'C'}
+            variant={properties.variant ?? (isMobile ? 'A' : 'C')}
             accessibilityTitle="Account Menu"
             accessibilityDescription="Access your account settings, profile, and navigation."
             trigger={
