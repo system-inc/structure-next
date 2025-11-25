@@ -55,6 +55,7 @@ export interface TabsThemeConfiguration {
     variantItemClasses: Partial<Record<TabsVariant, string>>; // Per-variant classes for TabItem element
     variantItemWrapperClasses: Partial<Record<TabsVariant, string>>; // Per-variant wrapper classes for children
     variantItemActiveClasses: Partial<Record<TabsVariant, string>>; // Per-variant active indicator classes
+    variantItemHoverClasses: Partial<Record<TabsVariant, string>>; // Per-variant hover indicator classes for inactive tabs
     sizes: Partial<Record<TabsSize, string>>;
     configuration: {
         baseClasses: string; // Applied to Tabs wrapper (minimal)
@@ -109,11 +110,11 @@ export const tabsTheme: TabsThemeConfiguration = {
 
         LineBottom: mergeClassNames(
             // Layout
-            'relative flex',
+            'group relative flex',
             // Interaction
             'cursor-pointer transition-colors',
             // Colors
-            'content--2 hover:content--0 data-[state=active]:content--0',
+            'content--2 data-[state=active]:content--0',
         ),
     },
 
@@ -136,7 +137,19 @@ export const tabsTheme: TabsThemeConfiguration = {
             // Position at bottom of tab item, full width
             'absolute right-0 -bottom-px left-0',
             // Line styling, rounded-full means we get a rounded stroke end cap
-            'h-px rounded-full background-content--0',
+            'h-px background-content--0',
+        ),
+    },
+
+    // Per-variant hover indicator classes for inactive tabs
+    variantItemHoverClasses: {
+        LineBottom: mergeClassNames(
+            // Position at bottom of tab item, full width
+            'absolute right-0 -bottom-px left-0',
+            // Line styling - grey, only visible on hover
+            'h-px background-content--5',
+            // Hidden by default, visible on hover
+            'opacity-0 group-hover:opacity-100',
         ),
     },
 

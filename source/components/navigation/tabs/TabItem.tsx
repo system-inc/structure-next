@@ -55,12 +55,20 @@ export const TabItem = React.forwardRef<React.ComponentRef<typeof RadixTabPrimit
         // Wrap children if variant specifies wrapper classes
         const content = wrapperClasses ? <div className={wrapperClasses}>{children}</div> : children;
 
+        // Get variant-specific hover classes for inactive tabs
+        const variantHoverClasses = tabsContext.variant
+            ? tabsContext.theme.variantItemHoverClasses?.[tabsContext.variant]
+            : undefined;
+
         return (
             <RadixTabPrimitive.Trigger ref={reference} {...radixTabTriggerProperties} asChild>
                 <motion.div className={tabItemClassName}>
+                    {/* Active indicator - shows for active tab with layout animation */}
                     {isActive && variantActiveClasses && (
                         <motion.div layoutId={`tab-${tabsContext.tabGroupId}`} className={activeIndicatorClassName} />
                     )}
+                    {/* Hover indicator - shows on hover for inactive tabs only */}
+                    {!isActive && variantHoverClasses && <div className={variantHoverClasses} />}
                     {content}
                 </motion.div>
             </RadixTabPrimitive.Trigger>
