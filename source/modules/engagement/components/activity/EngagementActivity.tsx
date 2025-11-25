@@ -330,5 +330,5 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
     }
 
     // Render the component
-    return <div className={mergeClassNames('flex w-80 shrink-0 flex-col', properties.className)}>{content}</div>;
+    return <div className={mergeClassNames('', properties.className)}>{content}</div>;
 }
