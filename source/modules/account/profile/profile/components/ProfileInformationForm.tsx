@@ -3,122 +3,150 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
-// Dependencies - Main Components
-import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
-import { FormInputText } from '@structure/source/components/forms/FormInputText';
-import { useNotifications } from '@structure/source/components/notifications/NotificationsProvider';
+// Dependencies - Hooks
+import { useForm } from '@structure/source/components/forms-new/useForm';
 
 // Dependencies - API
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { useAccountProfileUpdateRequest } from '@structure/source/modules/account/hooks/useAccountProfileUpdateRequest';
+import { GraphQLInputTypes } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-// Interface - ProfileFormValues
-interface ProfileFormValues {
-    givenName?: string;
-    familyName?: string;
-    displayName?: string;
-    phoneNumber?: string;
-}
+// Dependencies - Main Components
+import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
+import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
+import { Notice } from '@structure/source/components/notices/Notice';
+
+// Dependencies - Animation
+import { AnimatePresence, motion } from 'motion/react';
+
+// Dependencies - Assets
+import { SpinnerIcon } from '@phosphor-icons/react';
+
+// Dependencies - Utilities
+import { schemaFromGraphQl } from '@structure/source/utilities/schema/utilities/SchemaUtilities';
+
+// Schema - Create from GraphQL metadata for the fields we need
+const profileInformationSchema = schemaFromGraphQl(GraphQLInputTypes.AccountProfileUpdateInput, [
+    'givenName',
+    'familyName',
+    'displayName',
+]);
 
 // Component - ProfileInformationForm
 export function ProfileInformationForm() {
+    // State
+    const [showSuccessNotice, setShowSuccessNotice] = React.useState(false);
+    const [showErrorNotice, setShowErrorNotice] = React.useState(false);
+
     // Hooks
-    const notifications = useNotifications();
     const account = useAccount();
     const accountProfileUpdateRequest = useAccountProfileUpdateRequest();
+    const form = useForm({
+        schema: profileInformationSchema,
+        onSubmit: async function (formState) {
+            // Clear previous notices
+            setShowSuccessNotice(false);
+            setShowErrorNotice(false);
 
-    // Function to format phone number
-    // function formatPhoneNumber(phoneNumber: string | null | undefined): string | undefined {
-    //     if(!phoneNumber) return undefined;
-    //     let formatted = phoneNumber.startsWith('+') ? phoneNumber : '+1' + phoneNumber;
-    //     if(formatted.startsWith('+1') && formatted.length === 12) {
-    //         formatted = `+1 (${formatted.substring(2, 5)}) ${formatted.substring(5, 8)}-${formatted.substring(8, 12)}`;
-    //     }
-    //     return formatted;
-    // }
-
-    // Function to handle form submission
-    async function handleSubmit(formValues: ProfileFormValues): Promise<FormSubmitResponseInterface> {
-        try {
-            const result = await accountProfileUpdateRequest.execute({
-                input: {
-                    givenName: formValues.givenName as string,
-                    familyName: formValues.familyName as string,
-                    displayName: formValues.displayName as string,
-                    // phoneNumber: formatPhoneNumber(formValues.phoneNumber as string),
-                },
-            });
-
-            if(result?.accountProfileUpdate) {
-                notifications.addNotification({
-                    title: 'Profile Updated',
-                    content: 'Your profile information has been updated successfully.',
+            try {
+                // Execute the account profile update request
+                const result = await accountProfileUpdateRequest.execute({
+                    input: {
+                        givenName: formState.value.givenName as string,
+                        familyName: formState.value.familyName as string,
+                        displayName: formState.value.displayName as string,
+                    },
                 });
 
-                // Update account atom with fresh profile data
-                account.setData({ profile: result.accountProfileUpdate });
-            }
+                // If successful, update account data and show success notice
+                if(result?.accountProfileUpdate) {
+                    // Update account atom with fresh profile data
+                    account.setData({ profile: result.accountProfileUpdate });
 
-            return {
-                success: true,
-            };
-        }
-        catch(error) {
-            return {
-                success: false,
-                message: error instanceof Error ? error.message : 'An error occurred while updating your profile.',
-            };
-        }
-    }
+                    // Show inline success notice
+                    setShowSuccessNotice(true);
+                }
+            }
+            catch(error) {
+                console.error('Error updating profile:', error);
+                setShowErrorNotice(true);
+            }
+        },
+    });
+
+    // Effect to set account data on the form when it loads or changes
+    React.useEffect(
+        function () {
+            if(account.data?.profile) {
+                form.setFieldValue('givenName', account.data.profile.givenName ?? '');
+                form.setFieldValue('familyName', account.data.profile.familyName ?? '');
+                form.setFieldValue('displayName', account.data.profile.displayName ?? '');
+            }
+        },
+        [account.data?.profile, form],
+    );
 
     // Render the component
     return (
-        <div className="rounded-lg border border--3 p-6">
-            <h2 className="text-xl font-medium">Profile Information</h2>
+        <form.Form className="flex flex-col gap-4">
+            {/* Field - First Name */}
+            <form.Field identifier="givenName">
+                <form.FieldLabel tip="This is also known as your given name.">First Name</form.FieldLabel>
+                <FieldInputText variant="Outline" placeholder="Jane" />
+            </form.Field>
 
-            <Form
-                loading={!account.data && account.isLoading}
-                className="mt-6"
-                formInputs={[
-                    <FormInputText
-                        key="givenName"
-                        id="givenName"
-                        className="grow"
-                        label="First Name"
-                        labelTip="This is also known as your given name."
-                        defaultValue={account.data?.profile?.givenName}
-                    />,
-                    <FormInputText
-                        key="familyName"
-                        id="familyName"
-                        className="grow"
-                        label="Last Name"
-                        labelTip="This is also known as your family name."
-                        defaultValue={account.data?.profile?.familyName}
-                    />,
-                    <FormInputText
-                        key="displayName"
-                        id="displayName"
-                        className="mt-6"
-                        label="Display Name"
-                        labelTip="Your display name is how you will be identified on our platform."
-                        defaultValue={account.data?.profile?.displayName}
-                    />,
-                    // <FormInputText
-                    //     key="phoneNumber"
-                    //     id="phoneNumber"
-                    //     className="mt-6"
-                    //     label="Phone Number"
-                    //     placeholder="(555) 555-5555"
-                    //     defaultValue={account.account?.profile?.phoneNumber}
-                    // />,
-                ]}
-                buttonProperties={{
-                    children: 'Save Changes',
-                    processingText: 'Saving...',
-                }}
-                onSubmit={handleSubmit}
-            />
-        </div>
+            {/* Field - Last Name */}
+            <form.Field identifier="familyName">
+                <form.FieldLabel tip="This is also known as your family name.">Last Name</form.FieldLabel>
+                <FieldInputText variant="Outline" placeholder="Doe" />
+            </form.Field>
+
+            {/* Field - Display Name */}
+            <form.Field identifier="displayName">
+                <form.FieldLabel tip="Your display name is how you will be identified on our platform.">
+                    Display Name
+                </form.FieldLabel>
+                <FieldInputText variant="Outline" placeholder="Jane Doe" />
+            </form.Field>
+
+            {/* Success/Error Notices */}
+            <AnimatePresence>
+                {showSuccessNotice && (
+                    <motion.div
+                        key="success"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ type: 'spring', duration: 0.35, bounce: 0.05 }}
+                    >
+                        <Notice variant="Positive" title="Changes have been saved." />
+                    </motion.div>
+                )}
+                {showErrorNotice && (
+                    <motion.div
+                        key="error"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ type: 'spring', duration: 0.35, bounce: 0.05 }}
+                    >
+                        <Notice variant="Negative" title="There was an error saving your changes. Please try again." />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Submit Button */}
+            <div className="flex justify-end">
+                <AnimatedButton
+                    variant="A"
+                    type="submit"
+                    isProcessing={accountProfileUpdateRequest.isLoading}
+                    processingIcon={SpinnerIcon}
+                    animateIconPosition="iconRight"
+                >
+                    Save
+                </AnimatedButton>
+            </div>
+        </form.Form>
     );
 }
