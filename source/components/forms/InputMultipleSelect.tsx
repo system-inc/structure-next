@@ -244,9 +244,9 @@ export const InputMultipleSelect = React.forwardRef<
                 };
             })}
             // loadItems={properties.loadItems}
-            loadingItems={loadingItems}
-            loadingItemsMessage={properties.loadingItemsMessage}
-            loadingItemsError={loadingItemsError}
+            isLoadingItems={loadingItems}
+            isLoadingItemsMessage={properties.loadingItemsMessage}
+            isLoadingItemsError={loadingItemsError}
             search={properties.search}
             onItemSelected={onChangeIntercept}
             closeOnItemSelected={closeOnItemSelected}

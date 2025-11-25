@@ -49,9 +49,9 @@ export interface MenuProperties extends Omit<React.HTMLAttributes<HTMLDivElement
 
     // Optional asynchronous loading of menu items
     loadItems?: () => Promise<MenuItemInterface[]>;
-    loadingItems?: boolean;
-    loadingItemsMessage?: React.ReactNode;
-    loadingItemsError?: React.ReactNode;
+    isLoadingItems?: boolean;
+    isLoadingItemsMessage?: React.ReactNode;
+    isLoadingItemsError?: React.ReactNode;
 }
 export function Menu(properties: MenuProperties) {
     // References
@@ -98,8 +98,8 @@ export function Menu(properties: MenuProperties) {
         highlightItemOnMount ? (firstSelectedItemIndex !== -1 ? firstSelectedItemIndex : 0) : -1,
     );
     const highlightSourceReference = React.useRef<'keyboard' | 'mouse' | null>(null);
-    const [loadingItems, setLoadingItems] = React.useState<boolean>(properties.loadingItems ? true : false);
-    const [loadingItemsError, setLoadingItemsError] = React.useState<React.ReactNode>(properties.loadingItemsError);
+    const [loadingItems, setLoadingItems] = React.useState<boolean>(properties.isLoadingItems ? true : false);
+    const [loadingItemsError, setLoadingItemsError] = React.useState<React.ReactNode>(properties.isLoadingItemsError);
 
     // Update the items state when the properties change
     const propertiesItems = properties.items;
@@ -420,7 +420,7 @@ export function Menu(properties: MenuProperties) {
                     <div className="mr-1.5 animate-spin">
                         <BrokenCircleIcon className="h-5 w-5" />
                     </div>
-                    <div className="text-sm">{properties.loadingItemsMessage ?? 'Loading...'}</div>
+                    <div className="text-sm">{properties.isLoadingItemsMessage ?? 'Loading...'}</div>
                 </div>
             ) : loadingItemsError ? (
                 // Error loading items
