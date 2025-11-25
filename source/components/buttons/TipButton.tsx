@@ -31,7 +31,7 @@ export function TipButton({
 }: TipButtonProperties) {
     // Defaults
     const variantValue = buttonProperties.variant ?? 'Ghost';
-    const sizeValue = buttonProperties.size ?? 'IconExtraSmall';
+    const sizeValue = buttonProperties.size ?? 'IconSmall';
     const Icon = buttonProperties.icon ?? InformationCircledIcon;
     const openOnPressValue = openOnPress ?? false;
 
@@ -42,7 +42,7 @@ export function TipButton({
             size={sizeValue}
             icon={Icon}
             // The button stays above the shadow of the popover when open
-            className={mergeClassNames('data-[state=open]:z-50', className)}
+            className={mergeClassNames('p-1 data-[state=open]:z-50', className)}
             {...buttonProperties}
         />
     );

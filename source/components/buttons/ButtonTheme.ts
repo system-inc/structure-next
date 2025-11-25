@@ -220,6 +220,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Active and Popover open states (for TipButton)
             'active:background--5 data-[state=active]:background--5 data-[state=delayed-open]:background--5 data-[state=instant-open]:background--5 data-[state=open]:background--5',
             'active:content---3 data-[state=active]:content---1 data-[state=delayed-open]:content---1 data-[state=instant-open]:content---1 data-[state=open]:content---1',
+            // Dark appearance is a bit more contrasted
+            'dark:hover:background--6',
+            'dark:active:background--8 dark:data-[state=active]:background--8 dark:data-[state=delayed-open]:background--8 dark:data-[state=instant-open]:background--8 dark:data-[state=open]:background--8',
         ),
 
         // Variant Destructive - Dangerous/destructive action button
