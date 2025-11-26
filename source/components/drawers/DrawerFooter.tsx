@@ -39,12 +39,17 @@ export function DrawerFooter(properties: DrawerFooterProperties) {
         return null;
     }
 
+    // Get variant-specific footer classes (undefined if no variant)
+    const variantFooterClasses = drawerContext.variant
+        ? drawerContext.drawerTheme.variantFooterClasses?.[drawerContext.variant]
+        : undefined;
+
     // Render the component
     return (
         <div
             className={mergeClassNames(
-                drawerContext.drawerTheme.configuration.footerClasses,
-                'shrink-0 px-6 pt-4 pb-6',
+                drawerContext.drawerTheme.configuration.footerBaseClasses,
+                variantFooterClasses,
                 properties.className,
             )}
         >

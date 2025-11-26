@@ -50,9 +50,20 @@ export function DrawerHeader(properties: DrawerHeaderProperties) {
         return null;
     }
 
+    // Get variant-specific header classes (undefined if no variant)
+    const variantHeaderClasses = drawerContext.variant
+        ? drawerContext.drawerTheme.variantHeaderClasses?.[drawerContext.variant]
+        : undefined;
+
     // Render the component
     return (
-        <div className={mergeClassNames(drawerContext.drawerTheme.configuration.headerClasses, properties.className)}>
+        <div
+            className={mergeClassNames(
+                drawerContext.drawerTheme.configuration.headerBaseClasses,
+                variantHeaderClasses,
+                properties.className,
+            )}
+        >
             {renderCloseButton()}
             {properties.children}
         </div>

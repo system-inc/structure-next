@@ -30,7 +30,7 @@ export const baseDialogCloseClassNames = mergeClassNames(
     'z-10',
 );
 
-// Base styles for dialog header
+// Base styles for dialog header (layout only, no padding - padding comes from variant)
 export const baseDialogHeaderClassNames = mergeClassNames(
     // Flex layout with vertical spacing
     'flex flex-col space-y-1.5',
@@ -38,7 +38,10 @@ export const baseDialogHeaderClassNames = mergeClassNames(
     'text-left',
 );
 
-// Base styles for dialog footer
+// Base styles for dialog body (structural only, no padding - padding comes from variant)
+export const baseDialogBodyClassNames = 'grow overflow-y-auto';
+
+// Base styles for dialog footer (layout only, no padding - padding comes from variant)
 export const baseDialogFooterClassNames =
     // Flex layout with spacing
     'flex flex-row justify-end space-x-2';
@@ -125,15 +128,25 @@ export type DialogSize = keyof DialogSizes;
 // Structure must define all variants/positions/sizes it declares in the interfaces above
 // Project extensions are optional (Partial)
 export interface DialogThemeConfiguration {
+    // Container-level variant classes
     variants: Partial<Record<DialogVariant, string>>;
+
+    // Per-part variant classes (TabsTheme pattern)
+    // These allow each compound part to have variant-specific styling
+    // When no variant is set, parts are truly unstyled (no padding)
+    variantHeaderClasses: Partial<Record<DialogVariant, string>>;
+    variantBodyClasses: Partial<Record<DialogVariant, string>>;
+    variantFooterClasses: Partial<Record<DialogVariant, string>>;
+
     positions: Partial<Record<DialogPosition, string>>;
     sizes: Partial<Record<DialogSize, string>>;
     configuration: {
         baseClasses: string;
         overlayClasses: string;
         closeClasses: string;
-        headerClasses: string;
-        footerClasses: string;
+        headerBaseClasses: string;
+        bodyBaseClasses: string;
+        footerBaseClasses: string;
         defaultVariant?: {
             variant?: DialogVariant;
             position?: DialogPosition;
@@ -144,11 +157,24 @@ export interface DialogThemeConfiguration {
 
 // Dialog Theme - Structure Default
 export const dialogTheme: DialogThemeConfiguration = {
-    // Variants control visual styling (border, background, padding, shadow)
+    // Variants control visual styling (border, background, shadow)
+    // NOTE: Padding moved to per-part variant classes for consistency between mobile/desktop
     variants: {
         // Variant A - Styled modal with border and shadow
         // Use for: Standard dialogs, modals, forms
-        A: 'flex w-full flex-col gap-4 rounded-lg border border--0 background--0 p-6 shadow-lg',
+        A: 'flex w-full flex-col rounded-lg border border--0 background--0 shadow-lg',
+    },
+
+    // Per-part variant classes - padding for each compound part when variant is active
+    // When no variant is set, parts are truly unstyled (no padding)
+    variantHeaderClasses: {
+        A: 'shrink-0 px-6 pt-6 pb-4',
+    },
+    variantBodyClasses: {
+        A: 'px-6',
+    },
+    variantFooterClasses: {
+        A: 'shrink-0 px-6 pt-4 pb-6',
     },
 
     // Positions control where the dialog appears on screen
@@ -177,7 +203,7 @@ export const dialogTheme: DialogThemeConfiguration = {
     // Configuration
     configuration: {
         // Base classes (empty = unstyled by default, positions/sizes/variants add their own styles)
-        baseClasses: '',
+        baseClasses: 'flex flex-col',
 
         // Overlay classes
         overlayClasses: baseDialogOverlayClassNames,
@@ -185,11 +211,14 @@ export const dialogTheme: DialogThemeConfiguration = {
         // Close button classes
         closeClasses: baseDialogCloseClassNames,
 
-        // Header classes
-        headerClasses: baseDialogHeaderClassNames,
+        // Header base classes (layout only, no padding)
+        headerBaseClasses: baseDialogHeaderClassNames,
 
-        // Footer classes
-        footerClasses: baseDialogFooterClassNames,
+        // Body base classes (structural only, no padding)
+        bodyBaseClasses: baseDialogBodyClassNames,
+
+        // Footer base classes (layout only, no padding)
+        footerBaseClasses: baseDialogFooterClassNames,
 
         // Default properties when not specified
         defaultVariant: {

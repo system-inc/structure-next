@@ -50,9 +50,20 @@ export function DialogHeader(properties: DialogHeaderProperties) {
         return null;
     }
 
+    // Get variant-specific header classes (undefined if no variant)
+    const variantHeaderClasses = dialogContext.variant
+        ? dialogContext.dialogTheme.variantHeaderClasses?.[dialogContext.variant]
+        : undefined;
+
     // Render the component
     return (
-        <div className={mergeClassNames(dialogContext.dialogTheme.configuration.headerClasses, properties.className)}>
+        <div
+            className={mergeClassNames(
+                dialogContext.dialogTheme.configuration.headerBaseClasses,
+                variantHeaderClasses,
+                properties.className,
+            )}
+        >
             {renderCloseButton()}
             {properties.children}
         </div>

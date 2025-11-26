@@ -21,17 +21,26 @@ export interface DialogBodyProperties {
 export function DialogBody(properties: DialogBodyProperties) {
     const dialogContext = useDialogContext();
 
+    // Get variant-specific body classes (undefined if no variant)
+    const variantBodyClasses = dialogContext.variant
+        ? dialogContext.dialogTheme.variantBodyClasses?.[dialogContext.variant]
+        : undefined;
+
+    const bodyClassName = mergeClassNames(
+        dialogContext.dialogTheme.configuration.bodyBaseClasses,
+        variantBodyClasses,
+        properties.className,
+    );
+
     // Mobile
     if(dialogContext.isMobile) {
-        return (
-            <div className={mergeClassNames('grow overflow-y-auto', properties.className)}>{properties.children}</div>
-        );
+        return <div className={bodyClassName}>{properties.children}</div>;
     }
 
-    // Desktop
+    // Desktop with ScrollArea
     return (
         <ScrollArea className={mergeClassNames('max-h-[75vh]', properties.scrollAreaClassName)}>
-            <div className={properties.className}>{properties.children}</div>
+            <div className={bodyClassName}>{properties.children}</div>
         </ScrollArea>
     );
 }

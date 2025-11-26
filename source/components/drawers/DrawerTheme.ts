@@ -56,13 +56,18 @@ export const baseDrawerCloseClassNames = mergeClassNames(
     'z-10',
 );
 
-// Base styles for drawer header
+// Base styles for drawer header (layout only, no padding - padding comes from variant)
 export const baseDrawerHeaderClassNames = mergeClassNames(
-    // Flex and spacing
-    'shrink-0 px-6 pt-6 pb-4',
+    // Flex layout with vertical spacing
+    'flex flex-col space-y-1.5',
+    // Text alignment
+    'text-left',
 );
 
-// Base styles for drawer footer
+// Base styles for drawer body (structural only, no padding - padding comes from variant)
+export const baseDrawerBodyClassNames = 'grow overflow-y-auto';
+
+// Base styles for drawer footer (layout only, no padding - padding comes from variant)
 export const baseDrawerFooterClassNames = mergeClassNames(
     // Flex layout with spacing
     'flex flex-row justify-end space-x-2',
@@ -70,8 +75,16 @@ export const baseDrawerFooterClassNames = mergeClassNames(
 
 // Drawer theme configuration
 export interface DrawerThemeConfiguration {
-    // Variants control visual styling (border, background, padding)
+    // Container-level variant classes (border, background)
     variants: Partial<Record<DrawerVariant, string>>;
+
+    // Per-part variant classes (TabsTheme pattern)
+    // These allow each compound part to have variant-specific styling
+    // When no variant is set, parts are truly unstyled (no padding)
+    variantHeaderClasses: Partial<Record<DrawerVariant, string>>;
+    variantBodyClasses: Partial<Record<DrawerVariant, string>>;
+    variantFooterClasses: Partial<Record<DrawerVariant, string>>;
+
     // Sides control where the drawer slides in from (positioning and sizing)
     sides: Partial<Record<DrawerSide, string>>;
     // Configuration
@@ -84,10 +97,12 @@ export interface DrawerThemeConfiguration {
         overlayClasses: string;
         // Close button classes
         closeClasses: string;
-        // Header classes
-        headerClasses: string;
-        // Footer classes
-        footerClasses: string;
+        // Header base classes (layout only, no padding)
+        headerBaseClasses: string;
+        // Body base classes (structural only, no padding)
+        bodyBaseClasses: string;
+        // Footer base classes (layout only, no padding)
+        footerBaseClasses: string;
         // Default properties when not specified
         defaultVariant?: {
             // No default variant = unstyled
@@ -99,12 +114,34 @@ export interface DrawerThemeConfiguration {
 
 // Default drawer theme
 export const drawerTheme: DrawerThemeConfiguration = {
-    // Variants control visual styling (border, background, padding)
+    // Variants control visual styling (border, background)
+    // NOTE: Padding moved to per-part variant classes for consistency
     variants: {
         A: mergeClassNames('border--0 background--0 dark:background--0'),
         B: mergeClassNames('border--1 background--0 dark:background--1'),
         C: mergeClassNames('border--2 background--0 dark:background--2'),
         D: mergeClassNames('border--3 background--0 dark:background--3'),
+    },
+
+    // Per-part variant classes - padding for each compound part when variant is active
+    // When no variant is set, parts are truly unstyled (no padding)
+    variantHeaderClasses: {
+        A: 'shrink-0 px-6 pt-6 pb-4',
+        B: 'shrink-0 px-6 pt-6 pb-4',
+        C: 'shrink-0 px-6 pt-6 pb-4',
+        D: 'shrink-0 px-6 pt-6 pb-4',
+    },
+    variantBodyClasses: {
+        A: 'px-6',
+        B: 'px-6',
+        C: 'px-6',
+        D: 'px-6',
+    },
+    variantFooterClasses: {
+        A: 'shrink-0 px-6 pt-4 pb-6',
+        B: 'shrink-0 px-6 pt-4 pb-6',
+        C: 'shrink-0 px-6 pt-4 pb-6',
+        D: 'shrink-0 px-6 pt-4 pb-6',
     },
 
     // Sides control where the drawer slides in from
@@ -129,7 +166,7 @@ export const drawerTheme: DrawerThemeConfiguration = {
     // Configuration
     configuration: {
         // Base classes (empty = unstyled by default, sides/variants add their own styles)
-        baseClasses: '',
+        baseClasses: 'flex flex-col',
 
         // Base wrapper classes
         baseWrapperClasses: mergeClassNames('fixed z-50 flex flex-col'),
@@ -140,11 +177,14 @@ export const drawerTheme: DrawerThemeConfiguration = {
         // Close button classes
         closeClasses: baseDrawerCloseClassNames,
 
-        // Header classes
-        headerClasses: baseDrawerHeaderClassNames,
+        // Header base classes (layout only, no padding)
+        headerBaseClasses: baseDrawerHeaderClassNames,
 
-        // Footer classes
-        footerClasses: baseDrawerFooterClassNames,
+        // Body base classes (structural only, no padding)
+        bodyBaseClasses: baseDrawerBodyClassNames,
+
+        // Footer base classes (layout only, no padding)
+        footerBaseClasses: baseDrawerFooterClassNames,
 
         // Default properties when not specified
         defaultVariant: {

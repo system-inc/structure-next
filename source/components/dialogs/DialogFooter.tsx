@@ -39,12 +39,17 @@ export function DialogFooter(properties: DialogFooterProperties) {
         return null;
     }
 
+    // Get variant-specific footer classes (undefined if no variant)
+    const variantFooterClasses = dialogContext.variant
+        ? dialogContext.dialogTheme.variantFooterClasses?.[dialogContext.variant]
+        : undefined;
+
     // Render the component
     return (
         <div
             className={mergeClassNames(
-                dialogContext.dialogTheme.configuration.footerClasses,
-                dialogContext.isMobile ? 'shrink-0 px-6 pt-4 pb-6' : '',
+                dialogContext.dialogTheme.configuration.footerBaseClasses,
+                variantFooterClasses,
                 properties.className,
             )}
         >
