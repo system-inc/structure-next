@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Hooks
 import { useForm } from '@structure/source/components/forms-new/useForm';
+import { useFormNotice } from '@structure/source/components/forms-new/hooks/useFormNotice';
 
 // Dependencies - API
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
@@ -14,10 +15,6 @@ import { GraphQLInputTypes } from '@structure/source/api/graphql/GraphQlGenerate
 // Dependencies - Main Components
 import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
-import { Notice } from '@structure/source/components/notices/Notice';
-
-// Dependencies - Animation
-import { AnimatePresence, motion } from 'motion/react';
 
 // Dependencies - Assets
 import { SpinnerIcon } from '@phosphor-icons/react';
@@ -34,20 +31,15 @@ const profileInformationSchema = schemaFromGraphQl(GraphQLInputTypes.AccountProf
 
 // Component - ProfileDetailsForm
 export function ProfileDetailsForm() {
-    // State
-    const [showSuccessNotice, setShowSuccessNotice] = React.useState(false);
-    const [showErrorNotice, setShowErrorNotice] = React.useState(false);
-
     // Hooks
     const account = useAccount();
     const accountProfileUpdateRequest = useAccountProfileUpdateRequest();
+    const formNotice = useFormNotice({
+        // autoDismissInMilliseconds: 500,
+    });
     const form = useForm({
         schema: profileInformationSchema,
         onSubmit: async function (formState) {
-            // Clear previous notices
-            setShowSuccessNotice(false);
-            setShowErrorNotice(false);
-
             try {
                 // Execute the account profile update request
                 const result = await accountProfileUpdateRequest.execute({
@@ -64,12 +56,12 @@ export function ProfileDetailsForm() {
                     account.setData({ profile: result.accountProfileUpdate });
 
                     // Show inline success notice
-                    setShowSuccessNotice(true);
+                    formNotice.showSuccess('Changes have been saved.');
                 }
             }
             catch(error) {
                 console.error('Error updating profile:', error);
-                setShowErrorNotice(true);
+                formNotice.showError('There was an error saving your changes. Please try again.');
             }
         },
     });
@@ -109,43 +101,22 @@ export function ProfileDetailsForm() {
                 <FieldInputText variant="Outline" placeholder="Ada Lovelace" />
             </form.Field>
 
-            {/* Success/Error Notices */}
-            <AnimatePresence>
-                {showSuccessNotice && (
-                    <motion.div
-                        key="success"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ type: 'spring', duration: 0.35, bounce: 0.05 }}
-                    >
-                        <Notice variant="Positive" title="Changes have been saved." />
-                    </motion.div>
-                )}
-                {showErrorNotice && (
-                    <motion.div
-                        key="error"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ type: 'spring', duration: 0.35, bounce: 0.05 }}
-                    >
-                        <Notice variant="Negative" title="There was an error saving your changes. Please try again." />
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* FormNotice in a div with the button to prevent gap-4 messing with the exit animation */}
+            <div className="flex flex-col">
+                <formNotice.FormNotice className="mb-5.5" />
 
-            {/* Submit Button */}
-            <div className="flex justify-end">
-                <AnimatedButton
-                    variant="A"
-                    type="submit"
-                    isProcessing={accountProfileUpdateRequest.isLoading}
-                    processingIcon={SpinnerIcon}
-                    animateIconPosition="iconRight"
-                >
-                    Save
-                </AnimatedButton>
+                <div className="flex justify-end">
+                    {/* Save button */}
+                    <AnimatedButton
+                        variant="A"
+                        type="submit"
+                        isProcessing={accountProfileUpdateRequest.isLoading}
+                        processingIcon={SpinnerIcon}
+                        animateIconPosition="iconRight"
+                    >
+                        Save
+                    </AnimatedButton>
+                </div>
             </div>
         </form.Form>
     );
