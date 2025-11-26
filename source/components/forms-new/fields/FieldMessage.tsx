@@ -13,9 +13,9 @@ import type { ValidationResult } from '@structure/source/utilities/schema/Schema
 // Component - FieldMessage
 export interface FieldMessageProperties extends React.HTMLAttributes<HTMLDivElement> {
     /**
-     * Controls when success messages are displayed.
+     * Controls when success messages are displayed. If not provided, successes are not shown.
      *
-     * - 'WhenChanged' (default): Only show successes when value differs from default value.
+     * - 'WhenChanged': Only show successes when value differs from default value.
      *   Uses TanStack Form's `meta.isDefaultValue` - ideal for edit forms where you don't
      *   want to show "Valid!" on page load for existing data.
      * - 'Always': Always show successes after validation completes.
@@ -93,24 +93,26 @@ export function FieldMessage(properties: FieldMessageProperties) {
     // Uses TanStack Form's built-in isDefaultValue which compares current value to defaultValues
     const hasChangedFromDefault = storeIsDefaultValue === false;
 
-    // Get the showSuccesses mode, defaulting to 'WhenChanged'
-    const showSuccessesMode = properties.showSuccesses ?? 'WhenChanged';
+    // Determine if we should show successes based on showSuccesses prop (no default - user must opt in)
+    const showSuccessesMode = properties.showSuccesses;
 
     // Determine if we should show successes based on timing prop
     let shouldShowSuccesses =
-        showSuccessesMode === 'Always'
-            ? true
-            : showSuccessesMode === 'WhenChanged'
-              ? hasChangedFromDefault
-              : showSuccessesMode === 'OnBlur'
-                ? storeIsTouched
-                : showSuccessesMode === 'NonEmpty'
-                  ? typeof storeValue === 'string'
-                      ? storeValue.length > 0
-                      : !!storeValue
-                  : showSuccessesMode === 'OnBlurOrNonEmpty'
-                    ? storeIsTouched || (typeof storeValue === 'string' ? storeValue.length > 0 : !!storeValue)
-                    : false;
+        showSuccessesMode === undefined
+            ? false
+            : showSuccessesMode === 'Always'
+              ? true
+              : showSuccessesMode === 'WhenChanged'
+                ? hasChangedFromDefault
+                : showSuccessesMode === 'OnBlur'
+                  ? storeIsTouched
+                  : showSuccessesMode === 'NonEmpty'
+                    ? typeof storeValue === 'string'
+                        ? storeValue.length > 0
+                        : !!storeValue
+                    : showSuccessesMode === 'OnBlurOrNonEmpty'
+                      ? storeIsTouched || (typeof storeValue === 'string' ? storeValue.length > 0 : !!storeValue)
+                      : false;
 
     // Only show successes if there are no errors and we have successes to show
     shouldShowSuccesses = shouldShowSuccesses && !hasErrors && validationResults.successes.length > 0;
