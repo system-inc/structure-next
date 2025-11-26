@@ -122,6 +122,7 @@ export function ContactListEntryForm({
                 {label && <form.FieldLabel>{label}</form.FieldLabel>}
                 <div className="flex items-center gap-2">
                     <FieldInputText
+                        variant="Outline"
                         size="Large"
                         type="email"
                         disabled={contactListEntryCreateRequest.isLoading}
