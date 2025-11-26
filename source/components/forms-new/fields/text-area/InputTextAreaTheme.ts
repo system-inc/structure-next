@@ -37,6 +37,7 @@ export const autofillInputTextAreaStyleClassNames = 'autofill:bg-transparent dar
 //   }
 export interface InputTextAreaVariants {
     A: 'A';
+    Outline: 'Outline';
     Error: 'Error';
 }
 
@@ -102,6 +103,16 @@ export const inputTextAreaTheme: InputTextAreaThemeConfiguration = {
             borderInputTextAreaStyleClassNames,
             focusInputTextAreaStyleClassNames,
             autofillInputTextAreaStyleClassNames,
+        ),
+
+        // Variant Outline - Transparent background with border only
+        // Use for: Lighter, more subtle textareas, inline editing, or when background should show through
+        Outline: mergeClassNames(
+            commonInputTextAreaClassNames,
+            autofillInputTextAreaStyleClassNames,
+            // Border styling
+            borderInputTextAreaStyleClassNames,
+            focusInputTextAreaStyleClassNames,
         ),
 
         // Variant Error - Textarea with error state
