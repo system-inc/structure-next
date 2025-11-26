@@ -121,7 +121,11 @@ export function UsernameForm() {
         <>
             <form.Form className="flex flex-col gap-4">
                 {/* Field - Username */}
-                <form.Field identifier="username" validateSchema="onChange">
+                <form.Field
+                    identifier="username"
+                    validateSchema="onChange"
+                    messageProperties={{ showSuccesses: 'WhenChanged' }}
+                >
                     <form.FieldLabel>Username</form.FieldLabel>
                     <FieldInputText variant="Outline" commit="onChange" placeholder="adalovelace" />
                 </form.Field>
