@@ -8,17 +8,21 @@ import { useFieldContext, useStore } from '../../useForm';
 import { useFieldId } from '../../providers/FormIdProvider';
 
 // Dependencies - Main Components
-import { InputSelect } from './InputSelect';
+import { InputSelect, InputSelectProperties, InputSelectReferenceInterface } from './InputSelect';
 
 // Component - FieldInputSelect
-export type FieldInputSelectProperties = Omit<React.ComponentProps<typeof InputSelect>, 'value' | 'defaultValue'> & {
+export type FieldInputSelectProperties = Omit<
+    InputSelectProperties,
+    'value' | 'defaultValue' | 'onChange' | 'onBlur'
+> & {
     commit?: 'onChange' | 'onBlur'; // When to update form store (default: 'onChange' for select)
 };
 export function FieldInputSelect(properties: FieldInputSelectProperties) {
     // Hooks
     const fieldContext = useFieldContext<string>();
     const fieldId = useFieldId(fieldContext.name);
-    // Subscribe to value and errors
+
+    // Subscribe to value and errors from form store
     const storeValue = useStore(fieldContext.store, function (state) {
         return state.value;
     });
@@ -26,45 +30,41 @@ export function FieldInputSelect(properties: FieldInputSelectProperties) {
         return state.meta.errors;
     });
 
+    // References
+    const inputReference = React.useRef<InputSelectReferenceInterface>(null);
+
     // Defaults - selects typically commit onChange (immediate)
     const commitStrategy = properties.commit ?? 'onChange';
 
-    // Function to handle change events
-    function onChangeIntercept(event: React.ChangeEvent<HTMLSelectElement>) {
-        const selectValue = event.currentTarget.value;
-
+    // Function to handle selection change
+    function handleChange(value: string | undefined) {
         // Commit immediately for onChange strategy
         if(commitStrategy === 'onChange') {
-            fieldContext.handleChange(selectValue);
+            fieldContext.handleChange(value ?? '');
         }
         else {
             // For onBlur strategy, just update value without triggering validation
-            fieldContext.setValue(selectValue, { dontValidate: true });
+            fieldContext.setValue(value ?? '', { dontValidate: true });
         }
-
-        // Call properties.onChange if it exists
-        properties.onChange?.(event);
     }
 
     // Function to handle blur events
-    function onBlurIntercept(event: React.FocusEvent<HTMLSelectElement>) {
+    function handleBlur() {
         // Trigger validation on blur
         fieldContext.handleBlur();
-
-        // Call properties.onBlur if it exists
-        properties.onBlur?.(event);
     }
 
     // Render the component
     return (
         <InputSelect
             {...properties}
+            ref={inputReference}
             id={properties.id ?? fieldId}
             name={properties.name ?? fieldContext.name}
             value={storeValue ?? ''}
             aria-invalid={storeErrors && storeErrors.length > 0 ? true : undefined}
-            onChange={onChangeIntercept}
-            onBlur={onBlurIntercept}
+            onChange={handleChange}
+            onBlur={handleBlur}
         />
     );
 }
