@@ -104,19 +104,20 @@ export function ContactForm() {
                         {/* Field - Email Address */}
                         <form.Field identifier="emailAddress">
                             <form.FieldLabel>Your Email Address</form.FieldLabel>
-                            <FieldInputText type="email" />
+                            <FieldInputText variant="A" type="email" />
                         </form.Field>
 
                         {/* Field - Title */}
                         <form.Field identifier="title">
                             <form.FieldLabel>Subject</form.FieldLabel>
-                            <FieldInputText placeholder="Briefly describe your message" />
+                            <FieldInputText variant="A" placeholder="Briefly describe your message" />
                         </form.Field>
 
                         {/* Field - Content */}
                         <form.Field identifier="content">
                             <form.FieldLabel>Message</form.FieldLabel>
                             <FieldInputTextArea
+                                variant="A"
                                 placeholder="Please include any details that will help us assist you"
                                 rows={8}
                             />

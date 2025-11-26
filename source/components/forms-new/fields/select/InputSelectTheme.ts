@@ -26,6 +26,7 @@ export const focusStyleClassNames = 'focus:border--focus focus-visible:outline-n
 // Structure defines its base variants here, and projects can augment to add custom variants
 export interface InputSelectVariants {
     A: 'A';
+    Outline: 'Outline';
     Error: 'Error';
 }
 
@@ -108,7 +109,6 @@ export const inputSelectTheme: InputSelectThemeConfiguration = {
 
         // Default properties when not specified
         defaultVariant: {
-            variant: 'A',
             size: 'Base',
         },
     },

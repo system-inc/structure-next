@@ -139,7 +139,6 @@ export const inputTextTheme: InputTextThemeConfiguration = {
 
         // Default properties when not specified
         defaultVariant: {
-            variant: 'A',
             size: 'Base',
         },
     },

@@ -159,7 +159,6 @@ export const inputTextAreaTheme: InputTextAreaThemeConfiguration = {
 
         // Default properties when not specified
         defaultVariant: {
-            variant: 'A',
             size: 'Base',
             resize: 'vertical',
         },

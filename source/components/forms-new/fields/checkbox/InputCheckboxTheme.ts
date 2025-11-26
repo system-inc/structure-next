@@ -76,7 +76,6 @@ export const inputCheckboxTheme: InputCheckboxThemeConfiguration = {
         baseClasses: inputCheckboxBaseClassNames,
         indicatorClasses: 'flex items-center justify-center text-current',
         defaultVariant: {
-            variant: 'A',
             size: 'Base',
         },
     },
