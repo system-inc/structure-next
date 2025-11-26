@@ -128,14 +128,43 @@ export function useForm<
 
     // Merge schema defaults with user-provided defaults
     const schemaDefaults = schema.getDefaults();
+    const mergedDefaultValues = { ...schemaDefaults, ...(options.defaultValues ?? {}) } as TFormData;
     const mergedOptions = {
         ...options,
-        defaultValues: { ...schemaDefaults, ...(options.defaultValues ?? {}) } as TFormData,
+        defaultValues: mergedDefaultValues,
     };
 
     // This is the fully-typed TanStack form instance with Field, Subscribe, AppForm, etc.
     const appForm = useAppForm(mergedOptions);
     type AppFormType = typeof appForm;
+
+    // Track the last defaultValues we synced to, to avoid unnecessary resets
+    // We serialize to JSON for deep comparison (handles objects, arrays, etc.)
+    const lastSyncedDefaultsReference = React.useRef<string | null>(null);
+
+    // Automatically synchronize defaultValues when they change (e.g., async data arrives)
+    // This makes defaultValues "reactive" - when the property changes, we reset the form
+    // so that TanStack Form's internal defaultValues (and thus isDefaultValue) stay in sync
+    React.useEffect(
+        function () {
+            // Serialize current defaultValues for comparison
+            const serialized = JSON.stringify(mergedDefaultValues);
+
+            // Skip if defaultValues haven't actually changed
+            if(serialized === lastSyncedDefaultsReference.current) {
+                return;
+            }
+
+            // Reset form with new defaultValues
+            // This updates both the form values AND TanStack's internal defaultValues,
+            // ensuring isDefaultValue computes correctly
+            appForm.reset(mergedDefaultValues);
+            lastSyncedDefaultsReference.current = serialized;
+        },
+        // We intentionally use the serialized value as the dependency trigger
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [JSON.stringify(mergedDefaultValues)],
+    );
 
     const formReference = React.useRef<HTMLFormElement | null>(null);
     const requestAnimationFrameIdReference = React.useRef<number | null>(null);
