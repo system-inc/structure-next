@@ -89,9 +89,8 @@ export const InputSelect = React.forwardRef<InputSelectReferenceInterface, Input
         // State - Items (supports both static and async loaded)
         const [items, setItems] = React.useState<InputSelectItemProperties[]>(properties.items ?? []);
         const [isLoadingItemsInternal, setIsLoadingItemsInternal] = React.useState<boolean>(false);
-        const [isLoadingItemsErrorInternal, setIsLoadingItemsErrorInternal] = React.useState<React.ReactNode>(
-            undefined,
-        );
+        const [isLoadingItemsErrorInternal, setIsLoadingItemsErrorInternal] =
+            React.useState<React.ReactNode>(undefined);
 
         // Determine loading state - external prop takes precedence over internal state
         const isLoadingItems = properties.isLoadingItems ?? isLoadingItemsInternal;
@@ -262,7 +261,9 @@ export const InputSelect = React.forwardRef<InputSelectReferenceInterface, Input
                             typeof selectedItem.children === 'string' ? (
                                 <span className="truncate content--0">{selectedItem.children}</span>
                             ) : (
-                                selectedItem.children ?? <span className="truncate content--0">{selectedItem.value}</span>
+                                selectedItem.children ?? (
+                                    <span className="truncate content--0">{selectedItem.value}</span>
+                                )
                             )
                         ) : (
                             <span className="truncate content--placeholder">{placeholder}</span>
