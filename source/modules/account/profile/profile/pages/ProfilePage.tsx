@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { Card } from '@structure/source/components/containers/Card';
 import { ProfileImageSection } from '@structure/source/modules/account/profile/profile/components/ProfileImageSection';
-import { ProfileInformationForm } from '@structure/source/modules/account/profile/profile/components/ProfileInformationForm';
+import { ProfileDetailsForm } from '@structure/source/modules/account/profile/profile/components/ProfileDetailsForm';
 import { UsernameForm } from '@structure/source/modules/account/profile/profile/components/UsernameForm';
 import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
@@ -62,11 +62,11 @@ export function ProfilePage() {
             <div className="mt-10 w-full space-y-10">
                 <Card variant="A">
                     <h2 className="mb-6 text-base font-medium">Details</h2>
-                    <ProfileInformationForm />
+                    <ProfileDetailsForm />
                 </Card>
 
                 <Card variant="A">
-                    <h2 className="mb-6 text-base font-medium">Username</h2>
+                    <h2 className="mb-6 text-base font-medium">Change Username</h2>
                     <UsernameForm />
                 </Card>
             </div>

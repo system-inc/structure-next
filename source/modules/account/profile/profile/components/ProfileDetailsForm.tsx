@@ -32,8 +32,8 @@ const profileInformationSchema = schemaFromGraphQl(GraphQLInputTypes.AccountProf
     'displayName',
 ]);
 
-// Component - ProfileInformationForm
-export function ProfileInformationForm() {
+// Component - ProfileDetailsForm
+export function ProfileDetailsForm() {
     // State
     const [showSuccessNotice, setShowSuccessNotice] = React.useState(false);
     const [showErrorNotice, setShowErrorNotice] = React.useState(false);
@@ -92,13 +92,13 @@ export function ProfileInformationForm() {
             {/* Field - First Name */}
             <form.Field identifier="givenName">
                 <form.FieldLabel tip="This is also known as your given name.">First Name</form.FieldLabel>
-                <FieldInputText variant="Outline" placeholder="Jane" />
+                <FieldInputText variant="Outline" placeholder="Ada" />
             </form.Field>
 
             {/* Field - Last Name */}
             <form.Field identifier="familyName">
                 <form.FieldLabel tip="This is also known as your family name.">Last Name</form.FieldLabel>
-                <FieldInputText variant="Outline" placeholder="Doe" />
+                <FieldInputText variant="Outline" placeholder="Lovelace" />
             </form.Field>
 
             {/* Field - Display Name */}
@@ -106,7 +106,7 @@ export function ProfileInformationForm() {
                 <form.FieldLabel tip="Your display name is how you will be identified on our platform.">
                     Display Name
                 </form.FieldLabel>
-                <FieldInputText variant="Outline" placeholder="Jane Doe" />
+                <FieldInputText variant="Outline" placeholder="Ada Lovelace" />
             </form.Field>
 
             {/* Success/Error Notices */}

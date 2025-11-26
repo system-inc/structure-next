@@ -6,10 +6,12 @@ import React from 'react';
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
-import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
-import { FormInputText } from '@structure/source/components/forms/FormInputText';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
 import { Notice } from '@structure/source/components/notices/Notice';
+
+// Dependencies - Forms
+import { useForm } from '@structure/source/components/forms-new/useForm';
+import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
@@ -19,56 +21,84 @@ import { useAccountProfileUpdateRequest } from '@structure/source/modules/accoun
 import { AccountProfileUsernameValidateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
+import { schema } from '@structure/source/utilities/schema/Schema';
 
-// Dependencies - Animations
-// import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
+// Dependencies - Assets
+import { SpinnerIcon } from '@phosphor-icons/react';
 
 // Component - UsernameForm
 export function UsernameForm() {
-    // Hooks - API
+    // State
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+    const [usernameUpdateSuccess, setUsernameUpdateSuccess] = React.useState(false);
+
+    // Hooks
     const account = useAccount();
     const accountProfileUpdateRequest = useAccountProfileUpdateRequest();
 
-    // State
-    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-    const [activeUsername, setActiveUsername] = React.useState(account.data?.profile?.username || '');
-    const [newUsername, setNewUsername] = React.useState(activeUsername);
-    const [usernameUpdateSuccess, setUsernameUpdateSuccess] = React.useState(false);
+    // The current username from the server (used for validation skip logic and UI)
+    const serverUsername = account.data?.profile?.username ?? '';
 
-    // Effect to sync activeUsername with account state on initial load
-    React.useEffect(
+    // Create schema - recreates when serverUsername changes to update the skip function
+    const usernameSchema = React.useMemo(
         function () {
-            const currentUsername = account.data?.profile?.username;
-            if(currentUsername) {
-                setActiveUsername(currentUsername);
-                setNewUsername(currentUsername);
-            }
+            return schema.object({
+                username: schema
+                    .string()
+                    .username(serverUsername)
+                    .graphQlValidate(
+                        AccountProfileUsernameValidateDocument,
+                        function (value) {
+                            return { username: value };
+                        },
+                        function (value) {
+                            // Skip GraphQL validation if typing your own current username
+                            return value === serverUsername;
+                        },
+                    ),
+            });
         },
-        [account.data?.profile?.username],
+        [serverUsername],
     );
 
-    // Function to handle form submission
-    async function handleSubmit(): Promise<FormSubmitResponseInterface> {
-        setIsDialogOpen(true);
-        return { success: true };
-    }
+    // Initialize form with schema and server data as default values
+    // useForm automatically syncs defaultValues when they change (reactive defaultValues)
+    // This means when account.data loads or updates, the form resets automatically
+    const form = useForm({
+        schema: usernameSchema,
+        defaultValues: {
+            username: serverUsername,
+        },
+        onSubmit: async function () {
+            // Open dialog instead of executing mutation directly
+            setIsDialogOpen(true);
+        },
+    });
+
+    // Subscribe to form value for button disable logic
+    const currentFormUsername = form.useStore(function (state) {
+        return state.values.username;
+    });
+
+    // Subscribe to validation state for processing indicator
+    const isValidating = form.useStore(function (state) {
+        return state.isValidating;
+    });
 
     // Function to handle confirmation
     async function handleConfirm() {
         try {
             const result = await accountProfileUpdateRequest.execute({
                 input: {
-                    username: newUsername,
+                    username: currentFormUsername,
                 },
             });
 
             if(result?.accountProfileUpdate) {
-                setActiveUsername(newUsername); // Update activeUsername
-                setNewUsername(newUsername); // Synchronize newUsername with activeUsername
                 setUsernameUpdateSuccess(true);
 
                 // Update account atom with fresh profile data
+                // This will trigger useForm's reactive defaultValues sync automatically
                 account.setData({ profile: result.accountProfileUpdate });
             }
         } catch {
@@ -80,15 +110,8 @@ export function UsernameForm() {
     function handleDialogClose() {
         setIsDialogOpen(false);
 
-        // If username update was successful
+        // Reset username update success state
         if(usernameUpdateSuccess) {
-            // Set the new username as the active username
-            setActiveUsername(newUsername);
-
-            // Synchronize newUsername with activeUsername
-            setNewUsername(newUsername);
-
-            // Reset username update success state
             setUsernameUpdateSuccess(false);
         }
     }
@@ -96,63 +119,46 @@ export function UsernameForm() {
     // Render the component
     return (
         <>
-            <Form
-                loading={!account.data && account.isLoading}
-                formInputs={[
-                    <FormInputText
-                        key="username"
-                        id="username"
-                        label="Username"
-                        defaultValue={newUsername}
-                        validateOnChange={true}
-                        validateOnBlur={true}
-                        validationSchema={new ValidationSchema().username(activeUsername).graphQlQuery(
-                            AccountProfileUsernameValidateDocument,
-                            function (value) {
-                                return {
-                                    username: value,
-                                };
-                            },
-                            function (value) {
-                                return value === activeUsername; // Compare with activeUsername
-                            },
-                        )}
-                        showValidationSuccessResults={true}
-                        onChange={function (value) {
-                            // Reset username update success state
-                            setUsernameUpdateSuccess(false);
+            <form.Form className="flex flex-col gap-4">
+                {/* Field - Username */}
+                <form.Field identifier="username" validateSchema="onChange">
+                    <form.FieldLabel>Username</form.FieldLabel>
+                    <FieldInputText variant="Outline" commit="onChange" placeholder="adalovelace" />
+                </form.Field>
 
-                            if(value) {
-                                setNewUsername(value);
-                            }
-                        }}
-                    />,
-                ]}
-                buttonProperties={{
-                    children: 'Change Username',
-                    disabled: activeUsername === newUsername, // Use activeUsername to determine disabled state
-                }}
-                onSubmit={handleSubmit}
-            />
+                {/* Submit Button */}
+                <div className="flex justify-end">
+                    <AnimatedButton
+                        variant="A"
+                        type="submit"
+                        disabled={serverUsername === currentFormUsername}
+                        isProcessing={isValidating}
+                        processingIcon={SpinnerIcon}
+                    >
+                        Change Username
+                    </AnimatedButton>
+                </div>
+            </form.Form>
 
             {/* Confirmation Dialog */}
             <Dialog
                 variant="A"
                 accessibilityTitle={usernameUpdateSuccess ? 'Username Updated' : 'Confirm Username Change'}
                 accessibilityDescription="Update profile username"
+                header={usernameUpdateSuccess ? 'Username Updated' : 'Confirm Username Change'}
                 open={isDialogOpen}
                 onOpenChange={handleDialogClose}
             >
-                <Dialog.Header>{usernameUpdateSuccess ? 'Username Updated' : 'Confirm Username Change'}</Dialog.Header>
                 <Dialog.Body>
                     {usernameUpdateSuccess ? (
-                        <p className="">Your username has been successfully changed.</p>
+                        <p className="">
+                            Your username has been successfully changed to <i>&quot;{serverUsername}&quot;</i>.
+                        </p>
                     ) : (
                         <>
                             <p className="">
-                                Are you sure you want to change your username from <b>&quot;{activeUsername}&quot;</b>{' '}
-                                to
-                                <b>&quot;{newUsername}&quot;</b>?
+                                Are you sure you want to change your username from <i>&quot;{serverUsername}&quot;</i>{' '}
+                                to <i>&quot;{currentFormUsername}&quot;</i>?
                             </p>
                             {accountProfileUpdateRequest.error && (
                                 <Notice
@@ -166,7 +172,7 @@ export function UsernameForm() {
                 </Dialog.Body>
                 <Dialog.Footer>
                     {usernameUpdateSuccess ? (
-                        <Button variant="B" onClick={handleDialogClose}>
+                        <Button variant="A" onClick={handleDialogClose}>
                             Close
                         </Button>
                     ) : (
@@ -178,8 +184,10 @@ export function UsernameForm() {
                                 variant="A"
                                 onClick={handleConfirm}
                                 isProcessing={accountProfileUpdateRequest.isLoading}
+                                processingIcon={SpinnerIcon}
+                                animateIconPosition="iconRight"
                             >
-                                Confirm
+                                Change Username
                             </AnimatedButton>
                         </div>
                     )}
