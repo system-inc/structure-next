@@ -26,7 +26,7 @@ export function ProfileImageSection() {
         <div className="mr-6">
             {account.data ? (
                 <ProfileImageUploader
-                    className="h-32 w-32"
+                    className="h-24 w-24"
                     profileImageUrl={profileImageUrl}
                     alternateText={profileImageAlternateText}
                     onImageChange={function () {
@@ -34,7 +34,7 @@ export function ProfileImageSection() {
                     }}
                 />
             ) : (
-                <PlaceholderAnimation className="h-32 w-32" />
+                <PlaceholderAnimation className="h-24 w-24" />
             )}
         </div>
     );

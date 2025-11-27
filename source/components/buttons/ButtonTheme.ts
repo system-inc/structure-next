@@ -232,17 +232,16 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonTypographyClassNames,
             buttonCommonFocusClassNames,
             'rounded-lg border',
-            // Base: Subtle background with semantic negative content
-            'border--3 background--2 content--negative',
-            // Hover: Emphasize border with negative color
-            'hover:border--negative hover:background--3',
-            // Active: Stronger emphasis (includes when used as open popover trigger)
-            'active:border--negative active:background--4',
-            'data-[state=open]:border--negative data-[state=open]:background--4',
-            // Focus: Use negative border
-            'focus:border--negative',
-            // Disabled: Revert to base appearance
-            'disabled:hover:border--3 disabled:hover:background--2',
+            // Base: Red background with white text
+            'border-red-600 bg-red-500 text-white-800',
+            'dark:border-red-700 dark:bg-red-800',
+            // Hover
+            'hover:bg-red-700',
+            // Active (includes when used as open popover trigger)
+            'active:bg-red-800',
+            'data-[state=open]:bg-red-800',
+            // Disabled
+            'disabled:hover:bg-red-600',
         ),
 
         // Specialized UI Variants

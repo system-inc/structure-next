@@ -21,6 +21,7 @@ import CoinsIcon from '@structure/assets/icons/finance/CoinsIcon.svg';
 import GearIcon from '@structure/assets/icons/tools/GearIcon.svg';
 import TagIcon from '@structure/assets/icons/commerce/TagIcon.svg';
 import CodeIcon from '@structure/assets/icons/technology/CodeIcon.svg';
+import { SwatchesIcon } from '@phosphor-icons/react/dist/ssr';
 
 // Ops Navigation Links with role-based access control
 // Note: Administrator role has implicit access to all links (checked in OpsNavigation.tsx)
@@ -262,6 +263,12 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             },
         ],
     },
+    // Design - Administrator only
+    {
+        title: 'Design',
+        href: '/ops/design',
+        icon: SwatchesIcon,
+    },
     // Developers - Administrator only
     {
         title: 'Developers',
@@ -283,10 +290,6 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             {
                 title: 'Object Storage',
                 href: '/ops/developers/object-storage',
-            },
-            {
-                title: 'Design',
-                href: '/ops/developers/design',
             },
             {
                 title: 'Logs',

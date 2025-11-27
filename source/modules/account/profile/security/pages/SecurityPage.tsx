@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
+import { Card } from '@structure/source/components/containers/Card';
 import { ManagePasswordDialog } from '@structure/source/modules/account/profile/security/components/ManagePasswordDialog';
 
 // Dependencies - API
@@ -46,40 +47,39 @@ export function SecurityPage() {
     // Render the component
     return (
         <>
-            <h1>Security</h1>
+            <h1 className="mb-10">Security</h1>
 
-            <p className="mt-4 content--4">
-                Your account uses email-based authentication as the primary sign-in method. You can optionally set a
-                password for extra account protection.
-            </p>
-
-            <div className="mt-8">
-                {/* Set or Change Password Button */}
-                <Button variant="A" onClick={handlePasswordClick}>
+            <Card variant="A">
+                <h2 className="mb-4 text-base font-medium">Password</h2>
+                <p className="mb-6 text-sm content--4">
+                    Your account uses email-based authentication as the primary sign-in method. You can optionally set a
+                    password for extra account protection.
+                </p>
+                <Button variant="A" className="md:self-start" onClick={handlePasswordClick}>
                     {accountHasPasswordSet ? 'Change Password' : 'Set Password'}
                 </Button>
-            </div>
 
-            {/* Account Maintenance Dialog - Shows when auth is needed */}
-            <AccountMaintenanceDialog
-                open={needsAuthentication}
-                onOpenChange={function (open) {
-                    if(!open) {
-                        setNeedsAuthentication(false);
-                    }
-                }}
-                actionText={accountHasPasswordSet ? 'change your password' : 'set your password'}
-                onAuthenticated={handleAuthenticated}
-            />
+                {/* Account Maintenance Dialog - Shows when auth is needed */}
+                <AccountMaintenanceDialog
+                    open={needsAuthentication}
+                    onOpenChange={function (open) {
+                        if(!open) {
+                            setNeedsAuthentication(false);
+                        }
+                    }}
+                    actionText={accountHasPasswordSet ? 'change your password' : 'set your password'}
+                    onAuthenticated={handleAuthenticated}
+                />
 
-            {/* Password Management Dialog - Shows after authentication */}
-            <ManagePasswordDialog
-                open={showPasswordForm}
-                onOpenChange={function (open) {
-                    setShowPasswordForm(open);
-                }}
-                accountHasPasswordSet={accountHasPasswordSet || false}
-            />
+                {/* Password Management Dialog - Shows after authentication */}
+                <ManagePasswordDialog
+                    open={showPasswordForm}
+                    onOpenChange={function (open) {
+                        setShowPasswordForm(open);
+                    }}
+                    accountHasPasswordSet={accountHasPasswordSet || false}
+                />
+            </Card>
         </>
     );
 }

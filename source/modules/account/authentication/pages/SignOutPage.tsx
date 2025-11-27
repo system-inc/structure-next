@@ -7,6 +7,7 @@ import { useRouter } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
+import { Card } from '@structure/source/components/containers/Card';
 
 // Dependencies - Accounts
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
@@ -27,31 +28,29 @@ export function SignOutPage() {
     // Render the component
     return (
         <div className="flex h-screen flex-col items-center justify-center">
-            <div className="rounded-md border border--0 p-8">
-                <div className="flex w-80 flex-col">
-                    <p className="font-medium">Sign Out</p>
-                    <p className="mt-4 text-sm">Would you like to sign out?</p>
-                    <div className="mt-8 flex flex-col space-y-4">
-                        <Button
-                            variant="Destructive"
-                            onClick={function () {
-                                console.log('signing out..');
-                                account.signOut('/');
-                            }}
-                        >
-                            Sign Out
-                        </Button>
-                        <Button
-                            variant="Outline"
-                            onClick={function () {
-                                router.back();
-                            }}
-                        >
-                            No, Go Back
-                        </Button>
-                    </div>
+            <Card variant="A" className="w-80">
+                <p className="font-medium">Sign Out</p>
+                <p className="mt-4 text-sm">Would you like to sign out?</p>
+                <div className="mt-8 flex flex-col space-y-4">
+                    <Button
+                        variant="Destructive"
+                        onClick={function () {
+                            console.log('signing out..');
+                            account.signOut('/');
+                        }}
+                    >
+                        Sign Out
+                    </Button>
+                    <Button
+                        variant="Outline"
+                        onClick={function () {
+                            router.back();
+                        }}
+                    >
+                        No, Go Back
+                    </Button>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 }
