@@ -52,8 +52,8 @@ export function NavigationDrawer(properties: NavigationDrawerProperties) {
     // Render the component
     return (
         <Drawer
-            className=""
             variant="A"
+            className=""
             side="Left"
             accessibilityTitle="Navigation Menu"
             accessibilityDescription="Browse the main sections of the website."
