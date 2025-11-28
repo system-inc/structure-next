@@ -27,7 +27,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // - w-auto: Sizes to content width, works well as flex children without fighting siblings
 // - min-h-0: Allows flex child to shrink below content size (required for scrolling in flex containers)
 // - overflow-hidden: Clips scrollbars to rounded corners when using rounded-* classes
-export const scrollAreaRootClassName = 'h-full w-auto min-h-0 overflow-hidden';
+export const scrollAreaRootClassName = 'h-full min-h-0 w-auto overflow-hidden';
 
 // Viewport Defaults (className):
 // - h-full w-full: Fills the Root completely so scrollable area matches container size
@@ -56,7 +56,7 @@ export const scrollAreaVerticalScrollbarClassName =
 
 // Horizontal Scrollbar - 14px tall track with padding for 6px thumb
 export const scrollAreaHorizontalScrollbarClassName =
-    'h-3.5 py-1 px-0.5 flex-col data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
+    'h-3.5 flex-col px-0.5 py-1 data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
 
 // Thumb - the draggable scroll handle
 export const scrollAreaThumbClassName = mergeClassNames(

@@ -82,7 +82,6 @@
     }
 }
 
-
 /* Scrollbar Hide - Hides scrollbars while maintaining scroll functionality */
 @utility scrollbar-hide {
     -ms-overflow-style: none;

@@ -22,7 +22,9 @@ export function OpsDesignDialogsPage() {
                 <p className="text-sm content--1">
                     Dialog with colored borders to visualize the structure. Each section has an 8px border.
                 </p>
-                <Button variant="A" onClick={() => setDebugDialogOpen(true)}>Open Debug Dialog</Button>
+                <Button variant="A" onClick={() => setDebugDialogOpen(true)}>
+                    Open Debug Dialog
+                </Button>
             </div>
 
             <Dialog
@@ -34,7 +36,7 @@ export function OpsDesignDialogsPage() {
                 header={
                     <div className="border-8 border-red-500">
                         <div className="p-4">
-                            <span className="text-xs font-mono text-red-500">HEADER (red border)</span>
+                            <span className="font-mono text-xs text-red-500">HEADER (red border)</span>
                             <h3 className="text-lg font-medium">Debug Dialog Header</h3>
                         </div>
                     </div>
@@ -47,7 +49,7 @@ export function OpsDesignDialogsPage() {
                 footer={
                     <div className="border-8 border-yellow-500">
                         <div className="flex justify-end gap-2 p-4">
-                            <span className="text-xs font-mono text-yellow-500">FOOTER (yellow border)</span>
+                            <span className="font-mono text-xs text-yellow-500">FOOTER (yellow border)</span>
                             <Button variant="A" onClick={() => setDebugDialogOpen(false)}>
                                 Close
                             </Button>
