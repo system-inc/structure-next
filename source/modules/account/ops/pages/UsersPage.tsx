@@ -6,7 +6,7 @@ import { useRouter, useUrlPath, useUrlSearchParameters } from '@structure/source
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
-import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
+import { OpsNavigationTrail } from '@structure/source/ops/layout/navigation/OpsNavigationTrail';
 import { Pagination } from '@structure/source/components/navigation/pagination/Pagination';
 import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 import { ProfileImage } from '@structure/source/modules/account/components/profile-image/ProfileImage';

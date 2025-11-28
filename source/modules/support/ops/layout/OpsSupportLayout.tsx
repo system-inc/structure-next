@@ -6,7 +6,7 @@ import { useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { SideNavigationLayout } from '@structure/source/layouts/side-navigation/SideNavigationLayout';
-import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayout';
+import { AuthorizationLayout } from '@structure/source/modules/account/layouts/AuthorizationLayout';
 import { OpsSupportPageNavigation } from '@structure/source/modules/support/ops/layout/OpsSupportPageNavigation';
 import { AccountRole } from '@structure/source/modules/account/Account';
 

@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
+import { OpsNavigationTrail } from '@structure/source/ops/layout/navigation/OpsNavigationTrail';
 import { GraphQlQueryTable } from '@structure/source/components/tables/GraphQlQueryTable';
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 

@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
-import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
+import { OpsNavigationTrail } from '@structure/source/ops/layout/navigation/OpsNavigationTrail';
 import { Button } from '@structure/source/components/buttons/Button';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';

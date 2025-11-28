@@ -21,7 +21,7 @@ import { ThemeProvider } from '@structure/source/theme/ThemeProvider';
 import { IconContext } from '@phosphor-icons/react';
 
 // Dependencies - Feature Providers
-import { EngagementProvider } from '@structure/source/modules/engagement/EngagementProvider';
+import { EngagementProvider } from '@structure/source/modules/engagement/layouts/EngagementProvider';
 
 // Dependencies - Interaction Providers
 import { NotificationsProvider } from '@structure/source/components/notifications/NotificationsProvider';

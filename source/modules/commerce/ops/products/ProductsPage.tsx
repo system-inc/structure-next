@@ -4,13 +4,13 @@ import React from 'react';
 // Dependencies - Main Components
 import { OpsNavigationTrail } from '@structure/source/ops/layout/navigation/OpsNavigationTrail';
 
-// Component - UsersSegmentsPage
-export function UsersSegmentsPage() {
+// Component - ProductsPage
+export function ProductsPage() {
     // Render the component
     return (
         <div className="px-6 py-4">
             <OpsNavigationTrail />
-            <h1>Segments</h1>
+            <h1>Products</h1>
         </div>
     );
 }
