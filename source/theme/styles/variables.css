@@ -105,7 +105,7 @@
 
     /* Scrim Scale - Translucent layers that provide contrast against any background */
     /* Uses dark-* (black transparency) in light mode, light-* (white transparency) in dark mode */
-    --color-scrim-0: light-dark(var(--color-dark-0), var(--color-light-0));
+    /* --color-scrim-0: light-dark(var(--color-dark-0), var(--color-light-0)); */
     --color-scrim-25: light-dark(var(--color-dark-25), var(--color-light-25));
     --color-scrim-50: light-dark(var(--color-dark-50), var(--color-light-50));
     --color-scrim-100: light-dark(var(--color-dark-100), var(--color-light-100));
@@ -127,7 +127,7 @@
     --color-scrim-900: light-dark(var(--color-dark-900), var(--color-light-900));
     --color-scrim-950: light-dark(var(--color-dark-950), var(--color-light-950));
     --color-scrim-975: light-dark(var(--color-dark-975), var(--color-light-975));
-    --color-scrim-1000: light-dark(var(--color-dark-1000), var(--color-light-1000));
+    /* --color-scrim-1000: light-dark(var(--color-dark-1000), var(--color-light-1000)); */
 
     /* Black Scale (Lightest to Darkest) */
     --color-black-0: #505050; /* Step 0 */
@@ -257,6 +257,213 @@
     --color-white-950: #fbfbfb; /* Step 950 */
     /* --color-white-975: #fdfdfd; Step 975 */
     --color-white-1000: #ffffff; /* Step 1000 */
+
+    /* Red Scale (0 to 1000, Tailwind defaults commented out) */
+    --color-red-0: #feffff;
+    /* --color-red-50: #fef2f2; Tailwind default */
+    /* --color-red-100: #fee2e2; Tailwind default */
+    --color-red-150: #fed6d6;
+    /* --color-red-200: #fecaca; Tailwind default */
+    --color-red-250: #fdb8b8;
+    /* --color-red-300: #fca5a5; Tailwind default */
+    --color-red-350: #fa8b8b;
+    /* --color-red-400: #f87171; Tailwind default */
+    --color-red-450: #f45a5a;
+    /* --color-red-500: #ef4444; Tailwind default */
+    --color-red-550: #e63535;
+    /* --color-red-600: #dc2626; Tailwind default */
+    --color-red-650: #ca2121;
+    /* --color-red-700: #b91c1c; Tailwind default */
+    --color-red-750: #a91c1c;
+    /* --color-red-800: #991b1b; Tailwind default */
+    --color-red-850: #8c1c1c;
+    /* --color-red-900: #7f1d1d; Tailwind default */
+    /* --color-red-950: #450a0a; Tailwind default */
+    --color-red-1000: #0b0000;
+
+    /* Orange Scale (0 to 1000, Tailwind defaults commented out) */
+    --color-orange-0: #ffffff;
+    /* --color-orange-50: #fff7ed; Tailwind default */
+    /* --color-orange-100: #ffedd5; Tailwind default */
+    --color-orange-150: #fee2c0;
+    /* --color-orange-200: #fed7aa; Tailwind default */
+    --color-orange-250: #fec88f;
+    /* --color-orange-300: #fdba74; Tailwind default */
+    --color-orange-350: #fca658;
+    /* --color-orange-400: #fb923c; Tailwind default */
+    --color-orange-450: #fa8229;
+    /* --color-orange-500: #f97316; Tailwind default */
+    --color-orange-550: #f26611;
+    /* --color-orange-600: #ea580c; Tailwind default */
+    --color-orange-650: #d64c0c;
+    /* --color-orange-700: #c2410c; Tailwind default */
+    --color-orange-750: #ae3a0f;
+    /* --color-orange-800: #9a3412; Tailwind default */
+    --color-orange-850: #8b3012;
+    /* --color-orange-900: #7c2d12; Tailwind default */
+    /* --color-orange-950: #431407; Tailwind default */
+    --color-orange-1000: #0a0000;
+
+    /* Yellow Scale (0 to 1000, Tailwind defaults commented out) */
+    --color-yellow-0: #feffff;
+    /* --color-yellow-50: #fefce8; Tailwind default */
+    /* --color-yellow-100: #fef9c3; Tailwind default */
+    --color-yellow-150: #fef4a6;
+    /* --color-yellow-200: #fef08a; Tailwind default */
+    --color-yellow-250: #fee868;
+    /* --color-yellow-300: #fde047; Tailwind default */
+    --color-yellow-350: #fcd62e;
+    /* --color-yellow-400: #facc15; Tailwind default */
+    --color-yellow-450: #f2c00e;
+    /* --color-yellow-500: #eab308; Tailwind default */
+    --color-yellow-550: #da9e06;
+    /* --color-yellow-600: #ca8a04; Tailwind default */
+    --color-yellow-650: #b67606;
+    /* --color-yellow-700: #a16207; Tailwind default */
+    --color-yellow-750: #93580a;
+    /* --color-yellow-800: #854d0e; Tailwind default */
+    --color-yellow-850: #7b4610;
+    /* --color-yellow-900: #713f12; Tailwind default */
+    /* --color-yellow-950: #422006; Tailwind default */
+    --color-yellow-1000: #130100;
+
+    /* Green Scale (0 to 1000, Tailwind defaults commented out) */
+    --color-green-0: #fffeff;
+    /* --color-green-50: #f0fdf4; Tailwind default */
+    /* --color-green-100: #dcfce7; Tailwind default */
+    --color-green-150: #ccfadc;
+    /* --color-green-200: #bbf7d0; Tailwind default */
+    --color-green-250: #a0f3be;
+    /* --color-green-300: #86efac; Tailwind default */
+    --color-green-350: #68e696;
+    /* --color-green-400: #4ade80; Tailwind default */
+    --color-green-450: #36d26f;
+    /* --color-green-500: #22c55e; Tailwind default */
+    --color-green-550: #1cb454;
+    /* --color-green-600: #16a34a; Tailwind default */
+    --color-green-650: #169244;
+    /* --color-green-700: #15803d; Tailwind default */
+    --color-green-750: #167238;
+    /* --color-green-800: #166534; Tailwind default */
+    --color-green-850: #155c30;
+    /* --color-green-900: #14532d; Tailwind default */
+    /* --color-green-950: #052e16; Tailwind default */
+    --color-green-1000: #000900;
+
+    /* Teal Scale (0 to 1000, Tailwind defaults commented out) */
+    --color-teal-0: #ffffff;
+    /* --color-teal-50: #f0fdfa; Tailwind default */
+    /* --color-teal-100: #ccfbf1; Tailwind default */
+    --color-teal-150: #b2f8ea;
+    /* --color-teal-200: #99f6e4; Tailwind default */
+    --color-teal-250: #7cf0dc;
+    /* --color-teal-300: #5eead4; Tailwind default */
+    --color-teal-350: #46dfca;
+    /* --color-teal-400: #2dd4bf; Tailwind default */
+    --color-teal-450: #20c6b2;
+    /* --color-teal-500: #14b8a6; Tailwind default */
+    --color-teal-550: #10a697;
+    /* --color-teal-600: #0d9488; Tailwind default */
+    --color-teal-650: #0e857b;
+    /* --color-teal-700: #0f766e; Tailwind default */
+    --color-teal-750: #106a64;
+    /* --color-teal-800: #115e59; Tailwind default */
+    --color-teal-850: #125652;
+    /* --color-teal-900: #134e4a; Tailwind default */
+    /* --color-teal-950: #042f2e; Tailwind default */
+    --color-teal-1000: #001012;
+
+    /* Blue Scale (0 to 1000, Tailwind defaults commented out) */
+    --color-blue-0: #ffffff;
+    /* --color-blue-50: #eff6ff; Tailwind default */
+    /* --color-blue-100: #dbeafe; Tailwind default */
+    --color-blue-150: #cde2fe;
+    /* --color-blue-200: #bfdbfe; Tailwind default */
+    --color-blue-250: #a9d0fe;
+    /* --color-blue-300: #93c5fd; Tailwind default */
+    --color-blue-350: #7ab5fc;
+    /* --color-blue-400: #60a5fa; Tailwind default */
+    --color-blue-450: #4e94f8;
+    /* --color-blue-500: #3b82f6; Tailwind default */
+    --color-blue-550: #3072f0;
+    /* --color-blue-600: #2563eb; Tailwind default */
+    --color-blue-650: #2158e2;
+    /* --color-blue-700: #1d4ed8; Tailwind default */
+    --color-blue-750: #1e47c4;
+    /* --color-blue-800: #1e40af; Tailwind default */
+    --color-blue-850: #1e3d9c;
+    /* --color-blue-900: #1e3a8a; Tailwind default */
+    /* --color-blue-950: #172554; Tailwind default */
+    --color-blue-1000: #10101e;
+
+    /* Indigo Scale (0 to 1000, Tailwind defaults commented out) */
+    --color-indigo-0: #fcfdff;
+    /* --color-indigo-50: #eef2ff; Tailwind default */
+    /* --color-indigo-100: #e0e7ff; Tailwind default */
+    --color-indigo-150: #d4dcfe;
+    /* --color-indigo-200: #c7d2fe; Tailwind default */
+    --color-indigo-250: #b6c3fd;
+    /* --color-indigo-300: #a5b4fc; Tailwind default */
+    --color-indigo-350: #93a0fa;
+    /* --color-indigo-400: #818cf8; Tailwind default */
+    --color-indigo-450: #7279f4;
+    /* --color-indigo-500: #6366f1; Tailwind default */
+    --color-indigo-550: #5956eb;
+    /* --color-indigo-600: #4f46e5; Tailwind default */
+    --color-indigo-650: #493fd8;
+    /* --color-indigo-700: #4338ca; Tailwind default */
+    --color-indigo-750: #3d34b6;
+    /* --color-indigo-800: #3730a3; Tailwind default */
+    --color-indigo-850: #342f92;
+    /* --color-indigo-900: #312e81; Tailwind default */
+    /* --color-indigo-950: #1e1b4b; Tailwind default */
+    --color-indigo-1000: #0b0815;
+
+    /* Purple Scale (0 to 1000, Tailwind defaults commented out) */
+    --color-purple-0: #ffffff;
+    /* --color-purple-50: #faf5ff; Tailwind default */
+    /* --color-purple-100: #f3e8ff; Tailwind default */
+    --color-purple-150: #eedeff;
+    /* --color-purple-200: #e9d5ff; Tailwind default */
+    --color-purple-250: #e0c4fe;
+    /* --color-purple-300: #d8b4fe; Tailwind default */
+    --color-purple-350: #cc9cfd;
+    /* --color-purple-400: #c084fc; Tailwind default */
+    --color-purple-450: #b46cfa;
+    /* --color-purple-500: #a855f7; Tailwind default */
+    --color-purple-550: #9e44f0;
+    /* --color-purple-600: #9333ea; Tailwind default */
+    --color-purple-650: #882adc;
+    /* --color-purple-700: #7e22ce; Tailwind default */
+    --color-purple-750: #7422bb;
+    /* --color-purple-800: #6b21a8; Tailwind default */
+    --color-purple-850: #621e98;
+    /* --color-purple-900: #581c87; Tailwind default */
+    /* --color-purple-950: #3b0764; Tailwind default */
+    --color-purple-1000: #1e0041;
+
+    /* Pink Scale (0 to 1000, Tailwind defaults commented out) */
+    --color-pink-0: #fefdfd;
+    /* --color-pink-50: #fdf2f8; Tailwind default */
+    /* --color-pink-100: #fce7f3; Tailwind default */
+    --color-pink-150: #fcdbee;
+    /* --color-pink-200: #fbcfe8; Tailwind default */
+    --color-pink-250: #fabcde;
+    /* --color-pink-300: #f9a8d4; Tailwind default */
+    --color-pink-350: #f68dc5;
+    /* --color-pink-400: #f472b6; Tailwind default */
+    --color-pink-450: #f05da8;
+    /* --color-pink-500: #ec4899; Tailwind default */
+    --color-pink-550: #e43888;
+    /* --color-pink-600: #db2777; Tailwind default */
+    --color-pink-650: #cc206a;
+    /* --color-pink-700: #be185d; Tailwind default */
+    --color-pink-750: #ae1855;
+    /* --color-pink-800: #9d174d; Tailwind default */
+    --color-pink-850: #901848;
+    /* --color-pink-900: #831843; Tailwind default */
+    /* --color-pink-950: #500724; Tailwind default */
+    --color-pink-1000: #1d0005;
 
     /* Borders - Gradient */
     --color-border--3: light-dark(var(--color-white-750), var(--color-black-500));
