@@ -20,7 +20,7 @@ export interface OpsDesignLayoutProperties {
 
 export function OpsDesignLayout(properties: OpsDesignLayoutProperties) {
     return (
-        <ScrollArea containerClassName="px-6 pb-6">
+        <ScrollArea className="px-6 pb-6">
             {/* Non-sticky header content */}
             <div className="mt-6 flex justify-center">
                 <div className="w-full max-w-7xl">

@@ -306,7 +306,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                 </div>
 
                 {/* Visitors list - scrollable, takes remaining height */}
-                <ScrollArea className="flex-1 pr-3 pb-3">
+                <ScrollArea containerClassName="flex-1" className="pr-3 pb-3">
                     <div ref={containerReference} className="space-y-3 pb-6">
                         <AnimatePresence initial={false} propagate>
                             {sortedVisitors.map(function (visitor) {
@@ -330,5 +330,5 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
     }
 
     // Render the component
-    return <div className={mergeClassNames('', properties.className)}>{content}</div>;
+    return <div className={mergeClassNames('flex flex-col', properties.className)}>{content}</div>;
 }

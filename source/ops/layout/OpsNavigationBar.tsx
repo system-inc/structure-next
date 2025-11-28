@@ -10,6 +10,7 @@ import { Button } from '@structure/source/components/buttons/Button';
 import { Link } from '@structure/source/components/navigation/Link';
 import { AccountNavigationResponsivePopoverDrawer } from '@structure/source/modules/account/components/navigation/responsive-popover-drawer/AccountNavigationResponsivePopoverDrawer';
 import { OpsNavigation } from './navigation/OpsNavigation';
+import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 import { AnimatePresence, motion } from 'motion/react';
 import Image from 'next/image';
 import { ProjectSettings } from '@project/ProjectSettings';
@@ -129,9 +130,9 @@ export function OpsNavigationBar() {
                                     }}
                                     className="fixed top-10 bottom-0 left-0 p-2"
                                 >
-                                    <div className="h-full w-56 overflow-y-auto rounded-lg border border--0 background--2">
+                                    <ScrollArea containerClassName="w-56 rounded-lg border border--0 background--2">
                                         <OpsNavigation />
-                                    </div>
+                                    </ScrollArea>
                                 </motion.div>
                             </Dialog.Content>
                         )}

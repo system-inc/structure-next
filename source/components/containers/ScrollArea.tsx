@@ -10,41 +10,80 @@ import * as RadixScrollArea from '@radix-ui/react-scroll-area';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Class Names - Scroll Area
-export const scrollAreaContainerClassName = 'h-full overflow-hidden';
-export const scrollAreaClassName = 'h-full w-full rounded-[inherit]';
+//
+// ScrollArea Structure:
+// ┌─────────────────────────────────────────┐
+// │ Root (containerClassName)               │ ← Outer container, controls sizing in parent layout
+// │ ┌─────────────────────────────────┬───┐ │
+// │ │ Viewport (className)            │ ▲ │ │ ← Scrollable content area
+// │ │                                 │ █ │ │
+// │ │  [Your content here]            │ █ │ │
+// │ │                                 │ ▼ │ │
+// │ └─────────────────────────────────┴───┘ │
+// └─────────────────────────────────────────┘
+//
+// Root Defaults (containerClassName):
+// - h-full: Fills parent height, required for vertical scrolling to work
+// - w-auto: Sizes to content width, works well as flex children without fighting siblings
+// - min-h-0: Allows flex child to shrink below content size (required for scrolling in flex containers)
+// - overflow-hidden: Clips scrollbars to rounded corners when using rounded-* classes
+export const scrollAreaRootClassName = 'h-full w-auto min-h-0 overflow-hidden';
+
+// Viewport Defaults (className):
+// - h-full w-full: Fills the Root completely so scrollable area matches container size
+// - rounded-[inherit]: Inherits border radius from Root for proper clipping
+export const scrollAreaViewportClassName = 'h-full w-full rounded-[inherit]';
+
+// Usage:
+// - containerClassName: Size/position the scroll area (e.g., flex-1, shrink-0, max-h-64, rounded-lg)
+// - className: Style the scrollable viewport (e.g., padding, background)
+
+// Scrollbar (shared) - track styling for both orientations
 export const scrollAreaScrollbarClassName = mergeClassNames(
     // Layout
-    'flex touch-none px-1 py-0.5 select-none',
+    'flex touch-none select-none',
     // Hover - Subtle track background on hover (macOS uses ~9% opacity)
     'data-[state=visible]:hover:bg-scrim-100',
-    // Group
+    // Group - allows thumb to respond to scrollbar state
     'group',
     // Animation - Animate the hover colors
     'duration-500 ease-out',
 );
+
+// Vertical Scrollbar - 14px wide track with padding for 6px thumb
 export const scrollAreaVerticalScrollbarClassName =
-    'w-[14px] data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
+    'w-3.5 px-1 py-0.5 data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
+
+// Horizontal Scrollbar - 14px tall track with padding for 6px thumb
 export const scrollAreaHorizontalScrollbarClassName =
-    'h-[14px] flex-col data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
+    'h-3.5 py-1 px-0.5 flex-col data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
+
+// Thumb - the draggable scroll handle
 export const scrollAreaThumbClassName = mergeClassNames(
-    // Layout
-    'relative flex-1 rounded before:absolute before:top-1/2 before:left-1/2 before:h-full before:min-h-11 before:w-full before:min-w-11 before:translate-x-[50%] before:translate-y-[50%]',
+    // Layout - flex-1 fills track minus padding, resulting in 6px thumb
+    'relative flex-1 rounded',
+    // Invisible touch target - minimum 44x44px centered on thumb for accessibility
+    'before:absolute before:top-1/2 before:left-1/2 before:h-full before:min-h-11 before:w-full before:min-w-11 before:-translate-x-1/2 before:-translate-y-1/2',
     // Colors - macOS native overlay scrollbar uses ~50% opacity, ~60% on hover/active
     'bg-scrim-500 hover:bg-scrim-600',
     // Animation
     'transition-opacity duration-300 ease-out',
-    // Animate in when the group is visible
+    // Animate in when the scrollbar is visible
     'group-data-[state=visible]:opacity-100',
-    // Animate out when the group is hidden
+    // Animate out when the scrollbar is hidden
     'group-data-[state=hidden]:opacity-0',
 );
+
+// Corner - appears when both scrollbars are visible (currently unstyled)
 export const scrollAreaCornerClassName = '';
 
 // Component - ScrollArea
 export interface ScrollAreaProperties {
     children: React.ReactNode;
-    className?: string;
+    // Styles the outer Root container - use for sizing/positioning the scroll area in its parent (e.g., h-full, flex-1)
     containerClassName?: string;
+    // Styles the inner Viewport - use for styling the scrollable content area (e.g., padding, max-height)
+    className?: string;
     scrollbarClassName?: string;
     verticalScrollbarClassName?: string;
     horizontalScrollbarClassName?: string;
@@ -73,11 +112,21 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
             type={type}
             scrollHideDelay={scrollHideDelay}
             dir={direction}
-            className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName)}
+            className={mergeClassNames(scrollAreaRootClassName, properties.containerClassName)}
         >
             <RadixScrollArea.Viewport
                 ref={reference}
-                className={mergeClassNames(scrollAreaClassName, 'scroll-area-viewport', properties.className)}
+                className={mergeClassNames(
+                    scrollAreaViewportClassName,
+                    // Radix uses display:table on the inner content div to measure dimensions.
+                    // When horizontal scrolling is disabled, this causes unwanted width expansion.
+                    // Override to display:block to prevent this. See: https://github.com/radix-ui/primitives/issues/2722
+                    // When horizontal scrolling is enabled, keep display:table but constrain with min-width:100%
+                    horizontalScrollbar ? '[&>div]:min-w-full' : '[&>div]:block!',
+                    // Ensure inner content fills height
+                    '[&>div]:h-full',
+                    properties.className,
+                )}
                 // asChild is causing major issues
                 // If it is enabled, the scroll area works but cannot have a height that
                 // fills the parent container
@@ -117,7 +166,12 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
                     )}
                 >
                     <RadixScrollArea.Thumb
-                        className={mergeClassNames(scrollAreaThumbClassName, properties.thumbClassName)}
+                        className={mergeClassNames(
+                            scrollAreaThumbClassName,
+                            // Override Radix's inline height style to match vertical thumb behavior (6px after padding)
+                            'h-auto!',
+                            properties.thumbClassName,
+                        )}
                     />
                 </RadixScrollArea.Scrollbar>
             )}

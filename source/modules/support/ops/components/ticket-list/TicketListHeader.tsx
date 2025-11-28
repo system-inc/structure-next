@@ -51,6 +51,7 @@ export function TicketListHeader(properties: TicketListHeaderProperties) {
                 <div className="flex items-center gap-3">
                     {/* Master checkbox */}
                     <InputCheckbox
+                        variant="A"
                         isChecked={checkboxState}
                         onIsCheckedChange={(isChecked) => properties.onSelectAllTickets(isChecked === true)}
                         aria-label="Select all tickets"

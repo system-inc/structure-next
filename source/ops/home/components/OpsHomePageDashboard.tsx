@@ -53,7 +53,7 @@ export function OpsHomePageDashboard(properties: OpsHomePageDashboardProperties)
 
     // Render the component
     return (
-        <ScrollArea containerClassName="h-full w-full">
+        <ScrollArea>
             {/* Inner container - centered with max-width */}
             <div className={mergeClassNames('mx-auto max-w-[1440px] px-6 pt-6 pb-8', properties.className)}>
                 {/* Header */}
@@ -76,7 +76,7 @@ export function OpsHomePageDashboard(properties: OpsHomePageDashboardProperties)
                                         Sessions
                                     </Button>
                                 }
-                                body={<EngagementActivity className="pt-4" databaseName="readonly" />}
+                                body={<EngagementActivity className="mt-6" databaseName="readonly" />}
                             />
                         )}
                     </div>

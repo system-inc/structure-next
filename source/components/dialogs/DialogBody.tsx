@@ -38,9 +38,10 @@ export function DialogBody(properties: DialogBodyProperties) {
     }
 
     // Desktop with ScrollArea
+    // bodyClassName includes grow, min-h-0, overflow-y-auto from theme
     return (
-        <ScrollArea className={mergeClassNames('max-h-[75vh]', properties.scrollAreaClassName)}>
-            <div className={bodyClassName}>{properties.children}</div>
+        <ScrollArea containerClassName={bodyClassName} className={properties.scrollAreaClassName}>
+            {properties.children}
         </ScrollArea>
     );
 }

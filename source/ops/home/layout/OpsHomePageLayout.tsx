@@ -34,17 +34,14 @@ export function OpsHomePageLayout(properties: OpsHomePageLayoutProperties) {
 
     // Render the component
     return (
-        <div className="flex h-full w-full background--0">
+        <div className="flex h-full w-full gap-1.5">
             {/* Dashboard - fills remaining space, scrolls independently */}
-            <div className="min-w-0 flex-1">{properties.children}</div>
+            <ScrollArea containerClassName="flex-1">{properties.children}</ScrollArea>
 
             {/* Sidebar - fixed width on right, hidden on small screens */}
             {showSidebar && (
-                <ScrollArea containerClassName="h-full w-80 shrink-0">
-                    <EngagementActivity
-                        className="mt-6 flex h-full flex-col"
-                        databaseName={properties.databaseName ?? 'readonly'}
-                    />
+                <ScrollArea containerClassName="shrink-0 w-80">
+                    <EngagementActivity className="pt-6" databaseName={properties.databaseName ?? 'readonly'} />
                 </ScrollArea>
             )}
         </div>

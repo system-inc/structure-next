@@ -52,6 +52,7 @@ export function TicketListItem(properties: TicketListItemProperties) {
         >
             {/* Checkbox */}
             <InputCheckbox
+                variant="A"
                 isChecked={properties.isChecked}
                 onIsCheckedChange={properties.onCheckboxChange}
                 onClick={function (event) {
