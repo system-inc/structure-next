@@ -1,40 +1,49 @@
-// Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+/**
+ * Structure InputSelect Theme
+ *
+ * Composition-based theme that routes to underlying component themes (Button, Popover).
+ * InputSelect is a composite component, so its theme maps presets to the themes of its parts
+ * rather than defining its own styles.
+ *
+ * Projects can override/extend this theme via ProjectSettings.theme.components.InputSelect
+ */
 
-// Theme - InputSelectTheme
-// Common select styles
-export const commonInputSelectClassNames = mergeClassNames(
-    // Content
-    'content--0',
-    // Placeholder
-    'placeholder:opacity-50',
-    // Disabled
-    'disabled:cursor-not-allowed disabled:opacity-80',
-);
+// Dependencies - Types
+import type { ButtonVariant, ButtonSize } from '@structure/source/components/buttons/ButtonTheme';
+import type { PopoverVariant, PopoverSize } from '@structure/source/components/popovers/PopoverTheme';
 
-// Background styles
-// Background - keep the background a bit lighter in light mode and bit darker in dark mode
-export const backgroundStyleClassNames = 'background--2 inset-shadow-xs dark:background--3';
+// Variant mapping - maps to underlying component variants
+export interface InputSelectVariantMapping {
+    triggerButtonVariant: ButtonVariant;
+    popoverVariant: PopoverVariant;
+    menuItemButtonVariant: ButtonVariant;
+}
 
-// Border styles
-export const borderStyleClassNames = 'rounded-lg border border--1';
+// Size mapping - maps to underlying component sizes
+export interface InputSelectSizeMapping {
+    triggerButtonSize: ButtonSize;
+    popoverSize: PopoverSize;
+    menuItemButtonSize: ButtonSize;
+}
 
-// Focus styles: border color changes on focus, disable outline to prevent double border
-export const focusStyleClassNames = 'focus:border--focus focus-visible:outline-none';
-
-// InputSelect Variants Interface - Source of truth for all input select variants
+// InputSelect Variants Interface - Source of truth for all input select variant presets
 // Structure defines its base variants here, and projects can augment to add custom variants
+// Example in project code:
+//   declare module '@structure/source/components/forms-new/fields/select/InputSelectTheme' {
+//     interface InputSelectVariants {
+//       CustomVariant: 'CustomVariant';
+//     }
+//   }
 export interface InputSelectVariants {
     A: 'A';
-    Outline: 'Outline';
-    Error: 'Error';
+    // Future: B, Outline, Ghost, etc.
 }
 
 // Type - InputSelect Variant (derived from InputSelectVariants interface)
 // Automatically includes both structure variants and any project-added variants
 export type InputSelectVariant = keyof InputSelectVariants;
 
-// InputSelect Sizes Interface - Source of truth for all input select sizes
+// InputSelect Sizes Interface - Source of truth for all input select size presets
 // Structure defines its base sizes here, and projects can augment to add custom sizes
 export interface InputSelectSizes {
     Small: 'Small';
@@ -47,14 +56,11 @@ export interface InputSelectSizes {
 export type InputSelectSize = keyof InputSelectSizes;
 
 // Type - InputSelect Theme Configuration
-// Structure must define all variants/sizes it declares in the interfaces above
-// Project extensions are optional (Partial)
+// Maps variant/size presets to underlying component theme values
 export interface InputSelectThemeConfiguration {
-    variants: Partial<Record<InputSelectVariant, string>>;
-    sizes: Partial<Record<InputSelectSize, string>>;
+    variants: Partial<Record<InputSelectVariant, InputSelectVariantMapping>>;
+    sizes: Partial<Record<InputSelectSize, InputSelectSizeMapping>>;
     configuration: {
-        baseClasses: string;
-        focusClasses: string;
         defaultVariant: {
             variant?: InputSelectVariant;
             size?: InputSelectSize;
@@ -64,51 +70,39 @@ export interface InputSelectThemeConfiguration {
 
 // InputSelect Theme - Structure Default
 export const inputSelectTheme: InputSelectThemeConfiguration = {
-    // Variants
+    // Variant presets - each maps to underlying component variants
     variants: {
-        // Variant A - Primary select input
-        // Use for: Standard form select inputs
-        A: mergeClassNames(
-            commonInputSelectClassNames,
-            backgroundStyleClassNames,
-            borderStyleClassNames,
-            focusStyleClassNames,
-        ),
-
-        // Variant Error - Select input with error state
-        // Use for: Selects with validation errors
-        Error: mergeClassNames(
-            commonInputSelectClassNames,
-            backgroundStyleClassNames,
-            // Border with error color
-            'rounded-lg border border--negative',
-            // Focus override to maintain error color
-            'focus:border--negative focus-visible:outline-none',
-        ),
+        // Variant A - Standard form select
+        A: {
+            triggerButtonVariant: 'InputSelect',
+            popoverVariant: 'A',
+            menuItemButtonVariant: 'MenuItem',
+        },
     },
 
-    // Sizes
+    // Size presets - each maps to underlying component sizes
     sizes: {
-        Small: mergeClassNames('h-8 w-full px-3 text-sm'),
-        Base: mergeClassNames('h-9 w-full px-3 text-sm'),
-        Large: mergeClassNames('w-full px-3 py-2.5 text-[15px]'),
+        Small: {
+            triggerButtonSize: 'InputSelect',
+            popoverSize: 'Base',
+            menuItemButtonSize: 'MenuItem',
+        },
+        Base: {
+            triggerButtonSize: 'InputSelect',
+            popoverSize: 'Base',
+            menuItemButtonSize: 'MenuItem',
+        },
+        Large: {
+            triggerButtonSize: 'InputSelect',
+            popoverSize: 'Base',
+            menuItemButtonSize: 'MenuItem',
+        },
     },
 
     // Configuration
     configuration: {
-        // Base classes
-        baseClasses: mergeClassNames(
-            commonInputSelectClassNames,
-            backgroundStyleClassNames,
-            borderStyleClassNames,
-            focusStyleClassNames,
-        ),
-
-        // Focus classes
-        focusClasses: focusStyleClassNames,
-
-        // Default properties when not specified
         defaultVariant: {
+            variant: 'A',
             size: 'Base',
         },
     },

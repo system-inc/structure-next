@@ -10,7 +10,12 @@ import { MenuItemInterface } from '@structure/source/components/menus/Menu';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Theme
+import { inputSelectTheme as structureInputSelectTheme } from './InputSelectTheme';
 import type { InputSelectVariant, InputSelectSize } from './InputSelectTheme';
+import type { ButtonVariant, ButtonSize } from '@structure/source/components/buttons/ButtonTheme';
+import type { PopoverVariant, PopoverSize } from '@structure/source/components/popovers/PopoverTheme';
+import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
+import { mergeTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
@@ -40,9 +45,17 @@ export interface InputSelectProperties {
     // Items
     items?: InputSelectItemProperties[];
 
-    // Appearance
+    // Appearance - Preset (routes to all sub-components)
     variant?: InputSelectVariant;
     size?: InputSelectSize;
+
+    // Appearance - Individual overrides (take precedence over preset)
+    triggerButtonVariant?: ButtonVariant;
+    triggerButtonSize?: ButtonSize;
+    popoverVariant?: PopoverVariant;
+    popoverSize?: PopoverSize;
+    menuItemButtonVariant?: ButtonVariant;
+    menuItemButtonSize?: ButtonSize;
 
     // Behavior
     allowNoSelection?: boolean;
@@ -77,6 +90,27 @@ export interface InputSelectProperties {
 }
 export const InputSelect = React.forwardRef<InputSelectReferenceInterface, InputSelectProperties>(
     function InputSelect(properties, reference) {
+        // Get component theme from context
+        const componentTheme = useComponentTheme();
+
+        // Merge structure theme with project overrides
+        const theme = mergeTheme(structureInputSelectTheme, componentTheme?.InputSelect);
+
+        // Get preset from theme (with defaults)
+        const defaultVariant = theme.configuration.defaultVariant?.variant ?? 'A';
+        const defaultSize = theme.configuration.defaultVariant?.size ?? 'Base';
+        const variantPreset = theme.variants[properties.variant ?? defaultVariant];
+        const sizePreset = theme.sizes[properties.size ?? defaultSize];
+
+        // Resolve final variants - individual overrides take precedence over presets
+        const finalTriggerButtonVariant =
+            properties.triggerButtonVariant ?? variantPreset?.triggerButtonVariant ?? 'InputSelect';
+        const finalTriggerButtonSize = properties.triggerButtonSize ?? sizePreset?.triggerButtonSize ?? 'InputSelect';
+        const finalPopoverVariant = properties.popoverVariant ?? variantPreset?.popoverVariant ?? 'A';
+        const finalPopoverSize = properties.popoverSize ?? sizePreset?.popoverSize ?? 'Base';
+        // Note: menuItemButtonVariant/Size would be passed to PopoverMenu if it supported it
+        // For now, PopoverMenu handles its own menu item styling
+
         // References
         const buttonReference = React.useRef<HTMLButtonElement>(null);
 
@@ -239,6 +273,8 @@ export const InputSelect = React.forwardRef<InputSelectReferenceInterface, Input
                 closeOnItemSelected={true}
                 popoverProperties={{
                     ...properties.popoverProperties,
+                    variant: finalPopoverVariant,
+                    size: finalPopoverSize,
                     open: open,
                     onOpenChange: setOpen,
                 }}
@@ -246,8 +282,8 @@ export const InputSelect = React.forwardRef<InputSelectReferenceInterface, Input
                     <Button
                         ref={buttonReference}
                         className={mergeClassNames(properties.className)}
-                        variant={properties.variant === 'Outline' ? 'Outline' : 'InputSelect'}
-                        size="InputSelect"
+                        variant={finalTriggerButtonVariant}
+                        size={finalTriggerButtonSize}
                         disabled={properties.disabled}
                         tabIndex={properties.tabIndex}
                         id={properties.id}
