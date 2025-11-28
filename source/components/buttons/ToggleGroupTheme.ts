@@ -24,7 +24,7 @@ export interface ToggleGroupThemeConfiguration {
     variants: Record<ToggleGroupVariant, string>;
     sizes: Record<ToggleGroupSize, string>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         defaultVariant: {
             variant?: ToggleGroupVariant;
             size?: ToggleGroupSize;
@@ -53,7 +53,7 @@ export const toggleGroupTheme: ToggleGroupThemeConfiguration = {
         Large: '',
     },
     configuration: {
-        baseClasses: toggleGroupLayoutClassNames,
+        baseClassNames: toggleGroupLayoutClassNames,
         defaultVariant: {
             variant: 'A',
             size: 'Base',
@@ -68,7 +68,7 @@ declare module '@structure/source/theme/providers/ComponentThemeProvider' {
             variants?: Partial<Record<ToggleGroupVariant | string, string>>;
             sizes?: Partial<Record<ToggleGroupSize | string, string>>;
             configuration?: {
-                baseClasses?: string;
+                baseClassNames?: string;
                 defaultVariant?: {
                     variant?: ToggleGroupVariant | string;
                     size?: ToggleGroupSize | string;

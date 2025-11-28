@@ -44,7 +44,7 @@ export interface BadgeThemeConfiguration {
     sizes: Partial<Record<BadgeSize, string>>;
     compoundVariants: BadgeCompoundVariant[];
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         defaultVariant: {
             variant?: BadgeVariant;
             kind?: BadgeKind;
@@ -105,7 +105,7 @@ export const badgeTheme: BadgeThemeConfiguration = {
 
     // Configuration
     configuration: {
-        baseClasses: 'inline-flex items-center justify-center gap-2 rounded-full py-1 transition-colors',
+        baseClassNames: 'inline-flex items-center justify-center gap-2 rounded-full py-1 transition-colors',
         defaultVariant: {
             kind: 'Filled',
             size: 'Base',

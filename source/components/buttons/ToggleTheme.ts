@@ -80,7 +80,7 @@ export interface ToggleThemeConfiguration {
     sizes: Partial<Record<ToggleSize, string>>;
     iconSizes: Partial<Record<ToggleSize, string>>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         focusClasses: string;
         disabledClasses: string;
         defaultVariant: {
@@ -152,7 +152,7 @@ export const toggleTheme: ToggleThemeConfiguration = {
     },
 
     configuration: {
-        baseClasses: toggleCommonClassNames,
+        baseClassNames: toggleCommonClassNames,
         focusClasses: toggleFocusClassNames,
         disabledClasses: '',
         defaultVariant: {

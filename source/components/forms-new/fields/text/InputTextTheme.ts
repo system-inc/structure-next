@@ -70,7 +70,7 @@ export interface InputTextThemeConfiguration {
     variants: Partial<Record<InputTextVariant, string>>;
     sizes: Partial<Record<InputTextSize, string>>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         focusClasses: string;
         defaultVariant: {
             variant?: InputTextVariant;
@@ -126,7 +126,7 @@ export const inputTextTheme: InputTextThemeConfiguration = {
     // Configuration
     configuration: {
         // Base classes
-        baseClasses: mergeClassNames(
+        baseClassNames: mergeClassNames(
             commonInputTextClassNames,
             backgroundStyleClassNames,
             borderStyleClassNames,

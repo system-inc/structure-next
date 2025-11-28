@@ -48,7 +48,7 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function 
     const size = sizeProperty || badgeTheme.configuration.defaultVariant.size;
 
     // Create variant class names from theme
-    const badgeVariantClassNames = createVariantClassNames(badgeTheme.configuration.baseClasses, {
+    const badgeVariantClassNames = createVariantClassNames(badgeTheme.configuration.baseClassNames, {
         variants: {
             variant: badgeTheme.variants,
             kind: badgeTheme.kinds,

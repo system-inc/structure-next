@@ -73,7 +73,7 @@ export function DialogRoot(properties: DialogRootProperties) {
     const size = properties.size ?? dialogTheme.configuration?.defaultVariant?.size ?? 'Base';
 
     // Create dialog variant class names function using the merged theme
-    const dialogVariantClassNames = createVariantClassNames(dialogTheme.configuration.baseClasses, {
+    const dialogVariantClassNames = createVariantClassNames(dialogTheme.configuration.baseClassNames, {
         variants: {
             variant: dialogTheme.variants,
             position: dialogTheme.positions,

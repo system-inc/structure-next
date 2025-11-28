@@ -29,7 +29,7 @@ export interface CardThemeConfiguration {
     variants: Partial<Record<CardVariant, string>>;
     sizes: Partial<Record<CardSize, string>>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         defaultVariant: {
             variant?: CardVariant;
             size?: CardSize;
@@ -54,7 +54,7 @@ export const cardTheme: CardThemeConfiguration = {
         Large: 'rounded-2xl p-12',
     },
     configuration: {
-        baseClasses: '',
+        baseClassNames: '',
         defaultVariant: {
             size: 'Base',
         },

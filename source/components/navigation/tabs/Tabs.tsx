@@ -85,7 +85,7 @@ export const TabsRoot = React.forwardRef<React.ComponentRef<typeof RadixTabPrimi
 
         // Create variant class names function using the merged theme
         // Note: Only variants are applied to Tabs wrapper, sizes are applied to TabItems
-        const tabsVariantClassNames = createVariantClassNames(tabsTheme.configuration.baseClasses, {
+        const tabsVariantClassNames = createVariantClassNames(tabsTheme.configuration.baseClassNames, {
             variants: {
                 variant: tabsTheme.variants,
             },

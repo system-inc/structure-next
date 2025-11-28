@@ -115,7 +115,7 @@ export interface ButtonThemeConfiguration {
     sizes: Partial<Record<ButtonSize, string>>;
     iconSizes: Partial<Record<ButtonSize, string>>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         focusClasses: string;
         disabledClasses: string;
         defaultVariant: {
@@ -403,7 +403,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
     // Configuration
     configuration: {
         // Base classes applied to all buttons regardless of variant
-        baseClasses: 'cursor-pointer',
+        baseClassNames: 'cursor-pointer',
 
         // Focus ring for keyboard navigation (empty = variants handle their own focus)
         focusClasses: '',

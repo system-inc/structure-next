@@ -39,6 +39,8 @@ export const baseDialogHeaderClassNames = mergeClassNames(
 );
 
 // Base styles for dialog body (structural only, no padding - padding comes from variant)
+// grow: fills available space in dialog's flex layout
+// overflow-y-auto: required for ScrollArea to work properly in this context
 export const baseDialogBodyClassNames = 'grow overflow-y-auto';
 
 // Base styles for dialog footer (layout only, no padding - padding comes from variant)
@@ -141,7 +143,7 @@ export interface DialogThemeConfiguration {
     positions: Partial<Record<DialogPosition, string>>;
     sizes: Partial<Record<DialogSize, string>>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         overlayClasses: string;
         closeClasses: string;
         headerBaseClasses: string;
@@ -203,7 +205,7 @@ export const dialogTheme: DialogThemeConfiguration = {
     // Configuration
     configuration: {
         // Base classes (empty = unstyled by default, positions/sizes/variants add their own styles)
-        baseClasses: 'flex flex-col',
+        baseClassNames: 'flex flex-col',
 
         // Overlay classes
         overlayClasses: baseDialogOverlayClassNames,

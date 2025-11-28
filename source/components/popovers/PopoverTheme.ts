@@ -60,7 +60,7 @@ export interface PopoverThemeConfiguration {
     variants: Partial<Record<PopoverVariant, string>>;
     sizes: Partial<Record<PopoverSize, string>>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         defaultVariant?: {
             variant?: PopoverVariant;
             size?: PopoverSize;
@@ -91,7 +91,7 @@ export const popoverTheme: PopoverThemeConfiguration = {
     },
 
     configuration: {
-        baseClasses: '',
+        baseClassNames: '',
         defaultVariant: {
             variant: 'A',
             size: 'Base',

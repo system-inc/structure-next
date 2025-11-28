@@ -28,7 +28,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function Ca
     const cardTheme = mergeTheme(structureCardTheme, componentTheme?.Card);
 
     // Create variant className function
-    const cardVariantClassNames = createVariantClassNames(cardTheme.configuration.baseClasses, {
+    const cardVariantClassNames = createVariantClassNames(cardTheme.configuration.baseClassNames, {
         variants: {
             variant: cardTheme.variants,
             size: cardTheme.sizes,

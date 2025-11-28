@@ -40,7 +40,7 @@ export interface NoticeThemeConfiguration {
     sizes: Partial<Record<NoticeSize, string>>;
     iconSizes: Partial<Record<NoticeSize, string>>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         defaultVariant: {
             variant?: NoticeVariant;
             size?: NoticeSize;
@@ -84,7 +84,7 @@ export const noticeTheme: NoticeThemeConfiguration = {
 
     // Configuration
     configuration: {
-        baseClasses: mergeClassNames(
+        baseClassNames: mergeClassNames(
             'flex flex-col border',
             // Border radius - Default to rounded-xl (can be overridden via className)
             'rounded-xl',

@@ -54,7 +54,7 @@ export function Popover(properties: PopoverProperties) {
         properties.size ?? (variant === 'Tip' ? 'Tip' : popoverTheme.configuration?.defaultVariant?.size ?? 'Base');
 
     // Create popover variant class names function using the merged theme
-    const popoverVariantClassNames = createVariantClassNames(popoverTheme.configuration.baseClasses, {
+    const popoverVariantClassNames = createVariantClassNames(popoverTheme.configuration.baseClassNames, {
         variants: {
             variant: popoverTheme.variants,
             size: popoverTheme.sizes,

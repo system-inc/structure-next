@@ -34,7 +34,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
     const size = properties.size || noticeTheme.configuration.defaultVariant.size;
 
     // Create variant class names from theme
-    const noticeVariantClassNames = createVariantClassNames(noticeTheme.configuration.baseClasses, {
+    const noticeVariantClassNames = createVariantClassNames(noticeTheme.configuration.baseClassNames, {
         variants: {
             variant: noticeTheme.variants,
             size: noticeTheme.sizes,

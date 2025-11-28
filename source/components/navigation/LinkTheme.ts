@@ -43,7 +43,7 @@ export type LinkVariant = keyof LinkVariants;
 export interface LinkThemeConfiguration {
     variants: Partial<Record<LinkVariant, string>>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         defaultVariant?: LinkVariant;
     };
 }
@@ -83,7 +83,7 @@ export const linkTheme: LinkThemeConfiguration = {
     // Configuration
     configuration: {
         // Base classes (empty = unstyled by default)
-        baseClasses: '',
+        baseClassNames: '',
 
         // No default variant = completely unstyled when variant not specified
         defaultVariant: undefined,

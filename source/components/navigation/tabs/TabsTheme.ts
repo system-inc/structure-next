@@ -58,7 +58,7 @@ export interface TabsThemeConfiguration {
     variantItemHoverClasses: Partial<Record<TabsVariant, string>>; // Per-variant hover indicator classes for inactive tabs
     sizes: Partial<Record<TabsSize, string>>;
     configuration: {
-        baseClasses: string; // Applied to Tabs wrapper (minimal)
+        baseClassNames: string; // Applied to Tabs wrapper (minimal)
         itemBaseClasses: string; // Applied to all TabItems (minimal, shared interaction states)
         itemActiveClasses: string; // Applied to active indicator (minimal, variant adds specific styling)
         defaultVariant: {
@@ -166,7 +166,7 @@ export const tabsTheme: TabsThemeConfiguration = {
     // Configuration
     configuration: {
         // Base classes for Tabs wrapper (empty - variants define everything)
-        baseClasses: '',
+        baseClassNames: '',
 
         // Base classes for all TabItems (empty - variants define everything)
         itemBaseClasses: '',

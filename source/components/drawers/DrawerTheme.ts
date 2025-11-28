@@ -90,7 +90,7 @@ export interface DrawerThemeConfiguration {
     // Configuration
     configuration: {
         // Base classes for all drawer content
-        baseClasses: string;
+        baseClassNames: string;
         // Base classes for the drawer wrapper
         baseWrapperClasses: string;
         // Overlay classes
@@ -166,7 +166,7 @@ export const drawerTheme: DrawerThemeConfiguration = {
     // Configuration
     configuration: {
         // Base classes (empty = unstyled by default, sides/variants add their own styles)
-        baseClasses: 'flex flex-col',
+        baseClassNames: 'flex flex-col',
 
         // Base wrapper classes
         baseWrapperClasses: mergeClassNames('fixed z-50 flex flex-col'),

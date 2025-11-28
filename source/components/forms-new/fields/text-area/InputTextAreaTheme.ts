@@ -81,7 +81,7 @@ export interface InputTextAreaThemeConfiguration {
     sizes: Partial<Record<InputTextAreaSize, string>>;
     resize: Partial<Record<InputTextAreaResize, string>>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         focusClasses: string;
         defaultVariant: {
             variant?: InputTextAreaVariant;
@@ -146,7 +146,7 @@ export const inputTextAreaTheme: InputTextAreaThemeConfiguration = {
     // Configuration
     configuration: {
         // Base classes
-        baseClasses: mergeClassNames(
+        baseClassNames: mergeClassNames(
             commonInputTextAreaClassNames,
             backgroundInputTextAreaClassNames,
             borderInputTextAreaStyleClassNames,

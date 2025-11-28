@@ -133,7 +133,7 @@ export function TicketComments(properties: TicketCommentsProperties) {
     // Render the component
     return (
         <div className={`flex flex-1 flex-col overflow-hidden ${isAgentViewer && 'pb-4'}`}>
-            <ScrollArea className="flex grow px-4" ref={commentsContainerReference}>
+            <ScrollArea containerClassName="grow" className="px-4" ref={commentsContainerReference}>
                 <div className="flex grow flex-col items-center justify-end">
                     <div className="flex w-full max-w-[980px] flex-col space-y-4">
                         {commentsWithDateInformation.map(function (item, index) {

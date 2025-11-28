@@ -78,7 +78,7 @@ export const ToggleGroup = React.forwardRef<
     const toggleGroupTheme = mergeTheme(structureToggleGroupTheme, componentTheme?.ToggleGroup);
 
     // Create toggle group variant class names function using the merged theme
-    const toggleGroupVariantClassNames = createVariantClassNames(toggleGroupTheme.configuration.baseClasses, {
+    const toggleGroupVariantClassNames = createVariantClassNames(toggleGroupTheme.configuration.baseClassNames, {
         variants: {
             variant: toggleGroupTheme.variants,
             size: toggleGroupTheme.sizes,

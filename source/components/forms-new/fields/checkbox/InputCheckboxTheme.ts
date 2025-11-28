@@ -29,7 +29,7 @@ export interface InputCheckboxThemeConfiguration {
     sizes: Record<InputCheckboxSize, string>;
     iconSizes: Record<InputCheckboxSize, string>;
     configuration: {
-        baseClasses: string;
+        baseClassNames: string;
         indicatorClasses: string;
         defaultVariant: {
             variant?: InputCheckboxVariant;
@@ -73,7 +73,7 @@ export const inputCheckboxTheme: InputCheckboxThemeConfiguration = {
         Base: 'h-full w-full',
     },
     configuration: {
-        baseClasses: inputCheckboxBaseClassNames,
+        baseClassNames: inputCheckboxBaseClassNames,
         indicatorClasses: 'flex items-center justify-center text-current',
         defaultVariant: {
             size: 'Base',
@@ -89,7 +89,7 @@ declare module '@structure/source/theme/providers/ComponentThemeProvider' {
             sizes?: Partial<Record<InputCheckboxSize | string, string>>;
             iconSizes?: Partial<Record<InputCheckboxSize | string, string>>;
             configuration?: {
-                baseClasses?: string;
+                baseClassNames?: string;
                 indicatorClasses?: string;
                 defaultVariant?: {
                     variant?: InputCheckboxVariant | string;

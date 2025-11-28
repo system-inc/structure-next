@@ -94,7 +94,7 @@ export const Toggle = React.forwardRef<React.ElementRef<typeof RadixToggle.Root>
             : undefined;
 
     // Create toggle variant class names function using the merged theme
-    const toggleVariantClassNames = createVariantClassNames(toggleTheme.configuration.baseClasses, {
+    const toggleVariantClassNames = createVariantClassNames(toggleTheme.configuration.baseClassNames, {
         variants: {
             variant: toggleTheme.variants,
             size: toggleTheme.sizes,

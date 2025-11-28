@@ -114,7 +114,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
             : undefined;
 
     // Create button variant class names function using the merged theme
-    const buttonVariantClassNames = createVariantClassNames(buttonTheme.configuration.baseClasses, {
+    const buttonVariantClassNames = createVariantClassNames(buttonTheme.configuration.baseClassNames, {
         variants: {
             size: buttonTheme.sizes,
             variant: buttonTheme.variants,

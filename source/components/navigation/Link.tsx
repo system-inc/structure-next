@@ -36,7 +36,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function
     const linkTheme = mergeTheme(structureLinkTheme, componentTheme?.Link);
 
     // Create link variant class names function using the merged theme
-    const linkVariantClassNames = createVariantClassNames(linkTheme.configuration.baseClasses, {
+    const linkVariantClassNames = createVariantClassNames(linkTheme.configuration.baseClassNames, {
         variants: {
             variant: linkTheme.variants,
         },
@@ -48,12 +48,12 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function
     });
 
     // Get variant classes (unstyled if no variant specified)
-    const variantClasses = linkVariantClassNames({
+    const variantClassNames = linkVariantClassNames({
         variant: variant,
     });
 
     // Merge variant classes with user className, giving precedence to user classes
-    const mergedClassName = mergeClassNames(variantClasses, className);
+    const mergedClassName = mergeClassNames(variantClassNames, className);
 
     // Render the component
     return (
