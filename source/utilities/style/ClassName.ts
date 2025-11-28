@@ -33,7 +33,6 @@ const twMerge = extendTailwindMerge({
                 'background--negative',
                 'background--warning',
                 'background--informative',
-                'background--backdrop',
                 // Background using content colors
                 'background-content---3',
                 'background-content---2',

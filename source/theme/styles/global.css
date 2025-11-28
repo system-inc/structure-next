@@ -28,17 +28,6 @@
 @import './animations.css';
 
 @layer base {
-    body {
-        /* Enables OpenType font features for improved typography */
-        /* 'rlig' 1: Required ligatures (letterform combinations) */
-        /* 'calt' 1: Contextual alternates (context-dependent glyph variants) */
-        /* Improves readability and aesthetics of text */
-        /* Common in design systems for refined typography appearance */
-        font-feature-settings:
-            'rlig' 1,
-            'calt' 1;
-    }
-
     strong {
         /* Use medium weight (500) for strong text instead of browser default bold (700) */
         font-weight: 500;

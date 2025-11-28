@@ -1,97 +1,54 @@
-/* Border utilities with 0-10 scale + opacity modifier support */
+/* Border utilities with 0-10 scale */
 @utility border--* {
-    /* No slash modifier -> solid border */
     border-color: --value(--color-border- *, [color]);
-
-    /* Slash modifier like /50 -> treat as percentage */
-    --alpha: calc(--modifier(integer) * 1%);
-    border-color: --alpha(--value(--color-border- *, [color]) / var(--alpha, 100%));
-
-    /* Optional: allow true percentages like /12.5% */
-    border-color: --alpha(--value(--color-border- *, [color]) / --modifier([percentage]));
 }
 
 /* Border content utilities - uses content colors for borders */
 @utility border-content--* {
-    /* No slash modifier -> solid border */
     border-color: --value(--color-content- *, [color]);
-
-    /* Slash modifier like /50 -> treat as percentage */
-    --alpha: calc(--modifier(integer) * 1%);
-    border-color: --alpha(--value(--color-content- *, [color]) / var(--alpha, 100%));
-
-    /* Optional: allow true percentages like /12.5% */
-    border-color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
 }
 
-/* Background utilities with 0-10 scale + opacity modifier support */
+/* Background utilities with 0-10 scale */
 @utility background--* {
-    /* No slash modifier -> solid background */
     background-color: --value(--color-background- *, [color]);
-
-    /* Slash modifier like /50 -> treat as percentage */
-    --alpha: calc(--modifier(integer) * 1%);
-    background-color: --alpha(--value(--color-background- *, [color]) / var(--alpha, 100%));
-
-    /* Optional: allow true percentages like /12.5% */
-    background-color: --alpha(--value(--color-background- *, [color]) / --modifier([percentage]));
 }
 
 /* Background content utilities - uses content colors for backgrounds */
 @utility background-content--* {
-    /* No slash modifier -> solid background */
     background-color: --value(--color-content- *, [color]);
-
-    /* Slash modifier like /50 -> treat as percentage */
-    --alpha: calc(--modifier(integer) * 1%);
-    background-color: --alpha(--value(--color-content- *, [color]) / var(--alpha, 100%));
-
-    /* Optional: allow true percentages like /12.5% */
-    background-color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
 }
 
 /* Background border utilities - uses border colors for backgrounds */
 @utility background-border--* {
-    /* No slash modifier -> solid background */
     background-color: --value(--color-border- *, [color]);
-
-    /* Slash modifier like /50 -> treat as percentage */
-    --alpha: calc(--modifier(integer) * 1%);
-    background-color: --alpha(--value(--color-border- *, [color]) / var(--alpha, 100%));
-
-    /* Optional: allow true percentages like /12.5% */
-    background-color: --alpha(--value(--color-border- *, [color]) / --modifier([percentage]));
 }
 
-/* Text/Content utilities with 0-10 scale + opacity modifier support */
+/* Text/Content utilities with 0-10 scale */
 @utility content--* {
-    /* No slash modifier -> solid color */
     color: --value(--color-content- *, [color]);
-
-    /* Slash modifier like /50 -> treat as percentage */
-    --alpha: calc(--modifier(integer) * 1%);
-    color: --alpha(--value(--color-content- *, [color]) / var(--alpha, 100%));
-
-    /* Optional: allow true percentages like /12.5% */
-    color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
 }
 
 /* Content background utilities - uses background colors for content */
 @utility content-background--* {
-    /* No slash modifier -> solid color */
     color: --value(--color-background- *, [color]);
-
-    /* Slash modifier like /50 -> treat as percentage */
-    --alpha: calc(--modifier(integer) * 1%);
-    color: --alpha(--value(--color-background- *, [color]) / var(--alpha, 100%));
-
-    /* Optional: allow true percentages like /12.5% */
-    color: --alpha(--value(--color-background- *, [color]) / --modifier([percentage]));
 }
 
 /* Shadow utilities with 0-10 scale + reverse ---1/---2/---3 */
 @utility shadow--* {
     box-shadow: --value(--shadow- *, [box-shadow]);
+}
+
+/* Scrim utilities - translucent layers that provide contrast against any background */
+/* Uses dark-* (black transparency) in light mode, light-* (white transparency) in dark mode */
+/* Perfect for scrollbars, hover states, and other UI overlays */
+@utility scrim--* {
+    background-color: --value(--color-scrim- *, [color]);
+}
+
+/* Dim utilities - darkening layers that dim content in both light and dark modes */
+/* Uses dark-* (black transparency) in both modes - for modal backdrops, overlays that obscure content */
+@utility dim--* {
+    background-color: --value(--color-dark- *, [color]);
 }
 
 /* Prose - Typography styles for rich text content with proper spacing */

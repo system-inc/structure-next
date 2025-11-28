@@ -20,8 +20,22 @@
     /* Constants */
     --phi: 1.618rem;
 
-    /* Fonts */
-    --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    /* Fonts
+     * Tailwind v4 provides default font stacks that are applied automatically:
+     * - --font-sans is used by the font-sans utility class
+     * - --font-mono is used by the font-mono utility class
+     * - --default-font-family is applied to html/:host and references --font-sans by default
+     * - --default-font-feature-settings is applied to html/:host (defaults to 'normal' if not set)
+     *
+     * To customize, copy these to your project's variables.css and modify:
+     * --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+     * --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+     * --default-font-family: var(--font-sans);
+     */
+
+    /* Font feature settings for improved typography */
+    /* 'rlig': Required ligatures | 'calt': Contextual alternates */
+    --default-font-feature-settings: 'rlig' 1, 'calt' 1;
 
     /* Light Scale (Transparent Whites, Opacity 0 to 1) */
     --color-light-0: rgba(255 255 255 / 0);
@@ -88,6 +102,32 @@
     /* --color-dark-980: rgba(0 0 0 / 0.98); */
     /* --color-dark-990: rgba(0 0 0 / 0.99); */
     --color-dark-1000: #000000;
+
+    /* Scrim Scale - Translucent layers that provide contrast against any background */
+    /* Uses dark-* (black transparency) in light mode, light-* (white transparency) in dark mode */
+    --color-scrim-0: light-dark(var(--color-dark-0), var(--color-light-0));
+    --color-scrim-25: light-dark(var(--color-dark-25), var(--color-light-25));
+    --color-scrim-50: light-dark(var(--color-dark-50), var(--color-light-50));
+    --color-scrim-100: light-dark(var(--color-dark-100), var(--color-light-100));
+    --color-scrim-150: light-dark(var(--color-dark-150), var(--color-light-150));
+    --color-scrim-200: light-dark(var(--color-dark-200), var(--color-light-200));
+    --color-scrim-250: light-dark(var(--color-dark-250), var(--color-light-250));
+    --color-scrim-300: light-dark(var(--color-dark-300), var(--color-light-300));
+    --color-scrim-350: light-dark(var(--color-dark-350), var(--color-light-350));
+    --color-scrim-400: light-dark(var(--color-dark-400), var(--color-light-400));
+    --color-scrim-450: light-dark(var(--color-dark-450), var(--color-light-450));
+    --color-scrim-500: light-dark(var(--color-dark-500), var(--color-light-500));
+    --color-scrim-550: light-dark(var(--color-dark-550), var(--color-light-550));
+    --color-scrim-600: light-dark(var(--color-dark-600), var(--color-light-600));
+    --color-scrim-650: light-dark(var(--color-dark-650), var(--color-light-650));
+    --color-scrim-700: light-dark(var(--color-dark-700), var(--color-light-700));
+    --color-scrim-750: light-dark(var(--color-dark-750), var(--color-light-750));
+    --color-scrim-800: light-dark(var(--color-dark-800), var(--color-light-800));
+    --color-scrim-850: light-dark(var(--color-dark-850), var(--color-light-850));
+    --color-scrim-900: light-dark(var(--color-dark-900), var(--color-light-900));
+    --color-scrim-950: light-dark(var(--color-dark-950), var(--color-light-950));
+    --color-scrim-975: light-dark(var(--color-dark-975), var(--color-light-975));
+    --color-scrim-1000: light-dark(var(--color-dark-1000), var(--color-light-1000));
 
     /* Black Scale (Lightest to Darkest) */
     --color-black-0: #505050; /* Step 0 */
@@ -242,22 +282,11 @@
     --color-border-negative: light-dark(var(--color-red-600), var(--color-red-500));
 
     /* Borders - Semantic Muted (Soft/Pastel Variants) */
-    --color-border-informative-muted: light-dark(
-        var(--color-blue-200),
-        color-mix(in srgb, var(--color-blue-600) 32%, transparent)
-    );
-    --color-border-positive-muted: light-dark(
-        var(--color-green-200),
-        color-mix(in srgb, var(--color-green-600) 32%, transparent)
-    );
-    --color-border-warning-muted: light-dark(
-        var(--color-orange-200),
-        color-mix(in srgb, var(--color-orange-600) 32%, transparent)
-    );
-    --color-border-negative-muted: light-dark(
-        var(--color-red-200),
-        color-mix(in srgb, var(--color-red-600) 32%, transparent)
-    );
+    /* Dark mode values: 32% opacity of semantic color (pre-calculated to avoid @supports fallbacks) */
+    --color-border-informative-muted: light-dark(var(--color-blue-200), #2563eb52);
+    --color-border-positive-muted: light-dark(var(--color-green-200), #16a34a52);
+    --color-border-warning-muted: light-dark(var(--color-orange-200), #ea580c52);
+    --color-border-negative-muted: light-dark(var(--color-red-200), #dc262652);
 
     /* Backgrounds - Gradient */
     --color-background--3: light-dark(var(--color-white-1000), var(--color-black-850));
@@ -276,29 +305,17 @@
     --color-background-10: light-dark(var(--color-white-500), var(--color-black-200));
 
     /* Backgrounds - Semantic */
-    --color-background-backdrop: light-dark(var(--color-dark-400), var(--color-dark-600));
     --color-background-informative: light-dark(var(--color-blue-600), var(--color-blue-400));
     --color-background-positive: light-dark(var(--color-green-600), var(--color-green-400));
     --color-background-warning: light-dark(var(--color-orange-600), var(--color-orange-400));
     --color-background-negative: light-dark(var(--color-red-600), var(--color-red-400));
 
     /* Backgrounds - Semantic Muted (Soft/Pastel Variants) */
-    --color-background-informative-muted: light-dark(
-        var(--color-blue-50),
-        color-mix(in srgb, var(--color-blue-600) 16%, transparent)
-    );
-    --color-background-positive-muted: light-dark(
-        var(--color-green-50),
-        color-mix(in srgb, var(--color-green-600) 16%, transparent)
-    );
-    --color-background-warning-muted: light-dark(
-        var(--color-orange-50),
-        color-mix(in srgb, var(--color-orange-600) 16%, transparent)
-    );
-    --color-background-negative-muted: light-dark(
-        var(--color-red-50),
-        color-mix(in srgb, var(--color-red-600) 16%, transparent)
-    );
+    /* Dark mode values: 16% opacity of semantic color (pre-calculated to avoid @supports fallbacks) */
+    --color-background-informative-muted: light-dark(var(--color-blue-50), #2563eb29);
+    --color-background-positive-muted: light-dark(var(--color-green-50), #16a34a29);
+    --color-background-warning-muted: light-dark(var(--color-orange-50), #ea580c29);
+    --color-background-negative-muted: light-dark(var(--color-red-50), #dc262629);
 
     /* Content - Gradient */
     --color-content--3: light-dark(var(--color-black-1000), var(--color-white-1000));
