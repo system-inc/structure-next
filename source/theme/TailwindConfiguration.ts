@@ -170,8 +170,9 @@ export const TailwindConfiguration = {
     // Content paths for Tailwind to scan for class names
     content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', './libraries/**/*.{js,ts,jsx,tsx,mdx}'],
 
-    // Dark mode strategy, use class selector instead of media query (so dark: works)
-    darkMode: ['selector', '.scheme-dark'],
+    // Dark mode is now configured via @custom-variant in global.css
+    // This approach does not allow dark or light islands to function properly:
+    // darkMode: ['selector', '.scheme-dark'],
 
     theme: {
         // For the "container" className, center and add horizontal padding

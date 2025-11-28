@@ -15,6 +15,14 @@
 /* Tailwind CSS v4 Import */
 @import 'tailwindcss';
 
+/* Custom dark variant that respects nested scheme islands */
+/* Uses :has() to check if a .scheme-light ancestor contains any .scheme-dark descendant */
+/* - If .scheme-light contains .scheme-dark: dark: can still apply (element might be in that dark region) */
+/* - If .scheme-light has no .scheme-dark: it's a "pure light" region, dark: is blocked */
+/* Note: This works for clean island nesting but not side-by-side light/dark branches */
+/* TODO: We will eventually remove this after we ban and remove all instances of dark: */
+@custom-variant dark (&:where(.scheme-dark, .scheme-dark *):not(:where(.scheme-light:not(:has(.scheme-dark)), .scheme-light:not(:has(.scheme-dark)) *)));
+
 /* Import CSS variables */
 @import './variables.css';
 
