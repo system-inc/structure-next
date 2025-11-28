@@ -101,12 +101,7 @@ export async function RootLayout(properties: RootLayoutProperties) {
     // Render the component
     return (
         <html lang="en" className={mergeClassNames(properties.htmlClassName, schemeClassName)}>
-            <body
-                className={mergeClassNames(
-                    'background--0 content--0 transition-colors',
-                    properties.bodyClassName,
-                )}
-            >
+            <body className={mergeClassNames('background--0 content--0 transition-colors', properties.bodyClassName)}>
                 {/* Add a <main> tag so that any Radix-UI Portal elements get appended outside the main content */}
                 {/* Fixes any z-index issues with Popovers, etc. */}
                 <main className={mergeClassNames('relative isolate', properties.mainClassName)}>

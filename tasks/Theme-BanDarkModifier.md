@@ -24,7 +24,7 @@ We implemented a `:has()` workaround in `@custom-variant dark`, but it's complex
 ### Before (anti-pattern)
 
 ```tsx
-className="bg-red-650 dark:bg-red-900 border-red-750 dark:border-red-800"
+className = 'bg-red-650 dark:bg-red-900 border-red-750 dark:border-red-800';
 ```
 
 ### After (correct)
@@ -36,7 +36,7 @@ className="bg-red-650 dark:bg-red-900 border-red-750 dark:border-red-800"
 ```
 
 ```tsx
-className="bg-destructive border-destructive-border"
+className = 'bg-destructive border-destructive-border';
 ```
 
 ## Tasks

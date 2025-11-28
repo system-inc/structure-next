@@ -127,11 +127,7 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
     );
 
     // Render the component
-    return (
-        <EngagementContext.Provider value={{ path: urlPath }}>
-            {properties.children}
-        </EngagementContext.Provider>
-    );
+    return <EngagementContext.Provider value={{ path: urlPath }}>{properties.children}</EngagementContext.Provider>;
 }
 
 // Hook - useEngagement

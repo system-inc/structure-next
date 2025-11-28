@@ -25,22 +25,23 @@ const contentColors: Record<string, { light: string; dark: string; lightPrimitiv
 };
 
 // Color Data - Background Scale
-const backgroundColors: Record<string, { light: string; dark: string; lightPrimitive: string; darkPrimitive: string }> = {
-    '-3': { light: '#ffffff', dark: '#0c0c0c', lightPrimitive: 'white-1000', darkPrimitive: 'black-850' },
-    '-2': { light: '#ffffff', dark: '#101010', lightPrimitive: 'white-1000', darkPrimitive: 'black-800' },
-    '-1': { light: '#ffffff', dark: '#141414', lightPrimitive: 'white-1000', darkPrimitive: 'black-750' },
-    '0': { light: '#ffffff', dark: '#181818', lightPrimitive: 'white-1000', darkPrimitive: 'black-700' },
-    '1': { light: '#fbfbfb', dark: '#1c1c1c', lightPrimitive: 'white-950', darkPrimitive: 'black-650' },
-    '2': { light: '#f7f7f7', dark: '#202020', lightPrimitive: 'white-900', darkPrimitive: 'black-600' },
-    '3': { light: '#f3f3f3', dark: '#242424', lightPrimitive: 'white-850', darkPrimitive: 'black-550' },
-    '4': { light: '#efefef', dark: '#282828', lightPrimitive: 'white-800', darkPrimitive: 'black-500' },
-    '5': { light: '#ebebeb', dark: '#2c2c2c', lightPrimitive: 'white-750', darkPrimitive: 'black-450' },
-    '6': { light: '#e7e7e7', dark: '#303030', lightPrimitive: 'white-700', darkPrimitive: 'black-400' },
-    '7': { light: '#e3e3e3', dark: '#343434', lightPrimitive: 'white-650', darkPrimitive: 'black-350' },
-    '8': { light: '#dfdfdf', dark: '#383838', lightPrimitive: 'white-600', darkPrimitive: 'black-300' },
-    '9': { light: '#dbdbdb', dark: '#3c3c3c', lightPrimitive: 'white-550', darkPrimitive: 'black-250' },
-    '10': { light: '#d7d7d7', dark: '#404040', lightPrimitive: 'white-500', darkPrimitive: 'black-200' },
-};
+const backgroundColors: Record<string, { light: string; dark: string; lightPrimitive: string; darkPrimitive: string }> =
+    {
+        '-3': { light: '#ffffff', dark: '#0c0c0c', lightPrimitive: 'white-1000', darkPrimitive: 'black-850' },
+        '-2': { light: '#ffffff', dark: '#101010', lightPrimitive: 'white-1000', darkPrimitive: 'black-800' },
+        '-1': { light: '#ffffff', dark: '#141414', lightPrimitive: 'white-1000', darkPrimitive: 'black-750' },
+        '0': { light: '#ffffff', dark: '#181818', lightPrimitive: 'white-1000', darkPrimitive: 'black-700' },
+        '1': { light: '#fbfbfb', dark: '#1c1c1c', lightPrimitive: 'white-950', darkPrimitive: 'black-650' },
+        '2': { light: '#f7f7f7', dark: '#202020', lightPrimitive: 'white-900', darkPrimitive: 'black-600' },
+        '3': { light: '#f3f3f3', dark: '#242424', lightPrimitive: 'white-850', darkPrimitive: 'black-550' },
+        '4': { light: '#efefef', dark: '#282828', lightPrimitive: 'white-800', darkPrimitive: 'black-500' },
+        '5': { light: '#ebebeb', dark: '#2c2c2c', lightPrimitive: 'white-750', darkPrimitive: 'black-450' },
+        '6': { light: '#e7e7e7', dark: '#303030', lightPrimitive: 'white-700', darkPrimitive: 'black-400' },
+        '7': { light: '#e3e3e3', dark: '#343434', lightPrimitive: 'white-650', darkPrimitive: 'black-350' },
+        '8': { light: '#dfdfdf', dark: '#383838', lightPrimitive: 'white-600', darkPrimitive: 'black-300' },
+        '9': { light: '#dbdbdb', dark: '#3c3c3c', lightPrimitive: 'white-550', darkPrimitive: 'black-250' },
+        '10': { light: '#d7d7d7', dark: '#404040', lightPrimitive: 'white-500', darkPrimitive: 'black-200' },
+    };
 
 // Color Data - Border Scale
 const borderColors: Record<string, { light: string; dark: string; lightPrimitive: string; darkPrimitive: string }> = {
@@ -61,34 +62,124 @@ const borderColors: Record<string, { light: string; dark: string; lightPrimitive
 };
 
 // Color Data - Primitive Scales
-const primitiveScaleSteps = ['0', '50', '100', '150', '200', '250', '300', '350', '400', '450', '500', '550', '600', '650', '700', '750', '800', '850', '900', '950', '1000'];
+const primitiveScaleSteps = [
+    '0',
+    '50',
+    '100',
+    '150',
+    '200',
+    '250',
+    '300',
+    '350',
+    '400',
+    '450',
+    '500',
+    '550',
+    '600',
+    '650',
+    '700',
+    '750',
+    '800',
+    '850',
+    '900',
+    '950',
+    '1000',
+];
 
 const whiteScale: Record<string, string> = {
-    '0': '#afafaf', '50': '#b3b3b3', '100': '#b7b7b7', '150': '#bbbbbb', '200': '#bfbfbf',
-    '250': '#c3c3c3', '300': '#c7c7c7', '350': '#cbcbcb', '400': '#cfcfcf', '450': '#d3d3d3',
-    '500': '#d7d7d7', '550': '#dbdbdb', '600': '#dfdfdf', '650': '#e3e3e3', '700': '#e7e7e7',
-    '750': '#ebebeb', '800': '#efefef', '850': '#f3f3f3', '900': '#f7f7f7', '950': '#fbfbfb', '1000': '#ffffff',
+    '0': '#afafaf',
+    '50': '#b3b3b3',
+    '100': '#b7b7b7',
+    '150': '#bbbbbb',
+    '200': '#bfbfbf',
+    '250': '#c3c3c3',
+    '300': '#c7c7c7',
+    '350': '#cbcbcb',
+    '400': '#cfcfcf',
+    '450': '#d3d3d3',
+    '500': '#d7d7d7',
+    '550': '#dbdbdb',
+    '600': '#dfdfdf',
+    '650': '#e3e3e3',
+    '700': '#e7e7e7',
+    '750': '#ebebeb',
+    '800': '#efefef',
+    '850': '#f3f3f3',
+    '900': '#f7f7f7',
+    '950': '#fbfbfb',
+    '1000': '#ffffff',
 };
 
 const grayScale: Record<string, string> = {
-    '0': '#a7a7a7', '50': '#a3a3a3', '100': '#9f9f9f', '150': '#9b9b9b', '200': '#979797',
-    '250': '#939393', '300': '#8f8f8f', '350': '#8b8b8b', '400': '#878787', '450': '#838383',
-    '500': '#808080', '550': '#7c7c7c', '600': '#787878', '650': '#747474', '700': '#707070',
-    '750': '#6c6c6c', '800': '#686868', '850': '#646464', '900': '#606060', '950': '#5c5c5c', '1000': '#585858',
+    '0': '#a7a7a7',
+    '50': '#a3a3a3',
+    '100': '#9f9f9f',
+    '150': '#9b9b9b',
+    '200': '#979797',
+    '250': '#939393',
+    '300': '#8f8f8f',
+    '350': '#8b8b8b',
+    '400': '#878787',
+    '450': '#838383',
+    '500': '#808080',
+    '550': '#7c7c7c',
+    '600': '#787878',
+    '650': '#747474',
+    '700': '#707070',
+    '750': '#6c6c6c',
+    '800': '#686868',
+    '850': '#646464',
+    '900': '#606060',
+    '950': '#5c5c5c',
+    '1000': '#585858',
 };
 
 const blackScale: Record<string, string> = {
-    '0': '#505050', '50': '#4c4c4c', '100': '#484848', '150': '#444444', '200': '#404040',
-    '250': '#3c3c3c', '300': '#383838', '350': '#343434', '400': '#303030', '450': '#2c2c2c',
-    '500': '#282828', '550': '#242424', '600': '#202020', '650': '#1c1c1c', '700': '#181818',
-    '750': '#141414', '800': '#101010', '850': '#0c0c0c', '900': '#080808', '950': '#040404', '1000': '#000000',
+    '0': '#505050',
+    '50': '#4c4c4c',
+    '100': '#484848',
+    '150': '#444444',
+    '200': '#404040',
+    '250': '#3c3c3c',
+    '300': '#383838',
+    '350': '#343434',
+    '400': '#303030',
+    '450': '#2c2c2c',
+    '500': '#282828',
+    '550': '#242424',
+    '600': '#202020',
+    '650': '#1c1c1c',
+    '700': '#181818',
+    '750': '#141414',
+    '800': '#101010',
+    '850': '#0c0c0c',
+    '900': '#080808',
+    '950': '#040404',
+    '1000': '#000000',
 };
 
 const blueScale: Record<string, string> = {
-    '0': '#f0f7ff', '50': '#e6f1ff', '100': '#dbeafe', '150': '#cee3fe', '200': '#bfdbfe',
-    '250': '#abd0fe', '300': '#93c5fd', '350': '#7db6fc', '400': '#60a5fa', '450': '#5095f8',
-    '500': '#3b82f6', '550': '#3174f1', '600': '#2563eb', '650': '#2159e2', '700': '#1d4ed8',
-    '750': '#1e47c5', '800': '#1e40af', '850': '#1e3d9e', '900': '#1e3a8a', '950': '#172554', '1000': '#0f172a',
+    '0': '#f0f7ff',
+    '50': '#e6f1ff',
+    '100': '#dbeafe',
+    '150': '#cee3fe',
+    '200': '#bfdbfe',
+    '250': '#abd0fe',
+    '300': '#93c5fd',
+    '350': '#7db6fc',
+    '400': '#60a5fa',
+    '450': '#5095f8',
+    '500': '#3b82f6',
+    '550': '#3174f1',
+    '600': '#2563eb',
+    '650': '#2159e2',
+    '700': '#1d4ed8',
+    '750': '#1e47c5',
+    '800': '#1e40af',
+    '850': '#1e3d9e',
+    '900': '#1e3a8a',
+    '950': '#172554',
+    '1000': '#0f172a',
 };
 
 // Semantic State Colors
@@ -101,75 +192,238 @@ const semanticStates = {
 
 // Color Scale Generator Steps (0-1000 in 50 increments)
 const generatorSteps = [
-    '0', '50', '100', '150', '200', '250', '300', '350', '400', '450',
-    '500', '550', '600', '650', '700', '750', '800', '850', '900', '950', '1000',
+    '0',
+    '50',
+    '100',
+    '150',
+    '200',
+    '250',
+    '300',
+    '350',
+    '400',
+    '450',
+    '500',
+    '550',
+    '600',
+    '650',
+    '700',
+    '750',
+    '800',
+    '850',
+    '900',
+    '950',
+    '1000',
 ];
 
 // Tailwind CSS default color scales (50-950)
 const tailwindColors: Record<string, Record<string, string>> = {
     blue: {
-        '50': '#eff6ff', '100': '#dbeafe', '200': '#bfdbfe', '300': '#93c5fd', '400': '#60a5fa',
-        '500': '#3b82f6', '600': '#2563eb', '700': '#1d4ed8', '800': '#1e40af', '900': '#1e3a8a', '950': '#172554',
+        '50': '#eff6ff',
+        '100': '#dbeafe',
+        '200': '#bfdbfe',
+        '300': '#93c5fd',
+        '400': '#60a5fa',
+        '500': '#3b82f6',
+        '600': '#2563eb',
+        '700': '#1d4ed8',
+        '800': '#1e40af',
+        '900': '#1e3a8a',
+        '950': '#172554',
     },
     green: {
-        '50': '#f0fdf4', '100': '#dcfce7', '200': '#bbf7d0', '300': '#86efac', '400': '#4ade80',
-        '500': '#22c55e', '600': '#16a34a', '700': '#15803d', '800': '#166534', '900': '#14532d', '950': '#052e16',
+        '50': '#f0fdf4',
+        '100': '#dcfce7',
+        '200': '#bbf7d0',
+        '300': '#86efac',
+        '400': '#4ade80',
+        '500': '#22c55e',
+        '600': '#16a34a',
+        '700': '#15803d',
+        '800': '#166534',
+        '900': '#14532d',
+        '950': '#052e16',
     },
     red: {
-        '50': '#fef2f2', '100': '#fee2e2', '200': '#fecaca', '300': '#fca5a5', '400': '#f87171',
-        '500': '#ef4444', '600': '#dc2626', '700': '#b91c1c', '800': '#991b1b', '900': '#7f1d1d', '950': '#450a0a',
+        '50': '#fef2f2',
+        '100': '#fee2e2',
+        '200': '#fecaca',
+        '300': '#fca5a5',
+        '400': '#f87171',
+        '500': '#ef4444',
+        '600': '#dc2626',
+        '700': '#b91c1c',
+        '800': '#991b1b',
+        '900': '#7f1d1d',
+        '950': '#450a0a',
     },
     orange: {
-        '50': '#fff7ed', '100': '#ffedd5', '200': '#fed7aa', '300': '#fdba74', '400': '#fb923c',
-        '500': '#f97316', '600': '#ea580c', '700': '#c2410c', '800': '#9a3412', '900': '#7c2d12', '950': '#431407',
+        '50': '#fff7ed',
+        '100': '#ffedd5',
+        '200': '#fed7aa',
+        '300': '#fdba74',
+        '400': '#fb923c',
+        '500': '#f97316',
+        '600': '#ea580c',
+        '700': '#c2410c',
+        '800': '#9a3412',
+        '900': '#7c2d12',
+        '950': '#431407',
     },
     purple: {
-        '50': '#faf5ff', '100': '#f3e8ff', '200': '#e9d5ff', '300': '#d8b4fe', '400': '#c084fc',
-        '500': '#a855f7', '600': '#9333ea', '700': '#7e22ce', '800': '#6b21a8', '900': '#581c87', '950': '#3b0764',
+        '50': '#faf5ff',
+        '100': '#f3e8ff',
+        '200': '#e9d5ff',
+        '300': '#d8b4fe',
+        '400': '#c084fc',
+        '500': '#a855f7',
+        '600': '#9333ea',
+        '700': '#7e22ce',
+        '800': '#6b21a8',
+        '900': '#581c87',
+        '950': '#3b0764',
     },
     pink: {
-        '50': '#fdf2f8', '100': '#fce7f3', '200': '#fbcfe8', '300': '#f9a8d4', '400': '#f472b6',
-        '500': '#ec4899', '600': '#db2777', '700': '#be185d', '800': '#9d174d', '900': '#831843', '950': '#500724',
+        '50': '#fdf2f8',
+        '100': '#fce7f3',
+        '200': '#fbcfe8',
+        '300': '#f9a8d4',
+        '400': '#f472b6',
+        '500': '#ec4899',
+        '600': '#db2777',
+        '700': '#be185d',
+        '800': '#9d174d',
+        '900': '#831843',
+        '950': '#500724',
     },
     teal: {
-        '50': '#f0fdfa', '100': '#ccfbf1', '200': '#99f6e4', '300': '#5eead4', '400': '#2dd4bf',
-        '500': '#14b8a6', '600': '#0d9488', '700': '#0f766e', '800': '#115e59', '900': '#134e4a', '950': '#042f2e',
+        '50': '#f0fdfa',
+        '100': '#ccfbf1',
+        '200': '#99f6e4',
+        '300': '#5eead4',
+        '400': '#2dd4bf',
+        '500': '#14b8a6',
+        '600': '#0d9488',
+        '700': '#0f766e',
+        '800': '#115e59',
+        '900': '#134e4a',
+        '950': '#042f2e',
     },
     yellow: {
-        '50': '#fefce8', '100': '#fef9c3', '200': '#fef08a', '300': '#fde047', '400': '#facc15',
-        '500': '#eab308', '600': '#ca8a04', '700': '#a16207', '800': '#854d0e', '900': '#713f12', '950': '#422006',
+        '50': '#fefce8',
+        '100': '#fef9c3',
+        '200': '#fef08a',
+        '300': '#fde047',
+        '400': '#facc15',
+        '500': '#eab308',
+        '600': '#ca8a04',
+        '700': '#a16207',
+        '800': '#854d0e',
+        '900': '#713f12',
+        '950': '#422006',
     },
     gray: {
-        '50': '#f9fafb', '100': '#f3f4f6', '200': '#e5e7eb', '300': '#d1d5db', '400': '#9ca3af',
-        '500': '#6b7280', '600': '#4b5563', '700': '#374151', '800': '#1f2937', '900': '#111827', '950': '#030712',
+        '50': '#f9fafb',
+        '100': '#f3f4f6',
+        '200': '#e5e7eb',
+        '300': '#d1d5db',
+        '400': '#9ca3af',
+        '500': '#6b7280',
+        '600': '#4b5563',
+        '700': '#374151',
+        '800': '#1f2937',
+        '900': '#111827',
+        '950': '#030712',
     },
     slate: {
-        '50': '#f8fafc', '100': '#f1f5f9', '200': '#e2e8f0', '300': '#cbd5e1', '400': '#94a3b8',
-        '500': '#64748b', '600': '#475569', '700': '#334155', '800': '#1e293b', '900': '#0f172a', '950': '#020617',
+        '50': '#f8fafc',
+        '100': '#f1f5f9',
+        '200': '#e2e8f0',
+        '300': '#cbd5e1',
+        '400': '#94a3b8',
+        '500': '#64748b',
+        '600': '#475569',
+        '700': '#334155',
+        '800': '#1e293b',
+        '900': '#0f172a',
+        '950': '#020617',
     },
     indigo: {
-        '50': '#eef2ff', '100': '#e0e7ff', '200': '#c7d2fe', '300': '#a5b4fc', '400': '#818cf8',
-        '500': '#6366f1', '600': '#4f46e5', '700': '#4338ca', '800': '#3730a3', '900': '#312e81', '950': '#1e1b4b',
+        '50': '#eef2ff',
+        '100': '#e0e7ff',
+        '200': '#c7d2fe',
+        '300': '#a5b4fc',
+        '400': '#818cf8',
+        '500': '#6366f1',
+        '600': '#4f46e5',
+        '700': '#4338ca',
+        '800': '#3730a3',
+        '900': '#312e81',
+        '950': '#1e1b4b',
     },
     cyan: {
-        '50': '#ecfeff', '100': '#cffafe', '200': '#a5f3fc', '300': '#67e8f9', '400': '#22d3ee',
-        '500': '#06b6d4', '600': '#0891b2', '700': '#0e7490', '800': '#155e75', '900': '#164e63', '950': '#083344',
+        '50': '#ecfeff',
+        '100': '#cffafe',
+        '200': '#a5f3fc',
+        '300': '#67e8f9',
+        '400': '#22d3ee',
+        '500': '#06b6d4',
+        '600': '#0891b2',
+        '700': '#0e7490',
+        '800': '#155e75',
+        '900': '#164e63',
+        '950': '#083344',
     },
     emerald: {
-        '50': '#ecfdf5', '100': '#d1fae5', '200': '#a7f3d0', '300': '#6ee7b7', '400': '#34d399',
-        '500': '#10b981', '600': '#059669', '700': '#047857', '800': '#065f46', '900': '#064e3b', '950': '#022c22',
+        '50': '#ecfdf5',
+        '100': '#d1fae5',
+        '200': '#a7f3d0',
+        '300': '#6ee7b7',
+        '400': '#34d399',
+        '500': '#10b981',
+        '600': '#059669',
+        '700': '#047857',
+        '800': '#065f46',
+        '900': '#064e3b',
+        '950': '#022c22',
     },
     amber: {
-        '50': '#fffbeb', '100': '#fef3c7', '200': '#fde68a', '300': '#fcd34d', '400': '#fbbf24',
-        '500': '#f59e0b', '600': '#d97706', '700': '#b45309', '800': '#92400e', '900': '#78350f', '950': '#451a03',
+        '50': '#fffbeb',
+        '100': '#fef3c7',
+        '200': '#fde68a',
+        '300': '#fcd34d',
+        '400': '#fbbf24',
+        '500': '#f59e0b',
+        '600': '#d97706',
+        '700': '#b45309',
+        '800': '#92400e',
+        '900': '#78350f',
+        '950': '#451a03',
     },
     rose: {
-        '50': '#fff1f2', '100': '#ffe4e6', '200': '#fecdd3', '300': '#fda4af', '400': '#fb7185',
-        '500': '#f43f5e', '600': '#e11d48', '700': '#be123c', '800': '#9f1239', '900': '#881337', '950': '#4c0519',
+        '50': '#fff1f2',
+        '100': '#ffe4e6',
+        '200': '#fecdd3',
+        '300': '#fda4af',
+        '400': '#fb7185',
+        '500': '#f43f5e',
+        '600': '#e11d48',
+        '700': '#be123c',
+        '800': '#9f1239',
+        '900': '#881337',
+        '950': '#4c0519',
     },
     violet: {
-        '50': '#f5f3ff', '100': '#ede9fe', '200': '#ddd6fe', '300': '#c4b5fd', '400': '#a78bfa',
-        '500': '#8b5cf6', '600': '#7c3aed', '700': '#6d28d9', '800': '#5b21b6', '900': '#4c1d95', '950': '#2e1065',
+        '50': '#f5f3ff',
+        '100': '#ede9fe',
+        '200': '#ddd6fe',
+        '300': '#c4b5fd',
+        '400': '#a78bfa',
+        '500': '#8b5cf6',
+        '600': '#7c3aed',
+        '700': '#6d28d9',
+        '800': '#5b21b6',
+        '900': '#4c1d95',
+        '950': '#2e1065',
     },
 };
 
@@ -179,7 +433,7 @@ const tailwindSteps = ['50', '100', '200', '300', '400', '500', '600', '700', '8
 // Utility - Convert hex to HSL
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    if (!result) return { h: 0, s: 0, l: 50 };
+    if(!result) return { h: 0, s: 0, l: 50 };
 
     const r = parseInt(result[1]!, 16) / 255;
     const g = parseInt(result[2]!, 16) / 255;
@@ -191,10 +445,10 @@ function hexToHsl(hex: string): { h: number; s: number; l: number } {
     let s = 0;
     const l = (max + min) / 2;
 
-    if (max !== min) {
+    if(max !== min) {
         const d = max - min;
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        switch (max) {
+        switch(max) {
             case r:
                 h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
                 break;
@@ -223,27 +477,32 @@ function hslToHex(h: number, s: number, l: number): string {
     let g = 0;
     let b = 0;
 
-    if (0 <= h && h < 60) {
+    if(0 <= h && h < 60) {
         r = c;
         g = x;
         b = 0;
-    } else if (60 <= h && h < 120) {
+    }
+    else if(60 <= h && h < 120) {
         r = x;
         g = c;
         b = 0;
-    } else if (120 <= h && h < 180) {
+    }
+    else if(120 <= h && h < 180) {
         r = 0;
         g = c;
         b = x;
-    } else if (180 <= h && h < 240) {
+    }
+    else if(180 <= h && h < 240) {
         r = 0;
         g = x;
         b = c;
-    } else if (240 <= h && h < 300) {
+    }
+    else if(240 <= h && h < 300) {
         r = x;
         g = 0;
         b = c;
-    } else if (300 <= h && h < 360) {
+    }
+    else if(300 <= h && h < 360) {
         r = c;
         g = 0;
         b = x;
@@ -276,7 +535,7 @@ function generateColorScale(baseHex: string): Record<string, string> {
         let lightness: number;
         let saturation = baseHsl.s;
 
-        if (stepNum <= 500) {
+        if(stepNum <= 500) {
             // Lighter shades (0-500)
             // Map 0-500 to high-base lightness
             const factor = stepNum / 500;
@@ -284,7 +543,8 @@ function generateColorScale(baseHex: string): Record<string, string> {
             lightness = maxLight - factor * (maxLight - baseHsl.l);
             // Reduce saturation slightly for very light colors
             saturation = baseHsl.s * (0.3 + factor * 0.7);
-        } else {
+        }
+        else {
             // Darker shades (500-1000)
             // Map 500-1000 to base-low lightness
             const factor = (stepNum - 500) / 500;
@@ -360,7 +620,7 @@ function ColorScaleGenerator() {
 
     // Handle swatch click - sets the active property to the clicked step
     function handleSwatchClick(step: string) {
-        switch (activeProperty) {
+        switch(activeProperty) {
             case 'lightBg':
                 setLightBgStep(step);
                 break;
@@ -444,7 +704,7 @@ function ColorScaleGenerator() {
                             value={baseColor}
                             onChange={function (event) {
                                 const value = event.target.value;
-                                if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                                if(/^#[0-9A-Fa-f]{6}$/.test(value)) {
                                     setBaseColor(value);
                                 }
                             }}
@@ -589,7 +849,11 @@ function ColorScaleGenerator() {
                                 const hasTailwindColor = tailwindSteps.includes(step);
                                 return (
                                     <div key={step} className="flex-1 text-center">
-                                        <span className={`font-mono text-[9px] ${hasTailwindColor ? 'content--4' : 'content--6'}`}>
+                                        <span
+                                            className={`font-mono text-[9px] ${
+                                                hasTailwindColor ? 'content--4' : 'content--6'
+                                            }`}
+                                        >
                                             {hasTailwindColor ? step : ''}
                                         </span>
                                     </div>
@@ -664,18 +928,61 @@ function ColorScaleGenerator() {
                                 </p>
                                 {/* Indicators for which properties use this step */}
                                 <div className="mt-1 flex flex-wrap gap-0.5">
-                                    {isLightBg && <span className="h-1.5 w-1.5 rounded-full bg-white" title="Light BG" />}
-                                    {isLightBorder && <span className="h-1.5 w-1.5 rounded-full border border-white" title="Light Border" />}
-                                    {isLightHoverBg && <span className="h-1.5 w-1.5 rounded-full bg-white/60" title="Light Hover BG" />}
-                                    {isLightHoverBorder && <span className="h-1.5 w-1.5 rounded-full border border-white/60" title="Light Hover Border" />}
-                                    {isLightActiveBg && <span className="h-1.5 w-1.5 rounded-full bg-white/40" title="Light Active BG" />}
-                                    {isLightActiveBorder && <span className="h-1.5 w-1.5 rounded-full border border-white/40" title="Light Active Border" />}
+                                    {isLightBg && (
+                                        <span className="h-1.5 w-1.5 rounded-full bg-white" title="Light BG" />
+                                    )}
+                                    {isLightBorder && (
+                                        <span
+                                            className="h-1.5 w-1.5 rounded-full border border-white"
+                                            title="Light Border"
+                                        />
+                                    )}
+                                    {isLightHoverBg && (
+                                        <span className="h-1.5 w-1.5 rounded-full bg-white/60" title="Light Hover BG" />
+                                    )}
+                                    {isLightHoverBorder && (
+                                        <span
+                                            className="h-1.5 w-1.5 rounded-full border border-white/60"
+                                            title="Light Hover Border"
+                                        />
+                                    )}
+                                    {isLightActiveBg && (
+                                        <span
+                                            className="h-1.5 w-1.5 rounded-full bg-white/40"
+                                            title="Light Active BG"
+                                        />
+                                    )}
+                                    {isLightActiveBorder && (
+                                        <span
+                                            className="h-1.5 w-1.5 rounded-full border border-white/40"
+                                            title="Light Active Border"
+                                        />
+                                    )}
                                     {isDarkBg && <span className="h-1.5 w-1.5 rounded-full bg-black" title="Dark BG" />}
-                                    {isDarkBorder && <span className="h-1.5 w-1.5 rounded-full border border-black" title="Dark Border" />}
-                                    {isDarkHoverBg && <span className="h-1.5 w-1.5 rounded-full bg-black/60" title="Dark Hover BG" />}
-                                    {isDarkHoverBorder && <span className="h-1.5 w-1.5 rounded-full border border-black/60" title="Dark Hover Border" />}
-                                    {isDarkActiveBg && <span className="h-1.5 w-1.5 rounded-full bg-black/40" title="Dark Active BG" />}
-                                    {isDarkActiveBorder && <span className="h-1.5 w-1.5 rounded-full border border-black/40" title="Dark Active Border" />}
+                                    {isDarkBorder && (
+                                        <span
+                                            className="h-1.5 w-1.5 rounded-full border border-black"
+                                            title="Dark Border"
+                                        />
+                                    )}
+                                    {isDarkHoverBg && (
+                                        <span className="h-1.5 w-1.5 rounded-full bg-black/60" title="Dark Hover BG" />
+                                    )}
+                                    {isDarkHoverBorder && (
+                                        <span
+                                            className="h-1.5 w-1.5 rounded-full border border-black/60"
+                                            title="Dark Hover Border"
+                                        />
+                                    )}
+                                    {isDarkActiveBg && (
+                                        <span className="h-1.5 w-1.5 rounded-full bg-black/40" title="Dark Active BG" />
+                                    )}
+                                    {isDarkActiveBorder && (
+                                        <span
+                                            className="h-1.5 w-1.5 rounded-full border border-black/40"
+                                            title="Dark Active Border"
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </button>
@@ -685,7 +992,9 @@ function ColorScaleGenerator() {
 
             {/* Button Preview */}
             <div className="space-y-4">
-                <h3 className="text-sm font-medium content--1">Button Preview — Click a property below, then click a swatch above</h3>
+                <h3 className="text-sm font-medium content--1">
+                    Button Preview — Click a property below, then click a swatch above
+                </h3>
 
                 {/* Helper Buttons */}
                 <div className="flex flex-wrap items-center gap-2">
@@ -860,7 +1169,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('lightBg');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'lightBg' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'lightBg'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border border-white/30"
@@ -873,7 +1186,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('lightBorder');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'lightBorder' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'lightBorder'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border-2"
@@ -887,7 +1204,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('lightHoverBg');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'lightHoverBg' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'lightHoverBg'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border border-white/30"
@@ -900,7 +1221,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('lightHoverBorder');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'lightHoverBorder' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'lightHoverBorder'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border-2"
@@ -914,7 +1239,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('lightActiveBg');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'lightActiveBg' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'lightActiveBg'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border border-white/30"
@@ -927,7 +1256,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('lightActiveBorder');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'lightActiveBorder' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'lightActiveBorder'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border-2"
@@ -939,9 +1272,7 @@ function ColorScaleGenerator() {
 
                         {/* Light Mode Box */}
                         <div className="rounded-lg border border--0 background--0 p-8 scheme-light">
-                            <p className="mb-4 text-center text-xs font-medium content--2">
-                                Light Mode
-                            </p>
+                            <p className="mb-4 text-center text-xs font-medium content--2">Light Mode</p>
                             <div className="flex justify-center">
                                 <button
                                     className="rounded-md px-4 py-2 text-sm font-medium transition-colors"
@@ -959,10 +1290,8 @@ function ColorScaleGenerator() {
                                             generatedScale[lightHoverBorderStep] || '';
                                     }}
                                     onMouseLeave={function (event) {
-                                        event.currentTarget.style.backgroundColor =
-                                            generatedScale[lightBgStep] || '';
-                                        event.currentTarget.style.borderColor =
-                                            generatedScale[lightBorderStep] || '';
+                                        event.currentTarget.style.backgroundColor = generatedScale[lightBgStep] || '';
+                                        event.currentTarget.style.borderColor = generatedScale[lightBorderStep] || '';
                                     }}
                                     onMouseDown={function (event) {
                                         event.currentTarget.style.backgroundColor =
@@ -996,7 +1325,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('darkBg');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'darkBg' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'darkBg'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border border-white/30"
@@ -1009,7 +1342,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('darkBorder');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'darkBorder' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'darkBorder'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border-2"
@@ -1023,7 +1360,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('darkHoverBg');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'darkHoverBg' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'darkHoverBg'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border border-white/30"
@@ -1036,7 +1377,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('darkHoverBorder');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'darkHoverBorder' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'darkHoverBorder'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border-2"
@@ -1050,7 +1395,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('darkActiveBg');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'darkActiveBg' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'darkActiveBg'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border border-white/30"
@@ -1063,7 +1412,11 @@ function ColorScaleGenerator() {
                                 onClick={function () {
                                     setActiveProperty('darkActiveBorder');
                                 }}
-                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${activeProperty === 'darkActiveBorder' ? 'bg-blue-500 text-white' : 'background--2 content--1 hover:background--3'}`}
+                                className={`flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                                    activeProperty === 'darkActiveBorder'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'background--2 content--1 hover:background--3'
+                                }`}
                             >
                                 <span
                                     className="h-3 w-3 rounded border-2"
@@ -1075,9 +1428,7 @@ function ColorScaleGenerator() {
 
                         {/* Dark Mode Box */}
                         <div className="rounded-lg border border--0 background--0 p-8 scheme-dark">
-                            <p className="mb-4 text-center text-xs font-medium content--2">
-                                Dark Mode
-                            </p>
+                            <p className="mb-4 text-center text-xs font-medium content--2">Dark Mode</p>
                             <div className="flex justify-center">
                                 <button
                                     className="rounded-md px-4 py-2 text-sm font-medium transition-colors"
@@ -1095,10 +1446,8 @@ function ColorScaleGenerator() {
                                             generatedScale[darkHoverBorderStep] || '';
                                     }}
                                     onMouseLeave={function (event) {
-                                        event.currentTarget.style.backgroundColor =
-                                            generatedScale[darkBgStep] || '';
-                                        event.currentTarget.style.borderColor =
-                                            generatedScale[darkBorderStep] || '';
+                                        event.currentTarget.style.backgroundColor = generatedScale[darkBgStep] || '';
+                                        event.currentTarget.style.borderColor = generatedScale[darkBorderStep] || '';
                                     }}
                                     onMouseDown={function (event) {
                                         event.currentTarget.style.backgroundColor =
@@ -1174,10 +1523,7 @@ function ColorSwatchRow(properties: {
             {/* Light Mode Swatch */}
             <div className="flex flex-1 items-center gap-2 rounded-md background--1 p-2 scheme-light">
                 {properties.type === 'content' && (
-                    <div
-                        className="h-8 w-8 shrink-0 rounded"
-                        style={{ backgroundColor: properties.lightHex }}
-                    />
+                    <div className="h-8 w-8 shrink-0 rounded" style={{ backgroundColor: properties.lightHex }} />
                 )}
                 {properties.type === 'background' && (
                     <div
@@ -1200,10 +1546,7 @@ function ColorSwatchRow(properties: {
             {/* Dark Mode Swatch */}
             <div className="flex flex-1 items-center gap-2 rounded-md background--1 p-2 scheme-dark">
                 {properties.type === 'content' && (
-                    <div
-                        className="h-8 w-8 shrink-0 rounded"
-                        style={{ backgroundColor: properties.darkHex }}
-                    />
+                    <div className="h-8 w-8 shrink-0 rounded" style={{ backgroundColor: properties.darkHex }} />
                 )}
                 {properties.type === 'background' && (
                     <div
@@ -1237,7 +1580,9 @@ function PrimitiveScaleBar(properties: {
         <div className="mb-6">
             <h3 className="mb-2 text-sm font-medium content--1">{properties.title}</h3>
             <div
-                className={`rounded-lg p-3 ${properties.showOnDark ? 'scheme-dark background--0' : 'scheme-light background--0'}`}
+                className={`rounded-lg p-3 ${
+                    properties.showOnDark ? 'background--0 scheme-dark' : 'background--0 scheme-light'
+                }`}
             >
                 {/* Gradient Bar */}
                 <div className="flex h-10 overflow-hidden rounded-md">
@@ -1266,12 +1611,7 @@ function PrimitiveScaleBar(properties: {
 }
 
 // Component - Semantic State Card
-function SemanticStateCard(properties: {
-    name: string;
-    stateKey: string;
-    lightColor: string;
-    darkColor: string;
-}) {
+function SemanticStateCard(properties: { name: string; stateKey: string; lightColor: string; darkColor: string }) {
     return (
         <div className="overflow-hidden rounded-lg border border--0">
             <div className="background--1 p-3">
@@ -1281,10 +1621,7 @@ function SemanticStateCard(properties: {
                 {/* Light Mode */}
                 <div className="flex-1 background--0 p-3 scheme-light">
                     <div className="space-y-2">
-                        <div
-                            className="h-6 rounded"
-                            style={{ backgroundColor: properties.lightColor }}
-                        />
+                        <div className="h-6 rounded" style={{ backgroundColor: properties.lightColor }} />
                         <div
                             className="h-6 rounded background--1"
                             style={{ border: `2px solid ${properties.lightColor}` }}
@@ -1298,10 +1635,7 @@ function SemanticStateCard(properties: {
                 {/* Dark Mode */}
                 <div className="flex-1 background--0 p-3 scheme-dark">
                     <div className="space-y-2">
-                        <div
-                            className="h-6 rounded"
-                            style={{ backgroundColor: properties.darkColor }}
-                        />
+                        <div className="h-6 rounded" style={{ backgroundColor: properties.darkColor }} />
                         <div
                             className="h-6 rounded background--1"
                             style={{ border: `2px solid ${properties.darkColor}` }}
@@ -1468,10 +1802,7 @@ export function OpsDesignColorsPage() {
 
             {/* Section 3: Brand Colors */}
             <section>
-                <SectionHeader
-                    title="Brand Colors"
-                    description="Primary brand color scale and interactive states."
-                />
+                <SectionHeader title="Brand Colors" description="Primary brand color scale and interactive states." />
                 <PrimitiveScaleBar title="Blue Scale" scale={blueScale} steps={primitiveScaleSteps} />
 
                 {/* Brand States */}
@@ -1512,9 +1843,21 @@ export function OpsDesignColorsPage() {
                     title="Primitive Scales"
                     description="Raw color scales from 0-1000 used to build semantic utilities."
                 />
-                <PrimitiveScaleBar title="White Scale (darkest to lightest)" scale={whiteScale} steps={primitiveScaleSteps} />
-                <PrimitiveScaleBar title="Gray Scale (lightest to darkest)" scale={grayScale} steps={primitiveScaleSteps} />
-                <PrimitiveScaleBar title="Black Scale (lightest to darkest)" scale={blackScale} steps={primitiveScaleSteps} />
+                <PrimitiveScaleBar
+                    title="White Scale (darkest to lightest)"
+                    scale={whiteScale}
+                    steps={primitiveScaleSteps}
+                />
+                <PrimitiveScaleBar
+                    title="Gray Scale (lightest to darkest)"
+                    scale={grayScale}
+                    steps={primitiveScaleSteps}
+                />
+                <PrimitiveScaleBar
+                    title="Black Scale (lightest to darkest)"
+                    scale={blackScale}
+                    steps={primitiveScaleSteps}
+                />
 
                 {/* Transparency Scales */}
                 <div className="mt-6">
@@ -1523,17 +1866,19 @@ export function OpsDesignColorsPage() {
                         <div className="rounded-lg background--0 p-4 scheme-dark">
                             <p className="mb-2 text-xs content--0">Light Scale (on dark)</p>
                             <div className="flex h-8 overflow-hidden rounded-md">
-                                {['0', '100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'].map(function (step) {
-                                    const opacity = parseInt(step) / 1000;
-                                    return (
-                                        <div
-                                            key={step}
-                                            className="flex-1"
-                                            style={{ backgroundColor: `rgba(255, 255, 255, ${opacity})` }}
-                                            title={`light-${step}`}
-                                        />
-                                    );
-                                })}
+                                {['0', '100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'].map(
+                                    function (step) {
+                                        const opacity = parseInt(step) / 1000;
+                                        return (
+                                            <div
+                                                key={step}
+                                                className="flex-1"
+                                                style={{ backgroundColor: `rgba(255, 255, 255, ${opacity})` }}
+                                                title={`light-${step}`}
+                                            />
+                                        );
+                                    },
+                                )}
                             </div>
                             <div className="mt-1 flex font-mono text-[10px] content--4">
                                 <span>0%</span>
@@ -1546,17 +1891,19 @@ export function OpsDesignColorsPage() {
                         <div className="rounded-lg background--0 p-4 scheme-light">
                             <p className="mb-2 text-xs content--0">Dark Scale (on light)</p>
                             <div className="flex h-8 overflow-hidden rounded-md">
-                                {['0', '100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'].map(function (step) {
-                                    const opacity = parseInt(step) / 1000;
-                                    return (
-                                        <div
-                                            key={step}
-                                            className="flex-1"
-                                            style={{ backgroundColor: `rgba(0, 0, 0, ${opacity})` }}
-                                            title={`dark-${step}`}
-                                        />
-                                    );
-                                })}
+                                {['0', '100', '200', '300', '400', '500', '600', '700', '800', '900', '1000'].map(
+                                    function (step) {
+                                        const opacity = parseInt(step) / 1000;
+                                        return (
+                                            <div
+                                                key={step}
+                                                className="flex-1"
+                                                style={{ backgroundColor: `rgba(0, 0, 0, ${opacity})` }}
+                                                title={`dark-${step}`}
+                                            />
+                                        );
+                                    },
+                                )}
                             </div>
                             <div className="mt-1 flex font-mono text-[10px] content--4">
                                 <span>0%</span>
