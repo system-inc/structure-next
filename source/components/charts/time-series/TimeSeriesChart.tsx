@@ -171,7 +171,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
 
                         // Set active label for both left and right clicks (needed for context menu)
                         if(properties.onLabelClick && chartEvent && chartEvent.activeLabel) {
-                            properties.onLabelClick(chartEvent.activeLabel);
+                            properties.onLabelClick(String(chartEvent.activeLabel));
                         }
 
                         // Only handle left clicks for drag-to-zoom (button 0)
