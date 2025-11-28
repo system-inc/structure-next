@@ -120,8 +120,6 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
                     // Layout
                     'flex flex-1 flex-col',
                 )}
-                // Make the scroll area thumb more visible in dark mode
-                thumbClassName="dark:background--10/75 dark:hover:background--10/90"
             >
                 {regularLinks.length > 0 && (
                     <div className="flex flex-col space-y-0.5 py-2">
