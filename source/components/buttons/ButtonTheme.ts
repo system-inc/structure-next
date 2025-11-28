@@ -232,16 +232,20 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonTypographyClassNames,
             buttonCommonFocusClassNames,
             'rounded-lg border',
-            // Base: Red background with white text
-            'border-red-600 bg-red-500 text-white-800',
-            'dark:border-red-700 dark:bg-red-800',
-            // Hover
-            'hover:bg-red-700',
-            // Active (includes when used as open popover trigger)
-            'active:bg-red-800',
-            'data-[state=open]:bg-red-800',
-            // Disabled
-            'disabled:hover:bg-red-600',
+            // Light mode - Base
+            'border-red-800 bg-red-700 text-white-800',
+            // Light mode - Hover (bg: 600, border: 700)
+            'hover:border-red-750 hover:bg-red-650',
+            // Light mode - Active (bg: 500, border: 600)
+            'active:border-red-650 active:bg-red-550',
+            'data-[state=open]:border-red-650 data-[state=open]:bg-red-550',
+            // Dark mode - Base (bg: 900, border: 800)
+            'dark:border-red-800 dark:bg-red-900',
+            // Dark mode - Hover (bg: 850, border: 750)
+            'dark:hover:border-red-750 dark:hover:bg-red-850',
+            // Dark mode - Active (bg: 800, border: 700)
+            'dark:active:border-red-700 dark:active:bg-red-800',
+            'dark:data-[state=open]:border-red-700 dark:data-[state=open]:bg-red-800',
         ),
 
         // Specialized UI Variants
