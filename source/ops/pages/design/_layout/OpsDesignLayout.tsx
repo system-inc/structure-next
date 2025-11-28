@@ -20,26 +20,31 @@ export interface OpsDesignLayoutProperties {
 
 export function OpsDesignLayout(properties: OpsDesignLayoutProperties) {
     return (
-        <ScrollArea containerClassName="">
-            <div className="flex justify-center px-8 pb-12">
+        <ScrollArea containerClassName="px-6 pb-6">
+            {/* Non-sticky header content */}
+            <div className="mt-6 flex justify-center">
                 <div className="w-full max-w-4xl">
-                    <div className="mt-8 mb-4">
-                        <OpsNavigationTrail />
-                    </div>
+                    <OpsNavigationTrail />
+                </div>
+            </div>
 
-                    <div className="mb-8">
-                        {/* Mobile: PopoverMenu Navigation */}
-                        <div className="md:hidden">
-                            <OpsDesignNavigationPopoverMenu navigationLinks={opsDesignNavigationLinks} />
-                        </div>
+            {/* Mobile: PopoverMenu Navigation (non-sticky) */}
+            <div className="flex justify-center md:hidden">
+                <div className="w-full max-w-4xl">
+                    <OpsDesignNavigationPopoverMenu navigationLinks={opsDesignNavigationLinks} />
+                </div>
+            </div>
 
-                        {/* Desktop: Horizontal Tabs */}
-                        <div className="hidden md:block">
-                            <OpsDesignNavigationTabs navigationLinks={opsDesignNavigationLinks} />
-                        </div>
-                    </div>
+            {/* Desktop: Sticky Tabs */}
+            <div className="sticky top-0 z-10 hidden justify-center md:flex">
+                <div className="w-full max-w-4xl background--0">
+                    <OpsDesignNavigationTabs navigationLinks={opsDesignNavigationLinks} />
+                </div>
+            </div>
 
-                    {/* Content */}
+            {/* Content */}
+            <div className="mt-8 flex justify-center">
+                <div className="w-full max-w-4xl">
                     <React.Suspense fallback={<LoadingAnimation />}>{properties.children}</React.Suspense>
                 </div>
             </div>
