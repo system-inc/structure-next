@@ -16,7 +16,7 @@ export const scrollAreaScrollbarClassName = mergeClassNames(
     // Layout
     'flex touch-none px-1 py-0.5 select-none',
     // Hover - Subtle track background on hover (macOS uses ~9% opacity)
-    'data-[state=visible]:hover:scrim--100',
+    'data-[state=visible]:hover:bg-scrim-100',
     // Group
     'group',
     // Animation - Animate the hover colors
@@ -30,7 +30,7 @@ export const scrollAreaThumbClassName = mergeClassNames(
     // Layout
     'relative flex-1 rounded before:absolute before:top-1/2 before:left-1/2 before:h-full before:min-h-11 before:w-full before:min-w-11 before:translate-x-[50%] before:translate-y-[50%]',
     // Colors - macOS native overlay scrollbar uses ~50% opacity, ~60% on hover/active
-    'scrim--500 hover:scrim--600',
+    'bg-scrim-500 hover:bg-scrim-600',
     // Animation
     'transition-opacity duration-300 ease-out',
     // Animate in when the group is visible
@@ -50,9 +50,9 @@ export interface ScrollAreaProperties {
     horizontalScrollbarClassName?: string;
     thumbClassName?: string;
     cornerClassName?: string;
-    type?: 'auto' | 'always' | 'scroll' | 'hover';
+    type?: 'Auto' | 'Always' | 'Scroll' | 'Hover';
     scrollHideDelay?: number;
-    direction?: 'rightToLeft' | 'leftToRight';
+    direction?: 'RightToLeft' | 'LeftToRight';
     verticalScrollbar?: boolean;
     horizontalScrollbar?: boolean;
 }
@@ -61,10 +61,9 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
     reference: React.Ref<HTMLDivElement>,
 ) {
     // Defaults
-    const type = properties.type ?? 'scroll';
+    const type = (properties.type?.toLowerCase() ?? 'scroll') as 'auto' | 'always' | 'scroll' | 'hover';
     const scrollHideDelay = properties.scrollHideDelay ?? 600;
-    const direction =
-        properties.direction === 'rightToLeft' ? 'rtl' : properties.direction === 'leftToRight' ? 'ltr' : 'ltr';
+    const direction = properties.direction === 'RightToLeft' ? 'rtl' : 'ltr';
     const verticalScrollbar = properties.verticalScrollbar ?? true;
     const horizontalScrollbar = properties.horizontalScrollbar ?? false;
 

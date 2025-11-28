@@ -172,7 +172,7 @@ export const drawerTheme: DrawerThemeConfiguration = {
         baseWrapperClasses: mergeClassNames('fixed z-50 flex flex-col'),
 
         // Overlay classes
-        overlayClasses: mergeClassNames('fixed inset-0 z-40 dim--500'),
+        overlayClasses: mergeClassNames('fixed inset-0 z-40 bg-dark-500'),
 
         // Close button classes
         closeClasses: baseDrawerCloseClassNames,

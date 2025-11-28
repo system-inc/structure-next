@@ -23,19 +23,6 @@
     background-color: --value(--color-border- *, [color]);
 }
 
-/* Background dim utilities - darkening layers that dim content in both light and dark modes */
-/* Uses dark-* (black transparency) in both modes - for modal backdrops, overlays that obscure content */
-@utility background-dim--* {
-    background-color: --value(--color-dark- *, [color]);
-}
-
-/* Background scrim utilities - translucent layers that provide contrast against any background */
-/* Uses dark-* (black transparency) in light mode, light-* (white transparency) in dark mode */
-/* Perfect for scrollbars, hover states, and other UI overlays */
-@utility background-scrim--* {
-    background-color: --value(--color-scrim- *, [color]);
-}
-
 /* Text/Content utilities with 0-10 scale */
 @utility content--* {
     color: --value(--color-content- *, [color]);
