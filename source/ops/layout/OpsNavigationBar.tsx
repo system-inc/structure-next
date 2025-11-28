@@ -12,8 +12,6 @@ import { AccountNavigationResponsivePopoverDrawer } from '@structure/source/modu
 import { OpsNavigation } from './navigation/OpsNavigation';
 import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 import { AnimatePresence, motion } from 'motion/react';
-import Image from 'next/image';
-import { ProjectSettings } from '@project/ProjectSettings';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { atom, useAtom } from 'jotai';
 
@@ -21,7 +19,10 @@ import { atom, useAtom } from 'jotai';
 export const opsNavigationOpenAtom = atom(false);
 
 // Component - OpsNavigationBar
-export function OpsNavigationBar() {
+export interface OpsNavigationBarProperties {
+    logo: React.ReactNode;
+}
+export function OpsNavigationBar(properties: OpsNavigationBarProperties) {
     // State
     const [open, setOpen] = useAtom(opsNavigationOpenAtom);
 
@@ -52,24 +53,11 @@ export function OpsNavigationBar() {
                 <div className="absolute left-2.5 z-30 flex h-12 items-center">
                     <div className={mergeClassNames('mr-4 flex shrink-0 items-center space-x-2')}>
                         {/* Logo */}
-                        <Link href="/">
-                            <Image
-                                src={ProjectSettings.assets.favicon.light.location}
-                                alt="Logo"
-                                height={28} // h-7 = 28px
-                                width={28} // h-7 = 28px
-                                priority={true}
-                                className="dark:hidden"
-                            />
-                            <Image
-                                src={ProjectSettings.assets.favicon.dark.location}
-                                alt="Logo"
-                                height={28}
-                                width={28}
-                                priority={true}
-                                className="hidden dark:block"
-                            />
-                        </Link>
+                        {properties.logo && (
+                            <Link variant="C" href="/" className="relative block aspect-square h-6 shrink-0">
+                                {properties.logo}
+                            </Link>
+                        )}
 
                         {/* Menu button */}
                         <Dialog.Trigger asChild>

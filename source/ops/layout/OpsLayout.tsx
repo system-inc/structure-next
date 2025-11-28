@@ -6,8 +6,9 @@ import React from 'react';
 // Dependencies - Main Components
 import { OpsNavigationBar } from './OpsNavigationBar';
 
-// Component - InternalLayout
+// Component - OpsLayout
 export interface OpsLayoutProperties {
+    logo: React.ReactNode;
     children: React.ReactNode;
 }
 export function OpsLayout(properties: OpsLayoutProperties) {
@@ -16,7 +17,7 @@ export function OpsLayout(properties: OpsLayoutProperties) {
         <div className="flex h-screen flex-col overflow-hidden dark:bg-[#161616]">
             {/* Navigation - Fixed at top */}
             <div className="shrink-0">
-                <OpsNavigationBar />
+                <OpsNavigationBar logo={properties.logo} />
             </div>
 
             {/* Main Content - Wrapper with padding */}
