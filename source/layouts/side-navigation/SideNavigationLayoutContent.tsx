@@ -145,7 +145,7 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
             <motion.div
                 animate={{ opacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0 }}
                 className={mergeClassNames(
-                    'absolute inset-0 z-20 background--backdrop md:hidden',
+                    'absolute inset-0 z-20 dim--500 md:hidden',
                     // If the navigation is closing by window resize, do not show the overlay
                     sideNavigationLayoutNavigationIsClosingByWindowResize ? 'hidden' : '',
                     // If the navigation is open, allow pointer events, otherwise disable them

@@ -255,7 +255,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Content
             'content--3',
             // Hover
-            'hover:background--negative/5 hover:content--3',
+            'hover:background--negative-muted hover:content--3',
             // Active and Popover open states (for TipButton)
             'active:background--8 data-[state=delayed-open]:background--8 data-[state=instant-open]:background--8 data-[state=open]:background--8',
             'active:content---1 data-[state=delayed-open]:content---1 data-[state=instant-open]:content---1 data-[state=open]:content---1',

@@ -14,8 +14,8 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 export const baseDialogOverlayClassNames = mergeClassNames(
     // Position and z-index
     'fixed inset-0 z-50',
-    // Background and backdrop
-    'background--backdrop',
+    // Background dim overlay
+    'dim--500',
     // Animation states
     'data-[state=open]:animate-in data-[state=open]:fade-in-0',
     // Fade animation
