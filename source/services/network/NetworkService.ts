@@ -212,6 +212,9 @@ export class NetworkService {
     private statisticsManager: NetworkStatistics;
     private deviceIdManager: NetworkServiceDeviceId;
 
+    // Server-side request deduplication: tracks in-flight requests to avoid duplicate network calls
+    private pendingServerSideRequests: Map<string, Promise<Response>> = new Map();
+
     constructor(options: NetworkServiceOptions = {}) {
         this.options = options;
         this.statisticsManager = new NetworkStatistics(this.isServerSide());
@@ -322,11 +325,61 @@ export class NetworkService {
      * - Internal API calls get `credentials: 'include'`
      * - External API calls use browser default (`credentials: 'same-origin'`)
      * - Can be overridden by explicitly setting credentials in options
+     *
+     * Server-side requests are automatically deduplicated: if the same request
+     * (same URL, method, body, and headers) is made while another is in-flight,
+     * the existing promise is returned instead of making a duplicate network call.
      */
     async request(input: RequestInfo | URL, options?: RequestInit): Promise<Response> {
         // Ensure deviceId before making the request
         await this.deviceIdManager.ensure();
 
+        // Server-side deduplication: check if an identical request is already in-flight
+        // Next.js is does this with GET requests, but all GraphQL requests are POST
+        // This is to handle how Next.js uses separate generateMetadata and Page functions
+        // that both make the same request during SSR
+        if(this.isServerSide()) {
+            // Create cache key from URL + options
+            const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+            const cacheKey = JSON.stringify({
+                url,
+                method: options?.method || 'GET',
+                body: options?.body,
+                headers: options?.headers ? Object.fromEntries(new Headers(options.headers).entries()) : undefined,
+            });
+
+            // Check if this exact request is already in-flight
+            const existingServerSideRequest = this.pendingServerSideRequests.get(cacheKey);
+            if(existingServerSideRequest) {
+                // console.log('[NetworkService] Reusing existing server-side request for:', url, options?.body);
+
+                // Clone the response so each caller gets their own readable stream
+                return existingServerSideRequest.then(function (response) {
+                    return response.clone();
+                });
+            }
+
+            // Execute the request and store the promise
+            const serverSideRequestPromise = this.executeRequest(input, options);
+            this.pendingServerSideRequests.set(cacheKey, serverSideRequestPromise);
+
+            // Clean up after the request completes (success or failure)
+            serverSideRequestPromise.finally(() => {
+                this.pendingServerSideRequests.delete(cacheKey);
+            });
+
+            // Clone for the first caller too, so the cached response remains readable
+            return serverSideRequestPromise.then(function (response) {
+                return response.clone();
+            });
+        }
+
+        // Client-side: execute directly (existing behavior)
+        return this.executeRequest(input, options);
+    }
+
+    // Internal method that performs the actual fetch request
+    private async executeRequest(input: RequestInfo | URL, options?: RequestInit): Promise<Response> {
         // Use custom fetch if provided (for Cloudflare worker-to-worker calls)
         const fetchMethod = this.options.fetch || fetch;
 
