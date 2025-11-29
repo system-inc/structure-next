@@ -23,8 +23,8 @@ export const buttonCommonBehaviorClassNames = mergeClassNames(
     // Animation
     'transition-colors ease-out',
     // Disabled states (works for both button[disabled] and a[aria-disabled])
-    'disabled:cursor-not-allowed disabled:opacity-75',
-    'aria-disabled:cursor-not-allowed aria-disabled:opacity-75',
+    'disabled:cursor-not-allowed disabled:opacity-50',
+    'aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
 );
 
 // Common typography: font weight for button text
