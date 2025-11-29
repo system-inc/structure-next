@@ -158,30 +158,6 @@ const blackScale: Record<string, string> = {
     '1000': '#000000',
 };
 
-const blueScale: Record<string, string> = {
-    '0': '#f0f7ff',
-    '50': '#e6f1ff',
-    '100': '#dbeafe',
-    '150': '#cee3fe',
-    '200': '#bfdbfe',
-    '250': '#abd0fe',
-    '300': '#93c5fd',
-    '350': '#7db6fc',
-    '400': '#60a5fa',
-    '450': '#5095f8',
-    '500': '#3b82f6',
-    '550': '#3174f1',
-    '600': '#2563eb',
-    '650': '#2159e2',
-    '700': '#1d4ed8',
-    '750': '#1e47c5',
-    '800': '#1e40af',
-    '850': '#1e3d9e',
-    '900': '#1e3a8a',
-    '950': '#172554',
-    '1000': '#0f172a',
-};
-
 // Semantic State Colors
 const semanticStates = {
     informative: { light: '#2563eb', dark: '#60a5fa', name: 'Blue' },
@@ -1800,44 +1776,7 @@ export function OpsDesignColorsPage() {
                 </div>
             </section>
 
-            {/* Section 3: Brand Colors */}
-            <section>
-                <SectionHeader title="Brand Colors" description="Primary brand color scale and interactive states." />
-                <PrimitiveScaleBar title="Blue Scale" scale={blueScale} steps={primitiveScaleSteps} />
-
-                {/* Brand States */}
-                <div className="mt-4 grid grid-cols-3 gap-4">
-                    <div className="rounded-lg border border--0 p-4">
-                        <div className="mb-2 scheme-light">
-                            <div className="h-10 rounded bg-brand" />
-                        </div>
-                        <div className="scheme-dark">
-                            <div className="h-10 rounded bg-brand" />
-                        </div>
-                        <p className="mt-2 text-center font-mono text-xs content--3">brand</p>
-                    </div>
-                    <div className="rounded-lg border border--0 p-4">
-                        <div className="mb-2 scheme-light">
-                            <div className="h-10 rounded bg-brand-hover" />
-                        </div>
-                        <div className="scheme-dark">
-                            <div className="h-10 rounded bg-brand-hover" />
-                        </div>
-                        <p className="mt-2 text-center font-mono text-xs content--3">brand-hover</p>
-                    </div>
-                    <div className="rounded-lg border border--0 p-4">
-                        <div className="mb-2 scheme-light">
-                            <div className="h-10 rounded bg-brand-active" />
-                        </div>
-                        <div className="scheme-dark">
-                            <div className="h-10 rounded bg-brand-active" />
-                        </div>
-                        <p className="mt-2 text-center font-mono text-xs content--3">brand-active</p>
-                    </div>
-                </div>
-            </section>
-
-            {/* Section 4: Primitive Scales */}
+            {/* Section 3: Primitive Scales */}
             <section>
                 <SectionHeader
                     title="Primitive Scales"
@@ -1917,7 +1856,7 @@ export function OpsDesignColorsPage() {
                 </div>
             </section>
 
-            {/* Section 5: Cross-Category Utilities */}
+            {/* Section 4: Cross-Category Utilities */}
             <section>
                 <SectionHeader
                     title="Cross-Category Utilities"

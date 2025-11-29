@@ -24,7 +24,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Component - OpsHomePageDashboard
 export interface OpsHomePageDashboardProperties {
     className?: string;
-    dailyPromptQuestions: string[];
+    dailyPrompts: string[];
     children: React.ReactNode;
 }
 export function OpsHomePageDashboard(properties: OpsHomePageDashboardProperties) {
@@ -80,7 +80,7 @@ export function OpsHomePageDashboard(properties: OpsHomePageDashboardProperties)
                             />
                         )}
                     </div>
-                    <OpsHomePageDailyPrompt questions={properties.dailyPromptQuestions} />
+                    <OpsHomePageDailyPrompt questions={properties.dailyPrompts} />
                 </div>
 
                 {/* Date divider */}
