@@ -10,6 +10,8 @@ import { AnimatedButton } from '@structure/source/components/buttons/AnimatedBut
 // Dependencies - Hooks
 import { useForm } from '@structure/source/components/forms-new/useForm';
 import { useFormNotice } from '@structure/source/components/forms-new/hooks/useFormNotice';
+import { UseLinkedFieldOptions } from '@structure/source/components/forms-new/hooks/useLinkedField';
+import { useLinkedFields } from '@structure/source/components/forms-new/hooks/useLinkedFields';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
@@ -34,7 +36,7 @@ import {
 import { DotPathType, DotPathValuesType } from '@structure/source/utilities/type/DotPath';
 import { getValueForKeyRecursively } from '@structure/source/utilities/type/Object';
 import type { VariablesOf } from '@graphql-typed-document-node/core';
-import { titleCase, slug } from '@structure/source/utilities/type/String';
+import { titleCase } from '@structure/source/utilities/type/String';
 
 // Dependencies - Assets
 import { SpinnerIcon } from '@phosphor-icons/react';
@@ -103,6 +105,9 @@ export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocumen
     // Debug
     showPreviewGraphQlMutationTip?: boolean;
 
+    // Linked Fields - auto-update target field when source field changes
+    linkedFields?: Omit<UseLinkedFieldOptions, 'form'>[];
+
     // Layout
     className?: string;
     fieldClassName?: string;
@@ -112,9 +117,6 @@ export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocumen
 export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQlDocument>(
     properties: GraphQlOperationFormProperties<TDocument>,
 ) {
-    // State
-    const [slugManuallyEdited, setSlugManuallyEdited] = React.useState(false);
-
     // Extract GraphQL metadata
     const graphQlFormInputMetadataArray = graphQlFieldMetadataArrayFromGraphQlOperationParameterMetadata(
         properties.operation.parameters,
@@ -146,7 +148,7 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
                 const result = await mutation.execute(variables);
                 formNotice.showSuccess('Saved successfully!');
                 form.reset();
-                setSlugManuallyEdited(false);
+                linkedFields.resetAll();
 
                 if(properties.onSubmit) {
                     await properties.onSubmit(allValues as Record<string, unknown>, result, null);
@@ -170,64 +172,14 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
         },
     });
 
-    // Title/Slug auto-generation
-    const titleField = graphQlFormInputMetadataArray.find(function (f) {
-        return f.name.endsWith('.title');
-    });
-    const slugField = graphQlFormInputMetadataArray.find(function (f) {
-        return f.name.endsWith('.slug');
+    // Linked fields - auto-update target fields when source fields change
+    const linkedFields = useLinkedFields({
+        form,
+        linkedFields: properties.linkedFields || [],
     });
 
-    // Only track title if both title and slug fields exist and are visible
     // Cast to string[] for internal comparison since we're checking runtime metadata against typed props
     const excludedFieldsAsStrings = properties.excludedFields as string[] | undefined;
-    const shouldTrackTitle =
-        titleField &&
-        slugField &&
-        !(properties.hiddenFields && titleField.name in properties.hiddenFields) &&
-        !(properties.hiddenFields && slugField.name in properties.hiddenFields) &&
-        !excludedFieldsAsStrings?.includes(titleField.name) &&
-        !excludedFieldsAsStrings?.includes(slugField.name);
-
-    // Subscribe to title value changes using direct store subscription
-    // This is more reliable than useStore for field value changes per TanStack Form docs
-    const titleFieldName = shouldTrackTitle && titleField ? titleField.name : '';
-
-    // Track the last title value we processed to avoid infinite loops
-    const lastProcessedTitleReference = React.useRef<string | null>(null);
-
-    React.useEffect(
-        function () {
-            if(!shouldTrackTitle || !titleFieldName || !slugField) {
-                return;
-            }
-
-            // Subscribe to the form store for value changes
-            const unsubscribe = form.store.subscribe(function () {
-                // Skip if slug was manually edited
-                if(slugManuallyEdited) {
-                    return;
-                }
-
-                // Get the current title value using getFieldValue (which works correctly)
-                const currentTitleValue = form.getFieldValue(titleFieldName as never);
-
-                // Skip if title hasn't changed (prevents infinite loop from slug updates)
-                if(currentTitleValue === lastProcessedTitleReference.current) {
-                    return;
-                }
-
-                if(currentTitleValue && typeof currentTitleValue === 'string') {
-                    lastProcessedTitleReference.current = currentTitleValue;
-                    const newSlug = slug(currentTitleValue);
-                    form.setFieldValue(slugField.name, newSlug);
-                }
-            });
-
-            return unsubscribe;
-        },
-        [shouldTrackTitle, titleFieldName, slugField, slugManuallyEdited, form],
-    );
 
     // Fetch default values if query provided
     const defaultValuesQuery = networkService.useGraphQlQuery(
@@ -283,27 +235,30 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
             const fieldConfiguration = fieldPropertiesAsRecord?.[input.name] || {};
             const label = fieldConfiguration.label || titleCase(fieldIdentifierFromDottedPath(input.name));
 
-            // Determine if this field needs special handling for title/slug auto-generation
-            const isTitleField = input.name.endsWith('.title');
-            const isSlugField = input.name.endsWith('.slug');
+            // Determine if this field is a source or target in a linked field configuration
+            const isSourceField = linkedFields.isSourceField(input.name);
+            const isTargetField = linkedFields.isTargetField(input.name);
+
+            // Get listeners and handlers from linked fields hook
+            const sourceFieldListeners = linkedFields.getSourceFieldListeners(input.name);
+            const targetFieldOnInput = linkedFields.getTargetFieldOnInput(input.name);
 
             return (
-                <form.Field key={input.name} identifier={input.name} className={properties.fieldClassName}>
+                <form.Field
+                    key={input.name}
+                    identifier={input.name}
+                    className={properties.fieldClassName}
+                    listeners={sourceFieldListeners}
+                >
                     <form.FieldLabel tip={fieldConfiguration.tip}>{label}</form.FieldLabel>
                     <Component
                         variant="Outline"
                         placeholder={fieldConfiguration.placeholder || label}
                         {...fieldPropertiesFromFieldConfiguration(input, fieldConfiguration)}
-                        // Title field: commit onChange so slug updates while typing
-                        {...(isTitleField ? { commit: 'onChange' } : {})}
-                        // Slug field: track manual edits to disable auto-generation
-                        {...(isSlugField
-                            ? {
-                                  onInput: function () {
-                                      setSlugManuallyEdited(true);
-                                  },
-                              }
-                            : {})}
+                        // Source field: commit onChange so target updates while typing
+                        {...(isSourceField ? { commit: 'onChange' } : {})}
+                        // Target field: track manual edits to disable auto-generation
+                        {...(isTargetField ? { onInput: targetFieldOnInput } : {})}
                     />
                 </form.Field>
             );
