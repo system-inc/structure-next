@@ -189,21 +189,44 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
         !excludedFieldsAsStrings?.includes(titleField.name) &&
         !excludedFieldsAsStrings?.includes(slugField.name);
 
-    // Subscribe to title value changes - must be called unconditionally (Rules of Hooks)
-    // Use the title field name if tracking is enabled, otherwise use a dummy key
+    // Subscribe to title value changes using direct store subscription
+    // This is more reliable than useStore for field value changes per TanStack Form docs
     const titleFieldName = shouldTrackTitle && titleField ? titleField.name : '';
-    const titleValueFromStore = form.useStore(function (state) {
-        return titleFieldName ? (state.values as Record<string, unknown>)[titleFieldName] : null;
-    });
-    const titleValue = shouldTrackTitle ? titleValueFromStore : null;
+
+    // Track the last title value we processed to avoid infinite loops
+    const lastProcessedTitleReference = React.useRef<string | null>(null);
 
     React.useEffect(
         function () {
-            if(slugField && !slugManuallyEdited && titleValue && typeof titleValue === 'string') {
-                form.setFieldValue(slugField.name, slug(titleValue));
+            if(!shouldTrackTitle || !titleFieldName || !slugField) {
+                return;
             }
+
+            // Subscribe to the form store for value changes
+            const unsubscribe = form.store.subscribe(function () {
+                // Skip if slug was manually edited
+                if(slugManuallyEdited) {
+                    return;
+                }
+
+                // Get the current title value using getFieldValue (which works correctly)
+                const currentTitleValue = form.getFieldValue(titleFieldName as never);
+
+                // Skip if title hasn't changed (prevents infinite loop from slug updates)
+                if(currentTitleValue === lastProcessedTitleReference.current) {
+                    return;
+                }
+
+                if(currentTitleValue && typeof currentTitleValue === 'string') {
+                    lastProcessedTitleReference.current = currentTitleValue;
+                    const newSlug = slug(currentTitleValue);
+                    form.setFieldValue(slugField.name, newSlug);
+                }
+            });
+
+            return unsubscribe;
         },
-        [titleValue, slugManuallyEdited, slugField, form],
+        [shouldTrackTitle, titleFieldName, slugField, slugManuallyEdited, form],
     );
 
     // Fetch default values if query provided
