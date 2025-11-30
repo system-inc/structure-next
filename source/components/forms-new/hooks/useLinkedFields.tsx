@@ -4,16 +4,27 @@
 import React from 'react';
 
 // Dependencies - Types
-import { UseLinkedFieldOptions } from './useLinkedField';
+import { UseLinkedFieldOptionsInterface } from './useLinkedField';
 
-// Interface - UseLinkedFieldsOptions
-export interface UseLinkedFieldsOptions {
-    form: { setFieldValue: (field: string, value: unknown) => void };
-    linkedFields: Omit<UseLinkedFieldOptions, 'form'>[];
+// Type - Form interface that works with both narrowly and broadly typed setFieldValue
+// Uses a generic field type to accept forms where setFieldValue is typed to specific field names
+type FormWithLinkedFieldSupportType<TFormValue extends object> = {
+    setFieldValue: (field: Extract<keyof TFormValue, string>, value: unknown) => void;
+    state: { values: TFormValue };
+};
+
+// Interface - UseLinkedFieldsOptionsInterface
+// TFormValue is inferred from the form's state.values type, providing type-safe field names
+// NoInfer prevents TypeScript from inferring TFormValue from linkedFields, forcing inference from form only
+export interface UseLinkedFieldsOptionsInterface<TFormValue extends object> {
+    form: FormWithLinkedFieldSupportType<TFormValue>;
+    linkedFields: Omit<UseLinkedFieldOptionsInterface<NoInfer<Extract<keyof TFormValue, string>>>, 'form'>[];
 }
 
-// Interface - UseLinkedFieldsReturn
-export interface UseLinkedFieldsReturn {
+// Interface - UseLinkedFieldsReturnInterface
+// Note: Return methods accept `string` for runtime flexibility (e.g., iterating over metadata)
+// Type safety is enforced at the options level where linkedFields are configured
+export interface UseLinkedFieldsReturnInterface {
     getSourceFieldListeners: (sourceField: string) => { onChange: (event: { value: unknown }) => void } | undefined;
     getTargetFieldOnInput: (targetField: string) => ((event: React.FormEvent<HTMLInputElement>) => void) | undefined;
     isSourceField: (fieldName: string) => boolean;
@@ -23,7 +34,15 @@ export interface UseLinkedFieldsReturn {
 
 // Hook - useLinkedFields
 // Manages multiple linked field pairs. Uses a Map to track manual edit state per target field.
-export function useLinkedFields(options: UseLinkedFieldsOptions): UseLinkedFieldsReturn {
+export function useLinkedFields<TFormValue extends object>(
+    options: UseLinkedFieldsOptionsInterface<TFormValue>,
+): UseLinkedFieldsReturnInterface {
+    // Type alias for field paths
+    type TFieldPath = Extract<keyof TFormValue, string>;
+
+    // Type for linked field configuration with proper field type
+    type LinkedFieldOptionsType = Omit<UseLinkedFieldOptionsInterface<TFieldPath>, 'form'>;
+
     // State - Map of target field names to manual edit state
     const [manualEditStates, setManualEditStates] = React.useState<Map<string, boolean>>(function () {
         return new Map();
@@ -39,8 +58,8 @@ export function useLinkedFields(options: UseLinkedFieldsOptions): UseLinkedField
     );
 
     // Build lookup maps for quick access
-    const sourceToConfiguration = new Map<string, Omit<UseLinkedFieldOptions, 'form'>>();
-    const targetToConfiguration = new Map<string, Omit<UseLinkedFieldOptions, 'form'>>();
+    const sourceToConfiguration = new Map<string, LinkedFieldOptionsType>();
+    const targetToConfiguration = new Map<string, LinkedFieldOptionsType>();
 
     for(const linkedField of options.linkedFields) {
         sourceToConfiguration.set(linkedField.sourceField, linkedField);
