@@ -16,7 +16,7 @@ import type {
  * Converts a GraphQL input type metadata to a forms-new ObjectSchema.
  * This ensures frontend validation matches backend validation rules defined in GraphQL.
  *
- * @typeParam TInputType - The GraphQL input type (e.g., AccountProfileUpdateInput) for type-safe field names
+ * @typeParam TInput - The GraphQL input type (e.g., AccountProfileUpdateInput) for type-safe field names
  * @param graphQlMetadata - The GraphQL input type metadata from generated code
  * @param fieldSubset - Optional array of field names to include. If provided, only these fields will be in the schema.
  * @returns An ObjectSchema with validation rules derived from the GraphQL metadata
@@ -35,23 +35,23 @@ import type {
  * );
  * ```
  */
-export function schemaFromGraphQl<TInputType extends object = Record<string, unknown>>(
+export function schemaFromGraphQl<TInput extends object = Record<string, unknown>>(
     graphQlMetadata: GraphQLInputObjectTypeMetadata,
-    fieldSubset?: Extract<keyof TInputType, string>[],
-): ObjectSchema<Record<Extract<keyof TInputType, string>, BaseSchema<unknown>>> {
-    type TFieldName = Extract<keyof TInputType, string>;
+    fieldSubset?: Extract<keyof TInput, string>[],
+): ObjectSchema<Record<Extract<keyof TInput, string>, BaseSchema<unknown>>> {
+    type TField = Extract<keyof TInput, string>;
     const shape: ObjectShape = {};
 
     for(const field of graphQlMetadata.fields) {
         // Skip fields not in subset (if subset specified)
-        if(fieldSubset && !fieldSubset.includes(field.name as TFieldName)) {
+        if(fieldSubset && !fieldSubset.includes(field.name as TField)) {
             continue;
         }
 
         shape[field.name] = buildFieldSchema(field);
     }
 
-    return schema.object(shape) as ObjectSchema<Record<Extract<keyof TInputType, string>, BaseSchema<unknown>>>;
+    return schema.object(shape) as ObjectSchema<Record<Extract<keyof TInput, string>, BaseSchema<unknown>>>;
 }
 
 /**
