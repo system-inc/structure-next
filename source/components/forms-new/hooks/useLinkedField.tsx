@@ -3,16 +3,16 @@
 // Dependencies - React
 import React from 'react';
 
-// Interface - UseLinkedFieldOptions
-export interface UseLinkedFieldOptions {
+// Interface - UseLinkedFieldOptionsInterface
+export interface UseLinkedFieldOptionsInterface<TFieldPath extends string = string> {
     form: { setFieldValue: (field: string, value: unknown) => void };
-    sourceField: string;
-    targetField: string;
+    sourceField: TFieldPath;
+    targetField: TFieldPath;
     transform: (value: string) => string;
 }
 
-// Interface - UseLinkedFieldReturn
-export interface UseLinkedFieldReturn {
+// Interface - UseLinkedFieldReturnInterface
+export interface UseLinkedFieldReturnInterface {
     sourceFieldListeners: { onChange: (event: { value: unknown }) => void };
     targetFieldOnInput: (event: React.FormEvent<HTMLInputElement>) => void;
     isTargetManuallyEdited: boolean;
@@ -23,7 +23,9 @@ export interface UseLinkedFieldReturn {
 // Links a source field to a target field with a transform function.
 // When the source field changes, the target field is updated with the transformed value.
 // Manual edits to the target field disable auto-updates until the target is cleared.
-export function useLinkedField(options: UseLinkedFieldOptions): UseLinkedFieldReturn {
+export function useLinkedField<TFieldPath extends string = string>(
+    options: UseLinkedFieldOptionsInterface<TFieldPath>,
+): UseLinkedFieldReturnInterface {
     // State
     const [isTargetManuallyEdited, setIsTargetManuallyEdited] = React.useState(false);
 
