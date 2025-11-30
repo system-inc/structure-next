@@ -144,7 +144,13 @@ export function useFormNotice(options: UseFormNoticeOptions = {}): UseFormNotice
     const FormNotice = React.useMemo(
         function () {
             return function FormNotice(properties: FormNoticeProperties) {
-                const noticeState = React.useSyncExternalStore(store.subscribe, store.getSnapshot);
+                const noticeState = React.useSyncExternalStore(
+                    store.subscribe,
+                    store.getSnapshot,
+                    function getServerSnapshot() {
+                        return null; // No notice shown during SSR
+                    },
+                );
                 return <FormNoticeRenderer noticeState={noticeState} className={properties.className} />;
             };
         },
