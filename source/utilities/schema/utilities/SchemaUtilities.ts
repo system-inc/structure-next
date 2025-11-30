@@ -16,32 +16,33 @@ import type {
  * Converts a GraphQL input type metadata to a forms-new ObjectSchema.
  * This ensures frontend validation matches backend validation rules defined in GraphQL.
  *
- * @param graphqlMetadata - The GraphQL input type metadata from generated code (e.g., GraphQLInputTypes.AccountProfileUpdateInput)
+ * @typeParam TInputType - The GraphQL input type (e.g., AccountProfileUpdateInput) for type-safe field names
+ * @param graphQlMetadata - The GraphQL input type metadata from generated code
  * @param fieldSubset - Optional array of field names to include. If provided, only these fields will be in the schema.
  * @returns An ObjectSchema with validation rules derived from the GraphQL metadata
  *
  * @example
  * ```typescript
- * import { GraphQLInputTypes } from '@structure/source/api/graphql/GraphQlGeneratedCode';
- * import { schemaFromGraphQl } from '@structure/source/utilities/schema/schemaFromGraphQl';
+ * import { AccountProfileUpdateInput, AccountProfileUpdateInputMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
  *
- * // Create schema for all fields
- * const fullSchema = schemaFromGraphQl(GraphQLInputTypes.AccountProfileUpdateInput);
+ * // Create schema for all fields with type-safe field names
+ * const fullSchema = schemaFromGraphQl<AccountProfileUpdateInput>(AccountProfileUpdateInputMetadata);
  *
  * // Create schema for specific fields only
- * const partialSchema = schemaFromGraphQl(
- *     GraphQLInputTypes.AccountProfileUpdateInput,
+ * const partialSchema = schemaFromGraphQl<AccountProfileUpdateInput>(
+ *     AccountProfileUpdateInputMetadata,
  *     ['givenName', 'familyName', 'displayName'],
  * );
  * ```
  */
-export function schemaFromGraphQl<TFieldName extends string = string>(
-    graphqlMetadata: GraphQLInputObjectTypeMetadata,
-    fieldSubset?: TFieldName[],
-): ObjectSchema<Record<TFieldName, BaseSchema<unknown>>> {
+export function schemaFromGraphQl<TInputType extends object = Record<string, unknown>>(
+    graphQlMetadata: GraphQLInputObjectTypeMetadata,
+    fieldSubset?: Extract<keyof TInputType, string>[],
+): ObjectSchema<Record<Extract<keyof TInputType, string>, BaseSchema<unknown>>> {
+    type TFieldName = Extract<keyof TInputType, string>;
     const shape: ObjectShape = {};
 
-    for(const field of graphqlMetadata.fields) {
+    for(const field of graphQlMetadata.fields) {
         // Skip fields not in subset (if subset specified)
         if(fieldSubset && !fieldSubset.includes(field.name as TFieldName)) {
             continue;
@@ -50,7 +51,7 @@ export function schemaFromGraphQl<TFieldName extends string = string>(
         shape[field.name] = buildFieldSchema(field);
     }
 
-    return schema.object(shape) as ObjectSchema<Record<TFieldName, BaseSchema<unknown>>>;
+    return schema.object(shape) as ObjectSchema<Record<Extract<keyof TInputType, string>, BaseSchema<unknown>>>;
 }
 
 /**
