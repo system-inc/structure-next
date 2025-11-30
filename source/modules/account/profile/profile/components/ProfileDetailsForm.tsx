@@ -10,7 +10,7 @@ import { useFormNotice } from '@structure/source/components/forms-new/hooks/useF
 // Dependencies - API
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { useAccountProfileUpdateRequest } from '@structure/source/modules/account/hooks/useAccountProfileUpdateRequest';
-import { GraphQLInputTypes } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { AccountProfileUpdateInputMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Main Components
 import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
@@ -23,7 +23,7 @@ import { SpinnerIcon } from '@phosphor-icons/react';
 import { schemaFromGraphQl } from '@structure/source/utilities/schema/utilities/SchemaUtilities';
 
 // Schema - Create from GraphQL metadata for the fields we need
-const profileInformationSchema = schemaFromGraphQl(GraphQLInputTypes.AccountProfileUpdateInput, [
+const profileInformationSchema = schemaFromGraphQl(AccountProfileUpdateInputMetadata, [
     'givenName',
     'familyName',
     'displayName',

@@ -4439,1600 +4439,1600 @@ export interface GraphQLInputObjectFieldValidationMetadata {
     readonly options?: any;
 }
 
-export namespace GraphQLInputTypes {
-    export const SupportTicketStatus: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'SupportTicketStatus',
-        values: ['Open', 'Closed', 'Deleted'],
-    };
+export const SocialMediaProfileInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'SocialMediaProfileInput',
+    fields: [
+        {
+            name: 'platform',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'handlerUrl',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'username',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+    ],
+};
 
-    export const SupportTicketCommentVisibility: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'SupportTicketCommentVisibility',
-        values: ['Public', 'Internal'],
-    };
+export const AccountEncryptionConfigurationMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountEncryptionConfiguration',
+    fields: [
+        {
+            name: 'transitKeyId',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'publicKey',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+    ],
+};
 
-    export const SupportTicketCommentCreateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'SupportTicketCommentCreateInput',
-        fields: [
-            {
-                name: 'ticketIdentifier',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'content',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'contentType',
-                kind: 'enum',
-                type: GraphQLInputTypes.RichContentFormat,
-                required: false,
-            },
-            {
-                name: 'replyToCommentId',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'visibility',
-                kind: 'enum',
-                type: GraphQLInputTypes.SupportTicketCommentVisibility,
-                required: false,
-            },
-        ],
-    };
+export const AccountRegistrationCompleteInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountRegistrationCompleteInput',
+    fields: [
+        {
+            name: 'password',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'minLength',
+                    constraints: [8],
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [90],
+                },
+            ],
+        },
+        {
+            name: 'username',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isLength',
+                    constraints: [3, 32],
+                },
+            ],
+        },
+        {
+            name: 'displayName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isLength',
+                    constraints: [3, 32],
+                },
+            ],
+        },
+        {
+            name: 'givenName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'familyName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'phoneNumber',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'IsPhoneNumberLite',
+                    constraints: [{}],
+                },
+            ],
+        },
+        {
+            name: 'socialMediaProfiles',
+            kind: 'object',
+            type: SocialMediaProfileInputMetadata,
+            required: true,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+            ],
+        },
+        {
+            name: 'encryptionConfiguration',
+            kind: 'object',
+            type: AccountEncryptionConfigurationMetadata,
+            required: false,
+        },
+    ],
+};
 
-    export const PostTopicUpdateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'PostTopicUpdateInput',
-        fields: [
-            {
-                name: 'id',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'title',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [64],
-                    },
-                ],
-            },
-            {
-                name: 'description',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [1024],
-                    },
-                ],
-            },
-            {
-                name: 'slug',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [160],
-                    },
-                ],
-            },
-        ],
-    };
+export const AccountRegistrationOrSignInCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountRegistrationOrSignInCreateInput',
+    fields: [
+        {
+            name: 'emailAddress',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isEmail',
+                },
+            ],
+        },
+    ],
+};
 
-    export const PostTopicCreateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'PostTopicCreateInput',
-        fields: [
-            {
-                name: 'title',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [64],
-                    },
-                ],
-            },
-            {
-                name: 'description',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [1024],
-                    },
-                ],
-            },
-            {
-                name: 'type',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isIn',
-                        constraints: [['Principle', 'Idea', 'SupportArticle']],
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [24],
-                    },
-                ],
-            },
-            {
-                name: 'slug',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [160],
-                    },
-                ],
-            },
-            {
-                name: 'parentId',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'position',
-                kind: 'scalar',
-                type: 'Float',
-                required: false,
-                validation: [
-                    {
-                        type: 'isInt',
-                    },
-                ],
-            },
-        ],
-    };
+export const AccountPasswordVerifyInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountPasswordVerifyInput',
+    fields: [
+        {
+            name: 'password',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isNotEmpty',
+                },
+            ],
+        },
+    ],
+};
 
-    export const PostReportInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'PostReportInput',
-        fields: [
-            {
-                name: 'postId',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'commentId',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'reason',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [256],
-                    },
-                ],
-            },
-            {
-                name: 'note',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-        ],
-    };
+export const AccountEmailVerificationVerifyInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountEmailVerificationVerifyInput',
+    fields: [
+        {
+            name: 'code',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isNotEmpty',
+                },
+            ],
+        },
+    ],
+};
 
-    export const PostVoteType: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'PostVoteType',
-        values: ['Upvote', 'Downvote'],
-    };
+export const AccountProfileUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountProfileUpdateInput',
+    fields: [
+        {
+            name: 'username',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isLength',
+                    constraints: [3, 32],
+                },
+                {
+                    type: 'isString',
+                },
+            ],
+        },
+        {
+            name: 'displayName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'givenName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'familyName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'middleName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'preferredName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'phoneNumber',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'IsPhoneNumberLite',
+                    constraints: [{}],
+                },
+            ],
+        },
+        {
+            name: 'birthday',
+            kind: 'scalar',
+            type: 'DateTimeISO',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isDate',
+                },
+            ],
+        },
+        {
+            name: 'gender',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [32],
+                },
+            ],
+        },
+    ],
+};
 
-    export const PostUpdateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'PostUpdateInput',
-        fields: [
-            {
-                name: 'title',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [1024],
-                    },
-                ],
-            },
-            {
-                name: 'type',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isIn',
-                        constraints: [['Principle', 'Idea', 'SupportArticle']],
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [24],
-                    },
-                ],
-            },
-            {
-                name: 'slug',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [160],
-                    },
-                ],
-            },
-            {
-                name: 'description',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'content',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'contentType',
-                kind: 'enum',
-                type: GraphQLInputTypes.RichContentFormat,
-                required: false,
-            },
-            {
-                name: 'publishedAt',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'allowComment',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowVote',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowDownvote',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowReaction',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'metadata',
-                kind: 'scalar',
-                type: 'JSON',
-                required: false,
-            },
-        ],
-    };
+export const AccountInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountInput',
+    fields: [
+        {
+            name: 'emailAddress',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isEmail',
+                },
+            ],
+        },
+    ],
+};
 
-    export const RichContentFormat: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'RichContentFormat',
-        values: ['Markdown', 'Html', 'PlainText'],
-    };
+export const AccessRoleAssignmentCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccessRoleAssignmentCreateInput',
+    fields: [
+        {
+            name: 'expiresAt',
+            kind: 'scalar',
+            type: 'DateTimeISO',
+            required: false,
+        },
+        {
+            name: 'accessRole',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'emailAddress',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isEmail',
+                },
+            ],
+        },
+        {
+            name: 'username',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+    ],
+};
 
-    export const PostStatus: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'PostStatus',
-        values: ['Draft', 'Published', 'Deleted'],
-    };
+export const ContactListCreationInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'ContactListCreationInput',
+    fields: [
+        {
+            name: 'identifier',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [16],
+                },
+            ],
+        },
+        {
+            name: 'title',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [256],
+                },
+            ],
+        },
+        {
+            name: 'description',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [512],
+                },
+            ],
+        },
+    ],
+};
 
-    export const PostCreateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'PostCreateInput',
-        fields: [
-            {
-                name: 'status',
-                kind: 'enum',
-                type: GraphQLInputTypes.PostStatus,
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isEnum',
-                        constraints: [
-                            { Draft: 'Draft', Published: 'Published', Deleted: 'Deleted' },
-                            ['Draft', 'Published', 'Deleted'],
-                        ],
-                    },
-                ],
-            },
-            {
-                name: 'title',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [1024],
-                    },
-                ],
-            },
-            {
-                name: 'type',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isIn',
-                        constraints: [['Principle', 'Idea', 'SupportArticle']],
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [24],
-                    },
-                ],
-            },
-            {
-                name: 'slug',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [160],
-                    },
-                ],
-            },
-            {
-                name: 'description',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'content',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'contentType',
-                kind: 'enum',
-                type: GraphQLInputTypes.RichContentFormat,
-                required: false,
-            },
-            {
-                name: 'topicIds',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'arrayUnique',
-                    },
-                    {
-                        type: 'isArray',
-                    },
-                ],
-            },
-            {
-                name: 'allowComment',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowVote',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowDownvote',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowReaction',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'metadata',
-                kind: 'scalar',
-                type: 'JSON',
-                required: false,
-            },
-        ],
-    };
+export const ColumnFilterConditionOperatorMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'ColumnFilterConditionOperator',
+    values: [
+        'Equal',
+        'NotEqual',
+        'GreaterThan',
+        'GreaterThanOrEqual',
+        'LessThan',
+        'LessThanOrEqual',
+        'Like',
+        'NotLike',
+        'In',
+        'NotIn',
+        'IsNull',
+        'IsNotNull',
+    ],
+};
 
-    export const EngagementEventContextInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'EngagementEventContextInput',
-        fields: [
-            {
-                name: 'viewIdentifier',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [512],
-                    },
-                    {
-                        type: 'isNotEmpty',
-                    },
-                ],
-            },
-            {
-                name: 'traceId',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'traceSequenceNumber',
-                kind: 'scalar',
-                type: 'Int',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isInt',
-                    },
-                ],
-            },
-            {
-                name: 'referrer',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isUrl',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [512],
-                    },
-                ],
-            },
-            {
-                name: 'viewTitle',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isNotEmpty',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [512],
-                    },
-                ],
-            },
-            {
-                name: 'visitStartAt',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isDate',
-                    },
-                ],
-            },
-            {
-                name: 'visitId',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'loggedAt',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isDate',
-                    },
-                ],
-            },
-            {
-                name: 'additionalData',
-                kind: 'scalar',
-                type: 'JSON',
-                required: false,
-            },
-        ],
-    };
+export const ColumnFilterInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'ColumnFilterInput',
+    fields: [
+        {
+            name: 'operator',
+            kind: 'enum',
+            type: ColumnFilterConditionOperatorMetadata,
+            required: true,
+        },
+        {
+            name: 'caseSensitive',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+        },
+        {
+            name: 'column',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'value',
+            kind: 'scalar',
+            type: 'JSON',
+            required: true,
+        },
+    ],
+};
 
-    export const ClientPropertiesInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'ClientPropertiesInput',
-        fields: [
-            {
-                name: 'environment',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [64],
-                    },
-                    {
-                        type: 'isNotEmpty',
-                    },
-                ],
-            },
-        ],
-    };
+export const OrderByDirectionMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'OrderByDirection',
+    values: ['Ascending', 'Descending'],
+};
 
-    export const DeviceOrientation: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'DeviceOrientation',
-        values: ['Portrait', 'Landscape', 'NotAvailable'],
-    };
+export const OrderByInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'OrderByInput',
+    fields: [
+        {
+            name: 'key',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'direction',
+            kind: 'enum',
+            type: OrderByDirectionMetadata,
+            required: false,
+        },
+    ],
+};
 
-    export const DevicePropertiesInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'DevicePropertiesInput',
-        fields: [
-            {
-                name: 'orientation',
-                kind: 'enum',
-                type: GraphQLInputTypes.DeviceOrientation,
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isEnum',
-                        constraints: [
-                            { Portrait: 'Portrait', Landscape: 'Landscape', NotAvailable: 'NotAvailable' },
-                            ['Portrait', 'Landscape', 'NotAvailable'],
-                        ],
-                    },
-                ],
-            },
-        ],
-    };
+export const PaginationInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PaginationInput',
+    fields: [
+        {
+            name: 'itemsPerPage',
+            kind: 'scalar',
+            type: 'Int',
+            required: true,
+        },
+        {
+            name: 'itemIndex',
+            kind: 'scalar',
+            type: 'Int',
+            required: false,
+        },
+        {
+            name: 'filters',
+            kind: 'object',
+            type: ColumnFilterInputMetadata,
+            required: true,
+        },
+        {
+            name: 'orderBy',
+            kind: 'object',
+            type: OrderByInputMetadata,
+            required: true,
+        },
+    ],
+};
 
-    export const CreateEngagementEventInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'CreateEngagementEventInput',
-        fields: [
-            {
-                name: 'name',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [64],
-                    },
-                    {
-                        type: 'isNotEmpty',
-                    },
-                ],
-            },
-            {
-                name: 'category',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [64],
-                    },
-                    {
-                        type: 'isNotEmpty',
-                    },
-                ],
-            },
-            {
-                name: 'deviceProperties',
-                kind: 'object',
-                type: GraphQLInputTypes.DevicePropertiesInput,
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                ],
-            },
-            {
-                name: 'clientProperties',
-                kind: 'object',
-                type: GraphQLInputTypes.ClientPropertiesInput,
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                ],
-            },
-            {
-                name: 'eventContext',
-                kind: 'object',
-                type: GraphQLInputTypes.EngagementEventContextInput,
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                ],
-            },
-        ],
-    };
+export const AccountDeleteInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountDeleteInput',
+    fields: [
+        {
+            name: 'emailAddress',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isEmail',
+                },
+            ],
+        },
+        {
+            name: 'reason',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isNotEmpty',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+    ],
+};
 
-    export const ColumnFilterGroupOperator: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'ColumnFilterGroupOperator',
-        values: ['And', 'Or'],
-    };
+export const AccessRoleStatusMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'AccessRoleStatus',
+    values: ['Active', 'Expired', 'Revoked'],
+};
 
-    export const ColumnFilterGroupInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'ColumnFilterGroupInput',
-        fields: [
-            {
-                name: 'operator',
-                kind: 'enum',
-                type: GraphQLInputTypes.ColumnFilterGroupOperator,
-                required: false,
-            },
-            {
-                name: 'conditions',
-                kind: 'object',
-                type: GraphQLInputTypes.ColumnFilterInput,
-                required: true,
-            },
-            {
-                name: 'filters',
-                kind: 'object',
-                type: GraphQLInputTypes.ColumnFilterGroupInput,
-                required: true,
-            },
-        ],
-    };
+export const AccessRoleAssignmentRevokeInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccessRoleAssignmentRevokeInput',
+    fields: [
+        {
+            name: 'accessRole',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'emailAddress',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isEmail',
+                },
+            ],
+        },
+        {
+            name: 'username',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+    ],
+};
 
-    export const TimeInterval: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'TimeInterval',
-        values: [
-            'Minute',
-            'Hour',
-            'HourOfDay',
-            'Day',
-            'DayOfWeek',
-            'Week',
-            'WeekOfYear',
-            'DayOfMonth',
-            'Month',
-            'MonthOfYear',
-            'Quarter',
-            'Year',
-        ],
-    };
+export const AccountPasswordUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountPasswordUpdateInput',
+    fields: [
+        {
+            name: 'newPassword',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isNotEmpty',
+                },
+            ],
+        },
+    ],
+};
 
-    export const DataInteractionDatabaseTableMetricsQueryInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'DataInteractionDatabaseTableMetricsQueryInput',
-        fields: [
-            {
-                name: 'databaseName',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'tableName',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'columnName',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'startTime',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'endTime',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'timeInterval',
-                kind: 'enum',
-                type: GraphQLInputTypes.TimeInterval,
-                required: true,
-            },
-            {
-                name: 'timeZone',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'filters',
-                kind: 'object',
-                type: GraphQLInputTypes.ColumnFilterGroupInput,
-                required: false,
-            },
-            {
-                name: 'distinctColumnName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-        ],
-    };
+export const ContactListEntryInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'ContactListEntryInput',
+    fields: [
+        {
+            name: 'contactListIdentifier',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [16],
+                },
+            ],
+        },
+        {
+            name: 'emailAddress',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isEmail',
+                },
+            ],
+        },
+        {
+            name: 'name',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [256],
+                },
+            ],
+        },
+        {
+            name: 'firstName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [256],
+                },
+            ],
+        },
+        {
+            name: 'lastName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [256],
+                },
+            ],
+        },
+    ],
+};
 
-    export const ContactListEntryInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'ContactListEntryInput',
-        fields: [
-            {
-                name: 'contactListIdentifier',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [16],
-                    },
-                ],
-            },
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-            {
-                name: 'name',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [256],
-                    },
-                ],
-            },
-            {
-                name: 'firstName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [256],
-                    },
-                ],
-            },
-            {
-                name: 'lastName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [256],
-                    },
-                ],
-            },
-        ],
-    };
+export const TimeIntervalMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'TimeInterval',
+    values: [
+        'Minute',
+        'Hour',
+        'HourOfDay',
+        'Day',
+        'DayOfWeek',
+        'Week',
+        'WeekOfYear',
+        'DayOfMonth',
+        'Month',
+        'MonthOfYear',
+        'Quarter',
+        'Year',
+    ],
+};
 
-    export const AccountPasswordUpdateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountPasswordUpdateInput',
-        fields: [
-            {
-                name: 'newPassword',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isNotEmpty',
-                    },
-                ],
-            },
-        ],
-    };
+export const ColumnFilterGroupOperatorMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'ColumnFilterGroupOperator',
+    values: ['And', 'Or'],
+};
 
-    export const AccessRoleAssignmentRevokeInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccessRoleAssignmentRevokeInput',
-        fields: [
-            {
-                name: 'accessRole',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
+export const ColumnFilterGroupInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'ColumnFilterGroupInput',
+    fields: [
+        {
+            name: 'operator',
+            kind: 'enum',
+            type: ColumnFilterGroupOperatorMetadata,
+            required: false,
+        },
+        {
+            name: 'conditions',
+            kind: 'object',
+            type: ColumnFilterInputMetadata,
+            required: true,
+        },
+        {
+            name: 'filters',
+            kind: 'object',
+            get type() {
+                return ColumnFilterGroupInputMetadata;
             },
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-            {
-                name: 'username',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-        ],
-    };
+            required: true,
+        },
+    ],
+};
 
-    export const AccessRoleStatus: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'AccessRoleStatus',
-        values: ['Active', 'Expired', 'Revoked'],
-    };
+export const DataInteractionDatabaseTableMetricsQueryInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'DataInteractionDatabaseTableMetricsQueryInput',
+    fields: [
+        {
+            name: 'databaseName',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'tableName',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'columnName',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'startTime',
+            kind: 'scalar',
+            type: 'DateTimeISO',
+            required: false,
+        },
+        {
+            name: 'endTime',
+            kind: 'scalar',
+            type: 'DateTimeISO',
+            required: false,
+        },
+        {
+            name: 'timeInterval',
+            kind: 'enum',
+            type: TimeIntervalMetadata,
+            required: true,
+        },
+        {
+            name: 'timeZone',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'filters',
+            kind: 'object',
+            type: ColumnFilterGroupInputMetadata,
+            required: false,
+        },
+        {
+            name: 'distinctColumnName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+    ],
+};
 
-    export const AccountDeleteInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountDeleteInput',
-        fields: [
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-            {
-                name: 'reason',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isNotEmpty',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-        ],
-    };
+export const DeviceOrientationMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'DeviceOrientation',
+    values: ['Portrait', 'Landscape', 'NotAvailable'],
+};
 
-    export const OrderByDirection: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'OrderByDirection',
-        values: ['Ascending', 'Descending'],
-    };
+export const DevicePropertiesInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'DevicePropertiesInput',
+    fields: [
+        {
+            name: 'orientation',
+            kind: 'enum',
+            type: DeviceOrientationMetadata,
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isEnum',
+                    constraints: [
+                        { Portrait: 'Portrait', Landscape: 'Landscape', NotAvailable: 'NotAvailable' },
+                        ['Portrait', 'Landscape', 'NotAvailable'],
+                    ],
+                },
+            ],
+        },
+    ],
+};
 
-    export const OrderByInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'OrderByInput',
-        fields: [
-            {
-                name: 'key',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'direction',
-                kind: 'enum',
-                type: GraphQLInputTypes.OrderByDirection,
-                required: false,
-            },
-        ],
-    };
+export const ClientPropertiesInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'ClientPropertiesInput',
+    fields: [
+        {
+            name: 'environment',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [64],
+                },
+                {
+                    type: 'isNotEmpty',
+                },
+            ],
+        },
+    ],
+};
 
-    export const ColumnFilterConditionOperator: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'ColumnFilterConditionOperator',
-        values: [
-            'Equal',
-            'NotEqual',
-            'GreaterThan',
-            'GreaterThanOrEqual',
-            'LessThan',
-            'LessThanOrEqual',
-            'Like',
-            'NotLike',
-            'In',
-            'NotIn',
-            'IsNull',
-            'IsNotNull',
-        ],
-    };
+export const EngagementEventContextInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'EngagementEventContextInput',
+    fields: [
+        {
+            name: 'viewIdentifier',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [512],
+                },
+                {
+                    type: 'isNotEmpty',
+                },
+            ],
+        },
+        {
+            name: 'traceId',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isUuid',
+                },
+            ],
+        },
+        {
+            name: 'traceSequenceNumber',
+            kind: 'scalar',
+            type: 'Int',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isInt',
+                },
+            ],
+        },
+        {
+            name: 'referrer',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isUrl',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [512],
+                },
+            ],
+        },
+        {
+            name: 'viewTitle',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isNotEmpty',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [512],
+                },
+            ],
+        },
+        {
+            name: 'visitStartAt',
+            kind: 'scalar',
+            type: 'DateTimeISO',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isDate',
+                },
+            ],
+        },
+        {
+            name: 'visitId',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isUuid',
+                },
+            ],
+        },
+        {
+            name: 'loggedAt',
+            kind: 'scalar',
+            type: 'DateTimeISO',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isDate',
+                },
+            ],
+        },
+        {
+            name: 'additionalData',
+            kind: 'scalar',
+            type: 'JSON',
+            required: false,
+        },
+    ],
+};
 
-    export const ColumnFilterInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'ColumnFilterInput',
-        fields: [
-            {
-                name: 'operator',
-                kind: 'enum',
-                type: GraphQLInputTypes.ColumnFilterConditionOperator,
-                required: true,
-            },
-            {
-                name: 'caseSensitive',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'column',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'value',
-                kind: 'scalar',
-                type: 'JSON',
-                required: true,
-            },
-        ],
-    };
+export const CreateEngagementEventInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'CreateEngagementEventInput',
+    fields: [
+        {
+            name: 'name',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [64],
+                },
+                {
+                    type: 'isNotEmpty',
+                },
+            ],
+        },
+        {
+            name: 'category',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [64],
+                },
+                {
+                    type: 'isNotEmpty',
+                },
+            ],
+        },
+        {
+            name: 'deviceProperties',
+            kind: 'object',
+            type: DevicePropertiesInputMetadata,
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+            ],
+        },
+        {
+            name: 'clientProperties',
+            kind: 'object',
+            type: ClientPropertiesInputMetadata,
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+            ],
+        },
+        {
+            name: 'eventContext',
+            kind: 'object',
+            type: EngagementEventContextInputMetadata,
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+            ],
+        },
+    ],
+};
 
-    export const PaginationInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'PaginationInput',
-        fields: [
-            {
-                name: 'itemsPerPage',
-                kind: 'scalar',
-                type: 'Int',
-                required: true,
-            },
-            {
-                name: 'itemIndex',
-                kind: 'scalar',
-                type: 'Int',
-                required: false,
-            },
-            {
-                name: 'filters',
-                kind: 'object',
-                type: GraphQLInputTypes.ColumnFilterInput,
-                required: true,
-            },
-            {
-                name: 'orderBy',
-                kind: 'object',
-                type: GraphQLInputTypes.OrderByInput,
-                required: true,
-            },
-        ],
-    };
+export const PostStatusMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'PostStatus',
+    values: ['Draft', 'Published', 'Deleted'],
+};
 
-    export const ContactListCreationInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'ContactListCreationInput',
-        fields: [
-            {
-                name: 'identifier',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [16],
-                    },
-                ],
-            },
-            {
-                name: 'title',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [256],
-                    },
-                ],
-            },
-            {
-                name: 'description',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [512],
-                    },
-                ],
-            },
-        ],
-    };
+export const RichContentFormatMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'RichContentFormat',
+    values: ['Markdown', 'Html', 'PlainText'],
+};
 
-    export const AccessRoleAssignmentCreateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccessRoleAssignmentCreateInput',
-        fields: [
-            {
-                name: 'expiresAt',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'accessRole',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-            {
-                name: 'username',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-        ],
-    };
+export const PostCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PostCreateInput',
+    fields: [
+        {
+            name: 'status',
+            kind: 'enum',
+            type: PostStatusMetadata,
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isEnum',
+                    constraints: [
+                        { Draft: 'Draft', Published: 'Published', Deleted: 'Deleted' },
+                        ['Draft', 'Published', 'Deleted'],
+                    ],
+                },
+            ],
+        },
+        {
+            name: 'title',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [1024],
+                },
+            ],
+        },
+        {
+            name: 'type',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isIn',
+                    constraints: [['Principle', 'Idea', 'SupportArticle']],
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [24],
+                },
+            ],
+        },
+        {
+            name: 'slug',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [160],
+                },
+            ],
+        },
+        {
+            name: 'description',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'content',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'contentType',
+            kind: 'enum',
+            type: RichContentFormatMetadata,
+            required: false,
+        },
+        {
+            name: 'topicIds',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'arrayUnique',
+                },
+                {
+                    type: 'isArray',
+                },
+            ],
+        },
+        {
+            name: 'allowComment',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+        },
+        {
+            name: 'allowVote',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+        },
+        {
+            name: 'allowDownvote',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+        },
+        {
+            name: 'allowReaction',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+        },
+        {
+            name: 'metadata',
+            kind: 'scalar',
+            type: 'JSON',
+            required: false,
+        },
+    ],
+};
 
-    export const AccountInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountInput',
-        fields: [
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-        ],
-    };
+export const PostUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PostUpdateInput',
+    fields: [
+        {
+            name: 'title',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [1024],
+                },
+            ],
+        },
+        {
+            name: 'type',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isIn',
+                    constraints: [['Principle', 'Idea', 'SupportArticle']],
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [24],
+                },
+            ],
+        },
+        {
+            name: 'slug',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [160],
+                },
+            ],
+        },
+        {
+            name: 'description',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'content',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'contentType',
+            kind: 'enum',
+            type: RichContentFormatMetadata,
+            required: false,
+        },
+        {
+            name: 'publishedAt',
+            kind: 'scalar',
+            type: 'DateTimeISO',
+            required: false,
+        },
+        {
+            name: 'allowComment',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+        },
+        {
+            name: 'allowVote',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+        },
+        {
+            name: 'allowDownvote',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+        },
+        {
+            name: 'allowReaction',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+        },
+        {
+            name: 'metadata',
+            kind: 'scalar',
+            type: 'JSON',
+            required: false,
+        },
+    ],
+};
 
-    export const AccountProfileUpdateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountProfileUpdateInput',
-        fields: [
-            {
-                name: 'username',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isLength',
-                        constraints: [3, 32],
-                    },
-                    {
-                        type: 'isString',
-                    },
-                ],
-            },
-            {
-                name: 'displayName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'givenName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'familyName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'middleName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'preferredName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'phoneNumber',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'IsPhoneNumberLite',
-                        constraints: [{}],
-                    },
-                ],
-            },
-            {
-                name: 'birthday',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isDate',
-                    },
-                ],
-            },
-            {
-                name: 'gender',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [32],
-                    },
-                ],
-            },
-        ],
-    };
+export const PostVoteTypeMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'PostVoteType',
+    values: ['Upvote', 'Downvote'],
+};
 
-    export const AccountEmailVerificationVerifyInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountEmailVerificationVerifyInput',
-        fields: [
-            {
-                name: 'code',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isNotEmpty',
-                    },
-                ],
-            },
-        ],
-    };
+export const PostReportInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PostReportInput',
+    fields: [
+        {
+            name: 'postId',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isUuid',
+                },
+            ],
+        },
+        {
+            name: 'commentId',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isUuid',
+                },
+            ],
+        },
+        {
+            name: 'reason',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [256],
+                },
+            ],
+        },
+        {
+            name: 'note',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+    ],
+};
 
-    export const AccountPasswordVerifyInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountPasswordVerifyInput',
-        fields: [
-            {
-                name: 'password',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isNotEmpty',
-                    },
-                ],
-            },
-        ],
-    };
+export const PostTopicCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PostTopicCreateInput',
+    fields: [
+        {
+            name: 'title',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [64],
+                },
+            ],
+        },
+        {
+            name: 'description',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [1024],
+                },
+            ],
+        },
+        {
+            name: 'type',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isIn',
+                    constraints: [['Principle', 'Idea', 'SupportArticle']],
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [24],
+                },
+            ],
+        },
+        {
+            name: 'slug',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [160],
+                },
+            ],
+        },
+        {
+            name: 'parentId',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isUuid',
+                },
+            ],
+        },
+        {
+            name: 'position',
+            kind: 'scalar',
+            type: 'Float',
+            required: false,
+            validation: [
+                {
+                    type: 'isInt',
+                },
+            ],
+        },
+    ],
+};
 
-    export const AccountRegistrationOrSignInCreateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountRegistrationOrSignInCreateInput',
-        fields: [
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-        ],
-    };
+export const PostTopicUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PostTopicUpdateInput',
+    fields: [
+        {
+            name: 'id',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isUuid',
+                },
+            ],
+        },
+        {
+            name: 'title',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [64],
+                },
+            ],
+        },
+        {
+            name: 'description',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [1024],
+                },
+            ],
+        },
+        {
+            name: 'slug',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [160],
+                },
+            ],
+        },
+    ],
+};
 
-    export const AccountEncryptionConfiguration: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountEncryptionConfiguration',
-        fields: [
-            {
-                name: 'transitKeyId',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'publicKey',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-        ],
-    };
+export const SupportTicketCommentVisibilityMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'SupportTicketCommentVisibility',
+    values: ['Public', 'Internal'],
+};
 
-    export const SocialMediaProfileInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'SocialMediaProfileInput',
-        fields: [
-            {
-                name: 'platform',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'handlerUrl',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'username',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-        ],
-    };
+export const SupportTicketCommentCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'SupportTicketCommentCreateInput',
+    fields: [
+        {
+            name: 'ticketIdentifier',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'content',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'contentType',
+            kind: 'enum',
+            type: RichContentFormatMetadata,
+            required: false,
+        },
+        {
+            name: 'replyToCommentId',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isUuid',
+                },
+            ],
+        },
+        {
+            name: 'visibility',
+            kind: 'enum',
+            type: SupportTicketCommentVisibilityMetadata,
+            required: false,
+        },
+    ],
+};
 
-    export const AccountRegistrationCompleteInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountRegistrationCompleteInput',
-        fields: [
-            {
-                name: 'password',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'minLength',
-                        constraints: [8],
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [90],
-                    },
-                ],
-            },
-            {
-                name: 'username',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isLength',
-                        constraints: [3, 32],
-                    },
-                ],
-            },
-            {
-                name: 'displayName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isLength',
-                        constraints: [3, 32],
-                    },
-                ],
-            },
-            {
-                name: 'givenName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'familyName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'phoneNumber',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'IsPhoneNumberLite',
-                        constraints: [{}],
-                    },
-                ],
-            },
-            {
-                name: 'socialMediaProfiles',
-                kind: 'object',
-                type: GraphQLInputTypes.SocialMediaProfileInput,
-                required: true,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                ],
-            },
-            {
-                name: 'encryptionConfiguration',
-                kind: 'object',
-                type: GraphQLInputTypes.AccountEncryptionConfiguration,
-                required: false,
-            },
-        ],
-    };
-}
+export const SupportTicketStatusMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'SupportTicketStatus',
+    values: ['Open', 'Closed', 'Deleted'],
+};
 
 export interface GraphQLOperationMetadata<DocumentType> {
     readonly operation: string;
@@ -6088,7 +6088,7 @@ export const AccountAuthenticationRegistrationCompleteOperation: GraphQLOperatio
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountRegistrationCompleteInput,
+            type: AccountRegistrationCompleteInputMetadata,
         },
     ],
 };
@@ -6104,7 +6104,7 @@ export const AccountAuthenticationRegistrationOrSignInCreateOperation: GraphQLOp
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountRegistrationOrSignInCreateInput,
+            type: AccountRegistrationOrSignInCreateInputMetadata,
         },
     ],
 };
@@ -6120,7 +6120,7 @@ export const AccountAuthenticationPasswordVerifyOperation: GraphQLOperationMetad
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountPasswordVerifyInput,
+            type: AccountPasswordVerifyInputMetadata,
         },
     ],
 };
@@ -6136,7 +6136,7 @@ export const AccountAuthenticationEmailVerificationVerifyOperation: GraphQLOpera
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountEmailVerificationVerifyInput,
+            type: AccountEmailVerificationVerifyInputMetadata,
         },
     ],
 };
@@ -6150,7 +6150,7 @@ export const AccountProfileUpdateOperation: GraphQLOperationMetadata<typeof Acco
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountProfileUpdateInput,
+            type: AccountProfileUpdateInputMetadata,
         },
     ],
 };
@@ -6180,7 +6180,7 @@ export const AccountPrivilegedOperation: GraphQLOperationMetadata<typeof Account
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountInput,
+            type: AccountInputMetadata,
         },
     ],
 };
@@ -6196,7 +6196,7 @@ export const AccountAccessRoleAssignmentCreatePrivilegedOperation: GraphQLOperat
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccessRoleAssignmentCreateInput,
+            type: AccessRoleAssignmentCreateInputMetadata,
         },
     ],
 };
@@ -6212,7 +6212,7 @@ export const ContactListCreatePrivilegedOperation: GraphQLOperationMetadata<
             parameter: 'data',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.ContactListCreationInput,
+            type: ContactListCreationInputMetadata,
         },
     ],
 };
@@ -6226,7 +6226,7 @@ export const ContactListsPrivilegedOperation: GraphQLOperationMetadata<typeof Co
             parameter: 'pagination',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: PaginationInputMetadata,
         },
     ],
 };
@@ -6240,7 +6240,7 @@ export const AccountsPrivilegedOperation: GraphQLOperationMetadata<typeof Accoun
             parameter: 'pagination',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: PaginationInputMetadata,
         },
     ],
 };
@@ -6254,7 +6254,7 @@ export const AccountDeletePrivilegedOperation: GraphQLOperationMetadata<typeof A
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountDeleteInput,
+            type: AccountDeleteInputMetadata,
         },
     ],
 };
@@ -6271,14 +6271,14 @@ export const AccountAccessRoleAssignmentsPrivilegedOperation: GraphQLOperationMe
             required: true,
             kind: 'list',
             itemKind: 'enum',
-            type: GraphQLInputTypes.AccessRoleStatus,
+            type: AccessRoleStatusMetadata,
             allowsEmpty: false,
         },
         {
             parameter: 'pagination',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: PaginationInputMetadata,
         },
     ],
 };
@@ -6294,7 +6294,7 @@ export const AccountAccessRoleAssignmentRevokePrivilegedOperation: GraphQLOperat
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccessRoleAssignmentRevokeInput,
+            type: AccessRoleAssignmentRevokeInputMetadata,
         },
     ],
 };
@@ -6308,7 +6308,7 @@ export const AccountPasswordUpdateOperation: GraphQLOperationMetadata<typeof Acc
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountPasswordUpdateInput,
+            type: AccountPasswordUpdateInputMetadata,
         },
     ],
 };
@@ -6350,7 +6350,7 @@ export const ContactListEntryCreateOperation: GraphQLOperationMetadata<typeof Co
             parameter: 'data',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.ContactListEntryInput,
+            type: ContactListEntryInputMetadata,
         },
     ],
 };
@@ -6394,7 +6394,7 @@ export const DataInteractionDatabaseTableMetricsOperation: GraphQLOperationMetad
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.DataInteractionDatabaseTableMetricsQueryInput,
+            type: DataInteractionDatabaseTableMetricsQueryInputMetadata,
         },
     ],
 };
@@ -6444,13 +6444,13 @@ export const DataInteractionDatabaseTableRowsOperation: GraphQLOperationMetadata
             parameter: 'pagination',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: PaginationInputMetadata,
         },
         {
             parameter: 'filters',
             required: false,
             kind: 'object',
-            type: GraphQLInputTypes.ColumnFilterGroupInput,
+            type: ColumnFilterGroupInputMetadata,
         },
     ],
 };
@@ -6472,7 +6472,7 @@ export const DataInteractionDatabaseTablesOperation: GraphQLOperationMetadata<
             parameter: 'pagination',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: PaginationInputMetadata,
         },
     ],
 };
@@ -6486,7 +6486,7 @@ export const DataInteractionDatabasesOperation: GraphQLOperationMetadata<typeof 
             parameter: 'pagination',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: PaginationInputMetadata,
         },
     ],
 };
@@ -6501,7 +6501,7 @@ export const EngagementEventsCreateOperation: GraphQLOperationMetadata<typeof En
             required: true,
             kind: 'list',
             itemKind: 'object',
-            type: GraphQLInputTypes.CreateEngagementEventInput,
+            type: CreateEngagementEventInputMetadata,
             allowsEmpty: false,
         },
     ],
@@ -6530,7 +6530,7 @@ export const PostCreatePrivilegedOperation: GraphQLOperationMetadata<typeof Post
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PostCreateInput,
+            type: PostCreateInputMetadata,
         },
     ],
 };
@@ -6544,7 +6544,7 @@ export const PostCreateOperation: GraphQLOperationMetadata<typeof PostCreateDocu
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PostCreateInput,
+            type: PostCreateInputMetadata,
         },
     ],
 };
@@ -6618,7 +6618,7 @@ export const PostUpdateOperation: GraphQLOperationMetadata<typeof PostUpdateDocu
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PostUpdateInput,
+            type: PostUpdateInputMetadata,
         },
     ],
 };
@@ -6638,7 +6638,7 @@ export const PostVoteOperation: GraphQLOperationMetadata<typeof PostVoteDocument
             parameter: 'type',
             required: true,
             kind: 'enum',
-            type: GraphQLInputTypes.PostVoteType,
+            type: PostVoteTypeMetadata,
         },
     ],
 };
@@ -6652,7 +6652,7 @@ export const PostsOperation: GraphQLOperationMetadata<typeof PostsDocument> = {
             parameter: 'pagination',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: PaginationInputMetadata,
         },
     ],
 };
@@ -6718,7 +6718,7 @@ export const PostReactionProfilesOperation: GraphQLOperationMetadata<typeof Post
             parameter: 'pagination',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: PaginationInputMetadata,
         },
     ],
 };
@@ -6732,7 +6732,7 @@ export const PostReportCreateOperation: GraphQLOperationMetadata<typeof PostRepo
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PostReportInput,
+            type: PostReportInputMetadata,
         },
     ],
 };
@@ -6746,7 +6746,7 @@ export const PostTopicCreateOperation: GraphQLOperationMetadata<typeof PostTopic
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PostTopicCreateInput,
+            type: PostTopicCreateInputMetadata,
         },
     ],
 };
@@ -6774,7 +6774,7 @@ export const PostTopicUpdateOperation: GraphQLOperationMetadata<typeof PostTopic
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PostTopicUpdateInput,
+            type: PostTopicUpdateInputMetadata,
         },
     ],
 };
@@ -6788,7 +6788,7 @@ export const SupportTicketsPrivilegedOperation: GraphQLOperationMetadata<typeof 
             parameter: 'pagination',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: PaginationInputMetadata,
         },
     ],
 };
@@ -6804,7 +6804,7 @@ export const SupportTicketCommentCreatePrivilegedOperation: GraphQLOperationMeta
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.SupportTicketCommentCreateInput,
+            type: SupportTicketCommentCreateInputMetadata,
         },
     ],
 };
@@ -6846,7 +6846,7 @@ export const SupportTicketUpdateStatusPrivilegedOperation: GraphQLOperationMetad
             parameter: 'status',
             required: true,
             kind: 'enum',
-            type: GraphQLInputTypes.SupportTicketStatus,
+            type: SupportTicketStatusMetadata,
         },
     ],
 };
