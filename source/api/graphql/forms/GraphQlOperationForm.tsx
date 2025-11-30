@@ -4,15 +4,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import {
-    FormValuesInterface,
-    FormSubmitResponseInterface,
-    FormProperties,
-    Form,
-} from '@structure/source/components/forms/Form';
-import { FormInputReferenceInterface } from '@structure/source/components/forms/FormInput';
 import { Notice } from '@structure/source/components/notices/Notice';
-import { Button } from '@structure/source/components/buttons/Button';
+import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
+
+// Dependencies - Hooks
+import { useForm } from '@structure/source/components/forms-new/useForm';
+import { useFormNotice } from '@structure/source/components/forms-new/hooks/useFormNotice';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
@@ -21,156 +18,315 @@ import { BaseError } from '@structure/source/api/errors/BaseError';
 import { GraphQLOperationMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { generateFormInputs } from '@structure/source/api/graphql/forms/utilities/GraphQlFormUtilities';
-import { extractGraphQlFormInputMetadataArrayFromGraphQlParameterMetadataArray } from '@structure/source/api/graphql/forms/utilities/GraphQlFormUtilities';
 import {
-    GraphQlFormSubmissionHandler,
-    convertFormValuesToGraphQlMutationVariables,
-} from '@structure/source/api/graphql/forms/GraphQlFormSubmissionHandler';
+    graphQlFieldMetadataArrayFromGraphQlOperationParameterMetadata,
+    formValuesToGraphQlMutationVariables,
+} from '@structure/source/api/graphql/forms/utilities/GraphQlFieldMetadataExtraction';
+import {
+    fieldIdentifierFromDottedPath,
+    schemaFromGraphQlOperationMetadata,
+} from '@structure/source/api/graphql/forms/utilities/GraphQlFormSchemaGeneration';
+import {
+    FieldPropertiesOverride,
+    fieldFromGraphQlFieldMetadata,
+    fieldPropertiesFromFieldConfiguration,
+} from '@structure/source/api/graphql/forms/utilities/GraphQlFormFieldMapping';
+import { getValueForKeyRecursively } from '@structure/source/utilities/type/Object';
+import { titleCase, slug } from '@structure/source/utilities/type/String';
 
-// Type - FormInputsProperties
-export interface FormInputsProperties {
-    [key: string]: Record<string, unknown>;
-}
+// Dependencies - Assets
+import { SpinnerIcon } from '@phosphor-icons/react';
 
 // A minimal valid query for when defaultValuesQuery is not provided
 const noOpQuery = gql(`query NoOp { __typename }`);
 
-// Component - GraphQlOperationForm
-export interface GraphQlOperationFormProperties extends Omit<FormProperties, 'formInputs' | 'onSubmit'> {
+// Interface - SubmitButtonProperties
+export interface SubmitButtonProperties {
+    text?: string;
+    variant?: 'A' | 'B' | 'C';
+    className?: string;
+    icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+}
+
+// Interface - GraphQlOperationFormProperties
+export interface GraphQlOperationFormProperties {
+    // Required
     operation: GraphQLOperationMetadata<GraphQlDocument>;
+
+    // Field Control
+    hiddenFields?: Record<string, unknown>;
+    excludedFields?: string[];
+    fieldProperties?: Record<string, FieldPropertiesOverride>;
+
+    // Default Values - either pass values directly or provide a query to fetch them
+    defaultValues?: Record<string, unknown>;
     defaultValuesQuery?: {
         document: GraphQlDocument;
         variables: Record<string, unknown>;
     };
-    inputComponentsProperties?: FormInputsProperties;
+
+    // Submit Handling
     onSubmit?: (
-        formValues: FormValuesInterface,
+        formValues: Record<string, unknown>,
         mutationResponseData: unknown,
         mutationResponseError: BaseError | null,
     ) => void | Promise<void>;
-    showPreviewGraphQlMutationButton?: boolean;
+
+    // Submit Button
+    submitButton?: SubmitButtonProperties;
+
+    // Debug
+    showPreviewGraphQlMutationTip?: boolean;
+
+    // Layout
+    className?: string;
+    fieldClassName?: string;
 }
+
+// Component - GraphQlOperationForm
 export function GraphQlOperationForm(properties: GraphQlOperationFormProperties) {
     // State
-    const [defaultValues, setDefaultValues] = React.useState<Record<string, unknown> | null>(null);
-    const [previewFormValues, setPreviewFormValues] = React.useState<FormValuesInterface>({});
-    const [isPreviewGraphQlMutationShown, setIsPreviewGraphQlMutationShown] = React.useState(false);
-    const [formInputsReferencesMap] = React.useState(function () {
-        return new Map<string, FormInputReferenceInterface>();
-    });
+    const [slugManuallyEdited, setSlugManuallyEdited] = React.useState(false);
+
+    // Extract GraphQL metadata
+    const graphQlFormInputMetadataArray = React.useMemo(
+        function () {
+            return graphQlFieldMetadataArrayFromGraphQlOperationParameterMetadata(properties.operation.parameters);
+        },
+        [properties.operation.parameters],
+    );
+
+    // Create schema (excluding hidden and excluded fields)
+    const formSchema = React.useMemo(
+        function () {
+            return schemaFromGraphQlOperationMetadata(
+                properties.operation,
+                properties.hiddenFields,
+                properties.excludedFields,
+            );
+        },
+        [properties.operation, properties.hiddenFields, properties.excludedFields],
+    );
 
     // Hooks
     const mutation = networkService.useGraphQlMutation(
         properties.operation.document as Parameters<typeof networkService.useGraphQlMutation>[0],
     );
+    const formNotice = useFormNotice();
+    const form = useForm({
+        schema: formSchema,
+        onSubmit: async function (formState) {
+            // Merge form values with hidden field values
+            const allValues = { ...formState.value, ...properties.hiddenFields };
 
-    // Fetch default values if defaultValuesQuery is provided
-    const defaultValuesQueryState = networkService.useGraphQlQuery(
-        (properties.defaultValuesQuery?.document || noOpQuery) as Parameters<typeof networkService.useGraphQlQuery>[0],
-        properties.defaultValuesQuery?.variables,
-        {
-            enabled: !!properties.defaultValuesQuery,
-        },
-    );
+            // Convert to GraphQL mutation variables
+            const variables = formValuesToGraphQlMutationVariables(allValues as Record<string, unknown>);
 
-    // Effect to update the default values when the query loads data
-    React.useEffect(
-        function () {
-            if(defaultValuesQueryState.data && typeof defaultValuesQueryState.data === 'object') {
-                setDefaultValues(defaultValuesQueryState.data as Record<string, unknown>);
+            try {
+                const result = await mutation.execute(variables);
+                formNotice.showSuccess('Saved successfully!');
+                form.reset();
+                setSlugManuallyEdited(false);
+
+                if(properties.onSubmit) {
+                    await properties.onSubmit(allValues as Record<string, unknown>, result, null);
+                }
+            }
+            catch(error) {
+                const baseError =
+                    error instanceof BaseError
+                        ? error
+                        : new BaseError({
+                              name: 'FormSubmissionError',
+                              message: error instanceof Error ? error.message : String(error),
+                              statusCode: 500,
+                          });
+                formNotice.showError(baseError.message);
+
+                if(properties.onSubmit) {
+                    await properties.onSubmit(allValues as Record<string, unknown>, null, baseError);
+                }
             }
         },
-        [defaultValuesQueryState.data],
+    });
+
+    // Title/Slug auto-generation
+    const titleField = graphQlFormInputMetadataArray.find(function (f) {
+        return f.name.endsWith('.title');
+    });
+    const slugField = graphQlFormInputMetadataArray.find(function (f) {
+        return f.name.endsWith('.slug');
+    });
+
+    // Only track title if both title and slug fields exist and are visible
+    const shouldTrackTitle =
+        titleField &&
+        slugField &&
+        !(properties.hiddenFields && titleField.name in properties.hiddenFields) &&
+        !(properties.hiddenFields && slugField.name in properties.hiddenFields) &&
+        !properties.excludedFields?.includes(titleField.name) &&
+        !properties.excludedFields?.includes(slugField.name);
+
+    // Subscribe to title value changes - must be called unconditionally (Rules of Hooks)
+    // Use the title field name if tracking is enabled, otherwise use a dummy key
+    const titleFieldName = shouldTrackTitle && titleField ? titleField.name : '';
+    const titleValueFromStore = form.useStore(function (state) {
+        return titleFieldName ? (state.values as Record<string, unknown>)[titleFieldName] : null;
+    });
+    const titleValue = shouldTrackTitle ? titleValueFromStore : null;
+
+    React.useEffect(
+        function () {
+            if(slugField && !slugManuallyEdited && titleValue && typeof titleValue === 'string') {
+                form.setFieldValue(slugField.name, slug(titleValue));
+            }
+        },
+        [titleValue, slugManuallyEdited, slugField, form],
     );
 
-    // Generate form inputs based on the GraphQL operation metadata
-    const graphQlFormInputMetadataArray = extractGraphQlFormInputMetadataArrayFromGraphQlParameterMetadataArray(
-        properties.operation.parameters,
+    // Fetch default values if query provided
+    const defaultValuesQuery = networkService.useGraphQlQuery(
+        (properties.defaultValuesQuery?.document || noOpQuery) as Parameters<typeof networkService.useGraphQlQuery>[0],
+        properties.defaultValuesQuery?.variables,
+        { enabled: !!properties.defaultValuesQuery },
     );
 
-    // Generate form inputs based on the GraphQL operation metadata
-    const formInputs = generateFormInputs(
-        graphQlFormInputMetadataArray,
-        formInputsReferencesMap,
-        defaultValues,
-        properties.inputComponentsProperties,
+    // Set default values when query loads
+    React.useEffect(
+        function () {
+            if(defaultValuesQuery.data) {
+                for(const input of graphQlFormInputMetadataArray) {
+                    const value = getValueForKeyRecursively(
+                        defaultValuesQuery.data as Record<string, unknown>,
+                        fieldIdentifierFromDottedPath(input.name),
+                    );
+                    if(value !== undefined && value !== null) {
+                        form.setFieldValue(input.name, value);
+                    }
+                }
+            }
+        },
+        [defaultValuesQuery.data, graphQlFormInputMetadataArray, form],
     );
 
-    // Function to handle previewing the GraphQL mutation
-    function handlePreviewGraphQlMutationClick() {
-        // Collect current form values
-        const currentFormValues: FormValuesInterface = {};
-        formInputsReferencesMap.forEach(function (reference, id) {
-            currentFormValues[id] = reference.getValue();
-        });
+    // Set default values when provided directly via props
+    React.useEffect(
+        function () {
+            if(properties.defaultValues) {
+                for(const [fieldName, value] of Object.entries(properties.defaultValues)) {
+                    if(value !== undefined && value !== null) {
+                        form.setFieldValue(fieldName, value);
+                    }
+                }
+            }
+        },
+        [properties.defaultValues, form],
+    );
 
-        // Log the form values being used for preview
-        console.log('Form values used for preview:', currentFormValues);
+    // Generate form fields
+    const formFields = React.useMemo(
+        function () {
+            return graphQlFormInputMetadataArray
+                .filter(function (input) {
+                    // Filter out hidden and excluded fields
+                    if(properties.hiddenFields && input.name in properties.hiddenFields) return false;
+                    if(properties.excludedFields?.includes(input.name)) return false;
+                    return true;
+                })
+                .map(function (input) {
+                    const Component = fieldFromGraphQlFieldMetadata(input, properties.fieldProperties);
+                    const fieldConfiguration = properties.fieldProperties?.[input.name] || {};
+                    const label = fieldConfiguration.label || titleCase(fieldIdentifierFromDottedPath(input.name));
 
-        setPreviewFormValues(currentFormValues);
-        setIsPreviewGraphQlMutationShown(true);
-    }
+                    // Determine if this field needs special handling for title/slug auto-generation
+                    const isTitleField = input.name.endsWith('.title');
+                    const isSlugField = input.name.endsWith('.slug');
 
-    // Function to handle form submission
-    async function handleSubmit(formValues: FormValuesInterface): Promise<FormSubmitResponseInterface> {
-        // Debug the raw form values that are sent directly from the form
-        console.log('Form values from form submission:', JSON.stringify(formValues));
+                    return (
+                        <form.Field key={input.name} identifier={input.name} className={properties.fieldClassName}>
+                            <form.FieldLabel tip={fieldConfiguration.tip}>{label}</form.FieldLabel>
+                            <Component
+                                variant="Outline"
+                                placeholder={fieldConfiguration.placeholder || label}
+                                {...fieldPropertiesFromFieldConfiguration(input, fieldConfiguration)}
+                                // Title field: commit onChange so slug updates while typing
+                                {...(isTitleField ? { commit: 'onChange' } : {})}
+                                // Slug field: track manual edits to disable auto-generation
+                                {...(isSlugField
+                                    ? {
+                                          onInput: function () {
+                                              setSlugManuallyEdited(true);
+                                          },
+                                      }
+                                    : {})}
+                            />
+                        </form.Field>
+                    );
+                });
+        },
+        [
+            graphQlFormInputMetadataArray,
+            properties.hiddenFields,
+            properties.excludedFields,
+            properties.fieldProperties,
+            properties.fieldClassName,
+            form,
+        ],
+    );
 
-        // Collect current form values
-        // Ideally we do not do this and the form values should just be passed in here
-        const currentFormValues: FormValuesInterface = {};
-        formInputsReferencesMap.forEach(function (reference, id) {
-            currentFormValues[id] = reference.getValue();
-        });
+    // Submit button props
+    const submitButtonText = properties.submitButton?.text || 'Submit';
+    const submitButtonVariant = properties.submitButton?.variant || 'A';
+    const SubmitIcon = properties.submitButton?.icon || SpinnerIcon;
 
-        // Use the form values directly for submission
-        return GraphQlFormSubmissionHandler({
-            formValues: currentFormValues,
-            mutationFunction: async function (options: { variables: Record<string, unknown> }) {
-                const result = await mutation.execute(options.variables);
-                return {
-                    data: result,
-                    errors: undefined,
-                };
-            },
-            onSubmit: properties.onSubmit,
-        });
-    }
+    // Subscribe to form values for mutation preview (must be called unconditionally)
+    const formValuesForPreview = form.useStore(function (state) {
+        return state.values as Record<string, unknown>;
+    });
 
-    // Render the component
+    // Generate mutation preview tip content
+    const mutationPreviewTip = properties.showPreviewGraphQlMutationTip
+        ? (function () {
+              const allValues = { ...formValuesForPreview, ...properties.hiddenFields };
+              const variables = formValuesToGraphQlMutationVariables(allValues);
+              return <pre className="max-h-96 overflow-auto text-xs">{JSON.stringify(variables, null, 2)}</pre>;
+          })()
+        : undefined;
+
+    // Render
     return (
         <>
-            {/* Render an error if defaultValuesQuery is provided and there's an error */}
-            {properties.defaultValuesQuery && defaultValuesQueryState.error && (
+            {/* Error notice for default values query */}
+            {properties.defaultValuesQuery && defaultValuesQuery.error && (
                 <Notice variant="Negative" title="Error">
-                    <p>{defaultValuesQueryState.error.message}</p>
+                    <p>{defaultValuesQuery.error.message}</p>
                 </Notice>
             )}
 
-            {/* Render the form */}
-            <Form
-                {...properties}
-                loading={properties.defaultValuesQuery && defaultValuesQueryState.isLoading}
-                formInputs={formInputs}
-                onSubmit={handleSubmit}
-            />
+            <form.Form className={properties.className}>
+                {formFields}
 
-            {/* Preview Button */}
-            {properties.showPreviewGraphQlMutationButton && (
-                <Button className="mt-4" onClick={handlePreviewGraphQlMutationClick}>
-                    Preview GraphQL Mutation
-                </Button>
-            )}
-
-            {/* GraphQL Operation Preview Alert */}
-            {isPreviewGraphQlMutationShown && (
-                <div>
-                    <pre className="rounded p-2 text-xs">
-                        {JSON.stringify(convertFormValuesToGraphQlMutationVariables(previewFormValues), null, 4)}
-                    </pre>
+                <div className="flex flex-col">
+                    <formNotice.FormNotice className="mb-4" />
+                    <div className="flex justify-end">
+                        <AnimatedButton
+                            variant={submitButtonVariant}
+                            type="submit"
+                            isProcessing={mutation.isLoading}
+                            processingIcon={SubmitIcon}
+                            className={properties.submitButton?.className}
+                            tip={mutationPreviewTip}
+                            tipProperties={
+                                properties.showPreviewGraphQlMutationTip
+                                    ? { contentClassName: 'max-w-none' }
+                                    : undefined
+                            }
+                        >
+                            {submitButtonText}
+                        </AnimatedButton>
+                    </div>
                 </div>
-            )}
+            </form.Form>
         </>
     );
 }
