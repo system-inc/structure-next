@@ -116,24 +116,16 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
     const [slugManuallyEdited, setSlugManuallyEdited] = React.useState(false);
 
     // Extract GraphQL metadata
-    const graphQlFormInputMetadataArray = React.useMemo(
-        function () {
-            return graphQlFieldMetadataArrayFromGraphQlOperationParameterMetadata(properties.operation.parameters);
-        },
-        [properties.operation.parameters],
+    const graphQlFormInputMetadataArray = graphQlFieldMetadataArrayFromGraphQlOperationParameterMetadata(
+        properties.operation.parameters,
     );
 
     // Create schema (excluding hidden and excluded fields, with required overrides)
-    const formSchema = React.useMemo(
-        function () {
-            return schemaFromGraphQlOperationMetadata(
-                properties.operation,
-                properties.hiddenFields,
-                properties.excludedFields,
-                properties.requiredFieldOverrides,
-            );
-        },
-        [properties.operation, properties.hiddenFields, properties.excludedFields, properties.requiredFieldOverrides],
+    const formSchema = schemaFromGraphQlOperationMetadata(
+        properties.operation,
+        properties.hiddenFields,
+        properties.excludedFields,
+        properties.requiredFieldOverrides,
     );
 
     // Hooks
@@ -256,55 +248,43 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
     // Generate form fields
     // Cast fieldProperties to Record<string, ...> for internal use with runtime metadata
     const fieldPropertiesAsRecord = properties.fieldProperties as Record<string, FieldPropertiesOverride> | undefined;
-    const formFields = React.useMemo(
-        function () {
-            return graphQlFormInputMetadataArray
-                .filter(function (input) {
-                    // Filter out hidden and excluded fields
-                    if(properties.hiddenFields && input.name in properties.hiddenFields) return false;
-                    if(excludedFieldsAsStrings?.includes(input.name)) return false;
-                    return true;
-                })
-                .map(function (input) {
-                    const Component = fieldFromGraphQlFieldMetadata(input, fieldPropertiesAsRecord);
-                    const fieldConfiguration = fieldPropertiesAsRecord?.[input.name] || {};
-                    const label = fieldConfiguration.label || titleCase(fieldIdentifierFromDottedPath(input.name));
+    const formFields = graphQlFormInputMetadataArray
+        .filter(function (input) {
+            // Filter out hidden and excluded fields
+            if(properties.hiddenFields && input.name in properties.hiddenFields) return false;
+            if(excludedFieldsAsStrings?.includes(input.name)) return false;
+            return true;
+        })
+        .map(function (input) {
+            const Component = fieldFromGraphQlFieldMetadata(input, fieldPropertiesAsRecord);
+            const fieldConfiguration = fieldPropertiesAsRecord?.[input.name] || {};
+            const label = fieldConfiguration.label || titleCase(fieldIdentifierFromDottedPath(input.name));
 
-                    // Determine if this field needs special handling for title/slug auto-generation
-                    const isTitleField = input.name.endsWith('.title');
-                    const isSlugField = input.name.endsWith('.slug');
+            // Determine if this field needs special handling for title/slug auto-generation
+            const isTitleField = input.name.endsWith('.title');
+            const isSlugField = input.name.endsWith('.slug');
 
-                    return (
-                        <form.Field key={input.name} identifier={input.name} className={properties.fieldClassName}>
-                            <form.FieldLabel tip={fieldConfiguration.tip}>{label}</form.FieldLabel>
-                            <Component
-                                variant="Outline"
-                                placeholder={fieldConfiguration.placeholder || label}
-                                {...fieldPropertiesFromFieldConfiguration(input, fieldConfiguration)}
-                                // Title field: commit onChange so slug updates while typing
-                                {...(isTitleField ? { commit: 'onChange' } : {})}
-                                // Slug field: track manual edits to disable auto-generation
-                                {...(isSlugField
-                                    ? {
-                                          onInput: function () {
-                                              setSlugManuallyEdited(true);
-                                          },
-                                      }
-                                    : {})}
-                            />
-                        </form.Field>
-                    );
-                });
-        },
-        [
-            graphQlFormInputMetadataArray,
-            properties.hiddenFields,
-            excludedFieldsAsStrings,
-            fieldPropertiesAsRecord,
-            properties.fieldClassName,
-            form,
-        ],
-    );
+            return (
+                <form.Field key={input.name} identifier={input.name} className={properties.fieldClassName}>
+                    <form.FieldLabel tip={fieldConfiguration.tip}>{label}</form.FieldLabel>
+                    <Component
+                        variant="Outline"
+                        placeholder={fieldConfiguration.placeholder || label}
+                        {...fieldPropertiesFromFieldConfiguration(input, fieldConfiguration)}
+                        // Title field: commit onChange so slug updates while typing
+                        {...(isTitleField ? { commit: 'onChange' } : {})}
+                        // Slug field: track manual edits to disable auto-generation
+                        {...(isSlugField
+                            ? {
+                                  onInput: function () {
+                                      setSlugManuallyEdited(true);
+                                  },
+                              }
+                            : {})}
+                    />
+                </form.Field>
+            );
+        });
 
     // Submit button props
     const submitButtonText = properties.submitButton?.text || 'Submit';

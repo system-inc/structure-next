@@ -144,14 +144,6 @@ export function formValuesToGraphQlMutationVariables(formValues: Record<string, 
         // Split the key into parts
         const keyParts = key.split('.');
 
-        // Handle legacy 'Checked'/'Unchecked' boolean strings (from old form system)
-        if(value === 'Checked') {
-            graphQlValue = true;
-        }
-        else if(value === 'Unchecked') {
-            graphQlValue = false;
-        }
-
         // TODO: Remove this - hard coding this fix for now
         if(key === 'input.topicIds' && value) {
             graphQlValue = [value];
