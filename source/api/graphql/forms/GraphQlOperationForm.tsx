@@ -31,7 +31,9 @@ import {
     fieldFromGraphQlFieldMetadata,
     fieldPropertiesFromFieldConfiguration,
 } from '@structure/source/api/graphql/forms/utilities/GraphQlFormFieldMapping';
+import { DotPathType, DotPathValuesType } from '@structure/source/utilities/type/DotPath';
 import { getValueForKeyRecursively } from '@structure/source/utilities/type/Object';
+import type { VariablesOf } from '@graphql-typed-document-node/core';
 import { titleCase, slug } from '@structure/source/utilities/type/String';
 
 // Dependencies - Assets
@@ -39,6 +41,28 @@ import { SpinnerIcon } from '@phosphor-icons/react';
 
 // A minimal valid query for when defaultValuesQuery is not provided
 const noOpQuery = gql(`query NoOp { __typename }`);
+
+/**
+ * Extracts field paths from a GraphQL document's variables type.
+ * Used for type-safe field name references in GraphQlOperationForm.
+ *
+ * @example
+ * // For PostUpdateDocument with variables { id: string; input: { title: string; slug: string } }
+ * type Paths = FieldPathsOfType<typeof PostUpdateDocument>;
+ * // Result: 'id' | 'input' | 'input.title' | 'input.slug'
+ */
+type FieldPathsOfType<TDocument> = DotPathType<VariablesOf<TDocument>>;
+
+/**
+ * Creates a mapped type of field paths to their corresponding value types.
+ * Used for type-safe field value assignments in GraphQlOperationForm.
+ *
+ * @example
+ * // For PostUpdateDocument with variables { id: string; input: { title: string; slug: string } }
+ * type Values = FieldValuesOfType<typeof PostUpdateDocument>;
+ * // Result: { 'id'?: string; 'input.title'?: string; 'input.slug'?: string; ... }
+ */
+type FieldValuesOfType<TDocument> = DotPathValuesType<VariablesOf<TDocument>>;
 
 // Interface - SubmitButtonProperties
 export interface SubmitButtonProperties {
@@ -49,18 +73,18 @@ export interface SubmitButtonProperties {
 }
 
 // Interface - GraphQlOperationFormProperties
-export interface GraphQlOperationFormProperties {
+export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocument = GraphQlDocument> {
     // Required
-    operation: GraphQLOperationMetadata<GraphQlDocument>;
+    operation: GraphQLOperationMetadata<TDocument>;
 
-    // Field Control
-    requiredFieldOverrides?: string[]; // Override schema to make these fields required
-    hiddenFields?: Record<string, unknown>;
-    excludedFields?: string[];
-    fieldProperties?: Record<string, FieldPropertiesOverride>;
+    // Field Control - Type-safe field names and values when TDocument is specific
+    requiredFieldOverrides?: FieldPathsOfType<TDocument>[]; // Override schema to make these fields required
+    hiddenFields?: FieldValuesOfType<TDocument>;
+    excludedFields?: FieldPathsOfType<TDocument>[];
+    fieldProperties?: Partial<Record<FieldPathsOfType<TDocument>, FieldPropertiesOverride>>;
 
     // Default Values - either pass values directly or provide a query to fetch them
-    defaultValues?: Record<string, unknown>;
+    defaultValues?: FieldValuesOfType<TDocument>;
     defaultValuesQuery?: {
         document: GraphQlDocument;
         variables: Record<string, unknown>;
@@ -85,7 +109,9 @@ export interface GraphQlOperationFormProperties {
 }
 
 // Component - GraphQlOperationForm
-export function GraphQlOperationForm(properties: GraphQlOperationFormProperties) {
+export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQlDocument>(
+    properties: GraphQlOperationFormProperties<TDocument>,
+) {
     // State
     const [slugManuallyEdited, setSlugManuallyEdited] = React.useState(false);
 
@@ -161,13 +187,15 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
     });
 
     // Only track title if both title and slug fields exist and are visible
+    // Cast to string[] for internal comparison since we're checking runtime metadata against typed props
+    const excludedFieldsAsStrings = properties.excludedFields as string[] | undefined;
     const shouldTrackTitle =
         titleField &&
         slugField &&
         !(properties.hiddenFields && titleField.name in properties.hiddenFields) &&
         !(properties.hiddenFields && slugField.name in properties.hiddenFields) &&
-        !properties.excludedFields?.includes(titleField.name) &&
-        !properties.excludedFields?.includes(slugField.name);
+        !excludedFieldsAsStrings?.includes(titleField.name) &&
+        !excludedFieldsAsStrings?.includes(slugField.name);
 
     // Subscribe to title value changes - must be called unconditionally (Rules of Hooks)
     // Use the title field name if tracking is enabled, otherwise use a dummy key
@@ -226,18 +254,20 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
     );
 
     // Generate form fields
+    // Cast fieldProperties to Record<string, ...> for internal use with runtime metadata
+    const fieldPropertiesAsRecord = properties.fieldProperties as Record<string, FieldPropertiesOverride> | undefined;
     const formFields = React.useMemo(
         function () {
             return graphQlFormInputMetadataArray
                 .filter(function (input) {
                     // Filter out hidden and excluded fields
                     if(properties.hiddenFields && input.name in properties.hiddenFields) return false;
-                    if(properties.excludedFields?.includes(input.name)) return false;
+                    if(excludedFieldsAsStrings?.includes(input.name)) return false;
                     return true;
                 })
                 .map(function (input) {
-                    const Component = fieldFromGraphQlFieldMetadata(input, properties.fieldProperties);
-                    const fieldConfiguration = properties.fieldProperties?.[input.name] || {};
+                    const Component = fieldFromGraphQlFieldMetadata(input, fieldPropertiesAsRecord);
+                    const fieldConfiguration = fieldPropertiesAsRecord?.[input.name] || {};
                     const label = fieldConfiguration.label || titleCase(fieldIdentifierFromDottedPath(input.name));
 
                     // Determine if this field needs special handling for title/slug auto-generation
@@ -269,8 +299,8 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
         [
             graphQlFormInputMetadataArray,
             properties.hiddenFields,
-            properties.excludedFields,
-            properties.fieldProperties,
+            excludedFieldsAsStrings,
+            fieldPropertiesAsRecord,
             properties.fieldClassName,
             form,
         ],
