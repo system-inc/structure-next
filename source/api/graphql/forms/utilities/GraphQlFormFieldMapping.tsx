@@ -48,7 +48,12 @@ export function fieldFromGraphQlFieldMetadata(
         return FieldInputCheckbox as React.ComponentType<Record<string, unknown>>;
     }
 
-    // Long text (content, description, or maxLength > 128) -> TextArea
+    // Single-line fields - title and slug are always single-line
+    if(graphQlFieldMetadata.name.endsWith('.title') || graphQlFieldMetadata.name.endsWith('.slug')) {
+        return FieldInputText as React.ComponentType<Record<string, unknown>>;
+    }
+
+    // Multi-line fields - content, description, or long text (maxLength > 128)
     if(
         graphQlFieldMetadata.name.endsWith('.content') ||
         graphQlFieldMetadata.name.endsWith('.description') ||

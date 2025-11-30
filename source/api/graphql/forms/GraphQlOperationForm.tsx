@@ -54,6 +54,7 @@ export interface GraphQlOperationFormProperties {
     operation: GraphQLOperationMetadata<GraphQlDocument>;
 
     // Field Control
+    requiredFieldOverrides?: string[]; // Override schema to make these fields required
     hiddenFields?: Record<string, unknown>;
     excludedFields?: string[];
     fieldProperties?: Record<string, FieldPropertiesOverride>;
@@ -96,16 +97,17 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
         [properties.operation.parameters],
     );
 
-    // Create schema (excluding hidden and excluded fields)
+    // Create schema (excluding hidden and excluded fields, with required overrides)
     const formSchema = React.useMemo(
         function () {
             return schemaFromGraphQlOperationMetadata(
                 properties.operation,
                 properties.hiddenFields,
                 properties.excludedFields,
+                properties.requiredFieldOverrides,
             );
         },
-        [properties.operation, properties.hiddenFields, properties.excludedFields],
+        [properties.operation, properties.hiddenFields, properties.excludedFields, properties.requiredFieldOverrides],
     );
 
     // Hooks
