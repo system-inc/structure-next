@@ -5,19 +5,21 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Notice } from '@structure/source/components/notices/Notice';
-import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
+import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/components/buttons/AnimatedButton';
 
 // Dependencies - Hooks
 import { useForm } from '@structure/source/components/forms-new/useForm';
 import { useFormNotice } from '@structure/source/components/forms-new/hooks/useFormNotice';
-import { UseLinkedFieldOptions } from '@structure/source/components/forms-new/hooks/useLinkedField';
 import { useLinkedFields } from '@structure/source/components/forms-new/hooks/useLinkedFields';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { GraphQlDocument } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
-import { BaseError } from '@structure/source/api/errors/BaseError';
 import { GraphQLOperationMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { BaseError } from '@structure/source/api/errors/BaseError';
+
+// Dependencies - Assets
+import { SpinnerIcon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import {
@@ -33,60 +35,30 @@ import {
     fieldFromGraphQlFieldMetadata,
     fieldPropertiesFromFieldConfiguration,
 } from '@structure/source/api/graphql/forms/utilities/GraphQlFormFieldMapping';
-import { DotPathType, DotPathValuesType } from '@structure/source/utilities/type/DotPath';
+import {
+    DocumentFieldPathsType,
+    DocumentFieldValuesType,
+    LinkedFieldConfigurationInterface,
+} from '@structure/source/api/graphql/forms/utilities/GraphQlFormTypes';
 import { getValueForKeyRecursively } from '@structure/source/utilities/type/Object';
-import type { VariablesOf } from '@graphql-typed-document-node/core';
 import { titleCase } from '@structure/source/utilities/type/String';
-
-// Dependencies - Assets
-import { SpinnerIcon } from '@phosphor-icons/react';
 
 // A minimal valid query for when defaultValuesQuery is not provided
 const noOpQuery = gql(`query NoOp { __typename }`);
 
-/**
- * Extracts field paths from a GraphQL document's variables type.
- * Used for type-safe field name references in GraphQlOperationForm.
- *
- * @example
- * // For PostUpdateDocument with variables { id: string; input: { title: string; slug: string } }
- * type Paths = FieldPathsOfType<typeof PostUpdateDocument>;
- * // Result: 'id' | 'input' | 'input.title' | 'input.slug'
- */
-type FieldPathsOfType<TDocument> = DotPathType<VariablesOf<TDocument>>;
-
-/**
- * Creates a mapped type of field paths to their corresponding value types.
- * Used for type-safe field value assignments in GraphQlOperationForm.
- *
- * @example
- * // For PostUpdateDocument with variables { id: string; input: { title: string; slug: string } }
- * type Values = FieldValuesOfType<typeof PostUpdateDocument>;
- * // Result: { 'id'?: string; 'input.title'?: string; 'input.slug'?: string; ... }
- */
-type FieldValuesOfType<TDocument> = DotPathValuesType<VariablesOf<TDocument>>;
-
-// Interface - SubmitButtonProperties
-export interface SubmitButtonProperties {
-    text?: string;
-    variant?: 'A' | 'B' | 'C';
-    className?: string;
-    icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-}
-
-// Interface - GraphQlOperationFormProperties
+// Component - GraphQlOperationForm
 export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocument = GraphQlDocument> {
     // Required
     operation: GraphQLOperationMetadata<TDocument>;
 
     // Field Control - Type-safe field names and values when TDocument is specific
-    requiredFieldOverrides?: FieldPathsOfType<TDocument>[]; // Override schema to make these fields required
-    hiddenFields?: FieldValuesOfType<TDocument>;
-    excludedFields?: FieldPathsOfType<TDocument>[];
-    fieldProperties?: Partial<Record<FieldPathsOfType<TDocument>, FieldPropertiesOverride>>;
+    requiredFieldOverrides?: DocumentFieldPathsType<TDocument>[]; // Override schema to make these fields required
+    hiddenFields?: DocumentFieldValuesType<TDocument>;
+    excludedFields?: DocumentFieldPathsType<TDocument>[];
+    fieldProperties?: Partial<Record<DocumentFieldPathsType<TDocument>, FieldPropertiesOverride>>;
 
     // Default Values - either pass values directly or provide a query to fetch them
-    defaultValues?: FieldValuesOfType<TDocument>;
+    defaultValues?: DocumentFieldValuesType<TDocument>;
     defaultValuesQuery?: {
         document: GraphQlDocument;
         variables: Record<string, unknown>;
@@ -100,20 +72,18 @@ export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocumen
     ) => void | Promise<void>;
 
     // Submit Button
-    submitButton?: SubmitButtonProperties;
+    submitButton?: AnimatedButtonProperties;
 
     // Debug
     showPreviewGraphQlMutationTip?: boolean;
 
     // Linked Fields - auto-update target field when source field changes
-    linkedFields?: Omit<UseLinkedFieldOptions, 'form'>[];
+    linkedFields?: LinkedFieldConfigurationInterface<TDocument>[];
 
     // Layout
     className?: string;
     fieldClassName?: string;
 }
-
-// Component - GraphQlOperationForm
 export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQlDocument>(
     properties: GraphQlOperationFormProperties<TDocument>,
 ) {
@@ -173,8 +143,12 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
     });
 
     // Linked fields - auto-update target fields when source fields change
+    // Cast to satisfy the hook's type constraint while preserving GraphQL-based type safety on the properties
     const linkedFields = useLinkedFields({
-        form,
+        form: form as unknown as {
+            setFieldValue: (field: string, value: unknown) => void;
+            state: { values: Record<string, unknown> };
+        },
         linkedFields: properties.linkedFields || [],
     });
 
@@ -264,11 +238,6 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
             );
         });
 
-    // Submit button props
-    const submitButtonText = properties.submitButton?.text || 'Submit';
-    const submitButtonVariant = properties.submitButton?.variant || 'A';
-    const SubmitIcon = properties.submitButton?.icon || SpinnerIcon;
-
     // Subscribe to form values for mutation preview (must be called unconditionally)
     const formValuesForPreview = form.useStore(function (state) {
         return state.values as Record<string, unknown>;
@@ -283,7 +252,7 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
           })()
         : undefined;
 
-    // Render
+    // Render the component
     return (
         <>
             {/* Error notice for default values query */}
@@ -300,19 +269,19 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
                     <formNotice.FormNotice className="mb-4" />
                     <div className="flex justify-end">
                         <AnimatedButton
-                            variant={submitButtonVariant}
+                            variant="A"
                             type="submit"
                             isProcessing={mutation.isLoading}
-                            processingIcon={SubmitIcon}
-                            className={properties.submitButton?.className}
+                            processingIcon={SpinnerIcon}
                             tip={mutationPreviewTip}
                             tipProperties={
                                 properties.showPreviewGraphQlMutationTip
                                     ? { contentClassName: 'max-w-none' }
                                     : undefined
                             }
+                            {...properties.submitButton}
                         >
-                            {submitButtonText}
+                            {properties.submitButton?.children ?? 'Submit'}
                         </AnimatedButton>
                     </div>
                 </div>
