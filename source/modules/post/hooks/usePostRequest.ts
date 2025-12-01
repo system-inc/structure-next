@@ -30,6 +30,11 @@ export function usePostRequest(
                             variant
                         }
                     }
+                    topics {
+                        id
+                        title
+                        slug
+                    }
                     content
                     reactions {
                         content

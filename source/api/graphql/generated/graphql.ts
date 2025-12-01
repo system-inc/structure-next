@@ -2994,7 +2994,59 @@ export type PostQuery = {
                 variant?: string | null;
             }> | null;
         } | null;
+        topics?: Array<{ __typename?: 'PostTopic'; id: string; title: string; slug: string }> | null;
         reactions?: Array<{ __typename?: 'PostReaction'; content: string; count: number; reacted: boolean }> | null;
+    };
+};
+
+export type PostTopicByIdQueryVariables = Exact<{
+    id: Scalars['String']['input'];
+}>;
+
+export type PostTopicByIdQuery = {
+    __typename?: 'Query';
+    postTopicById: {
+        __typename?: 'PostTopic';
+        id: string;
+        title: string;
+        slug: string;
+        description?: string | null;
+        postCount: number;
+        createdAt: any;
+    };
+};
+
+export type PostTopicCreateMutationVariables = Exact<{
+    input: PostTopicCreateInput;
+}>;
+
+export type PostTopicCreateMutation = {
+    __typename?: 'Mutation';
+    postTopicCreate: {
+        __typename?: 'PostTopic';
+        id: string;
+        title: string;
+        slug: string;
+        description?: string | null;
+        postCount: number;
+        createdAt: any;
+    };
+};
+
+export type PostTopicUpdateMutationVariables = Exact<{
+    input: PostTopicUpdateInput;
+}>;
+
+export type PostTopicUpdateMutation = {
+    __typename?: 'Mutation';
+    postTopicUpdate: {
+        __typename?: 'PostTopic';
+        id: string;
+        title: string;
+        slug: string;
+        description?: string | null;
+        postCount: number;
+        createdAt: any;
     };
 };
 
@@ -3150,23 +3202,6 @@ export type PostReportCreateMutation = {
     postReportCreate: { __typename?: 'PostReport'; id: string };
 };
 
-export type PostTopicCreateMutationVariables = Exact<{
-    input: PostTopicCreateInput;
-}>;
-
-export type PostTopicCreateMutation = {
-    __typename?: 'Mutation';
-    postTopicCreate: {
-        __typename?: 'PostTopic';
-        id: string;
-        title: string;
-        slug: string;
-        description?: string | null;
-        postCount: number;
-        createdAt: any;
-    };
-};
-
 export type PostTopicDeleteMutationVariables = Exact<{
     id: Scalars['String']['input'];
 }>;
@@ -3174,23 +3209,6 @@ export type PostTopicDeleteMutationVariables = Exact<{
 export type PostTopicDeleteMutation = {
     __typename?: 'Mutation';
     postTopicDelete: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type PostTopicUpdateMutationVariables = Exact<{
-    input: PostTopicUpdateInput;
-}>;
-
-export type PostTopicUpdateMutation = {
-    __typename?: 'Mutation';
-    postTopicUpdate: {
-        __typename?: 'PostTopic';
-        id: string;
-        title: string;
-        slug: string;
-        description?: string | null;
-        postCount: number;
-        createdAt: any;
-    };
 };
 
 export type SupportTicketsPrivilegedQueryVariables = Exact<{
@@ -3329,23 +3347,6 @@ export type SupportTicketUpdateStatusPrivilegedMutationVariables = Exact<{
 export type SupportTicketUpdateStatusPrivilegedMutation = {
     __typename?: 'Mutation';
     supportTicketUpdateStatusPrivileged: { __typename?: 'SupportTicket'; id: string; status: SupportTicketStatus };
-};
-
-export type PostTopicByIdQueryVariables = Exact<{
-    id: Scalars['String']['input'];
-}>;
-
-export type PostTopicByIdQuery = {
-    __typename?: 'Query';
-    postTopicById: {
-        __typename?: 'PostTopic';
-        id: string;
-        title: string;
-        slug: string;
-        description?: string | null;
-        postCount: number;
-        createdAt: any;
-    };
 };
 
 export class TypedDocumentString<TResult, TVariables>
@@ -4067,6 +4068,11 @@ export const PostDocument = new TypedDocumentString(`
         variant
       }
     }
+    topics {
+      id
+      title
+      slug
+    }
     content
     reactions {
       content
@@ -4085,6 +4091,42 @@ export const PostDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostQuery, PostQueryVariables>;
+export const PostTopicByIdDocument = new TypedDocumentString(`
+    query PostTopicById($id: String!) {
+  postTopicById(id: $id) {
+    id
+    title
+    slug
+    description
+    postCount
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicByIdQuery, PostTopicByIdQueryVariables>;
+export const PostTopicCreateDocument = new TypedDocumentString(`
+    mutation PostTopicCreate($input: PostTopicCreateInput!) {
+  postTopicCreate(input: $input) {
+    id
+    title
+    slug
+    description
+    postCount
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicCreateMutation, PostTopicCreateMutationVariables>;
+export const PostTopicUpdateDocument = new TypedDocumentString(`
+    mutation PostTopicUpdate($input: PostTopicUpdateInput!) {
+  postTopicUpdate(input: $input) {
+    id
+    title
+    slug
+    description
+    postCount
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicUpdateMutation, PostTopicUpdateMutationVariables>;
 export const PostUnvoteDocument = new TypedDocumentString(`
     mutation PostUnvote($postId: String!) {
   postUnvote(postId: $postId) {
@@ -4208,18 +4250,6 @@ export const PostReportCreateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostReportCreateMutation, PostReportCreateMutationVariables>;
-export const PostTopicCreateDocument = new TypedDocumentString(`
-    mutation PostTopicCreate($input: PostTopicCreateInput!) {
-  postTopicCreate(input: $input) {
-    id
-    title
-    slug
-    description
-    postCount
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<PostTopicCreateMutation, PostTopicCreateMutationVariables>;
 export const PostTopicDeleteDocument = new TypedDocumentString(`
     mutation PostTopicDelete($id: String!) {
   postTopicDelete(id: $id) {
@@ -4227,18 +4257,6 @@ export const PostTopicDeleteDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostTopicDeleteMutation, PostTopicDeleteMutationVariables>;
-export const PostTopicUpdateDocument = new TypedDocumentString(`
-    mutation PostTopicUpdate($input: PostTopicUpdateInput!) {
-  postTopicUpdate(input: $input) {
-    id
-    title
-    slug
-    description
-    postCount
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<PostTopicUpdateMutation, PostTopicUpdateMutationVariables>;
 export const SupportTicketsPrivilegedDocument = new TypedDocumentString(`
     query SupportTicketsPrivileged($pagination: PaginationInput!) {
   supportTicketsPrivileged(pagination: $pagination) {
@@ -4352,18 +4370,6 @@ export const SupportTicketUpdateStatusPrivilegedDocument = new TypedDocumentStri
     SupportTicketUpdateStatusPrivilegedMutation,
     SupportTicketUpdateStatusPrivilegedMutationVariables
 >;
-export const PostTopicByIdDocument = new TypedDocumentString(`
-    query PostTopicById($id: String!) {
-  postTopicById(id: $id) {
-    id
-    title
-    slug
-    description
-    postCount
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<PostTopicByIdQuery, PostTopicByIdQueryVariables>;
 export type GraphQLInputTypeMetadata =
     | GraphQLInputScalarTypeMetadata
     | GraphQLInputEnumTypeMetadata
@@ -5673,6 +5679,141 @@ export const PostCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
     ],
 };
 
+export const PostTopicCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PostTopicCreateInput',
+    fields: [
+        {
+            name: 'title',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [64],
+                },
+            ],
+        },
+        {
+            name: 'description',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [1024],
+                },
+            ],
+        },
+        {
+            name: 'type',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isIn',
+                    constraints: [['Principle', 'Idea', 'SupportArticle']],
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [24],
+                },
+            ],
+        },
+        {
+            name: 'slug',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [160],
+                },
+            ],
+        },
+        {
+            name: 'parentId',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isUuid',
+                },
+            ],
+        },
+        {
+            name: 'position',
+            kind: 'scalar',
+            type: 'Float',
+            required: false,
+            validation: [
+                {
+                    type: 'isInt',
+                },
+            ],
+        },
+    ],
+};
+
+export const PostTopicUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PostTopicUpdateInput',
+    fields: [
+        {
+            name: 'id',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isUuid',
+                },
+            ],
+        },
+        {
+            name: 'title',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [64],
+                },
+            ],
+        },
+        {
+            name: 'description',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [1024],
+                },
+            ],
+        },
+        {
+            name: 'slug',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [160],
+                },
+            ],
+        },
+    ],
+};
+
 export const PostUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
     kind: 'object',
     type: 'PostUpdateInput',
@@ -5838,141 +5979,6 @@ export const PostReportInputMetadata: GraphQLInputObjectTypeMetadata = {
             kind: 'scalar',
             type: 'String',
             required: false,
-        },
-    ],
-};
-
-export const PostTopicCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
-    kind: 'object',
-    type: 'PostTopicCreateInput',
-    fields: [
-        {
-            name: 'title',
-            kind: 'scalar',
-            type: 'String',
-            required: true,
-            validation: [
-                {
-                    type: 'maxLength',
-                    constraints: [64],
-                },
-            ],
-        },
-        {
-            name: 'description',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'maxLength',
-                    constraints: [1024],
-                },
-            ],
-        },
-        {
-            name: 'type',
-            kind: 'scalar',
-            type: 'String',
-            required: true,
-            validation: [
-                {
-                    type: 'isIn',
-                    constraints: [['Principle', 'Idea', 'SupportArticle']],
-                },
-                {
-                    type: 'maxLength',
-                    constraints: [24],
-                },
-            ],
-        },
-        {
-            name: 'slug',
-            kind: 'scalar',
-            type: 'String',
-            required: true,
-            validation: [
-                {
-                    type: 'maxLength',
-                    constraints: [160],
-                },
-            ],
-        },
-        {
-            name: 'parentId',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'isUuid',
-                },
-            ],
-        },
-        {
-            name: 'position',
-            kind: 'scalar',
-            type: 'Float',
-            required: false,
-            validation: [
-                {
-                    type: 'isInt',
-                },
-            ],
-        },
-    ],
-};
-
-export const PostTopicUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
-    kind: 'object',
-    type: 'PostTopicUpdateInput',
-    fields: [
-        {
-            name: 'id',
-            kind: 'scalar',
-            type: 'String',
-            required: true,
-            validation: [
-                {
-                    type: 'isUuid',
-                },
-            ],
-        },
-        {
-            name: 'title',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'maxLength',
-                    constraints: [64],
-                },
-            ],
-        },
-        {
-            name: 'description',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'maxLength',
-                    constraints: [1024],
-                },
-            ],
-        },
-        {
-            name: 'slug',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'maxLength',
-                    constraints: [160],
-                },
-            ],
         },
     ],
 };
@@ -6589,6 +6595,48 @@ export const PostOperation: GraphQLOperationMetadata<typeof PostDocument> = {
     ],
 };
 
+export const PostTopicByIdOperation: GraphQLOperationMetadata<typeof PostTopicByIdDocument> = {
+    operation: 'PostTopicById',
+    operationType: 'query',
+    document: PostTopicByIdDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const PostTopicCreateOperation: GraphQLOperationMetadata<typeof PostTopicCreateDocument> = {
+    operation: 'PostTopicCreate',
+    operationType: 'mutation',
+    document: PostTopicCreateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: PostTopicCreateInputMetadata,
+        },
+    ],
+};
+
+export const PostTopicUpdateOperation: GraphQLOperationMetadata<typeof PostTopicUpdateDocument> = {
+    operation: 'PostTopicUpdate',
+    operationType: 'mutation',
+    document: PostTopicUpdateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: PostTopicUpdateInputMetadata,
+        },
+    ],
+};
+
 export const PostUnvoteOperation: GraphQLOperationMetadata<typeof PostUnvoteDocument> = {
     operation: 'PostUnvote',
     operationType: 'mutation',
@@ -6737,20 +6785,6 @@ export const PostReportCreateOperation: GraphQLOperationMetadata<typeof PostRepo
     ],
 };
 
-export const PostTopicCreateOperation: GraphQLOperationMetadata<typeof PostTopicCreateDocument> = {
-    operation: 'PostTopicCreate',
-    operationType: 'mutation',
-    document: PostTopicCreateDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: PostTopicCreateInputMetadata,
-        },
-    ],
-};
-
 export const PostTopicDeleteOperation: GraphQLOperationMetadata<typeof PostTopicDeleteDocument> = {
     operation: 'PostTopicDelete',
     operationType: 'mutation',
@@ -6761,20 +6795,6 @@ export const PostTopicDeleteOperation: GraphQLOperationMetadata<typeof PostTopic
             required: true,
             kind: 'scalar',
             type: 'String',
-        },
-    ],
-};
-
-export const PostTopicUpdateOperation: GraphQLOperationMetadata<typeof PostTopicUpdateDocument> = {
-    operation: 'PostTopicUpdate',
-    operationType: 'mutation',
-    document: PostTopicUpdateDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: PostTopicUpdateInputMetadata,
         },
     ],
 };
@@ -6847,20 +6867,6 @@ export const SupportTicketUpdateStatusPrivilegedOperation: GraphQLOperationMetad
             required: true,
             kind: 'enum',
             type: SupportTicketStatusMetadata,
-        },
-    ],
-};
-
-export const PostTopicByIdOperation: GraphQLOperationMetadata<typeof PostTopicByIdDocument> = {
-    operation: 'PostTopicById',
-    operationType: 'query',
-    document: PostTopicByIdDocument,
-    parameters: [
-        {
-            parameter: 'id',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
         },
     ],
 };
