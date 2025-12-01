@@ -45,14 +45,14 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
     // Determine the icon based on the variant (if not explicitly provided)
     let icon = properties.icon;
     if(!icon) {
-        if(variant === 'Negative') {
+        if(variant === 'Positive') {
+            icon = CheckCircleIcon;
+        }
+        else if(variant === 'Negative') {
             icon = WarningCircleIcon;
         }
         else if(variant === 'Warning') {
             icon = WarningIcon;
-        }
-        else if(variant === 'Positive') {
-            icon = CheckCircleIcon;
         }
         else if(variant === 'Informative') {
             icon = InfoIcon;
@@ -74,6 +74,9 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
     }
     else if(variant === 'Warning') {
         iconClassNames = mergeClassNames('content--warning', iconClassNames);
+    }
+    else if(variant === 'Informative') {
+        iconClassNames = mergeClassNames('content--informative', iconClassNames);
     }
 
     // Merge with custom icon className if provided
