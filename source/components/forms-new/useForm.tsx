@@ -3,6 +3,9 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - Types
+import type { NoticeVariant } from '@structure/source/components/notices/NoticeTheme';
+
 // Dependencies - TanStack Form
 import {
     createFormHook,
@@ -15,6 +18,7 @@ import {
 } from '@tanstack/react-form';
 
 // Dependencies - Hooks
+import { useFormNotice, type FormNoticeProperties } from './hooks/useFormNotice';
 import { useLinkedFields } from './hooks/useLinkedFields';
 
 // Dependencies - Form-Aware Components
@@ -108,6 +112,9 @@ export function useForm<
         TSubmitMeta
     > & {
         schema: TSchema; // Required and used for type inference!
+        notice?: {
+            autoDismissInMilliseconds?: number | null; // Default: 5000ms, null = no auto-dismiss
+        };
         linkedFields?: LinkedFieldConfigurationInterface<NoInfer<Extract<keyof TFormData, string>>>[]; // Auto-update target fields when source fields change
     },
 ) {
@@ -150,6 +157,11 @@ export function useForm<
     // This is the fully-typed TanStack form instance with Field, Subscribe, AppForm, etc.
     const appForm = useAppForm(mergedOptions);
     type AppFormType = typeof appForm;
+
+    // Form notice - always available for showing success/error messages
+    const formNoticeResult = useFormNotice({
+        autoDismissInMilliseconds: options.notice?.autoDismissInMilliseconds ?? 5000,
+    });
 
     // Linked fields - auto-update target fields when source fields change
     // Call the hook unconditionally (hooks must always be called), passing empty array if not configured
@@ -517,6 +529,15 @@ export function useForm<
                 useStore: function <TSelected>(selector: (state: typeof appForm.store.state) => TSelected): TSelected {
                     return useStore(appForm.store, selector);
                 },
+                // Notice component at top level for convenience
+                Notice: formNoticeResult.FormNotice,
+                // Namespaced notice methods
+                notice: {
+                    showSuccess: formNoticeResult.showSuccess,
+                    showError: formNoticeResult.showError,
+                    show: formNoticeResult.show,
+                    hide: formNoticeResult.hide,
+                },
                 // Expose linked fields reset for use in onSubmit callbacks
                 resetLinkedFields: linkedFieldsResult.resetAll,
             } as Record<PropertyKey, unknown>;
@@ -554,6 +575,13 @@ export function useForm<
                 FieldLabel: typeof FieldLabel;
                 FieldMessage: typeof FieldMessage;
                 useStore: <TSelected>(selector: (state: typeof appForm.store.state) => TSelected) => TSelected;
+                Notice: React.ComponentType<FormNoticeProperties>;
+                notice: {
+                    showSuccess: (title: string, content?: React.ReactNode) => void;
+                    showError: (title: string, content?: React.ReactNode) => void;
+                    show: (variant: NoticeVariant, title: string, content?: React.ReactNode) => void;
+                    hide: () => void;
+                };
                 resetLinkedFields: () => void;
             };
         },
