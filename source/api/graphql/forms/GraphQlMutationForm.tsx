@@ -46,10 +46,14 @@ import {
 // A minimal valid query for when defaultValuesQuery is not provided
 const noOpQuery = gql(`query NoOp { __typename }`);
 
+// Type - GraphQlMutationFormReferenceType
+// The form instance type exposed via formReference prop
+export type GraphQlMutationFormReferenceType = ReturnType<typeof useForm<ObjectSchema<ObjectShape>>> | null;
+
 // Component - GraphQlMutationForm
 export interface GraphQlMutationFormProperties<TDocument extends GraphQlDocument = GraphQlDocument> {
     // Form Reference - exposes the form instance for external control (e.g., setting values via effects)
-    formReference?: React.RefObject<ReturnType<typeof useForm<ObjectSchema<ObjectShape>>> | null>;
+    formReference?: React.RefObject<GraphQlMutationFormReferenceType>;
 
     // Layout
     className?: string;
