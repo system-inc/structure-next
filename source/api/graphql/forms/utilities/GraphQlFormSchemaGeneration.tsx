@@ -18,10 +18,7 @@ export function fieldIdentifierFromDottedPath(dottedPath: string): string {
 }
 
 // Helper - Build schema for a single field from GraphQL metadata
-export function fieldSchemaFromGraphQlFieldMetadata(
-    graphQlFieldMetadata: GraphQlFieldMetadata,
-    isRequiredOverride?: boolean,
-): BaseSchema<unknown> {
+export function fieldSchemaFromGraphQlFieldMetadata(graphQlFieldMetadata: GraphQlFieldMetadata): BaseSchema<unknown> {
     let fieldSchema: BaseSchema<unknown>;
 
     // Determine base schema type
@@ -69,9 +66,8 @@ export function fieldSchemaFromGraphQlFieldMetadata(
         }
     }
 
-    // Handle required/optional - use override if provided, otherwise use metadata
-    const isRequired = isRequiredOverride !== undefined ? isRequiredOverride : graphQlFieldMetadata.required;
-    if(!isRequired) {
+    // Handle required/optional based on GraphQL metadata
+    if(!graphQlFieldMetadata.required) {
         fieldSchema = fieldSchema.optional();
     }
 
@@ -83,7 +79,6 @@ export function schemaFromGraphQlOperationMetadata(
     graphQlOperationMetadata: GraphQLOperationMetadata<GraphQlDocument>,
     hiddenFields?: Record<string, unknown>,
     excludedFields?: string[],
-    requiredFields?: string[],
 ): ObjectSchema<Record<string, BaseSchema<unknown>>> {
     // Extract input type metadata from operation.parameters
     const graphQlFieldMetadataArray = graphQlFieldMetadataArrayFromGraphQlOperationParameterMetadata(
@@ -103,13 +98,7 @@ export function schemaFromGraphQlOperationMetadata(
             continue;
         }
 
-        // Check if this field should be required (override from props)
-        const isRequiredOverride = requiredFields?.includes(graphQlFieldMetadata.name) ? true : undefined;
-
-        shape[graphQlFieldMetadata.name] = fieldSchemaFromGraphQlFieldMetadata(
-            graphQlFieldMetadata,
-            isRequiredOverride,
-        );
+        shape[graphQlFieldMetadata.name] = fieldSchemaFromGraphQlFieldMetadata(graphQlFieldMetadata);
     }
 
     return schema.object(shape) as ObjectSchema<Record<string, BaseSchema<unknown>>>;
