@@ -15,12 +15,15 @@ import { networkService, gql } from '@structure/source/services/network/NetworkS
 import { GraphQlDocument } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
 import { GraphQLOperationMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { BaseError } from '@structure/source/api/errors/BaseError';
-import type { ResultOf } from '@graphql-typed-document-node/core';
+import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 // Dependencies - Assets
 import { SpinnerIcon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
+import { titleCase } from '@structure/source/utilities/type/String';
+import { getValueForKeyRecursively } from '@structure/source/utilities/type/Object';
+import { ObjectSchema, ObjectShape } from '@structure/source/utilities/schema/schemas/ObjectSchema';
 import {
     graphQlFieldMetadataArrayFromGraphQlOperationParameterMetadata,
     formValuesToGraphQlMutationVariables,
@@ -39,22 +42,33 @@ import {
     DocumentFieldValuesType,
     LinkedFieldConfigurationInterface,
 } from '@structure/source/api/graphql/forms/utilities/GraphQlFormTypes';
-import { getValueForKeyRecursively } from '@structure/source/utilities/type/Object';
-import { titleCase } from '@structure/source/utilities/type/String';
 
 // A minimal valid query for when defaultValuesQuery is not provided
 const noOpQuery = gql(`query NoOp { __typename }`);
 
 // Component - GraphQlOperationForm
 export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocument = GraphQlDocument> {
+    // Layout
+    className?: string;
+
     // Required
     operation: GraphQLOperationMetadata<TDocument>;
 
+    // Schema - merge additional field schemas on top of GraphQL-generated schema
+    // Useful for making fields required that are optional in the GraphQL schema, or validating extra fields
+    schema?: ObjectSchema<ObjectShape>;
+
     // Field Control - Type-safe field names and values when TDocument is specific
-    requiredFieldOverrides?: DocumentFieldPathsType<TDocument>[]; // Override schema to make these fields required
-    hiddenFields?: DocumentFieldValuesType<TDocument>;
-    excludedFields?: DocumentFieldPathsType<TDocument>[];
     fieldProperties?: Partial<Record<DocumentFieldPathsType<TDocument>, FieldPropertiesOverride>>;
+
+    // Hidden Fields - field paths to hide from the form (values still submitted)
+    hiddenFields?: DocumentFieldValuesType<TDocument>;
+
+    // Excluded Fields - field paths to exclude from the form
+    excludedFields?: DocumentFieldPathsType<TDocument>[];
+
+    // Linked Fields - auto-update target field when source field changes
+    linkedFields?: LinkedFieldConfigurationInterface<TDocument>[];
 
     // Default Values - either pass values directly or provide a query to fetch them
     defaultValues?: DocumentFieldValuesType<TDocument>;
@@ -63,22 +77,12 @@ export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocumen
         variables: Record<string, unknown>;
     };
 
-    // Submit Handling
-    onSubmit?: (
-        formValues: Record<string, unknown>,
-        mutationResponseData: unknown,
-        mutationResponseError: BaseError | null,
-    ) => void | Promise<void>;
-    resetOnSuccess?: boolean; // Reset form after successful submission (default: false)
-
-    // Submit Button
-    submitButton?: AnimatedButtonProperties;
-
     // Debug
     showPreviewGraphQlMutationTip?: boolean;
 
-    // Linked Fields - auto-update target field when source field changes
-    linkedFields?: LinkedFieldConfigurationInterface<TDocument>[];
+    // Children - render prop for extra fields not in the GraphQL schema (used with transformFormValues)
+    // Receives the form instance for full control over field rendering and validation
+    children?: (form: ReturnType<typeof useForm<ObjectSchema<ObjectShape>>>) => React.ReactNode;
 
     // Notice Messages - customize success/error messages shown after mutation
     notice?: {
@@ -92,9 +96,19 @@ export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocumen
         };
     };
 
-    // Layout
-    className?: string;
-    fieldClassName?: string;
+    // Submit Button
+    submitButton?: AnimatedButtonProperties;
+
+    // Transform values before submission - receives form values (VariablesOf + extra fields), returns transformed values
+    transformFormValues?: (formValues: VariablesOf<TDocument> & Record<string, unknown>) => Record<string, unknown>;
+
+    // Submit Handling
+    onSubmit?: (
+        formValues: Record<string, unknown>,
+        mutationResponseData: unknown,
+        mutationResponseError: BaseError | null,
+    ) => void | Promise<void>;
+    resetOnSuccess?: boolean; // Reset form after successful submission (default: false)
 }
 export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQlDocument>(
     properties: GraphQlOperationFormProperties<TDocument>,
@@ -104,13 +118,17 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
         properties.operation.parameters,
     );
 
-    // Create schema (excluding hidden and excluded fields, with required overrides)
-    const formSchema = schemaFromGraphQlOperationMetadata(
+    // Create schema (excluding hidden and excluded fields)
+    let formSchema = schemaFromGraphQlOperationMetadata(
         properties.operation,
         properties.hiddenFields,
         properties.excludedFields,
-        properties.requiredFieldOverrides,
     );
+
+    // Merge extra schema on top (overrides GraphQL-generated schema)
+    if(properties.schema) {
+        formSchema = formSchema.merge(properties.schema);
+    }
 
     // Hooks
     const graphQlMutation = networkService.useGraphQlMutation(
@@ -118,7 +136,6 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
     );
     const form = useForm({
         schema: formSchema,
-        // Pass linkedFields through to useForm - it handles all the wiring automatically
         // Cast to string-based configuration since GraphQL field paths are runtime strings
         linkedFields: properties.linkedFields as {
             sourceField: string;
@@ -127,10 +144,17 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
         }[],
         onSubmit: async function (formState) {
             // Merge form values with hidden field values
-            const allValues = { ...formState.value, ...properties.hiddenFields };
+            let formValues = { ...formState.value, ...properties.hiddenFields } as VariablesOf<TDocument> &
+                Record<string, unknown>;
+
+            // Apply value transformation if provided
+            if(properties.transformFormValues) {
+                formValues = properties.transformFormValues(formValues) as VariablesOf<TDocument> &
+                    Record<string, unknown>;
+            }
 
             // Convert to GraphQL mutation variables
-            const variables = formValuesToGraphQlMutationVariables(allValues as Record<string, unknown>);
+            const variables = formValuesToGraphQlMutationVariables(formValues);
 
             try {
                 const graphQlMutationResult = await graphQlMutation.execute(variables);
@@ -157,7 +181,7 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
                 }
 
                 if(properties.onSubmit) {
-                    await properties.onSubmit(allValues as Record<string, unknown>, graphQlMutationResult, null);
+                    await properties.onSubmit(formValues as Record<string, unknown>, graphQlMutationResult, null);
                 }
             }
             catch(error) {
@@ -183,7 +207,7 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
                 form.notice.showError(errorTitle, errorContent);
 
                 if(properties.onSubmit) {
-                    await properties.onSubmit(allValues as Record<string, unknown>, null, baseError);
+                    await properties.onSubmit(formValues as Record<string, unknown>, null, baseError);
                 }
             }
         },
@@ -217,7 +241,7 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
         [defaultValuesQuery.data, graphQlFormInputMetadataArray, form],
     );
 
-    // Set default values when provided directly via props
+    // Effect to set default values when provided directly via properties
     React.useEffect(
         function () {
             if(properties.defaultValues) {
@@ -248,7 +272,7 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
 
             // Render the field
             return (
-                <form.Field key={input.name} identifier={input.name} className={properties.fieldClassName}>
+                <form.Field key={input.name} identifier={input.name}>
                     <form.FieldLabel tip={fieldConfiguration.tip}>{label}</form.FieldLabel>
                     <Component
                         variant="Outline"
@@ -267,8 +291,14 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
     // Generate mutation preview tip content
     const graphQlMutationPreviewTip = properties.showPreviewGraphQlMutationTip
         ? (function () {
-              const allValues = { ...formValuesForPreview, ...properties.hiddenFields };
-              const variables = formValuesToGraphQlMutationVariables(allValues);
+              let formValues = { ...formValuesForPreview, ...properties.hiddenFields } as VariablesOf<TDocument> &
+                  Record<string, unknown>;
+              // Apply transformation if provided (same as in onSubmit)
+              if(properties.transformFormValues) {
+                  formValues = properties.transformFormValues(formValues) as VariablesOf<TDocument> &
+                      Record<string, unknown>;
+              }
+              const variables = formValuesToGraphQlMutationVariables(formValues);
               return <pre className="max-h-96 overflow-auto text-xs">{JSON.stringify(variables, null, 2)}</pre>;
           })()
         : undefined;
@@ -283,8 +313,13 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
                 </Notice>
             )}
 
+            {/* Form */}
             <form.Form className={properties.className}>
+                {/* Fields */}
                 {formFields}
+
+                {/* Children can have fields */}
+                {properties.children?.(form)}
 
                 <div className="flex flex-col">
                     <form.Notice className="mb-4" />
