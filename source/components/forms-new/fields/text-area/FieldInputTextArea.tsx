@@ -16,9 +16,9 @@ export type FieldInputTextAreaProperties = Omit<
     React.ComponentProps<typeof InputTextArea>,
     'value' | 'defaultValue'
 > & {
-    commit?: 'onChange' | 'onBlur'; // When to update form store (default: 'onBlur')
+    commitOn?: 'Change' | 'Blur'; // When to update form store (default: 'Blur')
 };
-export function FieldInputTextArea(properties: FieldInputTextAreaProperties) {
+export function FieldInputTextArea({ commitOn = 'Blur', ...inputTextAreaProperties }: FieldInputTextAreaProperties) {
     // Hooks
     const fieldContext = useFieldContext<string>();
     const fieldId = useFieldId(fieldContext.name);
@@ -35,46 +35,43 @@ export function FieldInputTextArea(properties: FieldInputTextAreaProperties) {
         return fieldContext.state.value == null ? '' : String(fieldContext.state.value);
     });
 
-    // Defaults
-    const commitStrategy = properties.commit ?? 'onBlur';
-
     // Function to handle input changes while typing
     function onInputIntercept(event: React.FormEvent<HTMLTextAreaElement>) {
-        // Only update store if commit strategy is 'onChange'
-        if(commitStrategy === 'onChange') {
+        // Only update store if commit strategy is 'Change'
+        if(commitOn === 'Change') {
             const inputValue = event.currentTarget.value;
             fieldContext.handleChange(inputValue);
         }
 
-        // Call properties.onInput if it exists
-        properties.onInput?.(event);
+        // Call inputProperties.onInput if it exists
+        inputTextAreaProperties.onInput?.(event);
     }
 
     // Function to handle key down events
     function onKeyDownIntercept(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-        // If Enter key is pressed with Ctrl/Cmd and commit strategy is 'onBlur', commit value
+        // If Enter key is pressed with Ctrl/Cmd and commit strategy is 'Blur', commit value
         // Note: In textareas, Enter creates new lines, so we only commit on Ctrl+Enter or Cmd+Enter
-        if(event.key === 'Enter' && (event.ctrlKey || event.metaKey) && commitStrategy === 'onBlur') {
+        if(event.key === 'Enter' && (event.ctrlKey || event.metaKey) && commitOn === 'Blur') {
             const element = inputReference.current;
             if(element) {
                 fieldContext.setValue(element.value, { dontValidate: true });
             }
         }
 
-        // Call properties.onKeyDown if it exists
-        properties.onKeyDown?.(event);
+        // Call inputProperties.onKeyDown if it exists
+        inputTextAreaProperties.onKeyDown?.(event);
     }
 
     // Function to handle focus events
     function onFocusIntercept(event: React.FocusEvent<HTMLTextAreaElement>) {
-        // Call properties.onFocus if it exists
-        properties.onFocus?.(event);
+        // Call inputProperties.onFocus if it exists
+        inputTextAreaProperties.onFocus?.(event);
     }
 
     // Function to handle blur events
     function onBlurIntercept(event: React.FocusEvent<HTMLTextAreaElement>) {
-        // Commit value to store without validation if commit strategy is 'onBlur'
-        if(commitStrategy === 'onBlur') {
+        // Commit value to store without validation if commit strategy is 'Blur'
+        if(commitOn === 'Blur') {
             const element = inputReference.current;
             if(element) {
                 fieldContext.setValue(element.value, { dontValidate: true });
@@ -84,18 +81,18 @@ export function FieldInputTextArea(properties: FieldInputTextAreaProperties) {
         // Trigger validation (only one validation cycle, no flash)
         fieldContext.handleBlur();
 
-        // Call properties.onBlur if it exists
-        properties.onBlur?.(event);
+        // Call inputProperties.onBlur if it exists
+        inputTextAreaProperties.onBlur?.(event);
     }
 
     // Render the component
     return (
         <>
             <InputTextArea
-                {...properties}
+                {...inputTextAreaProperties}
                 ref={inputReference}
-                id={properties.id ?? fieldId}
-                name={properties.name ?? fieldContext.name}
+                id={inputTextAreaProperties.id ?? fieldId}
+                name={inputTextAreaProperties.name ?? fieldContext.name}
                 defaultValue={defaultValue}
                 aria-invalid={storeErrors && storeErrors.length > 0 ? true : undefined}
                 onFocus={onFocusIntercept}

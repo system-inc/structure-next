@@ -167,6 +167,8 @@ export function useForm<
     // Call the hook unconditionally (hooks must always be called), passing empty array if not configured
     // Type safety is enforced at the options.linkedFields level where users configure source/target fields
     // The internal hook call uses string-based types since TanStack Form's complex generics aren't directly compatible
+    // Type cast needed: TanStack Form's setFieldValue uses Updater<DeepValue<...>> which is more complex
+    // than our simplified (field, value) => void interface. The cast bridges these type systems.
     type LinkedFieldName = Extract<keyof TFormData, string>;
     const linkedFieldsResult = useLinkedFields<Record<LinkedFieldName, unknown>>({
         form: appForm as unknown as {
@@ -287,7 +289,7 @@ export function useForm<
         identifier: FieldName; // REQUIRED - Public API must use identifier (type-safe field names)
         name?: FieldName; // Optional - TanStack internal usage only (type-safe)
         children?: React.ReactNode | OriginalFieldProperties['children'];
-        validateSchema?: 'onChange' | 'onBlur' | 'Both' | 'None'; // When to run schema validation (default: 'onBlur')
+        validateOn?: 'Blur' | 'Change' | 'Never'; // When to run validation (default: 'Blur')
         showMessage?: boolean; // Auto-render FieldMessage below children (default: true)
         messageProperties?: React.ComponentProps<typeof FieldMessage>; // Props to pass to auto-rendered FieldMessage
         className?: string; // CSS classes for the Field wrapper div
@@ -296,7 +298,7 @@ export function useForm<
         identifier,
         name,
         children,
-        validateSchema,
+        validateOn,
         showMessage = true,
         messageProperties,
         className,
@@ -313,14 +315,21 @@ export function useForm<
 
         // Get linked fields context for auto-wiring source/target fields
         const linkedFieldsContext = useLinkedFieldsContext();
+        const linkedFields = linkedFieldsContext.linkedFieldsResult;
+        const isSourceField = linkedFields?.isSourceField(fieldIdentifier ?? '') ?? false;
+        const isTargetField = linkedFields?.isTargetField(fieldIdentifier ?? '') ?? false;
 
-        // Get validation timing (default: 'onBlur')
-        const validationTiming = validateSchema ?? 'onBlur';
+        // Get validation timing (default: 'Blur', but 'Change' for linked fields to clear errors while typing)
+        const isLinkedField = isSourceField || isTargetField;
+        const validationTiming = validateOn ?? (isLinkedField ? 'Change' : 'Blur');
+
+        // Determine if we need to commit on change (required for onChange validation to work)
+        const needsCommitOnChange = validationTiming === 'Change' || isSourceField;
 
         // Generate auto-validator if schema exists for this field
         let validatorsFromSchema;
 
-        if(!schema || !fieldIdentifier || validationTiming === 'None') {
+        if(!schema || !fieldIdentifier || validationTiming === 'Never') {
             validatorsFromSchema = undefined;
         }
         else {
@@ -340,20 +349,14 @@ export function useForm<
                     return result.valid ? undefined : result.errors?.[0];
                 };
 
-                // Return validators based on validateSchema prop
-                if(validationTiming === 'onChange') {
+                // Return validators based on validateOn prop
+                if(validationTiming === 'Change') {
                     validatorsFromSchema = {
                         onChangeAsync: schemaValidationFunction,
                     };
                 }
-                else if(validationTiming === 'onBlur') {
+                else if(validationTiming === 'Blur') {
                     validatorsFromSchema = {
-                        onBlurAsync: schemaValidationFunction,
-                    };
-                }
-                else if(validationTiming === 'Both') {
-                    validatorsFromSchema = {
-                        onChangeAsync: schemaValidationFunction,
                         onBlurAsync: schemaValidationFunction,
                     };
                 }
@@ -404,11 +407,6 @@ export function useForm<
             };
         }
 
-        // Linked fields - check if this field is a source or target
-        const linkedFields = linkedFieldsContext.linkedFieldsResult;
-        const isSourceField = linkedFields?.isSourceField(fieldIdentifier ?? '') ?? false;
-        const isTargetField = linkedFields?.isTargetField(fieldIdentifier ?? '') ?? false;
-
         // Get linked field listeners/handlers
         const sourceFieldListeners = isSourceField
             ? linkedFields?.getSourceFieldListeners(fieldIdentifier ?? '')
@@ -432,55 +430,52 @@ export function useForm<
                     ? (children as (field: AnyFieldApi) => React.ReactNode)(field)
                     : children;
 
-            // Auto-inject properties for linked field behavior
-            // Source fields: add commit="onChange" so target updates while typing
-            // Target fields: add onInput handler to track manual edits
-            if(isSourceField || isTargetField) {
-                const injectedProperties: Record<string, unknown> = {};
+            // Auto-inject properties based on field configuration
+            // - commitOn="Change" when validation includes onChange (so validation actually triggers)
+            // - onInput handler for target fields (to track manual edits)
+            const injectedProperties: Record<string, unknown> = {};
 
-                if(isSourceField) {
-                    // Source field: commit onChange so transform runs while typing
-                    injectedProperties.commit = 'onChange';
+            if(needsCommitOnChange) {
+                // Commit on change so onChange validation actually runs
+                injectedProperties.commitOn = 'Change';
+            }
+
+            if(isTargetField && targetFieldOnInput) {
+                // Target field: track manual edits to disable auto-generation
+                injectedProperties.onInput = targetFieldOnInput;
+            }
+
+            // Only process if we have properties to inject
+            if(Object.keys(injectedProperties).length > 0) {
+                // Handle both single element and array of children
+                if(React.isValidElement(content)) {
+                    // Single child - clone with injected props
+                    const existingProperties = (content as React.ReactElement<Record<string, unknown>>).props;
+                    content = React.cloneElement(content as React.ReactElement<Record<string, unknown>>, {
+                        ...existingProperties,
+                        ...injectedProperties,
+                    });
                 }
-
-                if(isTargetField && targetFieldOnInput) {
-                    // Target field: track manual edits to disable auto-generation
-                    injectedProperties.onInput = targetFieldOnInput;
-                }
-
-                // Only process if we have properties to inject
-                if(Object.keys(injectedProperties).length > 0) {
-                    // Handle both single element and array of children
-                    if(React.isValidElement(content)) {
-                        // Single child - clone with injected props
-                        const existingProperties = (content as React.ReactElement<Record<string, unknown>>).props;
-                        content = React.cloneElement(content as React.ReactElement<Record<string, unknown>>, {
-                            ...existingProperties,
-                            ...injectedProperties,
-                        });
-                    }
-                    else if(Array.isArray(content)) {
-                        // Multiple children - find and clone input components (skip labels)
-                        content = content.map(function (child, index) {
-                            if(React.isValidElement(child)) {
-                                const componentName =
-                                    (child.type as { displayName?: string })?.displayName ||
-                                    (child.type as { name?: string })?.name ||
-                                    '';
-                                // Inject props into FieldInput* components, not FieldLabel
-                                if(componentName.startsWith('FieldInput') || componentName.includes('Input')) {
-                                    const existingProperties = (child as React.ReactElement<Record<string, unknown>>)
-                                        .props;
-                                    return React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
-                                        ...existingProperties,
-                                        ...injectedProperties,
-                                        key: child.key ?? index,
-                                    });
-                                }
+                else if(Array.isArray(content)) {
+                    // Multiple children - find and clone input components (skip labels)
+                    content = content.map(function (child, index) {
+                        if(React.isValidElement(child)) {
+                            const componentName =
+                                (child.type as { displayName?: string })?.displayName ||
+                                (child.type as { name?: string })?.name ||
+                                '';
+                            // Inject props into FieldInput* components, not FieldLabel
+                            if(componentName.startsWith('FieldInput') || componentName.includes('Input')) {
+                                const existingProperties = (child as React.ReactElement<Record<string, unknown>>).props;
+                                return React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
+                                    ...existingProperties,
+                                    ...injectedProperties,
+                                    key: child.key ?? index,
+                                });
                             }
-                            return child;
-                        });
-                    }
+                        }
+                        return child;
+                    });
                 }
             }
 

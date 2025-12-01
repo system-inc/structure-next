@@ -17,9 +17,9 @@ import { focusNextFormElementByLabel } from '@structure/source/utilities/react/R
 
 // Component - FieldInputText
 export type FieldInputTextProperties = Omit<React.ComponentProps<typeof InputText>, 'value' | 'defaultValue'> & {
-    commit?: 'onChange' | 'onBlur'; // When to update form store (default: 'onBlur')
+    commitOn?: 'Change' | 'Blur'; // When to update form store (default: 'Blur')
 };
-export function FieldInputText(properties: FieldInputTextProperties) {
+export function FieldInputText({ commitOn = 'Blur', ...inputTextProperties }: FieldInputTextProperties) {
     // Hooks
     const fieldContext = useFieldContext<string | number>();
     const fieldId = useFieldId(fieldContext.name);
@@ -36,33 +36,33 @@ export function FieldInputText(properties: FieldInputTextProperties) {
         return fieldContext.state.value == null ? '' : String(fieldContext.state.value);
     });
 
-    // Defaults
-    const commitStrategy = properties.commit ?? 'onBlur';
-
     // Check if this is a number input
-    const isNumberInput = properties.type === 'number';
+    const isNumberInput = inputTextProperties.type === 'number';
 
     // Function to handle input changes while typing
     function onInputIntercept(event: React.FormEvent<HTMLInputElement>) {
-        // For number inputs, always commit on blur to avoid empty string vs 0 issues
-        if(isNumberInput) {
-            return;
+        // Only update store if commit strategy is 'Change'
+        if(commitOn === 'Change') {
+            const rawValue = event.currentTarget.value;
+
+            // For number inputs, convert to number (empty string becomes 0)
+            if(isNumberInput) {
+                const numberValue = rawValue === '' ? 0 : Number(rawValue);
+                fieldContext.handleChange(numberValue);
+            }
+            else {
+                fieldContext.handleChange(rawValue);
+            }
         }
 
-        // For text inputs, only update store if commit strategy is 'onChange'
-        if(commitStrategy === 'onChange') {
-            const inputValue = event.currentTarget.value;
-            fieldContext.handleChange(inputValue);
-        }
-
-        // Call properties.onInput if it exists
-        properties.onInput?.(event);
+        // Call inputProperties.onInput if it exists
+        inputTextProperties.onInput?.(event);
     }
 
     // Function to handle key down events
     async function onKeyDownIntercept(event: React.KeyboardEvent<HTMLInputElement>) {
-        // If Enter key is pressed and commit strategy is 'onBlur', validate and navigate
-        if(event.key === 'Enter' && commitStrategy === 'onBlur' && !isNumberInput) {
+        // If Enter key is pressed and commit strategy is 'Blur', validate and navigate
+        if(event.key === 'Enter' && commitOn === 'Blur' && !isNumberInput) {
             event.preventDefault(); // Prevent default form submission
             const element = inputReference.current;
             if(element) {
@@ -91,20 +91,20 @@ export function FieldInputText(properties: FieldInputTextProperties) {
             }
         }
 
-        // Call properties.onKeyDown if it exists
-        properties.onKeyDown?.(event);
+        // Call inputProperties.onKeyDown if it exists
+        inputTextProperties.onKeyDown?.(event);
     }
 
     // Function to handle focus events
     function onFocusIntercept(event: React.FocusEvent<HTMLInputElement>) {
-        // Call properties.onFocus if it exists
-        properties.onFocus?.(event);
+        // Call inputProperties.onFocus if it exists
+        inputTextProperties.onFocus?.(event);
     }
 
     // Function to handle blur events
     function onBlurIntercept(event: React.FocusEvent<HTMLInputElement>) {
-        // Commit value to store without validation if commit strategy is 'onBlur'
-        if(commitStrategy === 'onBlur' || isNumberInput) {
+        // Commit value to store without validation if commit strategy is 'Blur'
+        if(commitOn === 'Blur') {
             const element = inputReference.current;
             if(element) {
                 // If number input, convert to a number
@@ -123,18 +123,18 @@ export function FieldInputText(properties: FieldInputTextProperties) {
         // Trigger validation (only one validation cycle, no flash)
         fieldContext.handleBlur();
 
-        // Call properties.onBlur if it exists
-        properties.onBlur?.(event);
+        // Call inputProperties.onBlur if it exists
+        inputTextProperties.onBlur?.(event);
     }
 
     // Render the component
     return (
         <>
             <InputText
-                {...properties}
+                {...inputTextProperties}
                 ref={inputReference}
-                id={properties.id ?? fieldId}
-                name={properties.name ?? fieldContext.name}
+                id={inputTextProperties.id ?? fieldId}
+                name={inputTextProperties.name ?? fieldContext.name}
                 defaultValue={defaultValue}
                 aria-invalid={storeErrors && storeErrors.length > 0 ? true : undefined}
                 onInput={onInputIntercept}

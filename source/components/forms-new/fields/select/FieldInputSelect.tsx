@@ -15,9 +15,9 @@ export type FieldInputSelectProperties = Omit<
     InputSelectProperties,
     'value' | 'defaultValue' | 'onChange' | 'onBlur'
 > & {
-    commit?: 'onChange' | 'onBlur'; // When to update form store (default: 'onChange' for select)
+    commitOn?: 'Change' | 'Blur'; // When to update form store (default: 'Change' for select)
 };
-export function FieldInputSelect(properties: FieldInputSelectProperties) {
+export function FieldInputSelect({ commitOn = 'Change', ...inputSelectProperties }: FieldInputSelectProperties) {
     // Hooks
     const fieldContext = useFieldContext<string>();
     const fieldId = useFieldId(fieldContext.name);
@@ -33,17 +33,14 @@ export function FieldInputSelect(properties: FieldInputSelectProperties) {
     // References
     const inputReference = React.useRef<InputSelectReferenceInterface>(null);
 
-    // Defaults - selects typically commit onChange (immediate)
-    const commitStrategy = properties.commit ?? 'onChange';
-
     // Function to handle selection change
     function handleChange(value: string | undefined) {
-        // Commit immediately for onChange strategy
-        if(commitStrategy === 'onChange') {
+        // Commit immediately for Change strategy
+        if(commitOn === 'Change') {
             fieldContext.handleChange(value ?? '');
         }
         else {
-            // For onBlur strategy, just update value without triggering validation
+            // For Blur strategy, just update value without triggering validation
             fieldContext.setValue(value ?? '', { dontValidate: true });
         }
     }
@@ -57,10 +54,10 @@ export function FieldInputSelect(properties: FieldInputSelectProperties) {
     // Render the component
     return (
         <InputSelect
-            {...properties}
+            {...inputSelectProperties}
             ref={inputReference}
-            id={properties.id ?? fieldId}
-            name={properties.name ?? fieldContext.name}
+            id={inputSelectProperties.id ?? fieldId}
+            name={inputSelectProperties.name ?? fieldContext.name}
             value={storeValue ?? ''}
             aria-invalid={storeErrors && storeErrors.length > 0 ? true : undefined}
             onChange={handleChange}
