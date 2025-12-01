@@ -43,7 +43,7 @@ import {
     LinkedFieldConfigurationInterface,
 } from '@structure/source/api/graphql/forms/utilities/GraphQlFormTypes';
 
-// A minimal valid query for when defaultValuesQuery is not provided
+// A minimal valid query for when defaultValuesGraphQlQuery is not provided
 const noOpQuery = gql(`query NoOp { __typename }`);
 
 // Function to process form values for submission (filter changed fields, merge hidden fields, apply transformations)
@@ -101,46 +101,32 @@ function processFormValuesForSubmission(
 export type GraphQlMutationFormReferenceType = ReturnType<typeof useForm<ObjectSchema<ObjectShape>>> | null;
 
 // Component - GraphQlMutationForm
-export interface GraphQlMutationFormProperties<TDocument extends GraphQlDocument = GraphQlDocument> {
+export interface GraphQlMutationFormProperties<
+    TDocument extends GraphQlDocument = GraphQlDocument,
+    TDefaultValuesQueryDocument extends GraphQlDocument = GraphQlDocument,
+> {
+    showPreviewGraphQlMutationTip?: boolean; // For debugging
     // Form Reference - exposes the form instance for external control (e.g., setting values via effects)
     formReference?: React.RefObject<GraphQlMutationFormReferenceType>;
-
-    // Layout
-    className?: string;
-
-    // Required
+    className?: string; // Layout
     operation: GraphQLOperationMetadata<TDocument>;
-
     // Schema - merge additional field schemas on top of GraphQL-generated schema
     // Useful for making fields required that are optional in the GraphQL schema, or validating extra fields
     schema?: ObjectSchema<ObjectShape>;
-
-    // Field Control - Type-safe field names and values when TDocument is specific
     fieldProperties?: Partial<Record<DocumentFieldPathsType<TDocument>, FieldPropertiesOverride>>;
-
-    // Hidden Fields - field paths to hide from the form (values still submitted)
-    hiddenFields?: DocumentFieldValuesType<TDocument>;
-
-    // Excluded Fields - field paths to exclude from the form
-    excludedFields?: DocumentFieldPathsType<TDocument>[];
-
-    // Linked Fields - auto-update target field when source field changes
-    linkedFields?: LinkedFieldConfigurationInterface<TDocument>[];
-
-    // Default Values - either pass values directly or provide a query to fetch them
-    defaultValues?: DocumentFieldValuesType<TDocument>;
-    defaultValuesQuery?: {
-        document: GraphQlDocument;
-        variables: Record<string, unknown>;
+    hiddenFields?: DocumentFieldValuesType<TDocument>; // Field paths to hide from the form (values still submitted)
+    excludedFields?: DocumentFieldPathsType<TDocument>[]; // Field paths to exclude from the form
+    linkedFields?: LinkedFieldConfigurationInterface<TDocument>[]; // Auto-update target field when source field changes
+    defaultValues?: DocumentFieldValuesType<TDocument>; // Pass values directly
+    // Provide a query to request default values
+    defaultValuesGraphQlQuery?: {
+        document: TDefaultValuesQueryDocument;
+        variables?: VariablesOf<TDefaultValuesQueryDocument>;
+        transform?: (data: ResultOf<TDefaultValuesQueryDocument>) => DocumentFieldValuesType<TDocument>;
     };
-
-    // Debug
-    showPreviewGraphQlMutationTip?: boolean;
-
-    // Children - render prop for extra fields not in the GraphQL schema (used with transformFormValues)
+    // Children - render property for extra fields not in the GraphQL schema (used with transformFormValues)
     // Receives the form instance for full control over field rendering and validation
     children?: (form: ReturnType<typeof useForm<ObjectSchema<ObjectShape>>>) => React.ReactNode;
-
     // Notice Messages - customize success/error messages shown after mutation
     notice?: {
         success?: {
@@ -152,11 +138,10 @@ export interface GraphQlMutationFormProperties<TDocument extends GraphQlDocument
             content?: React.ReactNode | ((error: BaseError) => React.ReactNode);
         };
     };
-
-    // Submit
-    submitButton?: AnimatedButtonProperties;
-    // Only submit fields that differ from defaultValues (default: false)
-    submitOnlyChangedFields?: boolean;
+    submitButtonProperties?: AnimatedButtonProperties;
+    submitOnlyChangedFields?: boolean; // Only submit fields that differ from defaultValues (default: false)
+    isLoading?: boolean; // Loading State - shows placeholder skeletons for each field while loading
+    resetOnSubmitSuccess?: boolean; // Reset form after successful submission (default: false)
     // Transform values before submission - receives form values (VariablesOf + extra fields), returns transformed values
     transformFormValues?: (formValues: VariablesOf<TDocument> & Record<string, unknown>) => Record<string, unknown>;
     onSubmit?: (
@@ -164,11 +149,11 @@ export interface GraphQlMutationFormProperties<TDocument extends GraphQlDocument
         mutationResponseData: ResultOf<TDocument> | null,
         mutationResponseError: BaseError | null,
     ) => void | Promise<void>;
-    resetOnSuccess?: boolean; // Reset form after successful submission (default: false)
 }
-export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlDocument>(
-    properties: GraphQlMutationFormProperties<TDocument>,
-) {
+export function GraphQlMutationForm<
+    TDocument extends GraphQlDocument = GraphQlDocument,
+    TDefaultValuesQueryDocument extends GraphQlDocument = GraphQlDocument,
+>(properties: GraphQlMutationFormProperties<TDocument, TDefaultValuesQueryDocument>) {
     // Extract GraphQL metadata
     const graphQlFormInputMetadataArray = graphQlFieldMetadataArrayFromGraphQlOperationParameterMetadata(
         properties.operation.parameters,
@@ -231,7 +216,7 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
                 form.notice.showSuccess(successTitle, successContent);
 
                 // Only reset form if explicitly requested (default: false)
-                if(properties.resetOnSuccess) {
+                if(properties.resetOnSubmitSuccess) {
                     form.reset();
                     form.resetLinkedFields();
                 }
@@ -273,38 +258,79 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
         },
     });
 
+    // Fetch default values if query provided
+    const defaultValuesGraphQlQueryRequest = networkService.useGraphQlQuery(
+        (properties.defaultValuesGraphQlQuery?.document || noOpQuery) as Parameters<
+            typeof networkService.useGraphQlQuery
+        >[0],
+        properties.defaultValuesGraphQlQuery?.variables as Parameters<typeof networkService.useGraphQlQuery>[1],
+        { enabled: !!properties.defaultValuesGraphQlQuery },
+    );
+
+    // Derive loading state - controlled if provided, otherwise from query
+    const isLoading = properties.isLoading ?? defaultValuesGraphQlQueryRequest.isLoading;
+
     // Cast to string[] for internal comparison since we're checking runtime metadata against typed props
     const excludedFieldsAsStrings = properties.excludedFields as string[] | undefined;
 
-    // Fetch default values if query provided
-    const defaultValuesQuery = networkService.useGraphQlQuery(
-        (properties.defaultValuesQuery?.document || noOpQuery) as Parameters<typeof networkService.useGraphQlQuery>[0],
-        properties.defaultValuesQuery?.variables,
-        { enabled: !!properties.defaultValuesQuery },
-    );
+    // Track the last synced query data to avoid re-running the effect unnecessarily
+    const lastSyncedQueryDataReference = React.useRef<string | null>(null);
 
     // Effect to set default values when provided via query
     React.useEffect(
         function () {
-            if(defaultValuesQuery.data) {
-                for(const input of graphQlFormInputMetadataArray) {
-                    const value = getValueForKeyRecursively(
-                        defaultValuesQuery.data as Record<string, unknown>,
-                        fieldIdentifierFromDottedPath(input.name),
+            if(defaultValuesGraphQlQueryRequest.data) {
+                // Serialize for comparison to avoid infinite loops
+                const serialized = JSON.stringify(defaultValuesGraphQlQueryRequest.data);
+                if(serialized === lastSyncedQueryDataReference.current) {
+                    return;
+                }
+                lastSyncedQueryDataReference.current = serialized;
+
+                // If transform function is provided, use it to map response to form values
+                if(properties.defaultValuesGraphQlQuery?.transform) {
+                    const transformedValues = properties.defaultValuesGraphQlQuery.transform(
+                        defaultValuesGraphQlQueryRequest.data as ResultOf<TDefaultValuesQueryDocument>,
                     );
-                    if(value !== undefined && value !== null) {
-                        form.setFieldValue(input.name, value);
+                    for(const [fieldName, value] of Object.entries(transformedValues)) {
+                        if(value !== undefined && value !== null) {
+                            form.setFieldValue(fieldName, value);
+                        }
+                    }
+                }
+                else {
+                    // Auto-map by matching field identifiers recursively
+                    for(const input of graphQlFormInputMetadataArray) {
+                        const value = getValueForKeyRecursively(
+                            defaultValuesGraphQlQueryRequest.data as Record<string, unknown>,
+                            fieldIdentifierFromDottedPath(input.name),
+                        );
+                        if(value !== undefined && value !== null) {
+                            form.setFieldValue(input.name, value);
+                        }
                     }
                 }
             }
         },
-        [defaultValuesQuery.data, graphQlFormInputMetadataArray, form],
+        // Note: form is intentionally excluded - setFieldValue is stable and including it causes infinite loops
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [defaultValuesGraphQlQueryRequest.data, graphQlFormInputMetadataArray, properties.defaultValuesGraphQlQuery],
     );
+
+    // Track the last synced default values to avoid re-running the effect unnecessarily
+    const lastSyncedDefaultValuesReference = React.useRef<string | null>(null);
 
     // Effect to set default values when provided directly via properties
     React.useEffect(
         function () {
             if(properties.defaultValues) {
+                // Serialize for comparison to avoid infinite loops
+                const serialized = JSON.stringify(properties.defaultValues);
+                if(serialized === lastSyncedDefaultValuesReference.current) {
+                    return;
+                }
+                lastSyncedDefaultValuesReference.current = serialized;
+
                 for(const [fieldName, value] of Object.entries(properties.defaultValues)) {
                     if(value !== undefined && value !== null) {
                         form.setFieldValue(fieldName, value);
@@ -312,7 +338,9 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
                 }
             }
         },
-        [properties.defaultValues, form],
+        // Note: form is intentionally excluded - setFieldValue is stable and including it causes infinite loops
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [properties.defaultValues],
     );
 
     // Effect to set form reference if provided
@@ -328,7 +356,9 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
     // Generate form fields
     // Cast fieldProperties to Record<string, ...> for internal use with runtime metadata
     const fieldPropertiesAsRecord = properties.fieldProperties as Record<string, FieldPropertiesOverride> | undefined;
-    const formFields = graphQlFormInputMetadataArray
+
+    // Filter and sort fields (used for both loading placeholders and actual form fields)
+    const visibleFields = graphQlFormInputMetadataArray
         .filter(function (input) {
             // Filter out hidden and excluded fields
             if(properties.hiddenFields && input.name in properties.hiddenFields) return false;
@@ -347,24 +377,26 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
             if(orderB === undefined) return -1;
             // Sort by order value (ascending)
             return orderA - orderB;
-        })
-        .map(function (input) {
-            const Component = fieldFromGraphQlFieldMetadata(input, fieldPropertiesAsRecord);
-            const fieldConfiguration = fieldPropertiesAsRecord?.[input.name] || {};
-            const label = fieldConfiguration.label || titleCase(fieldIdentifierFromDottedPath(input.name));
-
-            // Render the field
-            return (
-                <form.Field key={input.name} identifier={input.name}>
-                    <form.FieldLabel tip={fieldConfiguration.tip}>{label}</form.FieldLabel>
-                    <Component
-                        variant="Outline"
-                        placeholder={fieldConfiguration.placeholder || label}
-                        {...fieldPropertiesFromFieldConfiguration(input, fieldConfiguration)}
-                    />
-                </form.Field>
-            );
         });
+
+    const formFields = visibleFields.map(function (input) {
+        const Component = fieldFromGraphQlFieldMetadata(input, fieldPropertiesAsRecord);
+        const fieldConfiguration = fieldPropertiesAsRecord?.[input.name] || {};
+        const label = fieldConfiguration.label || titleCase(fieldIdentifierFromDottedPath(input.name));
+
+        // Render the field
+        return (
+            <form.Field key={input.name} identifier={input.name}>
+                <form.FieldLabel tip={fieldConfiguration.tip}>{label}</form.FieldLabel>
+                <Component
+                    variant="Outline"
+                    placeholder={fieldConfiguration.placeholder || label}
+                    disabled={isLoading}
+                    {...fieldPropertiesFromFieldConfiguration(input, fieldConfiguration)}
+                />
+            </form.Field>
+        );
+    });
 
     // Subscribe to form values for mutation preview (must be called unconditionally)
     const formValuesForPreview = form.useStore(function (state) {
@@ -391,9 +423,9 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
     return (
         <>
             {/* Error notice for default values query */}
-            {properties.defaultValuesQuery && defaultValuesQuery.error && (
+            {properties.defaultValuesGraphQlQuery && defaultValuesGraphQlQueryRequest.error && (
                 <Notice variant="Negative" title="Error">
-                    <p>{defaultValuesQuery.error.message}</p>
+                    <p>{defaultValuesGraphQlQueryRequest.error.message}</p>
                 </Notice>
             )}
 
@@ -420,9 +452,9 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
                                     ? { contentClassName: 'max-w-none' }
                                     : undefined
                             }
-                            {...properties.submitButton}
+                            {...properties.submitButtonProperties}
                         >
-                            {properties.submitButton?.children ?? 'Submit'}
+                            {properties.submitButtonProperties?.children ?? 'Submit'}
                         </AnimatedButton>
                     </div>
                 </div>

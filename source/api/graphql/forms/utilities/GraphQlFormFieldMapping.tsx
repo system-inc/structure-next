@@ -17,7 +17,7 @@ export interface FieldPropertiesOverride {
     placeholder?: string;
     rows?: number;
     component?: React.ComponentType;
-    tip?: string;
+    tip?: React.ReactNode; // Tip displayed next to the field label
     className?: string;
     order?: number; // Field display order (lower numbers appear first)
 }
