@@ -12,7 +12,7 @@ export const commonInputTextClassNames = mergeClassNames(
     // Placeholder (disabled)
     'disabled:placeholder:opacity-20',
     // Disabled
-    'disabled:cursor-not-allowed disabled:opacity-80',
+    'disabled:cursor-not-allowed disabled:opacity-50',
 );
 
 // Background styles (from existing InputText.tsx)

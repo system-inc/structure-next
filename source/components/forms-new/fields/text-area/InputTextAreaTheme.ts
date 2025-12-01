@@ -8,11 +8,11 @@ export const commonInputTextAreaClassNames = mergeClassNames(
     // Content
     'content--0',
     // Placeholder
-    'placeholder:opacity-70',
+    'placeholder:opacity-50',
     // Placeholder (disabled)
     'disabled:placeholder:opacity-20',
     // Disabled
-    'disabled:cursor-not-allowed disabled:opacity-20',
+    'disabled:cursor-not-allowed disabled:opacity-50',
 );
 
 // Background styles (matching InputText)
