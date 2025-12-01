@@ -4,8 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
-import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
+import { GraphQlMutationForm } from '@structure/source/api/graphql/forms/GraphQlMutationForm';
 
 // Dependencies - API
 import { PostCreatePrivilegedOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
@@ -23,35 +22,24 @@ export function IdeaSubmitPage() {
                 https://github.com/reactchartjs/react-chartjs-2/issues/new/choose
             </p>
 
-            <GraphQlOperationForm
-                className="mt-6"
+            <GraphQlMutationForm
+                className="mt-6 flex flex-col gap-4"
                 operation={PostCreatePrivilegedOperation}
-                inputComponentsProperties={{
-                    'input.description': {
-                        className: 'hidden',
-                    },
-                    'input.content': {
-                        component: FormInputTextArea,
-                        rows: 16,
-                    },
-                    // 'input.topicId': {
-                    //     className: 'hidden',
-                    // },
-                    'input.allowComment': {
-                        className: 'hidden',
-                        defaultValue: 'Checked',
-                    },
-                    'input.allowVote': {
-                        className: 'hidden',
-                        defaultValue: 'Checked',
-                    },
-                    'input.allowDownvote': {
-                        className: 'hidden',
-                    },
+                hiddenFields={{
+                    'input.allowComment': true,
+                    'input.allowVote': true,
                 }}
-                buttonProperties={{
-                    children: 'Submit Idea',
+                excludedFields={[
+                    'input.description',
+                    'input.allowDownvote',
+                    'input.allowReaction',
+                    'input.metadata',
+                    'input.contentType',
+                ]}
+                fieldProperties={{
+                    'input.content': { rows: 16 },
                 }}
+                submitButton={{ children: 'Submit Idea' }}
             />
         </div>
     );

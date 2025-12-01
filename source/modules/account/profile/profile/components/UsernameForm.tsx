@@ -123,11 +123,11 @@ export function UsernameForm() {
                 {/* Field - Username */}
                 <form.Field
                     identifier="username"
-                    validateSchema="onChange"
+                    validateOn="Change"
                     messageProperties={{ showSuccesses: 'WhenChanged' }}
                 >
                     <form.FieldLabel>Username</form.FieldLabel>
-                    <FieldInputText variant="Outline" commit="onChange" placeholder="adalovelace" />
+                    <FieldInputText variant="Outline" commitOn="Change" placeholder="adalovelace" />
                 </form.Field>
 
                 {/* Submit Button */}

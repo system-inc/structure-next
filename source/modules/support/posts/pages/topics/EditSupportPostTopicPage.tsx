@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
+import { GraphQlMutationForm } from '@structure/source/api/graphql/forms/GraphQlMutationForm';
 import { Button } from '@structure/source/components/buttons/Button';
 import { DeletePostTopicDialog } from '@structure/source/modules/post/topics/components/dialogs/DeletePostTopicDialog';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
@@ -12,8 +12,6 @@ import { HorizontalRule } from '@structure/source/components/layout/HorizontalRu
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';
 import { PostTopicUpdateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-
-// Dependencies - Assets
 
 // Component - EditSupportPostTopicPage
 export interface EditSupportPostTopicPageProperties {
@@ -28,18 +26,11 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
         <div className="container pt-10 pb-32">
             <h1 className="mb-8">Edit Topic</h1>
 
-            <p>need to do this</p>
-
-            <GraphQlOperationForm
-                className="mt-6"
+            <GraphQlMutationForm
+                className="mt-6 flex flex-col gap-4"
                 operation={PostTopicUpdateOperation}
-                inputComponentsProperties={{
-                    'input.id': {
-                        defaultValue: properties.postTopicId,
-                    },
-                }}
-                buttonProperties={{
-                    children: 'Save Changes',
+                hiddenFields={{
+                    'input.id': properties.postTopicId,
                 }}
                 defaultValuesQuery={{
                     document: gql(`
@@ -58,6 +49,7 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
                         id: properties.postTopicId,
                     },
                 }}
+                submitButton={{ children: 'Save Changes' }}
             />
 
             <HorizontalRule className="my-16" />

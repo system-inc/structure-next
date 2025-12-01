@@ -5,12 +5,10 @@ import React from 'react';
 import { useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
+import { GraphQlMutationForm } from '@structure/source/api/graphql/forms/GraphQlMutationForm';
 
 // Dependencies - API
-import { PostCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-
-// Dependencies - Assets
+import { PostCreateOperation, PostStatus } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - CreateSupportPostPage
 export function CreateSupportPostPage() {
@@ -23,59 +21,27 @@ export function CreateSupportPostPage() {
         <div className="container pt-10 pb-32">
             <h1 className="mb-8">Create Support Article</h1>
 
-            <GraphQlOperationForm
-                className="mt-6"
+            <GraphQlMutationForm
+                className="mt-6 flex flex-col gap-4"
                 operation={PostCreateOperation}
-                inputComponentsProperties={{
-                    'input.status': {
-                        className: 'hidden',
-                        defaultValue: 'Published',
-                    },
-                    'input.title': {
-                        // defaultValue: 'What if my package is missing?',
-                    },
-                    'input.type': {
-                        className: 'hidden',
-                        defaultValue: 'SupportArticle',
-                    },
-                    'input.slug': {
-                        // defaultValue: 'what-if-my-package-is-missing',
-                    },
-                    'input.description': {
-                        // className: 'hidden',
-                        // defaultValue: 'Learn how to handle missing packages.',
-                    },
-                    'input.content': {
-                        rows: 8,
-                        // defaultValue: 'If your package is missing...',
-                    },
-                    'input.contentType': {
-                        className: 'hidden',
-                    },
-                    'input.topicIds': {
-                        className: 'hidden',
-                        defaultValue: postTopicId,
-                    },
-                    'input.allowComment': {
-                        className: 'hidden',
-                    },
-                    'input.allowVote': {
-                        className: 'hidden',
-                    },
-                    'input.allowDownvote': {
-                        className: 'hidden',
-                    },
-                    'input.allowReaction': {
-                        className: 'hidden',
-                        defaultValue: 'Checked',
-                    },
-                    'input.metadata': {
-                        className: 'hidden',
-                    },
+                hiddenFields={{
+                    'input.status': PostStatus.Published,
+                    'input.type': 'SupportArticle',
+                    'input.allowReaction': true,
+                    ...(postTopicId ? { 'input.topicIds': [postTopicId] } : {}),
                 }}
-                buttonProperties={{
-                    children: 'Create Article',
+                excludedFields={[
+                    'input.contentType',
+                    'input.allowComment',
+                    'input.allowVote',
+                    'input.allowDownvote',
+                    'input.metadata',
+                ]}
+                fieldProperties={{
+                    'input.content': { rows: 8 },
+                    'input.description': { rows: 4 },
                 }}
+                submitButton={{ children: 'Create Article' }}
             />
         </div>
     );

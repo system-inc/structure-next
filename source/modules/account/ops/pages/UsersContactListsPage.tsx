@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { OpsNavigationTrail } from '@structure/source/ops/layout/navigation/OpsNavigationTrail';
 import { GraphQlQueryTable } from '@structure/source/components/tables/GraphQlQueryTable';
-import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
+import { GraphQlMutationForm } from '@structure/source/api/graphql/forms/GraphQlMutationForm';
 
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';
@@ -35,7 +35,11 @@ export function UsersContactListsPage() {
 
             <h1 className="mb-6">Contact Lists</h1>
 
-            <GraphQlOperationForm className="mb-12" operation={ContactListCreatePrivilegedOperation} />
+            <GraphQlMutationForm
+                className="mb-12 flex flex-col gap-4"
+                operation={ContactListCreatePrivilegedOperation}
+                submitButton={{ children: 'Create Contact List' }}
+            />
 
             <GraphQlQueryTable
                 className=""

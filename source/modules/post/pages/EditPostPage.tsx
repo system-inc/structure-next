@@ -2,24 +2,13 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-// import { Link } from '@structure/source/components/navigation/Link';
 
 // Dependencies - Main Components
-// import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
-// import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
-// import { PostControls } from '@structure/source/modules/post/controls/PostControls';
-import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
-import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
-import { FormInputText } from '@structure/source/components/forms/FormInputText';
+import { GraphQlMutationForm } from '@structure/source/api/graphql/forms/GraphQlMutationForm';
 
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';
-import {
-    PostUpdateOperation,
-    PostDocument,
-    // PostVoteType,
-    // PostsQuery,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { PostUpdateOperation, PostDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -49,52 +38,17 @@ export interface EditPostPageProperties {
     className?: string;
 }
 export function EditPostPage(properties: EditPostPageProperties) {
-    // State
-
     // Render the component
     return (
         <div className={mergeClassNames('container items-center justify-center pt-8 pb-32', properties.className)}>
-            THIS HAS A MAJOR BUG AND YOU NEED TO EDIT EACH FIELD IN ORDER TO HAVE THE FORM VALUES UPDATE Edit Post Page{' '}
-            {properties.postIdentifier}
-            <GraphQlOperationForm
+            <h1 className="mb-6">Edit Post</h1>
+            <GraphQlMutationForm
+                className="flex flex-col gap-4"
                 operation={PostUpdateOperation}
-                inputComponentsProperties={{
-                    id: {
-                        // className: 'hidden',
-                    },
-                    'input.title': {
-                        component: FormInputText,
-                    },
-                    'input.type': {
-                        // defaultValue: 'Principle',
-                        // className: 'hidden',
-                    },
-                    'input.description': {
-                        component: FormInputTextArea,
-                    },
-                    'input.content': {
-                        component: FormInputTextArea,
-                        rows: 16,
-                    },
-                    'input.topicId': {
-                        // className: 'hidden',
-                    },
-                    'input.allowComment': {
-                        // className: 'hidden',
-                        // defaultValue: 'Checked',
-                    },
-                    'input.allowVote': {
-                        // className: 'hidden',
-                        // defaultValue: 'Checked',
-                    },
-                    'input.allowDownvote': {
-                        // className: 'hidden',
-                        // defaultValue: 'Unchecked',
-                    },
-                    'input.allowReaction': {
-                        // className: 'hidden',
-                        // defaultValue: 'Checked',
-                    },
+                excludedFields={['input.contentType', 'input.metadata']}
+                fieldProperties={{
+                    'input.content': { rows: 16 },
+                    'input.description': { rows: 4 },
                 }}
                 defaultValuesQuery={{
                     document: PostDocument,
@@ -102,6 +56,7 @@ export function EditPostPage(properties: EditPostPageProperties) {
                         identifier: properties.postIdentifier,
                     },
                 }}
+                submitButton={{ children: 'Save Changes' }}
             />
         </div>
     );
