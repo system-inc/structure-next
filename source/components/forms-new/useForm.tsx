@@ -108,7 +108,7 @@ export function useForm<
         TSubmitMeta
     > & {
         schema: TSchema; // Required and used for type inference!
-        linkedFields?: LinkedFieldConfigurationInterface<Extract<keyof TFormData, string>>[]; // Auto-update target fields when source fields change
+        linkedFields?: LinkedFieldConfigurationInterface<NoInfer<Extract<keyof TFormData, string>>>[]; // Auto-update target fields when source fields change
     },
 ) {
     // Extract the schema from options
