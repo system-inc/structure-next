@@ -318,8 +318,8 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                 <Button
                     ref={buttonReference}
                     tabIndex={properties.tabIndex}
-                    variant={'InputSelect'}
-                    size="InputSelect"
+                    variant={'InputSelectTrigger'}
+                    size="InputSelectTrigger"
                     className={mergeClassNames(
                         'min-w-[246px] pl-2',
                         !value && 'content--1',

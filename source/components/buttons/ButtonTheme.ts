@@ -68,7 +68,8 @@ export interface ButtonVariants {
     ToggleOn: 'ToggleOn';
     ToggleOff: 'ToggleOff';
     MenuItem: 'MenuItem';
-    InputSelect: 'InputSelect';
+    MenuItemSelectable: 'MenuItemSelectable';
+    InputSelectTrigger: 'InputSelectTrigger';
     TableHeaderCell: 'TableHeaderCell';
 }
 
@@ -99,7 +100,8 @@ export interface ButtonSizes {
     IconExtraLarge: 'IconExtraLarge';
     IconExtraExtraLarge: 'IconExtraLarge';
     MenuItem: 'MenuItem';
-    InputSelect: 'InputSelect';
+    MenuItemSelectable: 'MenuItemSelectable';
+    InputSelectTrigger: 'InputSelectTrigger';
     TableHeaderCell: 'TableHeaderCell';
 }
 
@@ -290,10 +292,27 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ),
 
         // Variant MenuItem - Menu item button styling
-        // Use for: Items within dropdown menus, context menus, select options
+        // Use for: Items within dropdown menus, context menus, action menus
         MenuItem: mergeClassNames(
             // Layout
-            'relative flex cursor-default items-center justify-start gap-2',
+            'relative flex cursor-pointer items-center justify-start gap-2',
+            // Border
+            'rounded',
+            // Border - Focus states
+            'focus:border-none focus-visible:outline-none',
+            // Highlighted states
+            'data-[highlighted=true]:background--3 dark:data-[highlighted=true]:background--4',
+            // Active states
+            'data-[highlighted=true]:active:background--4 dark:data-[highlighted=true]:active:background--5',
+            // Disabled states
+            'disabled:opacity-50',
+        ),
+
+        // Variant MenuItemSelectable - Menu item with checkmark space for selection state
+        // Use for: Items within select dropdowns where items can be selected/checked
+        MenuItemSelectable: mergeClassNames(
+            // Layout
+            'relative flex cursor-pointer items-center justify-start gap-2',
             // Padding based on selected state (for checkmark icon spacing)
             'pl-8 data-[selected=true]:pl-2',
             // Border
@@ -310,9 +329,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             '[&[data-selected=true]>svg:first-child]:animate-in [&[data-selected=true]>svg:first-child]:duration-200 [&[data-selected=true]>svg:first-child]:fade-in',
         ),
 
-        // Variant InputSelect - Select input button styling
+        // Variant InputSelectTrigger - Select input trigger button styling
         // Use for: Custom select/dropdown triggers in forms
-        InputSelect: mergeClassNames(
+        InputSelectTrigger: mergeClassNames(
             buttonCommonBehaviorClassNames,
             buttonCommonFocusClassNames,
             // Layout (no justify-center because grow handles spacing)
@@ -369,8 +388,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
         IconExtraExtraLarge: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-4'),
 
         // Specialized Sizes
-        MenuItem: 'pt-1.5 pr-3 pb-1.5',
-        InputSelect: 'px-4 h-9',
+        MenuItem: 'p-1.5',
+        MenuItemSelectable: 'pt-1.5 pr-1.5 pb-1.5',
+        InputSelectTrigger: 'px-4 h-9',
         TableHeaderCell: 'h-8',
     },
 
@@ -396,7 +416,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         // Specialized Sizes
         MenuItem: 'h-4 w-4',
-        InputSelect: 'h-4 w-4',
+        MenuItemSelectable: 'h-4 w-4',
+        InputSelectTrigger: 'h-4 w-4',
         TableHeaderCell: 'h-3 w-3',
     },
 

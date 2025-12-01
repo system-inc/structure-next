@@ -259,8 +259,8 @@ export const InputMultipleSelect = React.forwardRef<
                 <Button
                     ref={buttonReference}
                     className={mergeClassNames(properties.className)}
-                    variant="InputSelect"
-                    size="InputSelect"
+                    variant="InputSelectTrigger"
+                    size="InputSelectTrigger"
                     isLoading={loadingItems}
                     tabIndex={properties.tabIndex}
                     onBlur={onBlurIntercept}

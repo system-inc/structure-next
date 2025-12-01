@@ -104,8 +104,8 @@ export const InputSelect = React.forwardRef<InputSelectReferenceInterface, Input
 
         // Resolve final variants - individual overrides take precedence over presets
         const finalTriggerButtonVariant =
-            properties.triggerButtonVariant ?? variantPreset?.triggerButtonVariant ?? 'InputSelect';
-        const finalTriggerButtonSize = properties.triggerButtonSize ?? sizePreset?.triggerButtonSize ?? 'InputSelect';
+            properties.triggerButtonVariant ?? variantPreset?.triggerButtonVariant ?? 'InputSelectTrigger';
+        const finalTriggerButtonSize = properties.triggerButtonSize ?? sizePreset?.triggerButtonSize ?? 'InputSelectTrigger';
         const finalPopoverVariant = properties.popoverVariant ?? variantPreset?.popoverVariant ?? 'A';
         const finalPopoverSize = properties.popoverSize ?? sizePreset?.popoverSize ?? 'Base';
         // Note: menuItemButtonVariant/Size would be passed to PopoverMenu if it supported it

@@ -124,8 +124,8 @@ export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDate
                 }
                 trigger={
                     <Button
-                        variant="InputSelect"
-                        size="InputSelect"
+                        variant="InputSelectTrigger"
+                        size="InputSelectTrigger"
                         className={mergeClassNames(
                             'min-w-[246px]',
                             !value && 'content--1',

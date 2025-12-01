@@ -74,7 +74,7 @@ export const inputSelectTheme: InputSelectThemeConfiguration = {
     variants: {
         // Variant A - Standard form select
         A: {
-            triggerButtonVariant: 'InputSelect',
+            triggerButtonVariant: 'InputSelectTrigger',
             popoverVariant: 'A',
             menuItemButtonVariant: 'MenuItem',
         },
@@ -83,17 +83,17 @@ export const inputSelectTheme: InputSelectThemeConfiguration = {
     // Size presets - each maps to underlying component sizes
     sizes: {
         Small: {
-            triggerButtonSize: 'InputSelect',
+            triggerButtonSize: 'InputSelectTrigger',
             popoverSize: 'Base',
             menuItemButtonSize: 'MenuItem',
         },
         Base: {
-            triggerButtonSize: 'InputSelect',
+            triggerButtonSize: 'InputSelectTrigger',
             popoverSize: 'Base',
             menuItemButtonSize: 'MenuItem',
         },
         Large: {
-            triggerButtonSize: 'InputSelect',
+            triggerButtonSize: 'InputSelectTrigger',
             popoverSize: 'Base',
             menuItemButtonSize: 'MenuItem',
         },

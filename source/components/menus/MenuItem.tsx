@@ -45,14 +45,20 @@ export const MenuItem = React.memo(
             [],
         );
 
+        // Determine the variant and size based on whether this is a selectable menu item
+        // MenuItemSelectable has left padding for checkmark, MenuItem does not
+        const isSelectable = selected !== undefined;
+        const defaultVariant = isSelectable ? 'MenuItemSelectable' : 'MenuItem';
+        const defaultSize = isSelectable ? 'MenuItemSelectable' : 'MenuItem';
+
         // Render the component
         return (
             <Button
                 {...buttonProperties} // Spread remaining Button properties
                 ref={buttonReference}
                 tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
-                variant={buttonProperties.variant || 'MenuItem'}
-                size={buttonProperties.size || 'MenuItem'}
+                variant={buttonProperties.variant || defaultVariant}
+                size={buttonProperties.size || defaultSize}
                 data-highlighted={buttonProperties.disabled ? undefined : highlighted ? 'true' : undefined}
                 data-selected={selected ? 'true' : undefined}
                 // onSelect <- use this in place of onClick if you want to do something when the menu item is selected
