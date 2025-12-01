@@ -46,6 +46,56 @@ import {
 // A minimal valid query for when defaultValuesQuery is not provided
 const noOpQuery = gql(`query NoOp { __typename }`);
 
+// Function to process form values for submission (filter changed fields, merge hidden fields, apply transformations)
+function processFormValuesForSubmission(
+    formValues: Record<string, unknown>,
+    options: {
+        submitOnlyChangedFields?: boolean;
+        defaultValues?: Record<string, unknown>;
+        hiddenFields?: Record<string, unknown>;
+        transformFormValues?: (values: Record<string, unknown>) => Record<string, unknown>;
+    },
+): Record<string, unknown> {
+    let processedValues = { ...formValues };
+
+    // If submitOnlyChangedFields is enabled, filter to only changed values
+    if(options.submitOnlyChangedFields && options.defaultValues) {
+        const changedValues: Record<string, unknown> = {};
+
+        // Compare using dotted keys from defaultValues, but get actual values by traversing nested structure
+        for(const [dottedKey, defaultValue] of Object.entries(options.defaultValues)) {
+            // Traverse the dotted path to get the actual value (e.g., 'input.displayName' -> formValues['input']['displayName'])
+            const pathParts = dottedKey.split('.');
+            let value: unknown = processedValues;
+            for(const part of pathParts) {
+                value = (value as Record<string, unknown>)?.[part];
+            }
+            // Normalize empty strings and nullish values for comparison
+            const normalizedValue = value === '' || value === null || value === undefined ? '' : value;
+            const normalizedDefault =
+                defaultValue === '' || defaultValue === null || defaultValue === undefined ? '' : defaultValue;
+            // Include field if it differs from default value
+            if(normalizedValue !== normalizedDefault) {
+                changedValues[dottedKey] = value;
+            }
+        }
+
+        processedValues = changedValues;
+    }
+
+    // Merge with hidden field values (always include these)
+    if(options.hiddenFields) {
+        processedValues = { ...processedValues, ...options.hiddenFields };
+    }
+
+    // Apply value transformation if provided
+    if(options.transformFormValues) {
+        processedValues = options.transformFormValues(processedValues);
+    }
+
+    return processedValues;
+}
+
 // Type - GraphQlMutationFormReferenceType
 // The form instance type exposed via formReference prop
 export type GraphQlMutationFormReferenceType = ReturnType<typeof useForm<ObjectSchema<ObjectShape>>> | null;
@@ -103,16 +153,15 @@ export interface GraphQlMutationFormProperties<TDocument extends GraphQlDocument
         };
     };
 
-    // Submit Button
+    // Submit
     submitButton?: AnimatedButtonProperties;
-
+    // Only submit fields that differ from defaultValues (default: false)
+    submitOnlyChangedFields?: boolean;
     // Transform values before submission - receives form values (VariablesOf + extra fields), returns transformed values
     transformFormValues?: (formValues: VariablesOf<TDocument> & Record<string, unknown>) => Record<string, unknown>;
-
-    // Submit Handling
     onSubmit?: (
-        formValues: Record<string, unknown>,
-        mutationResponseData: unknown,
+        formValues: VariablesOf<TDocument>,
+        mutationResponseData: ResultOf<TDocument> | null,
         mutationResponseError: BaseError | null,
     ) => void | Promise<void>;
     resetOnSuccess?: boolean; // Reset form after successful submission (default: false)
@@ -150,15 +199,15 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
             transform: (value: string) => string;
         }[],
         onSubmit: async function (formState) {
-            // Merge form values with hidden field values
-            let formValues = { ...formState.value, ...properties.hiddenFields } as VariablesOf<TDocument> &
-                Record<string, unknown>;
-
-            // Apply value transformation if provided
-            if(properties.transformFormValues) {
-                formValues = properties.transformFormValues(formValues) as VariablesOf<TDocument> &
-                    Record<string, unknown>;
-            }
+            // Process form values (filter changed fields, merge hidden fields, apply transformations)
+            const formValues = processFormValuesForSubmission(formState.value as Record<string, unknown>, {
+                submitOnlyChangedFields: properties.submitOnlyChangedFields,
+                defaultValues: properties.defaultValues as Record<string, unknown>,
+                hiddenFields: properties.hiddenFields as Record<string, unknown>,
+                transformFormValues: properties.transformFormValues as
+                    | ((values: Record<string, unknown>) => Record<string, unknown>)
+                    | undefined,
+            });
 
             // Convert to GraphQL mutation variables
             const variables = formValuesToGraphQlMutationVariables(formValues);
@@ -188,7 +237,11 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
                 }
 
                 if(properties.onSubmit) {
-                    await properties.onSubmit(formValues as Record<string, unknown>, graphQlMutationResult, null);
+                    await properties.onSubmit(
+                        formValues as VariablesOf<TDocument>,
+                        graphQlMutationResult as ResultOf<TDocument>,
+                        null,
+                    );
                 }
             }
             catch(error) {
@@ -214,7 +267,7 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
                 form.notice.showError(errorTitle, errorContent);
 
                 if(properties.onSubmit) {
-                    await properties.onSubmit(formValues as Record<string, unknown>, null, baseError);
+                    await properties.onSubmit(formValues as VariablesOf<TDocument>, null, baseError);
                 }
             }
         },
@@ -321,13 +374,14 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
     // Generate mutation preview tip content
     const graphQlMutationPreviewTip = properties.showPreviewGraphQlMutationTip
         ? (function () {
-              let formValues = { ...formValuesForPreview, ...properties.hiddenFields } as VariablesOf<TDocument> &
-                  Record<string, unknown>;
-              // Apply transformation if provided (same as in onSubmit)
-              if(properties.transformFormValues) {
-                  formValues = properties.transformFormValues(formValues) as VariablesOf<TDocument> &
-                      Record<string, unknown>;
-              }
+              const formValues = processFormValuesForSubmission(formValuesForPreview, {
+                  submitOnlyChangedFields: properties.submitOnlyChangedFields,
+                  defaultValues: properties.defaultValues as Record<string, unknown>,
+                  hiddenFields: properties.hiddenFields as Record<string, unknown>,
+                  transformFormValues: properties.transformFormValues as
+                      | ((values: Record<string, unknown>) => Record<string, unknown>)
+                      | undefined,
+              });
               const variables = formValuesToGraphQlMutationVariables(formValues);
               return <pre className="max-h-96 overflow-auto text-xs">{JSON.stringify(variables, null, 2)}</pre>;
           })()
