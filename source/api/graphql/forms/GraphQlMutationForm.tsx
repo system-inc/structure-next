@@ -48,6 +48,9 @@ const noOpQuery = gql(`query NoOp { __typename }`);
 
 // Component - GraphQlMutationForm
 export interface GraphQlMutationFormProperties<TDocument extends GraphQlDocument = GraphQlDocument> {
+    // Form Reference - exposes the form instance for external control (e.g., setting values via effects)
+    formReference?: React.RefObject<ReturnType<typeof useForm<ObjectSchema<ObjectShape>>> | null>;
+
     // Layout
     className?: string;
 
@@ -223,7 +226,7 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
         { enabled: !!properties.defaultValuesQuery },
     );
 
-    // Set default values when query loads
+    // Effect to set default values when provided via query
     React.useEffect(
         function () {
             if(defaultValuesQuery.data) {
@@ -253,6 +256,16 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
             }
         },
         [properties.defaultValues, form],
+    );
+
+    // Effect to set form reference if provided
+    React.useEffect(
+        function () {
+            if(properties.formReference) {
+                properties.formReference.current = form;
+            }
+        },
+        [form, properties.formReference],
     );
 
     // Generate form fields
