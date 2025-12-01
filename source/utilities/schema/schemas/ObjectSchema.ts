@@ -115,4 +115,10 @@ export class ObjectSchema<T extends ObjectShape> extends BaseSchema<
 
         return defaults as Partial<{ [K in keyof T]: T[K] extends BaseSchema<unknown, infer O> ? O : never }>;
     }
+
+    // Method - merge
+    // Returns a new ObjectSchema with the additional fields merged on top (overrides existing fields)
+    merge<U extends ObjectShape>(additionalShape: U): ObjectSchema<T & U> {
+        return new ObjectSchema({ ...this.shape, ...additionalShape } as T & U);
+    }
 }
