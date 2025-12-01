@@ -19,6 +19,7 @@ export interface FieldPropertiesOverride {
     component?: React.ComponentType;
     tip?: string;
     className?: string;
+    order?: number; // Field display order (lower numbers appear first)
 }
 
 // Function to determine which form component to use for a field

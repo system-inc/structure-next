@@ -282,6 +282,19 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
             if(excludedFieldsAsStrings?.includes(input.name)) return false;
             return true;
         })
+        .sort(function (a, b) {
+            // Sort by order property (lower numbers appear first)
+            const orderA = fieldPropertiesAsRecord?.[a.name]?.order;
+            const orderB = fieldPropertiesAsRecord?.[b.name]?.order;
+
+            // If neither has order, maintain original order
+            if(orderA === undefined && orderB === undefined) return 0;
+            // Fields with explicit order come before fields without
+            if(orderA === undefined) return 1;
+            if(orderB === undefined) return -1;
+            // Sort by order value (ascending)
+            return orderA - orderB;
+        })
         .map(function (input) {
             const Component = fieldFromGraphQlFieldMetadata(input, fieldPropertiesAsRecord);
             const fieldConfiguration = fieldPropertiesAsRecord?.[input.name] || {};
