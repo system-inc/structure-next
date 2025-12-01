@@ -46,8 +46,8 @@ import {
 // A minimal valid query for when defaultValuesQuery is not provided
 const noOpQuery = gql(`query NoOp { __typename }`);
 
-// Component - GraphQlOperationForm
-export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocument = GraphQlDocument> {
+// Component - GraphQlMutationForm
+export interface GraphQlMutationFormProperties<TDocument extends GraphQlDocument = GraphQlDocument> {
     // Layout
     className?: string;
 
@@ -110,8 +110,8 @@ export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocumen
     ) => void | Promise<void>;
     resetOnSuccess?: boolean; // Reset form after successful submission (default: false)
 }
-export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQlDocument>(
-    properties: GraphQlOperationFormProperties<TDocument>,
+export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlDocument>(
+    properties: GraphQlMutationFormProperties<TDocument>,
 ) {
     // Extract GraphQL metadata
     const graphQlFormInputMetadataArray = graphQlFieldMetadataArrayFromGraphQlOperationParameterMetadata(
