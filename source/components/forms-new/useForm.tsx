@@ -577,9 +577,9 @@ export function useForm<
                 useStore: <TSelected>(selector: (state: typeof appForm.store.state) => TSelected) => TSelected;
                 Notice: React.ComponentType<FormNoticeProperties>;
                 notice: {
-                    showSuccess: (title: string, content?: React.ReactNode) => void;
-                    showError: (title: string, content?: React.ReactNode) => void;
-                    show: (variant: NoticeVariant, title: string, content?: React.ReactNode) => void;
+                    showSuccess: (title: React.ReactNode, content?: React.ReactNode) => void;
+                    showError: (title: React.ReactNode, content?: React.ReactNode) => void;
+                    show: (variant: NoticeVariant, title: React.ReactNode, content?: React.ReactNode) => void;
                     hide: () => void;
                 };
                 resetLinkedFields: () => void;

@@ -21,9 +21,9 @@ export interface FormNoticeProperties {
 
 // Interface - UseFormNoticeReturn
 export interface UseFormNoticeReturn {
-    show: (variant: NoticeVariant, title: string, content?: React.ReactNode) => void;
-    showSuccess: (title: string, content?: React.ReactNode) => void;
-    showError: (title: string, content?: React.ReactNode) => void;
+    show: (variant: NoticeVariant, title: React.ReactNode, content?: React.ReactNode) => void;
+    showSuccess: (title: React.ReactNode, content?: React.ReactNode) => void;
+    showError: (title: React.ReactNode, content?: React.ReactNode) => void;
     hide: () => void;
     FormNotice: React.ComponentType<FormNoticeProperties>;
 }
@@ -32,9 +32,9 @@ export interface UseFormNoticeReturn {
 interface FormNoticeStore {
     getSnapshot: () => FormNoticeState | null;
     subscribe: (listener: () => void) => () => void;
-    show: (variant: NoticeVariant, title: string, content?: React.ReactNode) => void;
-    showSuccess: (title: string, content?: React.ReactNode) => void;
-    showError: (title: string, content?: React.ReactNode) => void;
+    show: (variant: NoticeVariant, title: React.ReactNode, content?: React.ReactNode) => void;
+    showSuccess: (title: React.ReactNode, content?: React.ReactNode) => void;
+    showError: (title: React.ReactNode, content?: React.ReactNode) => void;
     hide: () => void;
     dispose: () => void;
 }
@@ -69,7 +69,7 @@ function createFormNoticeStore(autoDismissInMilliseconds: number | null): FormNo
     }
 
     // Function to show a new notice
-    function show(variant: NoticeVariant, title: string, content?: React.ReactNode) {
+    function show(variant: NoticeVariant, title: React.ReactNode, content?: React.ReactNode) {
         clearTimer();
         keyCounter += 1;
 
@@ -89,12 +89,12 @@ function createFormNoticeStore(autoDismissInMilliseconds: number | null): FormNo
     }
 
     // Function to show a success notice
-    function showSuccess(title: string, content?: React.ReactNode) {
+    function showSuccess(title: React.ReactNode, content?: React.ReactNode) {
         show('Positive', title, content);
     }
 
     // Function to show an error notice
-    function showError(title: string, content?: React.ReactNode) {
+    function showError(title: React.ReactNode, content?: React.ReactNode) {
         show('Negative', title, content);
     }
 

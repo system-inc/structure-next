@@ -9,13 +9,13 @@ import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/comp
 
 // Dependencies - Hooks
 import { useForm } from '@structure/source/components/forms-new/useForm';
-import { useFormNotice } from '@structure/source/components/forms-new/hooks/useFormNotice';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { GraphQlDocument } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
 import { GraphQLOperationMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { BaseError } from '@structure/source/api/errors/BaseError';
+import type { ResultOf } from '@graphql-typed-document-node/core';
 
 // Dependencies - Assets
 import { SpinnerIcon } from '@phosphor-icons/react';
@@ -69,6 +69,7 @@ export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocumen
         mutationResponseData: unknown,
         mutationResponseError: BaseError | null,
     ) => void | Promise<void>;
+    resetOnSuccess?: boolean; // Reset form after successful submission (default: false)
 
     // Submit Button
     submitButton?: AnimatedButtonProperties;
@@ -78,6 +79,18 @@ export interface GraphQlOperationFormProperties<TDocument extends GraphQlDocumen
 
     // Linked Fields - auto-update target field when source field changes
     linkedFields?: LinkedFieldConfigurationInterface<TDocument>[];
+
+    // Notice Messages - customize success/error messages shown after mutation
+    notice?: {
+        success?: {
+            title?: React.ReactNode | ((graphQlMutationResult: ResultOf<TDocument>) => React.ReactNode);
+            content?: React.ReactNode | ((graphQlMutationResult: ResultOf<TDocument>) => React.ReactNode);
+        };
+        error?: {
+            title?: React.ReactNode | ((error: BaseError) => React.ReactNode);
+            content?: React.ReactNode | ((error: BaseError) => React.ReactNode);
+        };
+    };
 
     // Layout
     className?: string;
@@ -100,10 +113,9 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
     );
 
     // Hooks
-    const mutation = networkService.useGraphQlMutation(
+    const graphQlMutation = networkService.useGraphQlMutation(
         properties.operation.document as Parameters<typeof networkService.useGraphQlMutation>[0],
     );
-    const formNotice = useFormNotice();
     const form = useForm({
         schema: formSchema,
         // Pass linkedFields through to useForm - it handles all the wiring automatically
@@ -121,13 +133,31 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
             const variables = formValuesToGraphQlMutationVariables(allValues as Record<string, unknown>);
 
             try {
-                const result = await mutation.execute(variables);
-                formNotice.showSuccess('Saved successfully!');
-                form.reset();
-                form.resetLinkedFields();
+                const graphQlMutationResult = await graphQlMutation.execute(variables);
+
+                // Cast result to the expected type for type-safe callback functions
+                const typedResult = graphQlMutationResult as ResultOf<TDocument>;
+
+                // Resolve success notice title and content (support static or function)
+                const successTitle =
+                    typeof properties.notice?.success?.title === 'function'
+                        ? properties.notice.success.title(typedResult)
+                        : properties.notice?.success?.title ?? 'Saved.';
+                const successContent =
+                    typeof properties.notice?.success?.content === 'function'
+                        ? properties.notice.success.content(typedResult)
+                        : properties.notice?.success?.content;
+
+                form.notice.showSuccess(successTitle, successContent);
+
+                // Only reset form if explicitly requested (default: false)
+                if(properties.resetOnSuccess) {
+                    form.reset();
+                    form.resetLinkedFields();
+                }
 
                 if(properties.onSubmit) {
-                    await properties.onSubmit(allValues as Record<string, unknown>, result, null);
+                    await properties.onSubmit(allValues as Record<string, unknown>, graphQlMutationResult, null);
                 }
             }
             catch(error) {
@@ -139,7 +169,18 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
                               message: error instanceof Error ? error.message : String(error),
                               statusCode: 500,
                           });
-                formNotice.showError(baseError.message);
+
+                // Resolve error notice title and content (support static or function)
+                const errorTitle =
+                    typeof properties.notice?.error?.title === 'function'
+                        ? properties.notice.error.title(baseError)
+                        : properties.notice?.error?.title ?? baseError.message;
+                const errorContent =
+                    typeof properties.notice?.error?.content === 'function'
+                        ? properties.notice.error.content(baseError)
+                        : properties.notice?.error?.content;
+
+                form.notice.showError(errorTitle, errorContent);
 
                 if(properties.onSubmit) {
                     await properties.onSubmit(allValues as Record<string, unknown>, null, baseError);
@@ -224,7 +265,7 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
     });
 
     // Generate mutation preview tip content
-    const mutationPreviewTip = properties.showPreviewGraphQlMutationTip
+    const graphQlMutationPreviewTip = properties.showPreviewGraphQlMutationTip
         ? (function () {
               const allValues = { ...formValuesForPreview, ...properties.hiddenFields };
               const variables = formValuesToGraphQlMutationVariables(allValues);
@@ -246,14 +287,14 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
                 {formFields}
 
                 <div className="flex flex-col">
-                    <formNotice.FormNotice className="mb-4" />
+                    <form.Notice className="mb-4" />
                     <div className="flex justify-end">
                         <AnimatedButton
                             variant="A"
                             type="submit"
-                            isProcessing={mutation.isLoading}
+                            isProcessing={graphQlMutation.isLoading}
                             processingIcon={SpinnerIcon}
-                            tip={mutationPreviewTip}
+                            tip={graphQlMutationPreviewTip}
                             tipProperties={
                                 properties.showPreviewGraphQlMutationTip
                                     ? { contentClassName: 'max-w-none' }

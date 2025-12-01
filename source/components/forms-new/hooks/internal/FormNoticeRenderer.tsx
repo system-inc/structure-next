@@ -21,7 +21,7 @@ const defaultAnimationTransition = {
 export interface FormNoticeState {
     key: number;
     variant: NoticeVariant;
-    title: string;
+    title: React.ReactNode;
     content?: React.ReactNode;
 }
 
