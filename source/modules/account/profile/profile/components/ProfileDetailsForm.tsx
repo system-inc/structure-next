@@ -5,12 +5,14 @@ import React from 'react';
 
 // Dependencies - Hooks
 import { useForm } from '@structure/source/components/forms-new/useForm';
-import { useFormNotice } from '@structure/source/components/forms-new/hooks/useFormNotice';
 
 // Dependencies - API
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { useAccountProfileUpdateRequest } from '@structure/source/modules/account/hooks/useAccountProfileUpdateRequest';
-import { AccountProfileUpdateInputMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import {
+    AccountProfileUpdateInput,
+    AccountProfileUpdateInputMetadata,
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Main Components
 import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
@@ -23,22 +25,34 @@ import { SpinnerIcon } from '@phosphor-icons/react';
 import { schemaFromGraphQl } from '@structure/source/utilities/schema/utilities/SchemaUtilities';
 
 // Schema - Create from GraphQL metadata for the fields we need
-const profileInformationSchema = schemaFromGraphQl(AccountProfileUpdateInputMetadata, [
-    'givenName',
-    'familyName',
-    'displayName',
-]);
+const profileInformationSchema = schemaFromGraphQl<AccountProfileUpdateInput>(AccountProfileUpdateInputMetadata);
 
 // Component - ProfileDetailsForm
 export function ProfileDetailsForm() {
     // Hooks
     const account = useAccount();
     const accountProfileUpdateRequest = useAccountProfileUpdateRequest();
-    const formNotice = useFormNotice({
-        // autoDismissInMilliseconds: 500,
-    });
     const form = useForm({
         schema: profileInformationSchema,
+        // When the givenName or familyName changes, update displayName accordingly
+        linkedFields: [
+            {
+                sourceField: 'givenName',
+                targetField: 'displayName',
+                transform: function (givenName) {
+                    const familyName = form.getFieldValue('familyName') as string;
+                    return [givenName, familyName].filter(Boolean).join(' ');
+                },
+            },
+            {
+                sourceField: 'familyName',
+                targetField: 'displayName',
+                transform: function (familyName) {
+                    const givenName = form.getFieldValue('givenName') as string;
+                    return [givenName, familyName].filter(Boolean).join(' ');
+                },
+            },
+        ],
         onSubmit: async function (formState) {
             try {
                 // Execute the account profile update request
@@ -56,12 +70,12 @@ export function ProfileDetailsForm() {
                     account.setData({ profile: result.accountProfileUpdate });
 
                     // Show inline success notice
-                    formNotice.showSuccess('Changes have been saved.');
+                    form.notice.showSuccess('Changes saved.');
                 }
             }
             catch(error) {
                 console.error('Error updating profile:', error);
-                formNotice.showError('There was an error saving your changes. Please try again.');
+                form.notice.showError('There was an error saving your changes.');
             }
         },
     });
@@ -103,7 +117,7 @@ export function ProfileDetailsForm() {
 
             {/* FormNotice in a div with the button to prevent gap-4 messing with the exit animation */}
             <div className="flex flex-col">
-                <formNotice.FormNotice className="mb-5.5" />
+                <form.Notice className="mb-5.5" />
 
                 <div className="flex justify-end">
                     {/* Save button */}
