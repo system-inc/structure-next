@@ -118,7 +118,9 @@ export class ObjectSchema<T extends ObjectShape> extends BaseSchema<
 
     // Method - merge
     // Returns a new ObjectSchema with the additional fields merged on top (overrides existing fields)
-    merge<U extends ObjectShape>(additionalShape: U): ObjectSchema<T & U> {
+    // Accepts either an ObjectSchema or an ObjectShape directly
+    merge<U extends ObjectShape>(schemaOrShape: ObjectSchema<U> | U): ObjectSchema<T & U> {
+        const additionalShape = schemaOrShape instanceof ObjectSchema ? schemaOrShape.shape : schemaOrShape;
         return new ObjectSchema({ ...this.shape, ...additionalShape } as T & U);
     }
 }
