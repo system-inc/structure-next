@@ -34,6 +34,7 @@ interface GraphQlValidation {
     isIn?: string[];
     isEmail?: boolean;
     isNotEmpty?: boolean;
+    isOptional?: boolean;
     isEnum?: Record<string, unknown>;
     arrayUnique?: boolean;
     [key: string]: unknown;
@@ -139,6 +140,11 @@ export function formValuesToGraphQlMutationVariables(formValues: Record<string, 
 
     // Loop through the form values
     for(const [key, value] of Object.entries(formValues)) {
+        // Skip empty strings - they should be sent as undefined (not included) for optional fields
+        if(value === '') {
+            continue;
+        }
+
         let graphQlValue = value;
 
         // Split the key into parts

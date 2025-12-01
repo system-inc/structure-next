@@ -59,8 +59,8 @@ export function fieldSchemaFromGraphQlFieldMetadata(graphQlFieldMetadata: GraphQ
                 fieldSchema = (fieldSchema as ReturnType<typeof schema.string>).emailAddress();
             }
 
-            // Not empty
-            if(graphQlFieldMetadata.validation.isNotEmpty) {
+            // Not empty (but only if not also optional - GraphQL can have both isNotEmpty AND isOptional)
+            if(graphQlFieldMetadata.validation.isNotEmpty && !graphQlFieldMetadata.validation.isOptional) {
                 fieldSchema = (fieldSchema as ReturnType<typeof schema.string>).notEmpty();
             }
         }
