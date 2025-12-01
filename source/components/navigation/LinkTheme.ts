@@ -7,7 +7,8 @@
  * Projects can override/extend this theme via ProjectSettings.theme.components.Link
  */
 
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+// Use relative path to avoid Tailwind CSS resolution issues
+import { mergeClassNames } from '../../utilities/style/ClassName';
 
 // Focus styles for styled buttons
 export const baseLinkClassNames = mergeClassNames(

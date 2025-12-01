@@ -9,8 +9,9 @@
  */
 
 // Dependencies - Types
-import type { ButtonVariant, ButtonSize } from '@structure/source/components/buttons/ButtonTheme';
-import type { PopoverVariant, PopoverSize } from '@structure/source/components/popovers/PopoverTheme';
+// Use relative paths to avoid Tailwind CSS resolution issues
+import type { ButtonVariant, ButtonSize } from '../../../../components/buttons/ButtonTheme';
+import type { PopoverVariant, PopoverSize } from '../../../../components/popovers/PopoverTheme';
 
 // Variant mapping - maps to underlying component variants
 export interface InputSelectVariantMapping {

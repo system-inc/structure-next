@@ -1,5 +1,6 @@
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+// Use relative path to avoid Tailwind CSS resolution issues
+import { mergeClassNames } from '../../../../utilities/style/ClassName';
 
 // Theme - InputTextTheme
 // Common input styles

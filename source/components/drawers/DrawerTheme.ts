@@ -8,7 +8,8 @@
  */
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+// Use relative path to avoid Tailwind CSS resolution issues
+import { mergeClassNames } from '../../utilities/style/ClassName';
 
 // Drawer Variants Interface - Source of truth for all drawer variants
 // Structure defines its base variants here, and projects can augment to add custom variants
