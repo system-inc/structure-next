@@ -329,6 +329,7 @@ export function GraphQlMutationForm<TDocument extends GraphQlDocument = GraphQlD
                             type="submit"
                             isProcessing={graphQlMutation.isLoading}
                             processingIcon={SpinnerIcon}
+                            animateIconPosition="iconRight"
                             tip={graphQlMutationPreviewTip}
                             tipProperties={
                                 properties.showPreviewGraphQlMutationTip
