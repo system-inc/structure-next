@@ -39,7 +39,7 @@ export function IdeaSubmitPage() {
                 fieldProperties={{
                     'input.content': { rows: 16 },
                 }}
-                submitButton={{ children: 'Submit Idea' }}
+                submitButtonProperties={{ children: 'Submit Idea' }}
             />
         </div>
     );

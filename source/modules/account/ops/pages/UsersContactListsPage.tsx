@@ -38,7 +38,7 @@ export function UsersContactListsPage() {
             <GraphQlMutationForm
                 className="mb-12 flex flex-col gap-4"
                 operation={ContactListCreatePrivilegedOperation}
-                submitButton={{ children: 'Create Contact List' }}
+                submitButtonProperties={{ children: 'Create Contact List' }}
             />
 
             <GraphQlQueryTable
