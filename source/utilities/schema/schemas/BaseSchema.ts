@@ -131,4 +131,109 @@ export abstract class BaseSchema<TInput = unknown, TOutput = TInput> {
     protected addValidator(identifier: string, validator: Validator): void {
         this.validators.push(validator);
     }
+
+    // Validator - is
+    // Ensures value exactly equals the specified value
+    is(expectedValue: TOutput, message?: string): this {
+        this.addValidator('is', function (value: unknown, path) {
+            if(value !== expectedValue) {
+                return {
+                    valid: false,
+                    errors: [
+                        {
+                            path,
+                            identifier: 'notEqual',
+                            message: message || `Must be ${JSON.stringify(expectedValue)}.`,
+                        },
+                    ],
+                    successes: [],
+                };
+            }
+            return {
+                valid: true,
+                errors: [],
+                successes: [],
+            };
+        });
+        return this;
+    }
+
+    // Validator - not
+    // Ensures value does not equal the specified value
+    not(forbiddenValue: TOutput, message?: string): this {
+        this.addValidator('not', function (value: unknown, path) {
+            if(value === forbiddenValue) {
+                return {
+                    valid: false,
+                    errors: [
+                        {
+                            path,
+                            identifier: 'forbiddenValue',
+                            message: message || `Cannot be ${JSON.stringify(forbiddenValue)}.`,
+                        },
+                    ],
+                    successes: [],
+                };
+            }
+            return {
+                valid: true,
+                errors: [],
+                successes: [],
+            };
+        });
+        return this;
+    }
+
+    // Validator - in
+    // Ensures value is one of the allowed values
+    in(allowedValues: TOutput[], message?: string): this {
+        this.addValidator('in', function (value: unknown, path) {
+            if(!allowedValues.includes(value as TOutput)) {
+                return {
+                    valid: false,
+                    errors: [
+                        {
+                            path,
+                            identifier: 'notInList',
+                            message:
+                                message || `Must be one of: ${allowedValues.map((v) => JSON.stringify(v)).join(', ')}.`,
+                        },
+                    ],
+                    successes: [],
+                };
+            }
+            return {
+                valid: true,
+                errors: [],
+                successes: [],
+            };
+        });
+        return this;
+    }
+
+    // Validator - notIn
+    // Ensures value is not one of the forbidden values
+    notIn(forbiddenValues: TOutput[], message?: string): this {
+        this.addValidator('notIn', function (value: unknown, path) {
+            if(forbiddenValues.includes(value as TOutput)) {
+                return {
+                    valid: false,
+                    errors: [
+                        {
+                            path,
+                            identifier: 'forbiddenValue',
+                            message: message || `Cannot be ${JSON.stringify(value)}.`,
+                        },
+                    ],
+                    successes: [],
+                };
+            }
+            return {
+                valid: true,
+                errors: [],
+                successes: [],
+            };
+        });
+        return this;
+    }
 }
