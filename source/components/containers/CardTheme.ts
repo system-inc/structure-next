@@ -50,7 +50,7 @@ export const cardTheme: CardThemeConfiguration = {
     },
     sizes: {
         Small: 'rounded-xl p-4',
-        Base: 'rounded-2xl p-8',
+        Base: 'rounded-2xl p-5 md:p-8',
         Large: 'rounded-2xl p-12',
     },
     configuration: {
