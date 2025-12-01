@@ -10,7 +10,6 @@ import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/comp
 // Dependencies - Hooks
 import { useForm } from '@structure/source/components/forms-new/useForm';
 import { useFormNotice } from '@structure/source/components/forms-new/hooks/useFormNotice';
-import { useLinkedFields } from '@structure/source/components/forms-new/hooks/useLinkedFields';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
@@ -107,6 +106,13 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
     const formNotice = useFormNotice();
     const form = useForm({
         schema: formSchema,
+        // Pass linkedFields through to useForm - it handles all the wiring automatically
+        // Cast to string-based configuration since GraphQL field paths are runtime strings
+        linkedFields: properties.linkedFields as {
+            sourceField: string;
+            targetField: string;
+            transform: (value: string) => string;
+        }[],
         onSubmit: async function (formState) {
             // Merge form values with hidden field values
             const allValues = { ...formState.value, ...properties.hiddenFields };
@@ -118,7 +124,7 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
                 const result = await mutation.execute(variables);
                 formNotice.showSuccess('Saved successfully!');
                 form.reset();
-                linkedFields.resetAll();
+                form.resetLinkedFields();
 
                 if(properties.onSubmit) {
                     await properties.onSubmit(allValues as Record<string, unknown>, result, null);
@@ -140,16 +146,6 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
                 }
             }
         },
-    });
-
-    // Linked fields - auto-update target fields when source fields change
-    // Cast to satisfy the hook's type constraint while preserving GraphQL-based type safety on the properties
-    const linkedFields = useLinkedFields({
-        form: form as unknown as {
-            setFieldValue: (field: string, value: unknown) => void;
-            state: { values: Record<string, unknown> };
-        },
-        linkedFields: properties.linkedFields || [],
     });
 
     // Cast to string[] for internal comparison since we're checking runtime metadata against typed props
@@ -209,30 +205,14 @@ export function GraphQlOperationForm<TDocument extends GraphQlDocument = GraphQl
             const fieldConfiguration = fieldPropertiesAsRecord?.[input.name] || {};
             const label = fieldConfiguration.label || titleCase(fieldIdentifierFromDottedPath(input.name));
 
-            // Determine if this field is a source or target in a linked field configuration
-            const isSourceField = linkedFields.isSourceField(input.name);
-            const isTargetField = linkedFields.isTargetField(input.name);
-
-            // Get listeners and handlers from linked fields hook
-            const sourceFieldListeners = linkedFields.getSourceFieldListeners(input.name);
-            const targetFieldOnInput = linkedFields.getTargetFieldOnInput(input.name);
-
+            // Render the field
             return (
-                <form.Field
-                    key={input.name}
-                    identifier={input.name}
-                    className={properties.fieldClassName}
-                    listeners={sourceFieldListeners}
-                >
+                <form.Field key={input.name} identifier={input.name} className={properties.fieldClassName}>
                     <form.FieldLabel tip={fieldConfiguration.tip}>{label}</form.FieldLabel>
                     <Component
                         variant="Outline"
                         placeholder={fieldConfiguration.placeholder || label}
                         {...fieldPropertiesFromFieldConfiguration(input, fieldConfiguration)}
-                        // Source field: commit onChange so target updates while typing
-                        {...(isSourceField ? { commit: 'onChange' } : {})}
-                        // Target field: track manual edits to disable auto-generation
-                        {...(isTargetField ? { onInput: targetFieldOnInput } : {})}
                     />
                 </form.Field>
             );

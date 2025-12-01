@@ -14,9 +14,13 @@ import {
     type FormAsyncValidateOrFn,
 } from '@tanstack/react-form';
 
+// Dependencies - Hooks
+import { useLinkedFields } from './hooks/useLinkedFields';
+
 // Dependencies - Form-Aware Components
 import { FormIdProvider } from './providers/FormIdProvider';
 import { FormSchemaProvider, useFormSchema } from './providers/FormSchemaProvider';
+import { LinkedFieldsProvider, useLinkedFieldsContext } from './providers/LinkedFieldsProvider';
 import { FieldLabel } from './fields/FieldLabel';
 import { FieldMessage } from './fields/FieldMessage';
 
@@ -30,6 +34,14 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 export { useField, useStore, type FormApi, type FieldApi } from '@tanstack/react-form';
 export type { FormState, FieldOptions, FieldState, ValidationError } from '@tanstack/react-form';
 export const { fieldContext, formContext, useFieldContext } = createFormHookContexts();
+
+// Interface - LinkedFieldConfigurationInterface
+// Configuration for auto-updating a target field when a source field changes
+export interface LinkedFieldConfigurationInterface<TFieldPath extends string = string> {
+    sourceField: TFieldPath;
+    targetField: TFieldPath;
+    transform: (value: string) => string;
+}
 
 // Interface - SuccessMeta
 // Extends TanStack Form's field.meta to include success messages
@@ -96,6 +108,7 @@ export function useForm<
         TSubmitMeta
     > & {
         schema: TSchema; // Required and used for type inference!
+        linkedFields?: LinkedFieldConfigurationInterface<Extract<keyof TFormData, string>>[]; // Auto-update target fields when source fields change
     },
 ) {
     // Extract the schema from options
@@ -137,6 +150,23 @@ export function useForm<
     // This is the fully-typed TanStack form instance with Field, Subscribe, AppForm, etc.
     const appForm = useAppForm(mergedOptions);
     type AppFormType = typeof appForm;
+
+    // Linked fields - auto-update target fields when source fields change
+    // Call the hook unconditionally (hooks must always be called), passing empty array if not configured
+    // Type safety is enforced at the options.linkedFields level where users configure source/target fields
+    // The internal hook call uses string-based types since TanStack Form's complex generics aren't directly compatible
+    type LinkedFieldName = Extract<keyof TFormData, string>;
+    const linkedFieldsResult = useLinkedFields<Record<LinkedFieldName, unknown>>({
+        form: appForm as unknown as {
+            setFieldValue: (field: LinkedFieldName, value: unknown) => void;
+            state: { values: Record<LinkedFieldName, unknown> };
+        },
+        linkedFields: (options.linkedFields ?? []) as {
+            sourceField: LinkedFieldName;
+            targetField: LinkedFieldName;
+            transform: (value: string) => string;
+        }[],
+    });
 
     // Track the last defaultValues we synced to, to avoid unnecessary resets
     // We serialize to JSON for deep comparison (handles objects, arrays, etc.)
@@ -215,16 +245,18 @@ export function useForm<
         return (
             <FormIdProvider>
                 <FormSchemaProvider schema={schema}>
-                    <appForm.AppForm>
-                        <form
-                            {...formProperties}
-                            ref={formReference}
-                            className={mergeClassNames(className)}
-                            onSubmit={handleSubmitWithFocus}
-                        >
-                            {children}
-                        </form>
-                    </appForm.AppForm>
+                    <LinkedFieldsProvider linkedFieldsResult={linkedFieldsResult}>
+                        <appForm.AppForm>
+                            <form
+                                {...formProperties}
+                                ref={formReference}
+                                className={mergeClassNames(className)}
+                                onSubmit={handleSubmitWithFocus}
+                            >
+                                {children}
+                            </form>
+                        </appForm.AppForm>
+                    </LinkedFieldsProvider>
                 </FormSchemaProvider>
             </FormIdProvider>
         );
@@ -266,6 +298,9 @@ export function useForm<
         // Get schema from context (must be called before any early returns)
         const formSchemaContext = useFormSchema();
         const schema = formSchemaContext.schema;
+
+        // Get linked fields context for auto-wiring source/target fields
+        const linkedFieldsContext = useLinkedFieldsContext();
 
         // Get validation timing (default: 'onBlur')
         const validationTiming = validateSchema ?? 'onBlur';
@@ -357,15 +392,85 @@ export function useForm<
             };
         }
 
+        // Linked fields - check if this field is a source or target
+        const linkedFields = linkedFieldsContext.linkedFieldsResult;
+        const isSourceField = linkedFields?.isSourceField(fieldIdentifier ?? '') ?? false;
+        const isTargetField = linkedFields?.isTargetField(fieldIdentifier ?? '') ?? false;
+
+        // Get linked field listeners/handlers
+        const sourceFieldListeners = isSourceField
+            ? linkedFields?.getSourceFieldListeners(fieldIdentifier ?? '')
+            : undefined;
+        const targetFieldOnInput = isTargetField
+            ? linkedFields?.getTargetFieldOnInput(fieldIdentifier ?? '')
+            : undefined;
+
+        // Merge listeners: user-provided listeners + linked field listeners (for source fields)
+        const mergedListeners = sourceFieldListeners
+            ? { ...fieldProperties.listeners, ...sourceFieldListeners }
+            : fieldProperties.listeners;
+
         // Render the field children
         // FieldInput components are protected by TanStack's field-level store subscriptions,
         // so they only re-render when their specific field state changes.
         function renderFieldChildren(field: AnyFieldApi) {
             // Support both function children (render-property) and React node children (composition)
-            const content =
+            let content =
                 typeof children === 'function'
                     ? (children as (field: AnyFieldApi) => React.ReactNode)(field)
                     : children;
+
+            // Auto-inject properties for linked field behavior
+            // Source fields: add commit="onChange" so target updates while typing
+            // Target fields: add onInput handler to track manual edits
+            if(isSourceField || isTargetField) {
+                const injectedProperties: Record<string, unknown> = {};
+
+                if(isSourceField) {
+                    // Source field: commit onChange so transform runs while typing
+                    injectedProperties.commit = 'onChange';
+                }
+
+                if(isTargetField && targetFieldOnInput) {
+                    // Target field: track manual edits to disable auto-generation
+                    injectedProperties.onInput = targetFieldOnInput;
+                }
+
+                // Only process if we have properties to inject
+                if(Object.keys(injectedProperties).length > 0) {
+                    // Handle both single element and array of children
+                    if(React.isValidElement(content)) {
+                        // Single child - clone with injected props
+                        const existingProperties = (content as React.ReactElement<Record<string, unknown>>).props;
+                        content = React.cloneElement(content as React.ReactElement<Record<string, unknown>>, {
+                            ...existingProperties,
+                            ...injectedProperties,
+                        });
+                    }
+                    else if(Array.isArray(content)) {
+                        // Multiple children - find and clone input components (skip labels)
+                        content = content.map(function (child, index) {
+                            if(React.isValidElement(child)) {
+                                const componentName =
+                                    (child.type as { displayName?: string })?.displayName ||
+                                    (child.type as { name?: string })?.name ||
+                                    '';
+                                // Inject props into FieldInput* components, not FieldLabel
+                                if(componentName.startsWith('FieldInput') || componentName.includes('Input')) {
+                                    const existingProperties = (child as React.ReactElement<Record<string, unknown>>)
+                                        .props;
+                                    return React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
+                                        ...existingProperties,
+                                        ...injectedProperties,
+                                        key: child.key ?? index,
+                                    });
+                                }
+                            }
+                            return child;
+                        });
+                    }
+                }
+            }
 
             return (
                 <fieldContext.Provider value={field}>
@@ -385,7 +490,12 @@ export function useForm<
 
         // OriginalField expects a render function that receives the field API
         return (
-            <OriginalField {...fieldProperties} name={fieldIdentifier} validators={mergedValidators}>
+            <OriginalField
+                {...fieldProperties}
+                name={fieldIdentifier}
+                validators={mergedValidators}
+                listeners={mergedListeners}
+            >
                 {renderFieldChildren}
             </OriginalField>
         );
@@ -407,6 +517,8 @@ export function useForm<
                 useStore: function <TSelected>(selector: (state: typeof appForm.store.state) => TSelected): TSelected {
                     return useStore(appForm.store, selector);
                 },
+                // Expose linked fields reset for use in onSubmit callbacks
+                resetLinkedFields: linkedFieldsResult.resetAll,
             } as Record<PropertyKey, unknown>;
 
             // Cache bound functions to prevent identity churn on every property access
@@ -442,6 +554,7 @@ export function useForm<
                 FieldLabel: typeof FieldLabel;
                 FieldMessage: typeof FieldMessage;
                 useStore: <TSelected>(selector: (state: typeof appForm.store.state) => TSelected) => TSelected;
+                resetLinkedFields: () => void;
             };
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
