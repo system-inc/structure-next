@@ -2,48 +2,99 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-// import { useUrlPath } from '@structure/source/router/Navigation';
+
+// Dependencies - Hooks
+import { useUrlPath } from '@structure/source/router/Navigation';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
+import { useForm } from '@structure/source/components/forms-new/useForm';
+import { useSupportTicketCreateRequest } from '@structure/source/modules/support/contact/hooks/useSupportTicketCreateRequest';
 
 // Dependencies - Main Components
-import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
 import { Button } from '@structure/source/components/buttons/Button';
-import { FormInputSelect } from '@structure/source/components/forms/FormInputSelect';
-import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
-import { FormInputText } from '@structure/source/components/forms/FormInputText';
+import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
+import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
+import { FieldInputTextArea } from '@structure/source/components/forms-new/fields/text-area/FieldInputTextArea';
+import { FieldInputSelect } from '@structure/source/components/forms-new/fields/select/FieldInputSelect';
 
-// Dependencies - API
-// import { useApolloClient } from '@apollo/client';
-// import // PrincipleMagicDiceDocument,
-// // PrincipleMagicDiceQuery,
-// // SupportFeedbackCreateDocument,
-// '@project/app/_api/graphql/GraphQlGeneratedCode';
+// Dependencies - Utilities
+import { schema } from '@structure/source/utilities/schema/Schema';
 
 // Dependencies - Assets
-// import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
+import { PaperPlaneRightIcon, SpinnerIcon, CheckCircleIcon } from '@phosphor-icons/react';
+
+// Category options for the feedback dropdown
+const categoryOptions = [
+    { value: 'missingInformation', label: 'Missing information' },
+    { value: 'incorrect', label: 'Incorrect or misleading content' },
+    { value: 'outdated', label: 'Outdated content' },
+    { value: 'unclear', label: 'Unclear or confusing content' },
+    { value: 'error', label: 'Technical error or issue' },
+    { value: 'spam', label: 'Spam, irrelevant, or inappropriate content' },
+    { value: 'other', label: 'Other' },
+];
+
+// Category labels lookup for composing the subject
+const categoryLabels: Record<string, string> = Object.fromEntries(
+    categoryOptions.map(function (option) {
+        return [option.value, option.label];
+    }),
+);
+
+// Schema for the feedback form
+const supportFeedbackFormSchema = schema.object({
+    emailAddress: schema.string().emailAddress(),
+    category: schema.string(),
+    feedback: schema.string(),
+});
 
 // Component - SupportPostFeedbackDialog
-export type SupportPostFeedbackDialogProperties = Omit<
-    DialogProperties,
-    'accessibilityTitle' | 'accessibilityDescription'
->;
+export interface SupportPostFeedbackDialogProperties
+    extends Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'> {
+    selectedEmoji?: string;
+}
 export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 
     // Hooks
     const account = useAccount();
-    // const urlPath = useUrlPath();
-    // const apolloClient = useApolloClient();
-    // const [principleReviewCreateMutation] = useMutation(SupportFeedbackCreateDocument);
+    const urlPath = useUrlPath();
+    const supportTicketCreateRequest = useSupportTicketCreateRequest();
 
-    // Effect to update the open state when the open property changes
-    React.useEffect(
-        function () {
-            setOpen(properties.open ?? false);
+    // Form hook
+    const form = useForm({
+        schema: supportFeedbackFormSchema,
+        onSubmit: async function (formState) {
+            const category = formState.value.category;
+            const categoryLabel = categoryLabels[category] || category;
+
+            // Compose subject from category + URL
+            const subject = `Support Feedback: ${categoryLabel} - ${urlPath}`;
+
+            // Compose content with context
+            const content = [
+                `**Page URL:** ${urlPath}`,
+                properties.selectedEmoji ? `**Initial Reaction:** ${properties.selectedEmoji}` : null,
+                `**Category:** ${categoryLabel}`,
+                '',
+                '**Feedback:**',
+                formState.value.feedback,
+            ]
+                .filter(Boolean)
+                .join('\n');
+
+            await supportTicketCreateRequest.execute({
+                title: subject,
+                emailAddress: formState.value.emailAddress,
+                content: content,
+                type: 'Contact',
+                contentType: 'Markdown',
+                description: undefined,
+                attachmentFiles: undefined,
+            });
         },
-        [properties.open],
-    );
+    });
 
     // Function to intercept the onOpenChange event
     function onOpenChangeIntercept(open: boolean) {
@@ -54,97 +105,108 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
         setOpen(open);
     }
 
-    // Function to mark a principle as reviewed
-    // async function markPrincipleAsReviewed() {
-    //     console.log('Marking principle as reviewed');
+    // Function to close the dialog
+    function closeDialog() {
+        onOpenChangeIntercept(false);
+    }
 
-    //     setMarkingPrincipleAsReviewed(true);
+    // Effect to update the open state when the open property changes
+    React.useEffect(
+        function () {
+            setOpen(properties.open ?? false);
+        },
+        [properties.open],
+    );
 
-    //     if(randomPrinciple) {
-    //         await principleReviewCreateMutation({
-    //             variables: {
-    //                 id: randomPrinciple.id,
-    //             },
-    //         });
-
-    //         setMarkPrincipleAsReviewedButtonText('Redirecting...');
-
-    //         // Redirect to the principle
-    //         console.log('randomPrincipleUrlPath', randomPrincipleUrlPath);
-    //         router.push(randomPrincipleUrlPath);
-    //     }
-
-    //     setMarkingPrincipleAsReviewed(false);
-    // }
+    // Effect to set the email address automatically when account data is available
+    React.useEffect(
+        function () {
+            if(account.data?.emailAddress) {
+                form.setFieldValue('emailAddress', account.data.emailAddress);
+            }
+        },
+        [account.data?.emailAddress, form],
+    );
 
     // Render the component
     return (
         <Dialog
             variant="A"
             {...properties}
-            // Spread these properties after all properties to ensure they are not overwritten
             accessibilityTitle="Help Us Improve"
             accessibilityDescription="Submit feedback with email, issue type, and details"
             open={open}
             onOpenChange={onOpenChangeIntercept}
+            header="Help Us Improve"
         >
-            <Dialog.Header>Help Us Improve</Dialog.Header>
-            <Dialog.Body>
-                <div className="">
-                    {/* <div>Current URL: {urlPath}</div> */}
-                    <p className="mb-5 text-sm">
-                        Thank you for your feedback. We would love to hear more about your experience.
-                    </p>
+            <form.Form className="flex flex-col">
+                <Dialog.Body>
+                    {supportTicketCreateRequest.isSuccess ? (
+                        // Success state
+                        <div className="flex flex-col items-center py-8 text-center">
+                            <CheckCircleIcon className="mb-4 h-12 w-12 content--positive" weight="fill" />
+                            <p className="text-lg font-medium">Thank you for your feedback!</p>
+                            <p className="mt-2 text-sm content--3">
+                                We appreciate you taking the time to help us improve. Your feedback has been submitted
+                                and we&apos;ll review it carefully.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-3">
+                            <p className="text-sm">
+                                Thank you for your feedback. We would love to hear more about your experience.
+                            </p>
 
-                    {/* Would they like a followup to their email */}
-                    <FormInputText
-                        id="email"
-                        label="May we follow up over email? (optional)"
-                        // labelTip={
-                        //     <div className="max-w-64">Your feedback is anonymous unless you provide your email.</div>
-                        // }
-                        type="email"
-                        placeholder="Email Address"
-                        defaultValue={account?.data?.emailAddress}
-                    />
+                            <form.Field identifier="emailAddress">
+                                <form.FieldLabel>Email Address</form.FieldLabel>
+                                <FieldInputText variant="Outline" type="email" placeholder="your@email.com" />
+                            </form.Field>
 
-                    {/* Quick feedback selection */}
-                    <FormInputSelect
-                        className="mt-5"
-                        id="rating"
-                        label="What went wrong?"
-                        items={[
-                            { value: 'missingInformation', children: 'Missing information' },
-                            { value: 'incorrect', children: 'Incorrect or misleading content' },
-                            { value: 'outdated', children: 'Outdated content' },
-                            { value: 'unclear', children: 'Unclear or confusing content' },
-                            { value: 'error', children: 'Technical error or issue' },
-                            { value: 'spam', children: 'Spam, irrelevant, or inappropriate content' },
-                            { value: 'other', children: 'Other' },
-                        ]}
-                    />
+                            <form.Field identifier="category">
+                                <form.FieldLabel>What went wrong?</form.FieldLabel>
+                                <FieldInputSelect
+                                    placeholder="Select a category"
+                                    items={categoryOptions.map(function (option) {
+                                        return {
+                                            value: option.value,
+                                            children: option.label,
+                                        };
+                                    })}
+                                />
+                            </form.Field>
 
-                    {/* Additional details */}
-                    <FormInputTextArea
-                        className="mt-5"
-                        id="feedback"
-                        label="How can we do better?"
-                        rows={5}
-                        required={true}
-                    />
-                </div>
-            </Dialog.Body>
-            <Dialog.Footer>
-                <Button
-                    variant="A"
-                    // isLoading={chatConversationUpdateMutationState.loading}
-                    // onClick={function () {
-                    //     renameConversation();
-                    // }}
-                >
-                    Submit Feedback
-                </Button>
-            </Dialog.Footer>
+                            {/* Feedback Text */}
+                            <form.Field identifier="feedback">
+                                <form.FieldLabel>How can we do better?</form.FieldLabel>
+                                <FieldInputTextArea
+                                    variant="Outline"
+                                    rows={5}
+                                    placeholder="Please share your thoughts..."
+                                />
+                            </form.Field>
+                        </div>
+                    )}
+                </Dialog.Body>
+
+                <Dialog.Footer>
+                    {supportTicketCreateRequest.isSuccess && (
+                        <Button variant="A" onClick={closeDialog}>
+                            Close
+                        </Button>
+                    )}
+                    {/* Submit Button - inside form to enable form submission */}
+                    <AnimatedButton
+                        variant="A"
+                        type="submit"
+                        iconRight={PaperPlaneRightIcon}
+                        isProcessing={supportTicketCreateRequest.isLoading}
+                        processingIcon={SpinnerIcon}
+                        animateIconPosition="iconRight"
+                    >
+                        Submit Feedback
+                    </AnimatedButton>
+                </Dialog.Footer>
+            </form.Form>
         </Dialog>
     );
 }

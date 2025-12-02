@@ -102,7 +102,11 @@ export function SupportPostFeedback(properties: SupportPostFeedbackProperties) {
                 )}
 
                 {/* Dialog */}
-                <SupportPostFeedbackDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+                <SupportPostFeedbackDialog
+                    open={dialogOpen}
+                    onOpenChange={setDialogOpen}
+                    selectedEmoji={selectedEmoji ?? undefined}
+                />
             </div>
         </div>
     );
