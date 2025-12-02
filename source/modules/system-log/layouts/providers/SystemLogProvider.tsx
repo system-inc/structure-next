@@ -3,36 +3,8 @@
 // Dependencies - React
 import React from 'react';
 
-// Dependencies - API
-import { SystemLogClientInput, SystemLogCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-
-// Dependencies - Project
-import { ProjectSettings } from '@project/ProjectSettings';
-
-// Dependencies - Utilities
-import { inProductionEnvironment } from '@structure/source/utilities/environment/Environment';
-
-// Function to send error to logging service
-function systemLogCreate(input: SystemLogClientInput) {
-    // Only send errors in production
-    if(!inProductionEnvironment()) {
-        return;
-    }
-
-    // Use a direct fetch to avoid any issues with the network service during error states
-    // eslint-disable-next-line structure/network-service-rule
-    fetch(`https://${ProjectSettings.apis.base.host}${ProjectSettings.apis.base.graphQlPath}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-            query: SystemLogCreateDocument.toString(),
-            variables: { input },
-        }),
-    }).catch(function () {
-        // Silently fail - don't cause more errors from error logging
-    });
-}
+// Dependencies - Services
+import { systemLogService } from '@structure/source/modules/system-log/services/SystemLogService';
 
 // Component - SystemLogProvider
 interface SystemLogProviderProperties {
@@ -43,7 +15,7 @@ export function SystemLogProvider(properties: SystemLogProviderProperties) {
     React.useEffect(function () {
         // Global JS errors
         function handleError(event: ErrorEvent) {
-            systemLogCreate({
+            systemLogService.create({
                 level: 'Error',
                 event: 'ClientError',
                 category: 'Unhandled',
@@ -60,7 +32,7 @@ export function SystemLogProvider(properties: SystemLogProviderProperties) {
 
         // Unhandled promise rejections
         function handleRejection(event: PromiseRejectionEvent) {
-            systemLogCreate({
+            systemLogService.create({
                 level: 'Error',
                 event: 'ClientError',
                 category: 'UnhandledRejection',
