@@ -12,7 +12,6 @@ import {
     createFormHookContexts,
     useStore,
     type FormOptions,
-    type FormState,
     type AnyFieldApi,
     type FormValidateOrFn,
     type FormAsyncValidateOrFn,
@@ -20,12 +19,15 @@ import {
 
 // Dependencies - Hooks
 import { useFormNotice, type FormNoticeProperties } from './hooks/useFormNotice';
-import { useLinkedFields } from './internal/useLinkedFields';
+import {
+    useLinkedFields,
+    type LinkedFieldConfigurationInterface,
+    type SimpleFormApi,
+} from './internal/useLinkedFields';
 
 // Dependencies - Form-Aware Components
 import { FormIdProvider } from './providers/FormIdProvider';
 import { FormSchemaProvider, useFormSchema } from './providers/FormSchemaProvider';
-import { LinkedFieldsProvider, useLinkedFieldsContext } from './internal/LinkedFieldsProvider';
 import { FieldLabel } from './fields/FieldLabel';
 import { FieldMessage } from './fields/FieldMessage';
 
@@ -39,15 +41,6 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 export { useField, useStore, type FormApi, type FieldApi } from '@tanstack/react-form';
 export type { FormState, FieldOptions, FieldState, ValidationError } from '@tanstack/react-form';
 export const { fieldContext, formContext, useFieldContext } = createFormHookContexts();
-
-// Interface - LinkedFieldConfigurationInterface
-// Configuration for auto-updating a target field when a source field changes
-// TFormState is the full TanStack Form state with value, formApi, isValid, etc.
-export interface LinkedFieldConfigurationInterface<TFieldPath extends string = string, TFormState = unknown> {
-    sourceField: TFieldPath;
-    targetField: TFieldPath;
-    transform: (value: string, formState: TFormState) => string;
-}
 
 // Interface - SuccessMeta
 // Extends TanStack Form's field.meta to include success messages
@@ -119,19 +112,7 @@ export function useForm<
         };
         linkedFields?: LinkedFieldConfigurationInterface<
             NoInfer<Extract<keyof TFormData, string>>,
-            FormState<
-                TFormData,
-                TOnMount,
-                TOnChange,
-                TOnChangeAsync,
-                TOnBlur,
-                TOnBlurAsync,
-                TOnSubmit,
-                TOnSubmitAsync,
-                TOnDynamic,
-                TOnDynamicAsync,
-                TOnServer
-            >
+            NoInfer<TFormData>
         >[]; // Auto-update target fields when source fields change
     },
 ) {
@@ -182,13 +163,8 @@ export function useForm<
 
     // Linked fields - auto-update target fields when source fields change
     // Call the hook unconditionally (hooks must always be called), passing empty array if not configured
-    // Type cast needed: TanStack Form's setFieldValue uses complex Updater<DeepValue<...>> generics
-    // Our simplified (field, value) => void interface is compatible at runtime
     const linkedFieldsResult = useLinkedFields({
-        form: {
-            setFieldValue: appForm.setFieldValue as (field: string, value: unknown) => void,
-            state: appForm.store.state,
-        },
+        formApi: appForm as unknown as SimpleFormApi<TFormData>,
         linkedFields: options.linkedFields ?? [],
     });
 
@@ -269,18 +245,16 @@ export function useForm<
         return (
             <FormIdProvider>
                 <FormSchemaProvider schema={schema}>
-                    <LinkedFieldsProvider linkedFieldsResult={linkedFieldsResult}>
-                        <appForm.AppForm>
-                            <form
-                                {...formProperties}
-                                ref={formReference}
-                                className={mergeClassNames(className)}
-                                onSubmit={handleSubmitWithFocus}
-                            >
-                                {children}
-                            </form>
-                        </appForm.AppForm>
-                    </LinkedFieldsProvider>
+                    <appForm.AppForm>
+                        <form
+                            {...formProperties}
+                            ref={formReference}
+                            className={mergeClassNames(className)}
+                            onSubmit={handleSubmitWithFocus}
+                        >
+                            {children}
+                        </form>
+                    </appForm.AppForm>
                 </FormSchemaProvider>
             </FormIdProvider>
         );
@@ -323,11 +297,9 @@ export function useForm<
         const formSchemaContext = useFormSchema();
         const schema = formSchemaContext.schema;
 
-        // Get linked fields context for auto-wiring source/target fields
-        const linkedFieldsContext = useLinkedFieldsContext();
-        const linkedFields = linkedFieldsContext.linkedFieldsResult;
-        const isSourceField = linkedFields?.isSourceField(fieldIdentifier ?? '') ?? false;
-        const isTargetField = linkedFields?.isTargetField(fieldIdentifier ?? '') ?? false;
+        // Get linked field status for auto-wiring source/target fields (using closure)
+        const isSourceField = linkedFieldsResult.isSourceField(fieldIdentifier ?? '');
+        const isTargetField = linkedFieldsResult.isTargetField(fieldIdentifier ?? '');
 
         // Get validation timing (default: 'Blur', but 'Change' for linked fields to clear errors while typing)
         const isLinkedField = isSourceField || isTargetField;
@@ -417,12 +389,12 @@ export function useForm<
             };
         }
 
-        // Get linked field listeners/handlers
+        // Get linked field listeners/handlers (using closure)
         const sourceFieldListeners = isSourceField
-            ? linkedFields?.getSourceFieldListeners(fieldIdentifier ?? '')
+            ? linkedFieldsResult.getSourceFieldListeners(fieldIdentifier ?? '')
             : undefined;
         const targetFieldOnInput = isTargetField
-            ? linkedFields?.getTargetFieldOnInput(fieldIdentifier ?? '')
+            ? linkedFieldsResult.getTargetFieldOnInput(fieldIdentifier ?? '')
             : undefined;
 
         // Merge listeners: user-provided listeners + linked field listeners (for source fields)

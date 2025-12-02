@@ -3,20 +3,34 @@
 // Dependencies - React
 import React from 'react';
 
-// Dependencies - Types
-import { UseLinkedFieldOptionsInterface } from './useLinkedField';
+// Dependencies - TanStack Form
+import type { FormApi } from '@tanstack/react-form';
 
-// Type - Form interface that works with both narrowly and broadly typed setFieldValue
-type FormWithLinkedFieldSupportType<TFormState> = {
-    setFieldValue: (field: string, value: unknown) => void;
-    state: TFormState;
-};
+// Type - SimpleFormApi
+// Hides TanStack's 11 generic parameters for convenience
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type SimpleFormApi<TFormData> = FormApi<TFormData, any, any, any, any, any, any, any, any, any, any, any>;
+
+// Interface - FormStateInterface
+// Matches TanStack's onSubmit props shape: { value, formApi, meta }
+export interface FormStateInterface<TFormData> {
+    value: TFormData;
+    formApi: SimpleFormApi<TFormData>;
+    meta?: unknown;
+}
+
+// Interface - LinkedFieldConfigurationInterface
+// Configuration for auto-updating a target field when a source field changes
+export interface LinkedFieldConfigurationInterface<TFieldPath extends string = string, TFormData = unknown> {
+    sourceField: TFieldPath;
+    targetField: TFieldPath;
+    transform: (value: string, formState: FormStateInterface<TFormData>) => string;
+}
 
 // Interface - UseLinkedFieldsOptionsInterface
-// TFormState is the full form state from TanStack Form, giving transform access to value, formApi, etc.
-export interface UseLinkedFieldsOptionsInterface<TFieldPath extends string = string, TFormState = unknown> {
-    form: FormWithLinkedFieldSupportType<TFormState>;
-    linkedFields: Omit<UseLinkedFieldOptionsInterface<NoInfer<TFieldPath>, NoInfer<TFormState>>, 'form'>[];
+export interface UseLinkedFieldsOptionsInterface<TFieldPath extends string = string, TFormData = unknown> {
+    formApi: SimpleFormApi<TFormData>;
+    linkedFields: LinkedFieldConfigurationInterface<NoInfer<TFieldPath>, NoInfer<TFormData>>[];
 }
 
 // Interface - UseLinkedFieldsReturnInterface
@@ -32,18 +46,18 @@ export interface UseLinkedFieldsReturnInterface {
 
 // Hook - useLinkedFields
 // Manages multiple linked field pairs. Uses a Map to track manual edit state per target field.
-export function useLinkedFields<TFieldPath extends string = string, TFormState = unknown>(
-    options: UseLinkedFieldsOptionsInterface<TFieldPath, TFormState>,
+export function useLinkedFields<TFieldPath extends string = string, TFormData = unknown>(
+    options: UseLinkedFieldsOptionsInterface<TFieldPath, TFormData>,
 ): UseLinkedFieldsReturnInterface {
-    // Type for linked field configuration with proper field type
-    type LinkedFieldOptionsType = Omit<UseLinkedFieldOptionsInterface<TFieldPath, TFormState>, 'form'>;
+    // Type for linked field configuration
+    type LinkedFieldOptionsType = LinkedFieldConfigurationInterface<TFieldPath, TFormData>;
 
     // State - Map of target field names to manual edit state
     const [manualEditStates, setManualEditStates] = React.useState<Map<string, boolean>>(function () {
         return new Map();
     });
 
-    // Ref for stable listener reference
+    // Reference for stable listener reference
     const manualEditStatesReference = React.useRef(manualEditStates);
     React.useEffect(
         function () {
@@ -52,16 +66,24 @@ export function useLinkedFields<TFieldPath extends string = string, TFormState =
         [manualEditStates],
     );
 
+    // Reference for formApi to avoid stale closures
+    const formApiReference = React.useRef(options.formApi);
+    React.useEffect(
+        function () {
+            formApiReference.current = options.formApi;
+        },
+        [options.formApi],
+    );
+
     // Build lookup maps for quick access
     const sourceToConfiguration = new Map<string, LinkedFieldOptionsType>();
     const targetToConfiguration = new Map<string, LinkedFieldOptionsType>();
-
     for(const linkedField of options.linkedFields) {
         sourceToConfiguration.set(linkedField.sourceField, linkedField);
         targetToConfiguration.set(linkedField.targetField, linkedField);
     }
 
-    // Get listeners for a source field
+    // Function to get listeners for a source field
     function getSourceFieldListeners(sourceField: string) {
         const fieldConfiguration = sourceToConfiguration.get(sourceField);
         if(!fieldConfiguration) return undefined;
@@ -74,16 +96,28 @@ export function useLinkedFields<TFieldPath extends string = string, TFormState =
                 }
                 // Handle both string and number values (for number inputs)
                 if(typeof event.value === 'string' || typeof event.value === 'number') {
-                    options.form.setFieldValue(
+                    const formApi = formApiReference.current;
+
+                    // Build formState matching TanStack's onSubmit shape
+                    const formState: FormStateInterface<TFormData> = {
+                        value: formApi.state.values,
+                        formApi: formApi,
+                        meta: undefined,
+                    };
+
+                    const newValue = fieldConfiguration.transform(String(event.value), formState);
+                    // Type cast needed: TanStack Form's setFieldValue uses complex Updater<DeepValue<...>> generics
+                    // Our string return from transform is compatible at runtime
+                    (formApi.setFieldValue as (field: string, value: unknown) => void)(
                         fieldConfiguration.targetField,
-                        fieldConfiguration.transform(String(event.value), options.form.state),
+                        newValue,
                     );
                 }
             },
         };
     }
 
-    // Get onInput handler for a target field
+    // Function to get onInput handler for a target field
     function getTargetFieldOnInput(targetField: string) {
         const targetConfiguration = targetToConfiguration.get(targetField);
         if(!targetConfiguration) return undefined;
@@ -98,17 +132,17 @@ export function useLinkedFields<TFieldPath extends string = string, TFormState =
         };
     }
 
-    // Check if a field is a source field
+    // Function to check if a field is a source field
     function isSourceField(fieldName: string) {
         return sourceToConfiguration.has(fieldName);
     }
 
-    // Check if a field is a target field
+    // Function to check if a field is a target field
     function isTargetField(fieldName: string) {
         return targetToConfiguration.has(fieldName);
     }
 
-    // Reset all manual edit states
+    // Function to reset all manual edit states
     function resetAll() {
         setManualEditStates(new Map());
     }
