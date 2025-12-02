@@ -59,8 +59,8 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
         }
     }
 
-    // Variant icon wrapper class names - adjust spacing based on size
-    const variantIconContainerClassNames = 'mr-3 ml-1';
+    // Variant icon wrapper class names
+    const variantIconContainerClassNames = mergeClassNames('flex justify-center', properties.children ? 'pt-px' : '');
 
     // Build icon class names with variant colors and size
     const iconSizeClassName = noticeTheme.iconSizes?.[size!] || noticeTheme.iconSizes?.Base || 'h-[22px] w-[22px]';
@@ -85,14 +85,14 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
     }
 
     // Variant title class names - Size determines text styling, variant determines color
-    let titleClassNames = '';
+    let titleClassNames = 'font-medium';
 
     // Size-based text styling
     if(size === 'Large') {
-        titleClassNames = 'text-base';
+        titleClassNames = mergeClassNames(titleClassNames, 'text-base');
     }
     else if(size === 'Base') {
-        titleClassNames = 'text-sm';
+        titleClassNames = mergeClassNames(titleClassNames, 'text-sm');
     }
 
     // Variant-based color
@@ -127,7 +127,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
                 properties.className,
             )}
         >
-            <div className="flex items-center">
+            <div className="flex items-start gap-3">
                 {icon && <div className={variantIconContainerClassNames}>{themeIcon(icon, iconClassNames)}</div>}
                 <div className={variantTextContainerClassNames}>
                     {properties.title && <div className={titleClassNames}>{properties.title}</div>}
