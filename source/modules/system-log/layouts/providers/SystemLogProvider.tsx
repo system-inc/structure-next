@@ -15,7 +15,7 @@ export function SystemLogProvider(properties: SystemLogProviderProperties) {
     React.useEffect(function () {
         // Global JS errors
         function handleError(event: ErrorEvent) {
-            systemLogService.create({
+            systemLogService.log({
                 level: 'Error',
                 event: 'ClientError',
                 category: 'Unhandled',
@@ -32,7 +32,7 @@ export function SystemLogProvider(properties: SystemLogProviderProperties) {
 
         // Unhandled promise rejections
         function handleRejection(event: PromiseRejectionEvent) {
-            systemLogService.create({
+            systemLogService.log({
                 level: 'Error',
                 event: 'ClientError',
                 category: 'UnhandledRejection',

@@ -12,7 +12,7 @@ import { inProductionEnvironment } from '@structure/source/utilities/environment
 // Class - SystemLogService
 class SystemLogService {
     // Send a log entry to the server
-    create(input: SystemLogClientInput): void {
+    log(input: SystemLogClientInput): void {
         // Only send logs in production
         if(!inProductionEnvironment()) {
             return;
