@@ -3,18 +3,27 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - Animation
+import { motion } from 'motion/react';
+
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PlaceholderAnimation
-export type PlaceholderAnimationProperties = {
+export interface PlaceholderAnimationProperties {
     className?: string;
-};
+}
 export function PlaceholderAnimation(properties: PlaceholderAnimationProperties) {
     // Render the component
     return (
-        <div className={mergeClassNames('relative overflow-hidden rounded-sm background--1', properties.className)}>
-            <div className="absolute inset-0 animate-shimmer from-transparent to-transparent"></div>
-        </div>
+        <motion.div
+            className={mergeClassNames('background--3', properties.className)}
+            animate={{ opacity: [1, 0.5, 1] }}
+            transition={{
+                duration: 2,
+                ease: 'easeInOut',
+                repeat: Infinity,
+            }}
+        />
     );
 }
