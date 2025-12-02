@@ -9,10 +9,10 @@ import { schema } from '@structure/source/utilities/schema/Schema';
 
 // Schema - supportTicketCreateRequestInputSchema
 export const supportTicketCreateRequestInputSchema = schema.object({
-    title: schema.string().notEmpty(),
-    description: schema.string().notEmpty().optional(),
+    title: schema.string(),
+    description: schema.string().optional(),
     emailAddress: schema.string().emailAddress(),
-    content: schema.string().notEmpty(),
+    content: schema.string(),
     type: schema.string().is('Contact').default('Contact'),
     contentType: schema.string().in(['PlainText', 'Html', 'Markdown']).default('Markdown'),
     attachmentFiles: schema
