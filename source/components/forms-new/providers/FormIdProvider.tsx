@@ -18,6 +18,13 @@ export function useFieldId(fieldIdentifier: string | number | symbol) {
     return `${formId ?? 'form'}-${String(fieldIdentifier)}`;
 }
 
+// Hook - useFieldLabelId
+// Generates a deterministic label ID for aria-labelledby usage
+export function useFieldLabelId(fieldIdentifier: string | number | symbol) {
+    const formId = useFormId();
+    return `${formId ?? 'form'}-${String(fieldIdentifier)}-label`;
+}
+
 // Component - FormIdProvider
 // Provides a unique ID for a form and its children
 export function FormIdProvider(properties: { id?: string; children: React.ReactNode }) {

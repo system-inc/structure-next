@@ -1,6 +1,6 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - React and Next.js
+// Dependencies - React
 import React from 'react';
 
 // Dependencies - Main Components
@@ -8,13 +8,13 @@ import { Dialog } from '@structure/source/components/dialogs/Dialog';
 import { InputFile } from '@structure/source/components/forms-new/fields/file/InputFile';
 import { Button } from '@structure/source/components/buttons/Button';
 
-// Component - AttachmentModal
-export interface AttachmentModalProperties {
+// Component - InputMarkupAttachmentsDialog
+export interface InputMarkupAttachmentsDialogProperties {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onSave: (files: File[]) => void;
 }
-export function AttachmentModal(properties: AttachmentModalProperties) {
+export function InputMarkupAttachmentsDialog(properties: InputMarkupAttachmentsDialogProperties) {
     // Generate unique ID for InputFile
     const inputFileId = React.useId();
 

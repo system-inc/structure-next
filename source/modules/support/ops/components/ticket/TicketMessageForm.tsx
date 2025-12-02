@@ -159,17 +159,25 @@ export function TicketMessageForm(properties: TicketMessageFormProperties) {
         >
             <div className="w-full max-w-[980px]">
                 <InputMarkup
-                    type="markdown"
+                    variant="A"
+                    type="Markdown"
+                    placeholder="Reply..."
                     onChange={handleEditorChange}
                     attachedFiles={attachedFiles}
                     onSaveFiles={handleSaveFiles}
                     onRemoveFile={handleRemoveFile}
-                    isDisabled={isSubmitting}
-                    showLoading={isSubmitting}
-                    // loadingProgress={uploadProgress}
+                    disabled={isSubmitting}
+                    isLoading={isSubmitting}
                     shouldReset={shouldResetEditor}
-                    onResetComplete={() => setShouldResetEditor(false)}
-                    textSize="sm"
+                    onResetComplete={function () {
+                        setShouldResetEditor(false);
+                    }}
+                    toolbar={{
+                        showAttachments: true,
+                        showSubmit: true,
+                        submitLabel: 'Send',
+                        submitLoadingLabel: 'Sending',
+                    }}
                 />
                 {formSubmitted && form.formState.errors.reply && (
                     <p className="mt-2 text-sm text-red-500">{form.formState.errors.reply.message}</p>

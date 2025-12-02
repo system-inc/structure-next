@@ -4,6 +4,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
 import { FieldInputTextArea } from '@structure/source/components/forms-new/fields/text-area/FieldInputTextArea';
+import { FieldInputMarkup } from '@structure/source/components/forms-new/fields/markup/FieldInputMarkup';
 import { FieldInputCheckbox } from '@structure/source/components/forms-new/fields/checkbox/FieldInputCheckbox';
 import { FieldInputSelect } from '@structure/source/components/forms-new/fields/select/FieldInputSelect';
 
@@ -54,9 +55,13 @@ export function fieldFromGraphQlFieldMetadata(
         return FieldInputText as React.ComponentType<Record<string, unknown>>;
     }
 
-    // Multi-line fields - content, description, or long text (maxLength > 128)
+    // Rich text fields - content fields use the markup editor
+    if(graphQlFieldMetadata.name.endsWith('.content')) {
+        return FieldInputMarkup as React.ComponentType<Record<string, unknown>>;
+    }
+
+    // Multi-line fields - description or long text (maxLength > 128)
     if(
-        graphQlFieldMetadata.name.endsWith('.content') ||
         graphQlFieldMetadata.name.endsWith('.description') ||
         (graphQlFieldMetadata.validation?.maxLength &&
             typeof graphQlFieldMetadata.validation.maxLength === 'number' &&

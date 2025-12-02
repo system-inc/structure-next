@@ -49,7 +49,7 @@ export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
 
             <Card variant="A" className="mt-4">
                 <GraphQlMutationForm
-                    // showPreviewGraphQlMutationTip={true}
+                    showPreviewGraphQlMutationTip={true}
                     className="flex flex-col gap-4"
                     operation={PostUpdateOperation}
                     schema={schema.object({
@@ -73,7 +73,6 @@ export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
                         },
                         'input.content': {
                             order: 4,
-                            rows: 16,
                             tip: 'The full article content. Supports Markdown formatting.',
                         },
                     }}

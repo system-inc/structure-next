@@ -37,6 +37,7 @@ import {
     fieldFromGraphQlFieldMetadata,
     fieldPropertiesFromFieldConfiguration,
 } from '@structure/source/api/graphql/forms/utilities/GraphQlFormFieldMapping';
+import { FieldInputMarkup } from '@structure/source/components/forms-new/fields/markup/FieldInputMarkup';
 import {
     DocumentFieldPathsType,
     DocumentFieldValuesType,
@@ -384,10 +385,15 @@ export function GraphQlMutationForm<
         const fieldConfiguration = fieldPropertiesAsRecord?.[input.name] || {};
         const label = fieldConfiguration.label || titleCase(fieldIdentifierFromDottedPath(input.name));
 
+        // Check if this is a markup field (contenteditable needs aria-labelledby instead of htmlFor)
+        const useAriaLabelledBy = Component === FieldInputMarkup;
+
         // Render the field
         return (
             <form.Field key={input.name} identifier={input.name}>
-                <form.FieldLabel tip={fieldConfiguration.tip}>{label}</form.FieldLabel>
+                <form.FieldLabel tip={fieldConfiguration.tip} useAriaLabelledBy={useAriaLabelledBy}>
+                    {label}
+                </form.FieldLabel>
                 <Component
                     variant="Outline"
                     placeholder={fieldConfiguration.placeholder || label}

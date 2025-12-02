@@ -1,15 +1,25 @@
+'use client'; // This component uses client-only features
+
+// Dependencies - React
 import React from 'react';
+
+// Dependencies - Lexical
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getSelection, $isRangeSelection, LexicalNode } from 'lexical';
 import { TOGGLE_LINK_COMMAND, $isLinkNode, LinkNode } from '@lexical/link';
 import { $getNearestNodeOfType } from '@lexical/utils';
 
-export function FloatingLinkEditor() {
+// Component - LexicalFloatingLinkEditor
+export function LexicalFloatingLinkEditor() {
+    // Hooks
     const [editor] = useLexicalComposerContext();
+
+    // State
     const [linkUrl, setLinkUrl] = React.useState('');
     const [isVisible, setIsVisible] = React.useState(false);
     const [position, setPosition] = React.useState({ top: 0, left: 0 });
 
+    // Function to update the link editor state based on current selection
     const updateLinkEditor = React.useCallback(function () {
         const selection = $getSelection();
         if($isRangeSelection(selection)) {
@@ -32,6 +42,7 @@ export function FloatingLinkEditor() {
         }
     }, []);
 
+    // Effect to listen for editor updates
     React.useEffect(
         function () {
             return editor.registerUpdateListener(function (listener) {
@@ -41,28 +52,36 @@ export function FloatingLinkEditor() {
         [editor, updateLinkEditor],
     );
 
-    const updateLink = function () {
+    // Function to update the link URL
+    function handleUpdateLink() {
         editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);
         setIsVisible(false);
-    };
+    }
 
-    const removeLink = function () {
+    // Function to remove the link
+    function handleRemoveLink() {
         editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
         setIsVisible(false);
-    };
+    }
 
-    if(!isVisible) return null;
+    // Don't render if not visible
+    if(!isVisible) {
+        return null;
+    }
 
+    // Render the component
     return (
         <div className="" style={{ top: position.top, left: position.left, position: 'absolute' }}>
             <input
                 type="text"
                 value={linkUrl}
-                onChange={(event) => setLinkUrl(event.target.value)}
+                onChange={function (event) {
+                    setLinkUrl(event.target.value);
+                }}
                 placeholder="Enter URL"
             />
-            <button onClick={updateLink}>Update</button>
-            <button onClick={removeLink}>Remove</button>
+            <button onClick={handleUpdateLink}>Update</button>
+            <button onClick={handleRemoveLink}>Remove</button>
         </div>
     );
 }
