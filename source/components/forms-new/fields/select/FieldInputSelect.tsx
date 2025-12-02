@@ -18,6 +18,8 @@ export type FieldInputSelectProperties = Omit<
     commitOn?: 'Change' | 'Blur'; // When to update form store (default: 'Change' for select)
 };
 export function FieldInputSelect({ commitOn = 'Change', ...inputSelectProperties }: FieldInputSelectProperties) {
+    void commitOn; // Currently not used, but could be implemented for different behaviors
+
     // Hooks
     const fieldContext = useFieldContext<string>();
     const fieldId = useFieldId(fieldContext.name);
@@ -35,14 +37,11 @@ export function FieldInputSelect({ commitOn = 'Change', ...inputSelectProperties
 
     // Function to handle selection change
     function handleChange(value: string | undefined) {
-        // Commit immediately for Change strategy
-        if(commitOn === 'Change') {
-            fieldContext.handleChange(value ?? '');
-        }
-        else {
-            // For Blur strategy, just update value without triggering validation
-            fieldContext.setValue(value ?? '', { dontValidate: true });
-        }
+        fieldContext.setValue(value ?? '');
+        fieldContext.handleChange(value ?? '');
+
+        // Handle blur as well to clear blur validation errors
+        fieldContext.handleBlur();
     }
 
     // Function to handle blur events
