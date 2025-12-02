@@ -6,9 +6,15 @@ import { useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { GraphQlMutationForm } from '@structure/source/api/graphql/forms/GraphQlMutationForm';
+import { Card } from '@structure/source/components/containers/Card';
 
 // Dependencies - API
 import { PostCreateOperation, PostStatus } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { usePostTopicByIdRequest } from '@structure/source/modules/post/hooks/usePostTopicByIdRequest';
+
+// Dependencies - Utilities
+import { schema } from '@structure/source/utilities/schema/Schema';
+import { slug } from '@structure/source/utilities/type/String';
 
 // Component - CreateSupportPostPage
 export function CreateSupportPostPage() {
@@ -16,33 +22,68 @@ export function CreateSupportPostPage() {
     const urlSearchParameters = useUrlSearchParameters();
     const postTopicId = urlSearchParameters?.get('postTopicId');
 
+    // Query for topic data if postTopicId is provided
+    const postTopicByIdRequest = usePostTopicByIdRequest({ id: postTopicId ?? '' }, { enabled: !!postTopicId });
+    const postTopic = postTopicByIdRequest.data?.postTopicById;
+
     // Render the component
     return (
-        <div className="container pt-10 pb-32">
-            <h1 className="mb-8">Create Support Article</h1>
+        <div className="container items-center justify-center pt-8 pb-32">
+            <h1 className="text-xl">Create Post</h1>
 
-            <GraphQlMutationForm
-                className="mt-6 flex flex-col gap-4"
-                operation={PostCreateOperation}
-                hiddenFields={{
-                    'input.status': PostStatus.Published,
-                    'input.type': 'SupportArticle',
-                    'input.allowReaction': true,
-                    ...(postTopicId ? { 'input.topicIds': [postTopicId] } : {}),
-                }}
-                excludedFields={[
-                    'input.contentType',
-                    'input.allowComment',
-                    'input.allowVote',
-                    'input.allowDownvote',
-                    'input.metadata',
-                ]}
-                fieldProperties={{
-                    'input.content': { rows: 8 },
-                    'input.description': { rows: 4 },
-                }}
-                submitButton={{ children: 'Create Article' }}
-            />
+            {/* Show topic context */}
+            {postTopic && (
+                <p className="mt-2 text-sm content--4">
+                    In <span className="font-medium content--2">{postTopic.title}</span>
+                </p>
+            )}
+
+            <Card variant="A" className="mt-4">
+                <GraphQlMutationForm
+                    className="flex flex-col gap-4"
+                    operation={PostCreateOperation}
+                    schema={schema.object({
+                        'input.title': schema.string(),
+                        'input.slug': schema.string(),
+                        'input.content': schema.string(),
+                    })}
+                    fieldProperties={{
+                        'input.title': {
+                            order: 1,
+                            tip: 'The title displayed to users when browsing support articles.',
+                        },
+                        'input.slug': {
+                            order: 2,
+                            tip: 'The URL-friendly identifier used in the article link.',
+                        },
+                        'input.description': {
+                            order: 3,
+                            rows: 4,
+                            tip: 'A brief summary shown in search results and article previews.',
+                        },
+                        'input.content': {
+                            order: 4,
+                            rows: 16,
+                            tip: 'The full article content. Supports Markdown formatting.',
+                        },
+                    }}
+                    linkedFields={[{ sourceField: 'input.title', targetField: 'input.slug', transform: slug }]}
+                    hiddenFields={{
+                        'input.status': PostStatus.Published,
+                        'input.type': 'SupportArticle',
+                        'input.allowReaction': true,
+                        ...(postTopicId ? { 'input.topicIds': [postTopicId] } : {}),
+                    }}
+                    excludedFields={[
+                        'input.contentType',
+                        'input.allowComment',
+                        'input.allowVote',
+                        'input.allowDownvote',
+                        'input.metadata',
+                    ]}
+                    submitButtonProperties={{ children: 'Create Post' }}
+                />
+            </Card>
         </div>
     );
 }

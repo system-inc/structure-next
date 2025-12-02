@@ -5,20 +5,23 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
+import { Card } from '@structure/source/components/containers/Card';
 import { GraphQlMutationForm } from '@structure/source/api/graphql/forms/GraphQlMutationForm';
 import { DeletePostDialog } from '@structure/source/modules/post/components/dialogs/DeletePostDialog';
-import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 
 // Dependencies - API
 import { PostUpdateOperation, PostDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { schema } from '@structure/source/utilities/schema/Schema';
+import { slug } from '@structure/source/utilities/type/String';
+
+// Dependencies - Assets
+import { TrashIcon } from '@phosphor-icons/react/dist/ssr';
 
 // Component - EditSupportPostPage
 export interface EditSupportPostPageProperties {
     postIdentifier: string;
-    className?: string;
 }
 export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
     // State
@@ -26,50 +29,72 @@ export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
 
     // Render the component
     return (
-        <div className={mergeClassNames('container items-center justify-center pt-8 pb-32', properties.className)}>
-            <h1 className="mb-6 text-3xl font-medium">Edit Post</h1>
-
-            <GraphQlMutationForm
-                className="flex flex-col gap-4"
-                operation={PostUpdateOperation}
-                hiddenFields={{
-                    'input.type': 'SupportArticle',
-                    'input.allowComment': false,
-                    'input.allowVote': false,
-                    'input.allowDownvote': false,
-                    'input.allowReaction': true,
-                }}
-                excludedFields={['id', 'input.contentType', 'input.publishedAt', 'input.metadata']}
-                fieldProperties={{
-                    'input.content': { rows: 16 },
-                    'input.description': { rows: 4 },
-                }}
-                defaultValuesQuery={{
-                    document: PostDocument,
-                    variables: {
-                        identifier: properties.postIdentifier,
-                    },
-                }}
-                submitButton={{ children: 'Save Changes' }}
-            />
-
-            <HorizontalRule className="my-16" />
-
-            <div className="flex justify-end">
+        <div className="container items-center justify-center pt-8 pb-32">
+            <div className="flex items-center justify-between">
+                <h1 className="text-xl">Edit Post</h1>
                 <Button
-                    variant="Destructive"
+                    variant="DestructiveGhost"
+                    size="Icon"
+                    icon={TrashIcon}
                     onClick={function () {
                         setDeletePostDialogOpen(true);
                     }}
-                >
-                    Delete Post
-                </Button>
+                />
                 <DeletePostDialog
                     open={deletePostDialogOpen}
                     onOpenChange={setDeletePostDialogOpen}
                     postIdentifier={properties.postIdentifier}
                 />
             </div>
+
+            <Card variant="A" className="mt-4">
+                <GraphQlMutationForm
+                    // showPreviewGraphQlMutationTip={true}
+                    className="flex flex-col gap-4"
+                    operation={PostUpdateOperation}
+                    schema={schema.object({
+                        'input.title': schema.string(),
+                        'input.slug': schema.string(),
+                        'input.content': schema.string(),
+                    })}
+                    fieldProperties={{
+                        'input.title': {
+                            order: 1,
+                            tip: 'The title displayed to users when browsing support articles.',
+                        },
+                        'input.slug': {
+                            order: 2,
+                            tip: 'The URL-friendly identifier used in the article link.',
+                        },
+                        'input.description': {
+                            order: 3,
+                            rows: 4,
+                            tip: 'A brief summary shown in search results and article previews.',
+                        },
+                        'input.content': {
+                            order: 4,
+                            rows: 16,
+                            tip: 'The full article content. Supports Markdown formatting.',
+                        },
+                    }}
+                    linkedFields={[{ sourceField: 'input.title', targetField: 'input.slug', transform: slug }]}
+                    hiddenFields={{
+                        'input.type': 'SupportArticle',
+                        'input.allowComment': false,
+                        'input.allowVote': false,
+                        'input.allowDownvote': false,
+                        'input.allowReaction': true,
+                    }}
+                    excludedFields={['id', 'input.contentType', 'input.publishedAt', 'input.metadata']}
+                    defaultValuesGraphQlQuery={{
+                        document: PostDocument,
+                        variables: {
+                            identifier: properties.postIdentifier,
+                        },
+                    }}
+                    submitButtonProperties={{ children: 'Save' }}
+                />
+            </Card>
         </div>
     );
 }

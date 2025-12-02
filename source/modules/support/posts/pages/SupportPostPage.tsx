@@ -16,7 +16,7 @@ import { HorizontalRule } from '@structure/source/components/layout/HorizontalRu
 // import { useQuery } from '@apollo/client';
 
 // Dependencies - Assets
-import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
+import { PencilIcon } from '@phosphor-icons/react/dist/ssr';
 
 // Dependencies - Utilities
 // import { titleCase } from '@structure/source/utilities/String';
@@ -76,15 +76,18 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
     return (
         <div className="container pt-8 pb-32">
             {account.data?.isAdministrator() && (
-                <div className="float-end flex space-x-2">
+                <div className="float-end">
                     <Button
-                        variant="B"
-                        className="pl-3"
-                        iconLeft={EditIcon}
-                        href={'/support/posts/' + properties.post.identifier + '/edit'}
-                    >
-                        Edit Post
-                    </Button>
+                        variant="Ghost"
+                        size="Icon"
+                        icon={PencilIcon}
+                        href={
+                            '/support/posts/' +
+                            properties.post.identifier +
+                            '/edit?postTopicSlug=' +
+                            (properties.postTopicSlug ?? '')
+                        }
+                    />
                 </div>
             )}
 
