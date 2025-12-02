@@ -672,7 +672,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
 
                     <div className="flex items-center space-x-2 overflow-visible pr-2">
                         <Button
-                            variant="GhostDestructive"
+                            variant="DestructiveGhost"
                             className="relative left-0.5 aspect-square p-1"
                             icon={MinusCircledIcon}
                             onClick={handleDelete}

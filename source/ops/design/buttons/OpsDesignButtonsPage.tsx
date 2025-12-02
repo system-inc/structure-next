@@ -12,7 +12,7 @@ import { InputCheckbox } from '@structure/source/components/forms-new/fields/che
 // Dependencies - Assets
 import { PlusIcon, HeartIcon, StarIcon, DownloadIcon, TrashIcon } from '@phosphor-icons/react';
 
-// Helper to convert camelCase to spaced label (e.g., "GhostDestructive" -> "Ghost Destructive")
+// Helper to convert camelCase to spaced label (e.g., "DestructiveGhost" -> "Ghost Destructive")
 function toLabel(name: string, removePrefix?: string) {
     let label = name;
     if(removePrefix) {

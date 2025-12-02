@@ -516,7 +516,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                             <Button
                                 // Disabled if there is only one condition
                                 disabled={columnFilterGroupData.conditions.length === 1}
-                                variant="GhostDestructive"
+                                variant="DestructiveGhost"
                                 size="Icon"
                                 icon={MinusCircledIcon}
                                 onClick={function () {
@@ -606,7 +606,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                 {/* Remove Button - Only show if not the root group (every child FilterGroup has an id) */}
                 {properties.columnFilterGroupData.id && (
                     <Button
-                        variant="GhostDestructive"
+                        variant="DestructiveGhost"
                         iconLeft={MinusCircledIcon}
                         onClick={removeFilterGroupButtonOnClickIntercept}
                     >

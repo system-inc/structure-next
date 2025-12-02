@@ -64,7 +64,7 @@ export interface ButtonVariants {
     Contrast: 'Contrast';
     Ghost: 'Ghost';
     Destructive: 'Destructive';
-    GhostDestructive: 'GhostDestructive';
+    DestructiveGhost: 'DestructiveGhost';
     ToggleOn: 'ToggleOn';
     ToggleOff: 'ToggleOff';
     MenuItem: 'MenuItem';
@@ -252,19 +252,20 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         // Specialized UI Variants
 
-        // Variant GhostDestructive - Minimal destructive action button
+        // Variant DestructiveGhost - Minimal destructive action button
         // Use for: Less prominent destructive actions (e.g., remove from list, clear)
-        GhostDestructive: mergeClassNames(
-            buttonCommonBehaviorClassNames,
-            // Rounded
-            'rounded-lg',
+        DestructiveGhost: mergeClassNames(
+            'rounded-lg border border-transparent',
             // Content
-            'content--3',
+            'text-red-600 dark:text-red-650',
             // Hover
-            'hover:background--negative-muted hover:content--3',
-            // Active and Popover open states (for TipButton)
-            'active:background--8 data-[state=delayed-open]:background--8 data-[state=instant-open]:background--8 data-[state=open]:background--8',
-            'active:content---1 data-[state=delayed-open]:content---1 data-[state=instant-open]:content---1 data-[state=open]:content---1',
+            'hover:border-red-600 dark:hover:border-red-650',
+            // Light active and popover open states (for TipButton)
+            'active:text-red-650 data-[state=active]:text-red-650 data-[state=delayed-open]:text-red-650 data-[state=instant-open]:text-red-650 data-[state=open]:text-red-650',
+            'active:border-red-650 data-[state=active]:border-red-650 data-[state=delayed-open]:border-red-650 data-[state=instant-open]:border-red-650 data-[state=open]:border-red-650',
+            // Dark active and popover open states (for TipButton)
+            'dark:active:text-red-600 dark:data-[state=active]:text-red-600 dark:data-[state=delayed-open]:text-red-600 dark:data-[state=instant-open]:text-red-600 dark:data-[state=open]:text-red-600',
+            'dark:active:border-red-600 dark:data-[state=active]:border-red-600 dark:data-[state=delayed-open]:border-red-600 dark:data-[state=instant-open]:border-red-600 dark:data-[state=open]:border-red-600',
         ),
 
         // Variant ToggleOn - Button in toggled/active state
