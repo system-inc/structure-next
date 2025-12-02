@@ -75,8 +75,8 @@ export function AccountNavigationResponsivePopoverDrawer(
             accessibilityDescription="Access your account settings, profile, and navigation."
             trigger={
                 <AccountNavigationResponsivePopoverDrawerTriggerButton
-                    className={properties.triggerClassName}
                     variant={properties.triggerVariant}
+                    className={properties.triggerClassName}
                 />
             }
             content={

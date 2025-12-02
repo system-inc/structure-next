@@ -10,6 +10,9 @@ import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { NonLinkButtonProperties, Button } from '@structure/source/components/buttons/Button';
 import { ProfileImage } from '@structure/source/modules/account/components/profile-image/ProfileImage';
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+
 // Component - AccountNavigationResponsivePopoverDrawerTriggerButton
 // We need to forward references so the button receives the data-state attributes from the popover/drawer
 export interface AccountNavigationResponsivePopoverDrawerTriggerButtonProperties
@@ -33,13 +36,19 @@ export const AccountNavigationResponsivePopoverDrawerTriggerButton = React.forwa
     // Destructure to separate our custom props from button props
     const { variant, ...buttonProperties } = properties;
 
+    let className = properties.className;
+    if(account.signedIn) {
+        className = mergeClassNames('relative h-9 w-9 rounded-full', properties.className);
+    }
+
     // Render the component
     return (
         <Button
             ref={reference}
             {...buttonProperties}
             variant={variant || 'A'}
-            className={properties.className || (account.signedIn ? 'relative h-9 w-9' : undefined)}
+            className={className}
+            // Use Small if signed out to fit the "Sign In" text better
             size={account.signedIn ? undefined : 'Small'}
             aria-label="Open navigation menu"
         >
