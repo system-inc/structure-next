@@ -69,6 +69,9 @@ export interface TableProperties extends React.HTMLAttributes<HTMLTableElement> 
         message?: string;
         url?: string;
     };
+
+    // Empty state
+    emptyMessage?: React.ReactNode;
 }
 export function Table(properties: TableProperties) {
     // Hooks
@@ -624,7 +627,7 @@ export function Table(properties: TableProperties) {
                                 <tr>
                                     <td colSpan={visibleColumnsIndexesSet.size + 1}>
                                         <div className="flex items-center justify-center">
-                                            <div className="p-8 text-sm">No data.</div>
+                                            <div className="p-8 text-sm">{properties.emptyMessage ?? 'No data.'}</div>
                                         </div>
                                     </td>
                                 </tr>
