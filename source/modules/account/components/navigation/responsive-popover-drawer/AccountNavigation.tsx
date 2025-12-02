@@ -143,7 +143,8 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
             </ScrollArea>
 
             {/* Fixed Bottom Section */}
-            <div className="shrink-0">
+            {/* pb-[env(safe-area-inset-bottom)] ensures content isn't hidden behind iPhone home indicator */}
+            <div className="shrink-0 pb-[env(safe-area-inset-bottom)]">
                 {!account.signedIn && (
                     <>
                         <HorizontalRule className="mb-3" />

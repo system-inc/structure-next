@@ -157,11 +157,15 @@ export const drawerTheme: DrawerThemeConfiguration = {
 
         // Left side - Drawer slides in from left
         // Use for: Navigation menus, side panels
-        Left: mergeClassNames('inset-y-0 left-0 h-screen w-screen max-w-[min(20rem,85vw)] border-r'),
+        // Note: h-dvh (dynamic viewport height) fixes mobile browser chrome issues where h-screen/100vh
+        // includes area behind the URL bar, causing bottom content to be cut off
+        Left: mergeClassNames('inset-y-0 left-0 h-dvh w-screen max-w-[min(20rem,85vw)] border-r'),
 
         // Right side - Drawer slides in from right
         // Use for: Side panels, settings, filters
-        Right: mergeClassNames('inset-y-0 right-0 h-screen w-screen max-w-[min(20rem,85vw)] border-l'),
+        // Note: h-dvh (dynamic viewport height) fixes mobile browser chrome issues where h-screen/100vh
+        // includes area behind the URL bar, causing bottom content to be cut off
+        Right: mergeClassNames('inset-y-0 right-0 h-dvh w-screen max-w-[min(20rem,85vw)] border-l'),
     },
 
     // Configuration
