@@ -33,7 +33,12 @@ import {
     TextUnderlineIcon,
     PaperclipIcon,
     SpinnerIcon,
+    CodeIcon,
+    EyeIcon,
 } from '@phosphor-icons/react';
+
+// Dependencies - Theme
+import { InputMarkupMode } from '../InputMarkupTheme';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -51,6 +56,10 @@ export interface LexicalToolbarPluginProperties {
     showHistory?: boolean; // Default: true
     showAttachments?: boolean; // Default: false
     showSubmit?: boolean; // Default: false
+
+    // Mode toggle - Source (raw markdown) vs Visual (rich text)
+    mode?: InputMarkupMode;
+    onModeChange?: (mode: InputMarkupMode) => void;
 
     // Submit button config
     submitLabel?: string;
@@ -129,15 +138,22 @@ export function LexicalToolbarPlugin(properties: LexicalToolbarPluginProperties)
         [editor, $updateToolbar],
     );
 
+    // Mode toggle is always shown when mode prop is provided
+    const hasModeToggle = properties.mode !== undefined;
+
     // Check if any content should be shown
     const hasLeftContent = showHistory || showFormatting;
-    const hasRightContent = showAttachments || showSubmit;
+    const hasRightContent = showAttachments || showSubmit || hasModeToggle;
     const hasAnyContent = hasLeftContent || hasRightContent;
 
     // If nothing to show, render nothing
     if(!hasAnyContent && attachedFiles.length === 0) {
         return null;
     }
+
+    // Determine if formatting controls should be disabled (disabled in Source mode)
+    const isSourceMode = properties.mode === 'Source';
+    const formattingDisabled = properties.disabled || isSourceMode;
 
     // Render the component
     return (
@@ -202,7 +218,7 @@ export function LexicalToolbarPlugin(properties: LexicalToolbarPluginProperties)
                                     }}
                                     aria-label="Format Bold"
                                     variant="Ghost"
-                                    disabled={properties.disabled}
+                                    disabled={formattingDisabled}
                                 >
                                     <TextBIcon weight="bold" />
                                 </Toggle>
@@ -214,7 +230,7 @@ export function LexicalToolbarPlugin(properties: LexicalToolbarPluginProperties)
                                     }}
                                     aria-label="Format Italics"
                                     variant="Ghost"
-                                    disabled={properties.disabled}
+                                    disabled={formattingDisabled}
                                 >
                                     <TextItalicIcon weight="bold" />
                                 </Toggle>
@@ -226,7 +242,7 @@ export function LexicalToolbarPlugin(properties: LexicalToolbarPluginProperties)
                                     }}
                                     aria-label="Format Underline"
                                     variant="Ghost"
-                                    disabled={properties.disabled}
+                                    disabled={formattingDisabled}
                                 >
                                     <TextUnderlineIcon weight="bold" />
                                 </Toggle>
@@ -234,8 +250,24 @@ export function LexicalToolbarPlugin(properties: LexicalToolbarPluginProperties)
                         )}
                     </div>
 
-                    {/* Right side: Attachments and Submit */}
+                    {/* Right side: Mode toggle, Attachments, and Submit */}
                     <div className="flex items-center gap-1">
+                        {/* Mode toggle - Source (code icon) vs Visual (eye icon) */}
+                        {hasModeToggle && (
+                            <Button
+                                className="rounded-xl"
+                                size="Icon"
+                                variant="Ghost"
+                                icon={isSourceMode ? EyeIcon : CodeIcon}
+                                onClick={function () {
+                                    const newMode = isSourceMode ? 'Visual' : 'Source';
+                                    properties.onModeChange?.(newMode);
+                                }}
+                                aria-label={isSourceMode ? 'Switch to Visual mode' : 'Switch to Source mode'}
+                                disabled={properties.disabled}
+                            />
+                        )}
+
                         {showAttachments && (
                             <>
                                 <Button

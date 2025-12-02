@@ -93,6 +93,15 @@ export interface InputMarkupSizes {
 // Type - InputMarkup Size
 export type InputMarkupSize = keyof InputMarkupSizes;
 
+// InputMarkup Modes Interface
+export interface InputMarkupModes {
+    Source: 'Source'; // Raw markdown/text view (editable)
+    Visual: 'Visual'; // Rich text view (editable)
+}
+
+// Type - InputMarkup Mode
+export type InputMarkupMode = keyof InputMarkupModes;
+
 // Disabled styles - applied to container when disabled
 // Note: Unlike native inputs, div containers don't support :disabled pseudo-class
 // so we apply these conditionally via className
