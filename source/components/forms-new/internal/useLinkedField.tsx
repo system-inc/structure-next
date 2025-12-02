@@ -4,11 +4,12 @@
 import React from 'react';
 
 // Interface - UseLinkedFieldOptionsInterface
-export interface UseLinkedFieldOptionsInterface<TFieldPath extends string = string> {
-    form: { setFieldValue: (field: string, value: unknown) => void };
+// TFormState is the full form state from TanStack Form, giving transform access to value, formApi, etc.
+export interface UseLinkedFieldOptionsInterface<TFieldPath extends string = string, TFormState = unknown> {
+    form: { setFieldValue: (field: string, value: unknown) => void; state: TFormState };
     sourceField: TFieldPath;
     targetField: TFieldPath;
-    transform: (value: string) => string;
+    transform: (value: string, formState: TFormState) => string;
 }
 
 // Interface - UseLinkedFieldReturnInterface
@@ -23,8 +24,8 @@ export interface UseLinkedFieldReturnInterface {
 // Links a source field to a target field with a transform function.
 // When the source field changes, the target field is updated with the transformed value.
 // Manual edits to the target field disable auto-updates until the target is cleared.
-export function useLinkedField<TFieldPath extends string = string>(
-    options: UseLinkedFieldOptionsInterface<TFieldPath>,
+export function useLinkedField<TFieldPath extends string = string, TFormState = unknown>(
+    options: UseLinkedFieldOptionsInterface<TFieldPath, TFormState>,
 ): UseLinkedFieldReturnInterface {
     // State
     const [isTargetManuallyEdited, setIsTargetManuallyEdited] = React.useState(false);
@@ -44,8 +45,12 @@ export function useLinkedField<TFieldPath extends string = string>(
             if(isTargetManuallyEditedReference.current) {
                 return;
             }
-            if(typeof event.value === 'string') {
-                options.form.setFieldValue(options.targetField, options.transform(event.value));
+            // Handle both string and number values (for number inputs)
+            if(typeof event.value === 'string' || typeof event.value === 'number') {
+                options.form.setFieldValue(
+                    options.targetField,
+                    options.transform(String(event.value), options.form.state),
+                );
             }
         },
     };

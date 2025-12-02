@@ -12,6 +12,7 @@ import {
     createFormHookContexts,
     useStore,
     type FormOptions,
+    type FormState,
     type AnyFieldApi,
     type FormValidateOrFn,
     type FormAsyncValidateOrFn,
@@ -19,12 +20,12 @@ import {
 
 // Dependencies - Hooks
 import { useFormNotice, type FormNoticeProperties } from './hooks/useFormNotice';
-import { useLinkedFields } from './hooks/useLinkedFields';
+import { useLinkedFields } from './internal/useLinkedFields';
 
 // Dependencies - Form-Aware Components
 import { FormIdProvider } from './providers/FormIdProvider';
 import { FormSchemaProvider, useFormSchema } from './providers/FormSchemaProvider';
-import { LinkedFieldsProvider, useLinkedFieldsContext } from './providers/LinkedFieldsProvider';
+import { LinkedFieldsProvider, useLinkedFieldsContext } from './internal/LinkedFieldsProvider';
 import { FieldLabel } from './fields/FieldLabel';
 import { FieldMessage } from './fields/FieldMessage';
 
@@ -41,10 +42,11 @@ export const { fieldContext, formContext, useFieldContext } = createFormHookCont
 
 // Interface - LinkedFieldConfigurationInterface
 // Configuration for auto-updating a target field when a source field changes
-export interface LinkedFieldConfigurationInterface<TFieldPath extends string = string> {
+// TFormState is the full TanStack Form state with value, formApi, isValid, etc.
+export interface LinkedFieldConfigurationInterface<TFieldPath extends string = string, TFormState = unknown> {
     sourceField: TFieldPath;
     targetField: TFieldPath;
-    transform: (value: string) => string;
+    transform: (value: string, formState: TFormState) => string;
 }
 
 // Interface - SuccessMeta
@@ -115,7 +117,22 @@ export function useForm<
         notice?: {
             autoDismissInMilliseconds?: number | null; // Default: 5000ms, null = no auto-dismiss
         };
-        linkedFields?: LinkedFieldConfigurationInterface<NoInfer<Extract<keyof TFormData, string>>>[]; // Auto-update target fields when source fields change
+        linkedFields?: LinkedFieldConfigurationInterface<
+            NoInfer<Extract<keyof TFormData, string>>,
+            FormState<
+                TFormData,
+                TOnMount,
+                TOnChange,
+                TOnChangeAsync,
+                TOnBlur,
+                TOnBlurAsync,
+                TOnSubmit,
+                TOnSubmitAsync,
+                TOnDynamic,
+                TOnDynamicAsync,
+                TOnServer
+            >
+        >[]; // Auto-update target fields when source fields change
     },
 ) {
     // Extract the schema from options
@@ -165,21 +182,14 @@ export function useForm<
 
     // Linked fields - auto-update target fields when source fields change
     // Call the hook unconditionally (hooks must always be called), passing empty array if not configured
-    // Type safety is enforced at the options.linkedFields level where users configure source/target fields
-    // The internal hook call uses string-based types since TanStack Form's complex generics aren't directly compatible
-    // Type cast needed: TanStack Form's setFieldValue uses Updater<DeepValue<...>> which is more complex
-    // than our simplified (field, value) => void interface. The cast bridges these type systems.
-    type LinkedFieldName = Extract<keyof TFormData, string>;
-    const linkedFieldsResult = useLinkedFields<Record<LinkedFieldName, unknown>>({
-        form: appForm as unknown as {
-            setFieldValue: (field: LinkedFieldName, value: unknown) => void;
-            state: { values: Record<LinkedFieldName, unknown> };
+    // Type cast needed: TanStack Form's setFieldValue uses complex Updater<DeepValue<...>> generics
+    // Our simplified (field, value) => void interface is compatible at runtime
+    const linkedFieldsResult = useLinkedFields({
+        form: {
+            setFieldValue: appForm.setFieldValue as (field: string, value: unknown) => void,
+            state: appForm.store.state,
         },
-        linkedFields: (options.linkedFields ?? []) as {
-            sourceField: LinkedFieldName;
-            targetField: LinkedFieldName;
-            transform: (value: string) => string;
-        }[],
+        linkedFields: options.linkedFields ?? [],
     });
 
     // Track the last defaultValues we synced to, to avoid unnecessary resets

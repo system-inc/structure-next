@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Types
-import type { UseLinkedFieldsReturnInterface } from '../hooks/useLinkedFields';
+import type { UseLinkedFieldsReturnInterface } from './useLinkedFields';
 
 // Interface - LinkedFieldsContextValue
 interface LinkedFieldsContextValue {
