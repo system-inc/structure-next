@@ -78,7 +78,7 @@ export const linkTheme: LinkThemeConfiguration = {
 
         // Inline - For links within body text/prose
         // Underlined with subtle color change
-        Inline: 'underline underline-offset-2 hover:opacity-70 transition-opacity',
+        Inline: 'underline underline-offset-2 hover:opacity-70 active:opacity-100 transition-opacity',
     },
 
     // Configuration

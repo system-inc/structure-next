@@ -63,6 +63,7 @@ export interface ButtonVariants {
     Outline: 'Outline';
     Contrast: 'Contrast';
     Ghost: 'Ghost';
+    Informative: 'Informative';
     Destructive: 'Destructive';
     DestructiveGhost: 'DestructiveGhost';
     ToggleOn: 'ToggleOn';
@@ -159,7 +160,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonTypographyClassNames,
             buttonCommonFocusClassNames,
             // Border is fully round and outlined
-            'rounded-full border border--0',
+            'rounded-lg border border--0',
             // Background and content match the page background and content
             'background--0 content--0',
             // Hover emphasizes the border and content
@@ -225,6 +226,29 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Dark appearance is a bit more contrasted
             'dark:hover:background--6',
             'dark:active:background--8 dark:data-[state=active]:background--8 dark:data-[state=delayed-open]:background--8 dark:data-[state=instant-open]:background--8 dark:data-[state=open]:background--8',
+        ),
+
+        // Variant Informative - Informational action button
+        Informative: mergeClassNames(
+            buttonCommonLayoutClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
+            buttonCommonFocusClassNames,
+            'rounded-lg border',
+            // Light mode - Base
+            'border-blue-800 bg-blue-700 text-white-800',
+            // Light mode - Hover (bg: 600, border: 700)
+            'hover:border-blue-750 hover:bg-blue-650',
+            // Light mode - Active (bg: 500, border: 600)
+            'active:border-blue-650 active:bg-blue-550',
+            'data-[state=open]:border-blue-650 data-[state=open]:bg-blue-550',
+            // Dark mode - Base (bg: 900, border: 800)
+            'dark:border-blue-800 dark:bg-blue-900',
+            // Dark mode - Hover (bg: 850, border: 750)
+            'dark:hover:border-blue-750 dark:hover:bg-blue-850',
+            // Dark mode - Active (bg: 800, border: 700)
+            'dark:active:border-blue-700 dark:active:bg-blue-800',
+            'dark:data-[state=open]:border-blue-700 dark:data-[state=open]:bg-blue-800',
         ),
 
         // Variant Destructive - Dangerous/destructive action button
