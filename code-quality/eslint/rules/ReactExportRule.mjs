@@ -33,6 +33,8 @@ const ReactExportRule = {
         const specialNextJsFiles = [
             '/error.tsx',
             '/error.jsx',
+            '/global-error.tsx',
+            '/global-error.jsx',
             '/layout.tsx',
             '/layout.jsx',
             '/not-found.tsx',

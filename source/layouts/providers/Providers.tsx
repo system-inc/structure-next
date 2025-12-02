@@ -7,6 +7,7 @@ import React from 'react';
 import { sessionIdHttpOnlyCookieExistsAtom } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Foundation Providers
+import { SystemLogProvider } from '@structure/source/modules/system-log/layouts/providers/SystemLogProvider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { CookiesProvider } from '@structure/source/utilities/cookie/CookiesProvider';
 import { Cookies } from '@structure/source/utilities/cookie/Cookies';
@@ -43,27 +44,29 @@ export function Providers(properties: ProvidersProperties) {
 
     // Render the component
     return (
-        <NuqsAdapter>
-            <NetworkServiceProvider>
-                <CookiesProvider cookies={Cookies}>
-                    <WebSocketViaSharedWorkerProvider>
-                        <SharedStateProvider>
-                            <ThemeProvider>
-                                <IconContext.Provider value={{ weight: 'bold', color: 'currentColor' }}>
-                                    <EngagementProvider>
-                                        <NotificationsProvider>
-                                            <TipProvider delayDuration={100}>
-                                                {properties.children}
-                                                <AuthenticationDialog />
-                                            </TipProvider>
-                                        </NotificationsProvider>
-                                    </EngagementProvider>
-                                </IconContext.Provider>
-                            </ThemeProvider>
-                        </SharedStateProvider>
-                    </WebSocketViaSharedWorkerProvider>
-                </CookiesProvider>
-            </NetworkServiceProvider>
-        </NuqsAdapter>
+        <SystemLogProvider>
+            <NuqsAdapter>
+                <NetworkServiceProvider>
+                    <CookiesProvider cookies={Cookies}>
+                        <WebSocketViaSharedWorkerProvider>
+                            <SharedStateProvider>
+                                <ThemeProvider>
+                                    <IconContext.Provider value={{ weight: 'bold', color: 'currentColor' }}>
+                                        <EngagementProvider>
+                                            <NotificationsProvider>
+                                                <TipProvider delayDuration={100}>
+                                                    {properties.children}
+                                                    <AuthenticationDialog />
+                                                </TipProvider>
+                                            </NotificationsProvider>
+                                        </EngagementProvider>
+                                    </IconContext.Provider>
+                                </ThemeProvider>
+                            </SharedStateProvider>
+                        </WebSocketViaSharedWorkerProvider>
+                    </CookiesProvider>
+                </NetworkServiceProvider>
+            </NuqsAdapter>
+        </SystemLogProvider>
     );
 }

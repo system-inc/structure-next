@@ -3349,6 +3349,15 @@ export type SupportTicketUpdateStatusPrivilegedMutation = {
     supportTicketUpdateStatusPrivileged: { __typename?: 'SupportTicket'; id: string; status: SupportTicketStatus };
 };
 
+export type SystemLogCreateMutationVariables = Exact<{
+    input: SystemLogClientInput;
+}>;
+
+export type SystemLogCreateMutation = {
+    __typename?: 'Mutation';
+    systemLogCreate: { __typename?: 'OperationResult'; success: boolean };
+};
+
 export class TypedDocumentString<TResult, TVariables>
     extends String
     implements DocumentTypeDecoration<TResult, TVariables>
@@ -4370,6 +4379,13 @@ export const SupportTicketUpdateStatusPrivilegedDocument = new TypedDocumentStri
     SupportTicketUpdateStatusPrivilegedMutation,
     SupportTicketUpdateStatusPrivilegedMutationVariables
 >;
+export const SystemLogCreateDocument = new TypedDocumentString(`
+    mutation SystemLogCreate($input: SystemLogClientInput!) {
+  systemLogCreate(input: $input) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<SystemLogCreateMutation, SystemLogCreateMutationVariables>;
 export type GraphQLInputTypeMetadata =
     | GraphQLInputScalarTypeMetadata
     | GraphQLInputEnumTypeMetadata
@@ -6040,6 +6056,94 @@ export const SupportTicketStatusMetadata: GraphQLInputEnumTypeMetadata = {
     values: ['Open', 'Closed', 'Deleted'],
 };
 
+export const SystemLogClientInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'SystemLogClientInput',
+    fields: [
+        {
+            name: 'level',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isEnum',
+                    constraints: [
+                        { Info: 'Info', Debug: 'Debug', Warning: 'Warning', Error: 'Error' },
+                        ['Info', 'Debug', 'Warning', 'Error'],
+                    ],
+                },
+                {
+                    type: 'isNotEmpty',
+                },
+                {
+                    type: 'isString',
+                },
+            ],
+        },
+        {
+            name: 'event',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'maxLength',
+                    constraints: [100],
+                },
+                {
+                    type: 'isNotEmpty',
+                },
+                {
+                    type: 'isString',
+                },
+            ],
+        },
+        {
+            name: 'category',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'source',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'message',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'stackTrace',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'data',
+            kind: 'scalar',
+            type: 'JSONObject',
+            required: false,
+        },
+        {
+            name: 'traceId',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'traceSequence',
+            kind: 'scalar',
+            type: 'Float',
+            required: false,
+        },
+    ],
+};
+
 export interface GraphQLOperationMetadata<DocumentType> {
     readonly operation: string;
     readonly operationType: 'query' | 'mutation' | 'subscription';
@@ -6867,6 +6971,20 @@ export const SupportTicketUpdateStatusPrivilegedOperation: GraphQLOperationMetad
             required: true,
             kind: 'enum',
             type: SupportTicketStatusMetadata,
+        },
+    ],
+};
+
+export const SystemLogCreateOperation: GraphQLOperationMetadata<typeof SystemLogCreateDocument> = {
+    operation: 'SystemLogCreate',
+    operationType: 'mutation',
+    document: SystemLogCreateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: SystemLogClientInputMetadata,
         },
     ],
 };

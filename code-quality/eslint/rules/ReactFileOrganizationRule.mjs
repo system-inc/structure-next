@@ -34,6 +34,31 @@ const ReactFileOrganizationRule = {
         const maxComponentLines = options.maxComponentLines || 60;
         const maxHelperLines = options.maxHelperLines || 10;
 
+        // Next.js special files are exempt from this rule (they are standalone by design)
+        const filename = context.getFilename();
+        const specialNextJsFiles = [
+            '/page.tsx',
+            '/page.jsx',
+            '/error.tsx',
+            '/error.jsx',
+            '/global-error.tsx',
+            '/global-error.jsx',
+            '/layout.tsx',
+            '/layout.jsx',
+            '/not-found.tsx',
+            '/not-found.jsx',
+            '/loading.tsx',
+            '/loading.jsx',
+        ];
+        const isSpecialNextJsFile = specialNextJsFiles.some(function (pattern) {
+            return filename.endsWith(pattern);
+        });
+
+        // Skip this rule for Next.js special files
+        if(isSpecialNextJsFile) {
+            return {};
+        }
+
         // Track all React components found in the file
         const components = [];
 

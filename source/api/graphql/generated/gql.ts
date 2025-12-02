@@ -64,7 +64,6 @@ type Documents = {
     '\n            mutation PostUpdate($id: String!, $input: PostUpdateInput!) {\n                postUpdate(id: $id, input: $input) {\n                    id\n                    status\n                    title\n                    contentType\n                    content\n                    settings\n                    upvoteCount\n                    downvoteCount\n                    metadata\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.PostUpdateDocument;
     '\n            mutation PostVote($postId: String!, $type: PostVoteType!) {\n                postVote(postId: $postId, type: $type) {\n                    success\n                }\n            }\n        ': typeof types.PostVoteDocument;
     '\n            query Posts($pagination: PaginationInput!) {\n                posts(pagination: $pagination) {\n                    pagination {\n                        itemIndex\n                        itemIndexForPreviousPage\n                        itemIndexForNextPage\n                        itemsPerPage\n                        itemsTotal\n                        pagesTotal\n                        page\n                    }\n                    items {\n                        id\n                        identifier\n                        slug\n                        status\n                        title\n                        createdByProfileId\n                        createdByProfile {\n                            displayName\n                            username\n                            images {\n                                url\n                                type\n                                variant\n                            }\n                        }\n                        content\n                        reactions {\n                            content\n                            count\n                            reacted\n                        }\n                        upvoteCount\n                        downvoteCount\n                        voteType\n                        reportedCount\n                        reportStatus\n                        metadata\n                        latestRevisionId\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ': typeof types.PostsDocument;
-    '\n    mutation PostUpdate($id: String!, $input: PostUpdateInput!) {\n        postUpdate(id: $id, input: $input) {\n            id\n            status\n            title\n            contentType\n            content\n            settings\n            upvoteCount\n            downvoteCount\n            metadata\n            updatedAt\n            createdAt\n        }\n    }\n': typeof types.PostUpdateDocument;
     '\n            mutation PostReactionCreate($postId: String!, $content: String!) {\n                postReactionCreate(postId: $postId, content: $content) {\n                    success\n                }\n            }\n        ': typeof types.PostReactionCreateDocument;
     '\n            mutation PostReactionDelete($postId: String!, $content: String!) {\n                postReactionDelete(postId: $postId, content: $content) {\n                    success\n                }\n            }\n        ': typeof types.PostReactionDeleteDocument;
     '\n            query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput!) {\n                postReactionProfiles(postId: $postId, content: $content, pagination: $pagination) {\n                    items {\n                        username\n                        displayName\n                        profileId\n                    }\n                    pagination {\n                        itemIndex\n                        itemIndexForPreviousPage\n                        itemIndexForNextPage\n                        itemsPerPage\n                        itemsTotal\n                        pagesTotal\n                        page\n                    }\n                }\n            }\n        ': typeof types.PostReactionProfilesDocument;
@@ -75,6 +74,7 @@ type Documents = {
     '\n            mutation SupportTicketCommentCreatePrivileged($input: SupportTicketCommentCreateInput!) {\n                supportTicketCommentCreatePrivileged(input: $input) {\n                    id\n                    content\n                    contentType\n                    source\n                    visibility\n                    createdAt\n                }\n            }\n        ': typeof types.SupportTicketCommentCreatePrivilegedDocument;
     '\n            mutation SupportTicketAssign($ticketId: String!, $username: String) {\n                supportTicketAssign(ticketId: $ticketId, username: $username) {\n                    id\n                    assignedToProfileId\n                    assignedToProfile {\n                        username\n                        displayName\n                        images {\n                            type\n                            url\n                            variant\n                        }\n                    }\n                }\n            }\n        ': typeof types.SupportTicketAssignDocument;
     '\n            mutation SupportTicketUpdateStatusPrivileged($id: String!, $status: SupportTicketStatus!) {\n                supportTicketUpdateStatusPrivileged(id: $id, status: $status) {\n                    id\n                    status\n                }\n            }\n        ': typeof types.SupportTicketUpdateStatusPrivilegedDocument;
+    '\n            mutation SystemLogCreate($input: SystemLogClientInput!) {\n                systemLogCreate(input: $input) {\n                    success\n                }\n            }\n        ': typeof types.SystemLogCreateDocument;
 };
 const documents: Documents = {
     'query NoOp { __typename }': types.NoOpDocument,
@@ -178,8 +178,6 @@ const documents: Documents = {
         types.PostVoteDocument,
     '\n            query Posts($pagination: PaginationInput!) {\n                posts(pagination: $pagination) {\n                    pagination {\n                        itemIndex\n                        itemIndexForPreviousPage\n                        itemIndexForNextPage\n                        itemsPerPage\n                        itemsTotal\n                        pagesTotal\n                        page\n                    }\n                    items {\n                        id\n                        identifier\n                        slug\n                        status\n                        title\n                        createdByProfileId\n                        createdByProfile {\n                            displayName\n                            username\n                            images {\n                                url\n                                type\n                                variant\n                            }\n                        }\n                        content\n                        reactions {\n                            content\n                            count\n                            reacted\n                        }\n                        upvoteCount\n                        downvoteCount\n                        voteType\n                        reportedCount\n                        reportStatus\n                        metadata\n                        latestRevisionId\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ':
         types.PostsDocument,
-    '\n    mutation PostUpdate($id: String!, $input: PostUpdateInput!) {\n        postUpdate(id: $id, input: $input) {\n            id\n            status\n            title\n            contentType\n            content\n            settings\n            upvoteCount\n            downvoteCount\n            metadata\n            updatedAt\n            createdAt\n        }\n    }\n':
-        types.PostUpdateDocument,
     '\n            mutation PostReactionCreate($postId: String!, $content: String!) {\n                postReactionCreate(postId: $postId, content: $content) {\n                    success\n                }\n            }\n        ':
         types.PostReactionCreateDocument,
     '\n            mutation PostReactionDelete($postId: String!, $content: String!) {\n                postReactionDelete(postId: $postId, content: $content) {\n                    success\n                }\n            }\n        ':
@@ -200,6 +198,8 @@ const documents: Documents = {
         types.SupportTicketAssignDocument,
     '\n            mutation SupportTicketUpdateStatusPrivileged($id: String!, $status: SupportTicketStatus!) {\n                supportTicketUpdateStatusPrivileged(id: $id, status: $status) {\n                    id\n                    status\n                }\n            }\n        ':
         types.SupportTicketUpdateStatusPrivilegedDocument,
+    '\n            mutation SystemLogCreate($input: SystemLogClientInput!) {\n                systemLogCreate(input: $input) {\n                    success\n                }\n            }\n        ':
+        types.SystemLogCreateDocument,
 };
 
 /**
@@ -510,12 +510,6 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-    source: '\n    mutation PostUpdate($id: String!, $input: PostUpdateInput!) {\n        postUpdate(id: $id, input: $input) {\n            id\n            status\n            title\n            contentType\n            content\n            settings\n            upvoteCount\n            downvoteCount\n            metadata\n            updatedAt\n            createdAt\n        }\n    }\n',
-): typeof import('./graphql').PostUpdateDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
     source: '\n            mutation PostReactionCreate($postId: String!, $content: String!) {\n                postReactionCreate(postId: $postId, content: $content) {\n                    success\n                }\n            }\n        ',
 ): typeof import('./graphql').PostReactionCreateDocument;
 /**
@@ -572,6 +566,12 @@ export function graphql(
 export function graphql(
     source: '\n            mutation SupportTicketUpdateStatusPrivileged($id: String!, $status: SupportTicketStatus!) {\n                supportTicketUpdateStatusPrivileged(id: $id, status: $status) {\n                    id\n                    status\n                }\n            }\n        ',
 ): typeof import('./graphql').SupportTicketUpdateStatusPrivilegedDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            mutation SystemLogCreate($input: SystemLogClientInput!) {\n                systemLogCreate(input: $input) {\n                    success\n                }\n            }\n        ',
+): typeof import('./graphql').SystemLogCreateDocument;
 
 export function graphql(source: string) {
     return (documents as any)[source] ?? {};
