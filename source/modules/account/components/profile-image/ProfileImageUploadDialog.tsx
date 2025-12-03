@@ -1,10 +1,12 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Project
-import { ProjectSettings } from '@project/ProjectSettings';
-
 // Dependencies - React
 import React from 'react';
+
+// Dependencies - Hooks
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
+import { useAccountProfileImageUploadRequest } from '@structure/source/modules/account/hooks/useAccountProfileImageUploadRequest';
+import { useAccountProfileImageRemoveRequest } from '@structure/source/modules/account/hooks/useAccountProfileImageRemoveRequest';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
@@ -16,36 +18,6 @@ import { ImageEditor } from '@structure/source/components/images/editor/ImageEdi
 // Dependencies - Assets
 import { TrashIcon } from '@phosphor-icons/react';
 
-// Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
-import { AccountQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-
-// Types - Profile Image Upload Response
-interface StoredObject {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    storedObjectGroupId: string;
-    status: string;
-    name: string;
-    source: string;
-    extension: string;
-    isTemporary: boolean;
-    key: string;
-    version: string;
-    size: number;
-    etag: string;
-    httpEtag: string;
-    uploadedAt: string;
-    purgedAt: null | string;
-    meta: null | unknown;
-    url: string;
-}
-interface ProfileImageUploadResponse {
-    original: StoredObject;
-    transformed?: StoredObject[];
-}
-
 // Component - ProfileImageUploadDialog
 export interface ProfileImageUploadDialogProperties {
     trigger: React.ReactElement;
@@ -53,35 +25,32 @@ export interface ProfileImageUploadDialogProperties {
     onImageChange?: () => void;
 }
 export function ProfileImageUploadDialog(properties: ProfileImageUploadDialogProperties) {
+    // Hooks
+    const account = useAccount();
+    const accountProfileImageUploadRequest = useAccountProfileImageUploadRequest();
+    const accountProfileImageRemoveRequest = useAccountProfileImageRemoveRequest({
+        onSuccess: function (data) {
+            // Update account atom with removed images
+            if(data?.accountProfileImageRemove && account.data?.profile) {
+                account.setData({
+                    profile: {
+                        ...account.data.profile,
+                        images: data.accountProfileImageRemove.images || [],
+                    },
+                });
+            }
+            handleSuccess();
+        },
+        onError: function (mutationError) {
+            setError(mutationError.message);
+        },
+    });
+
     // State
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [dialogMode, setDialogMode] = React.useState<'select' | 'edit'>('select');
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
-    const [uploading, setUploading] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
-
-    // GraphQL mutation
-    const removeProfileImageMutation = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountProfileImageRemove {
-                accountProfileImageRemove {
-                    images {
-                        url
-                        variant
-                    }
-                }
-            }
-        `),
-        {
-            onSuccess: function () {
-                handleSuccess();
-            },
-            onError: function (mutationError) {
-                setError(mutationError.message);
-                setUploading(false);
-            },
-        },
-    );
 
     // Handle dialog close
     function handleDialogClose() {
@@ -89,14 +58,10 @@ export function ProfileImageUploadDialog(properties: ProfileImageUploadDialogPro
         setDialogMode('select');
         setSelectedFile(null);
         setError(null);
-        // Always ensure uploading state is reset when closing the dialog
-        setUploading(false);
     }
 
     // Handle file selection
     function handleFileSelected(file: File) {
-        // Make sure uploading state is reset when selecting a new file
-        setUploading(false);
         setSelectedFile(file);
         setDialogMode('edit');
         setError(null);
@@ -104,43 +69,25 @@ export function ProfileImageUploadDialog(properties: ProfileImageUploadDialogPro
 
     // Handle image upload
     async function handleImageUpload(imageBlob: Blob) {
-        setUploading(true);
         setError(null);
 
         try {
-            // Upload image to server via NetworkService
-            const response = await networkService.request(
-                'https://' + ProjectSettings.apis.base.host + '/accounts/profiles/images',
-                {
-                    method: 'POST',
-                    body: imageBlob,
-                    headers: {
-                        'Content-Type': 'image/jpeg',
-                    },
-                },
-            );
-
-            // Parse the response JSON
-            const profileImageUploadResponse = (await response.json()) as ProfileImageUploadResponse;
-
-            // Handle success with the image data
-            handleSuccess(profileImageUploadResponse);
+            await accountProfileImageUploadRequest.execute(imageBlob);
+            handleSuccess();
         }
         catch(uploadError) {
             setError(
                 uploadError instanceof Error ? uploadError.message : 'An error occurred while uploading the image',
             );
-            setUploading(false);
         }
     }
 
     // Handle image removal
     async function handleRemoveImage() {
-        setUploading(true);
         setError(null);
 
         try {
-            await removeProfileImageMutation.execute();
+            await accountProfileImageRemoveRequest.execute();
             // Success is handled by onSuccess callback
         } catch {
             // Error is handled by onError callback
@@ -148,68 +95,7 @@ export function ProfileImageUploadDialog(properties: ProfileImageUploadDialogPro
     }
 
     // Handle success (for both upload and remove)
-    async function handleSuccess(profileImageUploadResponse?: ProfileImageUploadResponse) {
-        if(
-            profileImageUploadResponse &&
-            profileImageUploadResponse.original &&
-            profileImageUploadResponse.transformed &&
-            profileImageUploadResponse.transformed.length > 0
-        ) {
-            // Get cached account data
-            const accountData = networkService.getCache<AccountQuery>(['account']);
-
-            if(accountData && accountData.account) {
-                // Create new images array from the upload response
-                const newImages = [
-                    // Original image
-                    {
-                        url: profileImageUploadResponse.original.url,
-                        variant: profileImageUploadResponse.original.name,
-                    },
-                    // All transformed images
-                    ...profileImageUploadResponse.transformed.map(function (transformedImage) {
-                        return {
-                            url: transformedImage.url,
-                            variant: transformedImage.name,
-                        };
-                    }),
-                ];
-
-                // Create updated account data with new image URLs
-                const updatedAccount = {
-                    ...accountData.account,
-                    profile: {
-                        ...accountData.account.profile,
-                        images: newImages,
-                    },
-                };
-
-                // Update the cache with new data
-                networkService.setCache(['account'], { account: updatedAccount });
-            }
-        }
-        else if(removeProfileImageMutation.data) {
-            // For image removal, update the cache with the mutation result
-            const removeResult = removeProfileImageMutation.data.accountProfileImageRemove;
-            const accountData = networkService.getCache<AccountQuery>(['account']);
-
-            if(removeResult && accountData && accountData.account) {
-                // Create updated account data with the response
-                const updatedAccount = {
-                    ...accountData.account,
-                    profile: {
-                        ...accountData.account.profile,
-                        images: removeResult.images || [],
-                    },
-                };
-
-                // Update the cache with new data
-                networkService.setCache(['account'], { account: updatedAccount });
-            }
-        }
-
-        // Image has been updated, reset uploading state and close dialog
-        setUploading(false);
+    function handleSuccess() {
         handleDialogClose();
         // Notify parent component
         properties.onImageChange?.();
@@ -257,7 +143,7 @@ export function ProfileImageUploadDialog(properties: ProfileImageUploadDialogPro
                         outputFormat="jpeg"
                         outputQuality={0.9}
                         maximumOutputSizeInBytes={1024 * 1024} // 1MB
-                        loading={uploading}
+                        loading={accountProfileImageUploadRequest.isLoading}
                     />
                 )}
             </div>
@@ -273,7 +159,7 @@ export function ProfileImageUploadDialog(properties: ProfileImageUploadDialogPro
                         variant="Destructive"
                         icon={TrashIcon}
                         onClick={handleRemoveImage}
-                        isLoading={uploading || removeProfileImageMutation.isLoading}
+                        isLoading={accountProfileImageRemoveRequest.isLoading}
                     >
                         Delete Current Picture
                     </Button>
