@@ -186,7 +186,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonBehaviorClassNames,
             buttonCommonTypographyClassNames,
             buttonCommonFocusClassNames,
-            'rounded-lg border border--0 content--0',
+            'rounded-lg border border--0 text-sm content--0',
             // Hover - Emphasize border and content
             'hover:border--6 hover:content---1',
             // Active and open - Further emphasize border and content

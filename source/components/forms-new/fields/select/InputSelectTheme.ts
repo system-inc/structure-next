@@ -37,7 +37,7 @@ export interface InputSelectSizeMapping {
 //   }
 export interface InputSelectVariants {
     A: 'A';
-    // Future: B, Outline, Ghost, etc.
+    Outline: 'Outline';
 }
 
 // Type - InputSelect Variant (derived from InputSelectVariants interface)
@@ -76,6 +76,13 @@ export const inputSelectTheme: InputSelectThemeConfiguration = {
         // Variant A - Standard form select
         A: {
             triggerButtonVariant: 'InputSelectTrigger',
+            popoverVariant: 'A',
+            menuItemButtonVariant: 'MenuItem',
+        },
+
+        // Variant Outline - Transparent background with border only
+        Outline: {
+            triggerButtonVariant: 'Outline',
             popoverVariant: 'A',
             menuItemButtonVariant: 'MenuItem',
         },
