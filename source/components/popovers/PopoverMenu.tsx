@@ -98,6 +98,7 @@ export function PopoverMenu({
             content={
                 <Menu
                     {...menuProperties}
+                    search={search}
                     className={mergeClassNames('max-h-screen', className)}
                     style={{
                         // Set the max height of the menu to the available height of the popover

@@ -67,7 +67,7 @@ export const InputTextVariants = {
         // Background
         'bg-transparent',
     ),
-    menuSearch: mergeClassNames(
+    MenuSearch: mergeClassNames(
         commonInputTextClassNames,
         autofillStyleClassNames,
         // Layout and sizing
@@ -76,6 +76,8 @@ export const InputTextVariants = {
         'border-b border--0',
         // Background
         'bg-transparent',
+        // No focus ring for menu search
+        'focus:outline-none',
     ),
 };
 
@@ -123,7 +125,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextProp
     const type = properties.type ?? 'text';
     const variant = properties.variant || 'default';
     const size = properties.size || 'default';
-    const Icon = properties.icon || variant == 'search' || variant == 'menuSearch' ? SearchIcon : undefined;
+    const Icon = properties.icon || variant == 'search' || variant == 'MenuSearch' ? SearchIcon : undefined;
 
     // Function to expose methods to parent components
     React.useImperativeHandle(reference, function () {

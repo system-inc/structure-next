@@ -33,7 +33,7 @@ export const MenuSearch = React.memo(
             <InputText
                 ref={searchInputTextReference}
                 id="menuSearch"
-                variant="menuSearch"
+                variant="MenuSearch"
                 placeholder="Search..."
                 autoComplete="off"
                 onKeyDown={handleKeyDown}

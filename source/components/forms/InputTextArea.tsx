@@ -66,7 +66,7 @@ export const InputTextAreaVariants = {
         // Background
         'bg-transparent',
     ),
-    menuSearch: mergeClassNames(
+    MenuSearch: mergeClassNames(
         commonClassNames,
         autofillStyleClassNames,
         // Layout and sizing
