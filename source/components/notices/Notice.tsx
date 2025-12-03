@@ -127,7 +127,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
                 properties.className,
             )}
         >
-            <div className="flex items-start gap-3">
+            <div className={mergeClassNames('flex gap-3', properties.children ? 'items-start' : 'items-center')}>
                 {icon && <div className={variantIconContainerClassNames}>{themeIcon(icon, iconClassNames)}</div>}
                 <div className={variantTextContainerClassNames}>
                     {properties.title && <div className={titleClassNames}>{properties.title}</div>}
