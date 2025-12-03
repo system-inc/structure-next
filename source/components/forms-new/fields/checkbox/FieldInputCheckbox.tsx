@@ -11,9 +11,6 @@ import { useFieldId } from '../../providers/FormIdProvider';
 import { InputCheckbox } from './InputCheckbox';
 import { TipButton } from '@structure/source/components/buttons/TipButton';
 
-// Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
-
 // Dependencies - Types
 import type { InputCheckboxState } from './InputCheckbox';
 
@@ -22,15 +19,10 @@ export type FieldInputCheckboxProperties = Omit<
     React.ComponentProps<typeof InputCheckbox>,
     'isChecked' | 'defaultIsChecked'
 > & {
-    children?: React.ReactNode; // Label text displayed next to the checkbox
-    labelClassName?: string; // Additional classes for the label wrapper
     tip?: React.ReactNode; // Optional tooltip content displayed at the end of the label
 };
 
-export function FieldInputCheckbox(properties: FieldInputCheckboxProperties) {
-    // Destructure label-related props
-    const { children, labelClassName, tip, ...checkboxProperties } = properties;
-
+export function FieldInputCheckbox({ children, tip, ...checkboxProperties }: FieldInputCheckboxProperties) {
     // Hooks
     const fieldContext = useFieldContext<boolean>();
     const fieldId = useFieldId(fieldContext.name);
@@ -62,8 +54,18 @@ export function FieldInputCheckbox(properties: FieldInputCheckboxProperties) {
         checkboxProperties.onBlur?.(event);
     }
 
-    // Build the checkbox element
-    const checkboxElement = (
+    // Build the label content with optional tip
+    const labelContent = tip ? (
+        <span className="flex items-center gap-0.5">
+            {children}
+            <TipButton tip={tip} tipClassName="text-sm font-normal" openOnPress={true} />
+        </span>
+    ) : (
+        children
+    );
+
+    // Render the checkbox with children passed through
+    return (
         <InputCheckbox
             {...checkboxProperties}
             id={checkboxProperties.id ?? fieldId}
@@ -72,32 +74,8 @@ export function FieldInputCheckbox(properties: FieldInputCheckboxProperties) {
             aria-invalid={storeErrors && storeErrors.length > 0 ? true : undefined}
             onIsCheckedChange={onIsCheckedChangeIntercept}
             onBlur={onBlurIntercept}
-        />
+        >
+            {labelContent}
+        </InputCheckbox>
     );
-
-    // If children provided, wrap in a label for accessibility
-    if(children) {
-        return (
-            <label
-                className={mergeClassNames(
-                    'flex cursor-pointer items-center gap-2 text-sm select-none',
-                    labelClassName,
-                )}
-                htmlFor={checkboxProperties.id ?? fieldId}
-            >
-                {checkboxElement}
-                {tip ? (
-                    <div className="flex items-center gap-0.5">
-                        {children}
-                        <TipButton tip={tip} tipClassName="text-sm font-normal" openOnPress={true} />
-                    </div>
-                ) : (
-                    children
-                )}
-            </label>
-        );
-    }
-
-    // Otherwise, render just the checkbox
-    return checkboxElement;
 }

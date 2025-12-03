@@ -34,12 +34,28 @@ export interface InputCheckboxProperties
     isChecked?: InputCheckboxState;
     defaultIsChecked?: InputCheckboxState;
     onIsCheckedChange?: (isChecked: InputCheckboxState) => void;
+    children?: React.ReactNode; // Label text displayed next to the checkbox
+    labelClassName?: string; // Additional classes for the label wrapper
 }
 export const InputCheckbox = React.forwardRef<React.ComponentRef<typeof RadixCheckbox.Root>, InputCheckboxProperties>(
     function InputCheckbox(
-        { className, variant, size, isChecked, defaultIsChecked, onIsCheckedChange, ...checkboxProperties },
+        {
+            className,
+            variant,
+            size,
+            isChecked,
+            defaultIsChecked,
+            onIsCheckedChange,
+            children,
+            labelClassName,
+            ...radixCheckboxRootProperties
+        },
         reference,
     ) {
+        // Generate unique ID for label association
+        const generatedId = React.useId();
+        const checkboxId = radixCheckboxRootProperties.id ?? generatedId;
+
         // Get component theme from context
         const componentTheme = useComponentTheme();
 
@@ -76,15 +92,17 @@ export const InputCheckbox = React.forwardRef<React.ComponentRef<typeof RadixChe
             [onIsCheckedChange],
         );
 
-        // Render the component
-        return (
+        // Build the checkbox element
+        const checkboxElement = (
             <RadixCheckbox.Root
                 ref={reference}
+                id={checkboxId}
+                name={radixCheckboxRootProperties.name ?? checkboxId}
                 className={themeClassName}
                 checked={radixIsChecked}
                 defaultChecked={radixDefaultIsChecked}
                 onCheckedChange={handleCheckedChange}
-                {...checkboxProperties}
+                {...radixCheckboxRootProperties}
             >
                 <RadixCheckbox.Indicator className={theme.configuration.indicatorClasses}>
                     {isChecked === 'Indeterminate' ? (
@@ -95,6 +113,25 @@ export const InputCheckbox = React.forwardRef<React.ComponentRef<typeof RadixChe
                 </RadixCheckbox.Indicator>
             </RadixCheckbox.Root>
         );
+
+        // If children provided, wrap in a label for accessibility
+        if(children) {
+            return (
+                <label
+                    className={mergeClassNames(
+                        'flex w-fit cursor-pointer items-center gap-2 text-sm select-none',
+                        labelClassName,
+                    )}
+                    htmlFor={checkboxId}
+                >
+                    {checkboxElement}
+                    {children}
+                </label>
+            );
+        }
+
+        // Otherwise, render just the checkbox
+        return checkboxElement;
     },
 );
 
