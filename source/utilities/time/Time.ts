@@ -486,3 +486,54 @@ export function monthAbbreviation(month: number): string {
     // Convert from 1-based to 0-based index
     return monthNames[month - 1] || '';
 }
+
+// ================================================================================================
+// Hour Format Conversion
+// ================================================================================================
+
+/**
+ * Converts a 24-hour format hour to 12-hour format with period.
+ *
+ * @param {number} hour24 - The hour in 24-hour format (0-23)
+ * @returns {{ hour: number; period: 'AM' | 'PM' }} The 12-hour format with period
+ *
+ * @example
+ * hour24To12(0)   // Returns: { hour: 12, period: 'AM' }
+ * hour24To12(9)   // Returns: { hour: 9, period: 'AM' }
+ * hour24To12(12)  // Returns: { hour: 12, period: 'PM' }
+ * hour24To12(15)  // Returns: { hour: 3, period: 'PM' }
+ * hour24To12(23)  // Returns: { hour: 11, period: 'PM' }
+ */
+export function hour24To12(hour24: number): { hour: number; period: 'AM' | 'PM' } {
+    if(hour24 === 0) {
+        return { hour: 12, period: 'AM' };
+    }
+    if(hour24 < 12) {
+        return { hour: hour24, period: 'AM' };
+    }
+    if(hour24 === 12) {
+        return { hour: 12, period: 'PM' };
+    }
+    return { hour: hour24 - 12, period: 'PM' };
+}
+
+/**
+ * Converts a 12-hour format hour with period to 24-hour format.
+ *
+ * @param {number} hour12 - The hour in 12-hour format (1-12)
+ * @param {'AM' | 'PM'} period - The period (AM or PM)
+ * @returns {number} The hour in 24-hour format (0-23)
+ *
+ * @example
+ * hour12To24(12, 'AM') // Returns: 0
+ * hour12To24(9, 'AM')  // Returns: 9
+ * hour12To24(12, 'PM') // Returns: 12
+ * hour12To24(3, 'PM')  // Returns: 15
+ * hour12To24(11, 'PM') // Returns: 23
+ */
+export function hour12To24(hour12: number, period: 'AM' | 'PM'): number {
+    if(period === 'AM') {
+        return hour12 === 12 ? 0 : hour12;
+    }
+    return hour12 === 12 ? 12 : hour12 + 12;
+}
