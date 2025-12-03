@@ -13,6 +13,9 @@ import { Notice } from '@structure/source/components/notices/Notice';
 import { ImageSelector } from '@structure/source/components/images/selector/ImageSelector';
 import { ImageEditor } from '@structure/source/components/images/editor/ImageEditor';
 
+// Dependencies - Assets
+import { TrashIcon } from '@phosphor-icons/react';
+
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { AccountQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
@@ -235,18 +238,6 @@ export function ProfileImageUploadDialog(properties: ProfileImageUploadDialogPro
                         accept="image/*"
                         maximumFileSizeInBytes={5 * 1024 * 1024} // 5MB
                     />
-
-                    {properties.profileImageUrl && (
-                        <div className="flex justify-center pt-4">
-                            <Button
-                                variant="Destructive"
-                                onClick={handleRemoveImage}
-                                isLoading={uploading || removeProfileImageMutation.isLoading}
-                            >
-                                Remove Current Profile Picture
-                            </Button>
-                        </div>
-                    )}
                 </div>
             );
         }
@@ -273,6 +264,25 @@ export function ProfileImageUploadDialog(properties: ProfileImageUploadDialogPro
         );
     }
 
+    // Get footer content (remove button shown in select mode when profile image exists)
+    function getFooterContent() {
+        if(dialogMode === 'select' && properties.profileImageUrl) {
+            return (
+                <div className="flex flex-1 justify-start">
+                    <Button
+                        variant="Destructive"
+                        icon={TrashIcon}
+                        onClick={handleRemoveImage}
+                        isLoading={uploading || removeProfileImageMutation.isLoading}
+                    >
+                        Delete Current Picture
+                    </Button>
+                </div>
+            );
+        }
+        return null;
+    }
+
     // Render the component
     return (
         <Dialog
@@ -295,6 +305,7 @@ export function ProfileImageUploadDialog(properties: ProfileImageUploadDialogPro
             trigger={properties.trigger}
             header={dialogMode === 'select' ? 'Profile Picture' : 'Crop Profile Picture'}
             body={getDialogContent()}
+            footer={getFooterContent()}
             footerCloseButton={true}
         />
     );

@@ -10,6 +10,9 @@ import { ProfileImageUploadDialog } from './ProfileImageUploadDialog';
 // Dependencies - Assets
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+
 // Component - ProfileImageUploader
 export interface ProfileImageUploaderProperties {
     className?: string;
@@ -24,7 +27,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
             profileImageUrl={properties.profileImageUrl}
             onImageChange={properties.onImageChange}
             trigger={
-                <div className={`relative cursor-pointer ${properties.className || ''}`}>
+                <div className={mergeClassNames('relative shrink-0 cursor-pointer', properties.className)}>
                     <ProfileImage
                         profileImageUrl={properties.profileImageUrl || undefined}
                         alternateText={properties.alternateText}

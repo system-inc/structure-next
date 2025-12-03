@@ -17,7 +17,7 @@ export function PlaceholderAnimation(properties: PlaceholderAnimationProperties)
     // Render the component
     return (
         <motion.div
-            className={mergeClassNames('background--3', properties.className)}
+            className={mergeClassNames('rounded-[inherit] background--3', properties.className)}
             animate={{ opacity: [1, 0.5, 1] }}
             transition={{
                 duration: 2,
