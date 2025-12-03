@@ -165,10 +165,10 @@ export function TicketComments(properties: TicketCommentsProperties) {
 
                             const backgroundColorClasses = isAgentViewer
                                 ? isAgentComment
-                                    ? 'bg-blue-500 content--0'
+                                    ? 'bg-blue-500 text-white-1000'
                                     : 'background--2'
                                 : isUserComment
-                                  ? 'bg-blue-500 content--0'
+                                  ? 'bg-blue-500 text-white-1000'
                                   : 'background--2';
 
                             return (
