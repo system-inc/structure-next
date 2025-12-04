@@ -47,13 +47,12 @@ import {
 // A minimal valid query for when defaultValuesGraphQlQuery is not provided
 const noOpQuery = gql(`query NoOp { __typename }`);
 
-// Function to process form values for submission (filter changed fields, merge hidden fields, apply transformations)
+// Function to process form values for submission (filter changed fields, apply transformations)
 function processFormValuesForSubmission(
     formValues: Record<string, unknown>,
     options: {
         submitOnlyChangedFields?: boolean;
         defaultValues?: Record<string, unknown>;
-        hiddenFields?: Record<string, unknown>;
         transformFormValues?: (values: Record<string, unknown>) => Record<string, unknown>;
     },
 ): Record<string, unknown> {
@@ -84,11 +83,6 @@ function processFormValuesForSubmission(
         processedValues = changedValues;
     }
 
-    // Merge with hidden field values (always include these)
-    if(options.hiddenFields) {
-        processedValues = { ...processedValues, ...options.hiddenFields };
-    }
-
     // Apply value transformation if provided
     if(options.transformFormValues) {
         processedValues = options.transformFormValues(processedValues);
@@ -115,7 +109,7 @@ export interface GraphQlMutationFormProperties<
     // Useful for making fields required that are optional in the GraphQL schema, or validating extra fields
     schema?: ObjectSchema<ObjectShape>;
     fieldProperties?: Partial<Record<DocumentFieldPathsType<TDocument>, FieldPropertiesOverride>>;
-    hiddenFields?: DocumentFieldValuesType<TDocument>; // Field paths to hide from the form (values still submitted)
+    hiddenFields?: DocumentFieldPathsType<TDocument>[]; // Field identifiers to hide from UI (values still in form, use defaultValues to set them)
     excludedFields?: DocumentFieldPathsType<TDocument>[]; // Field paths to exclude from the form
     linkedFields?: LinkedFieldConfigurationInterface<TDocument>[]; // Auto-update target field when source field changes
     defaultValues?: DocumentFieldValuesType<TDocument>; // Pass values directly
@@ -189,7 +183,6 @@ export function GraphQlMutationForm<
             const formValues = processFormValuesForSubmission(formState.value as Record<string, unknown>, {
                 submitOnlyChangedFields: properties.submitOnlyChangedFields,
                 defaultValues: properties.defaultValues as Record<string, unknown>,
-                hiddenFields: properties.hiddenFields as Record<string, unknown>,
                 transformFormValues: properties.transformFormValues as
                     | ((values: Record<string, unknown>) => Record<string, unknown>)
                     | undefined,
@@ -272,6 +265,7 @@ export function GraphQlMutationForm<
     const isLoading = properties.isLoading ?? defaultValuesGraphQlQueryRequest.isLoading;
 
     // Cast to string[] for internal comparison since we're checking runtime metadata against typed props
+    const hiddenFieldsAsStrings = properties.hiddenFields as string[] | undefined;
     const excludedFieldsAsStrings = properties.excludedFields as string[] | undefined;
 
     // Track the last synced query data to avoid re-running the effect unnecessarily
@@ -362,7 +356,7 @@ export function GraphQlMutationForm<
     const visibleFields = graphQlFormInputMetadataArray
         .filter(function (input) {
             // Filter out hidden and excluded fields
-            if(properties.hiddenFields && input.name in properties.hiddenFields) return false;
+            if(hiddenFieldsAsStrings?.includes(input.name)) return false;
             if(excludedFieldsAsStrings?.includes(input.name)) return false;
             return true;
         })
@@ -415,7 +409,6 @@ export function GraphQlMutationForm<
               const formValues = processFormValuesForSubmission(formValuesForPreview, {
                   submitOnlyChangedFields: properties.submitOnlyChangedFields,
                   defaultValues: properties.defaultValues as Record<string, unknown>,
-                  hiddenFields: properties.hiddenFields as Record<string, unknown>,
                   transformFormValues: properties.transformFormValues as
                       | ((values: Record<string, unknown>) => Record<string, unknown>)
                       | undefined,

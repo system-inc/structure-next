@@ -77,7 +77,7 @@ export function fieldSchemaFromGraphQlFieldMetadata(graphQlFieldMetadata: GraphQ
 // Helper - Create schema from GraphQL operation metadata
 export function schemaFromGraphQlOperationMetadata(
     graphQlOperationMetadata: GraphQLOperationMetadata<GraphQlDocument>,
-    hiddenFields?: Record<string, unknown>,
+    hiddenFields?: string[],
     excludedFields?: string[],
 ): ObjectSchema<Record<string, BaseSchema<unknown>>> {
     // Extract input type metadata from operation.parameters
@@ -88,8 +88,8 @@ export function schemaFromGraphQlOperationMetadata(
     // Build schema for each visible field
     const shape: ObjectShape = {};
     for(const graphQlFieldMetadata of graphQlFieldMetadataArray) {
-        // Skip hidden fields (they'll be merged on submit)
-        if(hiddenFields && graphQlFieldMetadata.name in hiddenFields) {
+        // Skip hidden fields (they're still in form state, just not visible in UI)
+        if(hiddenFields?.includes(graphQlFieldMetadata.name)) {
             continue;
         }
 
