@@ -77,14 +77,15 @@ export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
                         },
                     }}
                     linkedFields={[{ sourceField: 'input.title', targetField: 'input.slug', transform: slug }]}
-                    hiddenFields={{
-                        'input.type': 'SupportArticle',
-                        'input.allowComment': false,
-                        'input.allowVote': false,
-                        'input.allowDownvote': false,
-                        'input.allowReaction': true,
-                    }}
-                    excludedFields={['id', 'input.contentType', 'input.publishedAt', 'input.metadata']}
+                    hiddenFields={[
+                        'id',
+                        'input.type',
+                        'input.allowComment',
+                        'input.allowVote',
+                        'input.allowDownvote',
+                        'input.allowReaction',
+                    ]}
+                    excludedFields={['input.contentType', 'input.publishedAt', 'input.metadata']}
                     defaultValuesGraphQlQuery={{
                         document: PostDocument,
                         variables: {

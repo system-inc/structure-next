@@ -40,6 +40,7 @@ export function CreateSupportPostPage() {
 
             <Card variant="A" className="mt-4">
                 <GraphQlMutationForm
+                    showPreviewGraphQlMutationTip={true}
                     className="flex flex-col gap-4"
                     operation={PostCreateOperation}
                     schema={schema.object({
@@ -68,12 +69,18 @@ export function CreateSupportPostPage() {
                         },
                     }}
                     linkedFields={[{ sourceField: 'input.title', targetField: 'input.slug', transform: slug }]}
-                    hiddenFields={{
+                    defaultValues={{
                         'input.status': PostStatus.Published,
                         'input.type': 'SupportArticle',
                         'input.allowReaction': true,
                         ...(postTopicId ? { 'input.topicIds': [postTopicId] } : {}),
                     }}
+                    hiddenFields={[
+                        'input.status',
+                        'input.type',
+                        'input.allowReaction',
+                        ...(postTopicId ? (['input.topicIds'] as const) : []),
+                    ]}
                     excludedFields={[
                         'input.contentType',
                         'input.allowComment',

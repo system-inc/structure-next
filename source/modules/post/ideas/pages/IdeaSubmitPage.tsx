@@ -25,10 +25,14 @@ export function IdeaSubmitPage() {
             <GraphQlMutationForm
                 className="mt-6 flex flex-col gap-4"
                 operation={PostCreatePrivilegedOperation}
-                hiddenFields={{
+                fieldProperties={{
+                    'input.content': { rows: 16 },
+                }}
+                defaultValues={{
                     'input.allowComment': true,
                     'input.allowVote': true,
                 }}
+                hiddenFields={['input.allowComment', 'input.allowVote']}
                 excludedFields={[
                     'input.description',
                     'input.allowDownvote',
@@ -36,9 +40,6 @@ export function IdeaSubmitPage() {
                     'input.metadata',
                     'input.contentType',
                 ]}
-                fieldProperties={{
-                    'input.content': { rows: 16 },
-                }}
                 submitButtonProperties={{ children: 'Submit Idea' }}
             />
         </div>

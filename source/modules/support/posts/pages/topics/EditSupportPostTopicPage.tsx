@@ -49,7 +49,7 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
 
             <Card variant="A" className="mt-4">
                 <GraphQlMutationForm
-                    // showPreviewGraphQlMutationTip={true}
+                    showPreviewGraphQlMutationTip={true}
                     className="flex flex-col gap-4"
                     operation={PostTopicUpdateOperation}
                     schema={schema.object({
@@ -72,7 +72,8 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
                         },
                     }}
                     linkedFields={[{ sourceField: 'input.title', targetField: 'input.slug', transform: slug }]}
-                    hiddenFields={{
+                    hiddenFields={['input.id']}
+                    defaultValues={{
                         'input.id': properties.postTopicId,
                     }}
                     defaultValuesGraphQlQuery={{
