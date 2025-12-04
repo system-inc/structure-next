@@ -16,8 +16,8 @@ import { AccountRole } from '@structure/source/modules/account/Account';
 // Dependencies - API
 import { BaseError } from '@structure/source/api/errors/BaseError';
 
-// Dependencies - Animation
-import { LineLoadingAnimation } from '@structure/source/components/animations/LineLoadingAnimation';
+// Placeholder - Shown while loading to prevent layout shift
+const authorizationLayoutPlaceholder = <div className="min-h-[75vh] w-full" />;
 
 // Component - AuthorizationLayout
 export interface AuthorizationLayoutProperties {
@@ -40,11 +40,13 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
     if(!account.signedIn && !account.data) {
         // Still loading initial account data
         if(account.isLoading) {
-            return <LineLoadingAnimation />;
+            return authorizationLayoutPlaceholder;
         }
+
         // Not signed in and not loading - show sign in prompt
         return (
-            <React.Suspense fallback={null}>
+            <React.Suspense fallback={authorizationLayoutPlaceholder}>
+                {authorizationLayoutPlaceholder}
                 <NotSignedInNotice />
             </React.Suspense>
         );
@@ -55,7 +57,7 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
         if(!account.data) {
             // Still loading account data
             if(account.isLoading) {
-                return <LineLoadingAnimation />;
+                return authorizationLayoutPlaceholder;
             }
             // Not loading and no data - not authorized
             return <NotAuthorizedNotice />;

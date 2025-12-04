@@ -8,7 +8,7 @@ import { Card } from '@structure/source/components/containers/Card';
 import { ProfileImageSection } from '@structure/source/modules/account/profile/profile/components/ProfileImageSection';
 import { ProfileDetailsForm } from '@structure/source/modules/account/profile/profile/components/ProfileDetailsForm';
 import { UsernameForm } from '@structure/source/modules/account/profile/profile/components/UsernameForm';
-import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
+import { Placeholder } from '@structure/source/components/animations/Placeholder';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
@@ -32,14 +32,14 @@ export function ProfilePage() {
                     {account.data?.profileDisplayName ? (
                         <h2 className="text-2xl font-semibold">{account.data.profileDisplayName}</h2>
                     ) : (
-                        account.isLoading && <PlaceholderAnimation className="h-8 w-48" />
+                        account.isLoading && <Placeholder className="h-8 w-48" />
                     )}
 
                     {/* Username */}
                     {account.data?.profile?.username ? (
                         <p className="mt-1 mb-2 text-sm content--1">@{account.data.profile.username}</p>
                     ) : (
-                        account.isLoading && <PlaceholderAnimation className="mt-2 h-4 w-32" />
+                        account.isLoading && <Placeholder className="mt-2 h-4 w-32" />
                     )}
 
                     {/* Joined Date */}
@@ -53,7 +53,7 @@ export function ProfilePage() {
                             })}
                         </p>
                     ) : (
-                        account.isLoading && <PlaceholderAnimation className="mt-2 h-4 w-40" />
+                        account.isLoading && <Placeholder className="mt-2 h-4 w-40" />
                     )}
                 </div>
             </div>

@@ -18,7 +18,7 @@ import {
 } from '@structure/source/modules/account/authentication/AccountAuthenticatedSession';
 
 // Dependencies - Animations
-import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
+import { Placeholder } from '@structure/source/components/animations/Placeholder';
 
 // Dependencies - API
 import {
@@ -156,11 +156,11 @@ export function UsersRolesPage() {
                                     key={index}
                                     className="grid grid-cols-[40px_1fr] items-center gap-3 py-2 md:grid-cols-[40px_160px_160px_1fr_100px]"
                                 >
-                                    <PlaceholderAnimation className="h-10 w-10 rounded-full" />
-                                    <PlaceholderAnimation className="h-5 w-40" />
-                                    <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
-                                    <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
-                                    <PlaceholderAnimation className="hidden h-8 w-20 md:block" />
+                                    <Placeholder className="h-10 w-10 rounded-full" />
+                                    <Placeholder className="h-5 w-40" />
+                                    <Placeholder className="hidden h-5 w-40 md:block" />
+                                    <Placeholder className="hidden h-5 w-40 md:block" />
+                                    <Placeholder className="hidden h-8 w-20 md:block" />
                                 </div>
                             ))}
                         </div>

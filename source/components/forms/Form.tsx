@@ -16,7 +16,7 @@ import { FormInputText } from '@structure/source/components/forms/FormInputText'
 import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/components/buttons/AnimatedButton';
 
 // Dependencies - Animations
-import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
+import { Placeholder } from '@structure/source/components/animations/Placeholder';
 
 // Dependencies - Utilities
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
@@ -461,7 +461,7 @@ export function Form(properties: FormProperties) {
                                 return null;
                             }
 
-                            return <PlaceholderAnimation key={formInput.props.id} className="h-16 w-full" />;
+                            return <Placeholder key={formInput.props.id} className="h-16 w-full" />;
                         })}
                     </div>
                 );

@@ -18,7 +18,7 @@ import {
     ColumnFilterGroupDataInterface,
 } from '@structure/source/components/tables/ColumnFilterGroup';
 import { ColumnFilterGroupOperator } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
+import { Placeholder } from '@structure/source/components/animations/Placeholder';
 
 // Dependencies - Assets
 import FilterIcon from '@structure/assets/icons/interface/FilterIcon.svg';
@@ -589,13 +589,13 @@ export function Table(properties: TableProperties) {
                                         <tr key={rowIndex} className="border-b border--3">
                                             {properties.rowSelection && (
                                                 <td className="w-4 p-2">
-                                                    <PlaceholderAnimation className="h-4 w-4" />
+                                                    <Placeholder className="h-4 w-4" />
                                                 </td>
                                             )}
                                             {Array.from(visibleColumnsIndexesSet).map(function (columnIndex) {
                                                 return (
                                                     <td key={columnIndex} className="p-2">
-                                                        <PlaceholderAnimation className="h-4 w-full max-w-32" />
+                                                        <Placeholder className="h-4 w-full max-w-32" />
                                                     </td>
                                                 );
                                             })}

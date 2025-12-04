@@ -10,7 +10,7 @@ import { ProfileImageUploader } from '@structure/source/modules/account/componen
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Animations
-import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
+import { Placeholder } from '@structure/source/components/animations/Placeholder';
 
 // Component - ProfileImageSection
 export function ProfileImageSection() {
@@ -34,7 +34,7 @@ export function ProfileImageSection() {
                     }}
                 />
             ) : (
-                <PlaceholderAnimation className="h-24 w-24" />
+                <Placeholder className="h-24 w-24" />
             )}
         </div>
     );

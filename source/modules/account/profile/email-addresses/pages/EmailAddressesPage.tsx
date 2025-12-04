@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Animation
-import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
+import { Placeholder } from '@structure/source/components/animations/Placeholder';
 
 // Dependencies - Components
 import { Badge } from '@structure/source/components/badges/Badge';
@@ -41,8 +41,8 @@ export function EmailAddressesPage() {
                     )
                 ) : account.isLoading ? (
                     <div>
-                        <PlaceholderAnimation className="h-6 w-64" />
-                        <PlaceholderAnimation className="mt-2 h-4 w-40" />
+                        <Placeholder className="h-6 w-64" />
+                        <Placeholder className="mt-2 h-4 w-40" />
                     </div>
                 ) : null}
             </Card>

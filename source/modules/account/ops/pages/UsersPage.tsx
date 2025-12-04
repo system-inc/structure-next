@@ -8,7 +8,7 @@ import { useRouter, useUrlPath, useUrlSearchParameters } from '@structure/source
 import { Link } from '@structure/source/components/navigation/Link';
 import { OpsNavigationTrail } from '@structure/source/ops/layout/navigation/OpsNavigationTrail';
 import { Pagination } from '@structure/source/components/navigation/pagination/Pagination';
-import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
+import { Placeholder } from '@structure/source/components/animations/Placeholder';
 import { ProfileImage } from '@structure/source/modules/account/components/profile-image/ProfileImage';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
 import { Button } from '@structure/source/components/buttons/Button';
@@ -158,19 +158,19 @@ export function UsersPage() {
                                 className="grid grid-cols-[40px_1fr] items-center gap-3 py-2 md:grid-cols-[40px_160px_160px_1fr]"
                             >
                                 {/* Avatar Placeholder */}
-                                <PlaceholderAnimation className="h-8 w-8 rounded-full" />
+                                <Placeholder className="h-8 w-8 rounded-full" />
 
                                 {/* Mobile: Stacked Info Placeholders */}
                                 <div className="flex flex-col space-y-2 md:hidden">
-                                    <PlaceholderAnimation className="h-5 w-40" />
-                                    <PlaceholderAnimation className="h-3.5 w-40" />
-                                    <PlaceholderAnimation className="h-3.5 w-40" />
+                                    <Placeholder className="h-5 w-40" />
+                                    <Placeholder className="h-3.5 w-40" />
+                                    <Placeholder className="h-3.5 w-40" />
                                 </div>
 
                                 {/* Desktop: Column Info Placeholders */}
-                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
-                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
-                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
+                                <Placeholder className="hidden h-5 w-40 md:block" />
+                                <Placeholder className="hidden h-5 w-40 md:block" />
+                                <Placeholder className="hidden h-5 w-40 md:block" />
                             </div>
                         ))}
                     </div>

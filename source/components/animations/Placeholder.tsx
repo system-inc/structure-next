@@ -9,11 +9,11 @@ import { motion } from 'motion/react';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
-// Component - PlaceholderAnimation
-export interface PlaceholderAnimationProperties {
+// Component - Placeholder
+export interface PlaceholderProperties {
     className?: string;
 }
-export function PlaceholderAnimation(properties: PlaceholderAnimationProperties) {
+export function Placeholder(properties: PlaceholderProperties) {
     // Render the component
     return (
         <motion.div
