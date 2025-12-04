@@ -4,13 +4,16 @@ projectDirectory=$PWD
 # Define which modules belong in the structure library
 # These modules are shared across projects and part of the structure framework
 STRUCTURE_MODULES=(
+    "AccessLog"
     "Account"
     "Contact"
     "DataInteraction"
+    "Feedback"
     "Logging"
     "Metrics"
     "Post"
     "Support"
+    "SystemLogClient"
 )
 
 # Extract project title from ProjectSettings.ts
