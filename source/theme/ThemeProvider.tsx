@@ -12,8 +12,22 @@ import { globalStore } from '@structure/source/utilities/shared-state/SharedStat
 import { Theme, OperatingSystemTheme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
 import { themeKey, operatingSystemThemeKey, darkThemeMediaQueryString } from '@structure/source/theme/ThemeSettings';
 
+// Dependencies - Services
+import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
+
 // Dependencies - Utilities
 import { Cookies } from '@structure/source/utilities/cookie/Cookies';
+
+// Function to resolve a theme to its actual scheme class name
+// When theme is OperatingSystem, uses the provided OS theme to determine the class
+export function getThemeClassName(theme: Theme, operatingSystemTheme?: OperatingSystemTheme): string {
+    if(theme === Theme.OperatingSystem) {
+        return operatingSystemTheme === OperatingSystemTheme.Dark
+            ? ThemeClassName[Theme.Dark]
+            : ThemeClassName[Theme.Light];
+    }
+    return ThemeClassName[theme];
+}
 
 // Function to set the theme class name on the DOM
 function setThemeClassName(themeClassName: string) {
@@ -24,11 +38,74 @@ function setThemeClassName(themeClassName: string) {
     document.documentElement.classList.add(themeClassName);
 }
 
+// Function to apply a theme to the DOM (resolves Theme enum to actual scheme class)
+function applyThemeToDom(theme: Theme) {
+    // Determine the current OS theme preference
+    const operatingSystemDarkThemeQuery = window.matchMedia(darkThemeMediaQueryString);
+    const operatingSystemTheme = operatingSystemDarkThemeQuery.matches
+        ? OperatingSystemTheme.Dark
+        : OperatingSystemTheme.Light;
+
+    // Get the resolved scheme class and apply it
+    const schemeClass = getThemeClassName(theme, operatingSystemTheme);
+    setThemeClassName(schemeClass);
+}
+
 // Shared State - Theme (Synchronized with Local Storage)
+// Custom storage implementation enables cross-tab synchronization
 const themeAtomWithStorage = atomWithStorage<Theme>(
-    themeKey, // Local storage Key
+    themeKey,
     Theme.OperatingSystem, // Initial value (overridden by local storage values)
-    undefined, // Custom storage (change if you want to use something other than localStorage)
+    {
+        getItem: function (key: string, initialValue: Theme): Theme {
+            const storedValue = localStorageService.get<Theme>(key);
+            return storedValue ?? initialValue;
+        },
+        setItem: function (key: string, value: Theme): void {
+            localStorageService.set(key, value);
+        },
+        removeItem: function (key: string): void {
+            localStorageService.remove(key);
+        },
+        subscribe: function (key: string, callback: (value: Theme) => void, initialValue: Theme) {
+            // Cross-tab synchronization via storage events
+            // Listens for storage events from other browser tabs and applies theme changes
+            // This ensures all tabs stay in sync when theme is changed in any tab
+            function handleStorageChange(event: StorageEvent) {
+                // Get the prefixed key that localStorageService uses
+                const prefixedKey = localStorageService.getPrefixedKey(key);
+
+                if(event.key === prefixedKey && event.newValue) {
+                    try {
+                        // localStorageService wraps values in { value: ... }
+                        const wrapped = JSON.parse(event.newValue) as { value: Theme };
+                        const newTheme = wrapped.value;
+
+                        // Apply theme to DOM in this tab
+                        applyThemeToDom(newTheme);
+
+                        // Update the atom state
+                        callback(newTheme);
+                    }
+                    catch(error) {
+                        console.error('[ThemeStorage] Failed to parse storage event:', error);
+                    }
+                }
+                else if(event.key === prefixedKey && event.newValue === null) {
+                    // Key was removed, reset to initial value
+                    applyThemeToDom(initialValue);
+                    callback(initialValue);
+                }
+            }
+
+            window.addEventListener('storage', handleStorageChange);
+
+            // Return cleanup function
+            return function () {
+                window.removeEventListener('storage', handleStorageChange);
+            };
+        },
+    },
     {
         getOnInit: true, // Initialize atom prior to React initial hydration (prevents flashing)
     },
@@ -42,21 +119,10 @@ export const readOnlyThemeAtom = atom(function (get) {
 // Shared State - setThemeAtom
 export const setThemeAtom = atom(null, function (get, set, theme: Theme) {
     if(typeof window !== 'undefined') {
-        // If OperatingSystem theme is selected, use actual OS preference
-        if(theme === Theme.OperatingSystem) {
-            const operatingSystemDarkThemeQuery = window.matchMedia(darkThemeMediaQueryString);
-            const isDark = operatingSystemDarkThemeQuery.matches;
-            const schemeClass = isDark ? 'scheme-dark' : 'scheme-light';
-            setThemeClassName(schemeClass);
-        }
-        else {
-            // For Light or Dark, use the direct mapping
-            const schemeClass = ThemeClassName[theme];
-            setThemeClassName(schemeClass);
-        }
+        applyThemeToDom(theme);
     }
 
-    // Set the theme
+    // Set the theme (atomWithStorage handles localStorage and cross-tab sync)
     set(themeAtomWithStorage, theme ?? atomReset);
 });
 
@@ -76,12 +142,9 @@ operatingSystemThemeAtom.onMount = function (setOperatingSystemThemeAtom) {
         // Update the operatingSystemThemeAtom
         setOperatingSystemThemeAtom(operatingSystemTheme);
 
-        // If the theme is OperatingSystem, set scheme-dark or scheme-light based on OS preference
-        // This allows both light-dark() CSS function AND Tailwind's dark: classes to work
+        // If the user has selected "Operating System" theme, update DOM to match the new OS preference
         if(globalStore.get(readOnlyThemeAtom) === Theme.OperatingSystem) {
-            const osBasedSchemeClass =
-                operatingSystemTheme === OperatingSystemTheme.Dark ? 'scheme-dark' : 'scheme-light';
-            setThemeClassName(osBasedSchemeClass);
+            applyThemeToDom(Theme.OperatingSystem);
         }
     }
 

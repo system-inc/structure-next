@@ -1,24 +1,19 @@
 // Dependencies - Shared State
 import { useAtomValue } from 'jotai';
-import { readOnlyThemeAtom, readOnlyOperatingSystemThemeAtom } from '@structure/source/theme/ThemeProvider';
-import { Theme, OperatingSystemTheme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
+import {
+    readOnlyThemeAtom,
+    readOnlyOperatingSystemThemeAtom,
+    getThemeClassName,
+} from '@structure/source/theme/ThemeProvider';
 
 // Hook - useThemeSettings
 export function useThemeSettings() {
     const theme = useAtomValue(readOnlyThemeAtom);
     const operatingSystemTheme = useAtomValue(readOnlyOperatingSystemThemeAtom);
-    const themeClassName =
-        theme === Theme.OperatingSystem
-            ? operatingSystemTheme === OperatingSystemTheme.Light
-                ? ThemeClassName.Light
-                : ThemeClassName.Dark
-            : theme === Theme.Light
-              ? ThemeClassName.Light
-              : ThemeClassName.Dark;
 
     return {
         theme: theme,
-        themeClassName: themeClassName,
+        themeClassName: getThemeClassName(theme, operatingSystemTheme),
         operatingSystemTheme: operatingSystemTheme,
     };
 }
