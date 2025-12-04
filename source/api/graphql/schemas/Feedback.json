@@ -11,42 +11,11 @@
                 "type": "String",
                 "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text."
             },
-            "DateTimeISO": {
-                "kind": "scalar",
-                "type": "DateTimeISO",
-                "description": "A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format."
-            },
-            "SupportTicketStatus": {
-                "kind": "enum",
-                "type": "SupportTicketStatus",
-                "description": "The status of a support ticket",
-                "values": ["Open", "Closed", "Deleted"]
-            },
             "RichContentFormat": {
                 "kind": "enum",
                 "type": "RichContentFormat",
                 "description": "The format of the string rich-content",
                 "values": ["Markdown", "Html", "PlainText"]
-            },
-            "SupportTicketCommentSource": {
-                "kind": "enum",
-                "type": "SupportTicketCommentSource",
-                "values": ["User", "Agent"]
-            },
-            "SupportTicketCommentVisibility": {
-                "kind": "enum",
-                "type": "SupportTicketCommentVisibility",
-                "values": ["Public", "Internal"]
-            },
-            "MediaObjectType": {
-                "kind": "enum",
-                "type": "MediaObjectType",
-                "values": ["Image", "Video", "File"]
-            },
-            "Boolean": {
-                "kind": "scalar",
-                "type": "Boolean",
-                "description": "The `Boolean` scalar type represents `true` or `false`."
             },
             "PaginationInput": {
                 "kind": "object",
@@ -127,6 +96,11 @@
                     "IsNotNull"
                 ]
             },
+            "Boolean": {
+                "kind": "scalar",
+                "type": "Boolean",
+                "description": "The `Boolean` scalar type represents `true` or `false`."
+            },
             "JSON": {
                 "kind": "scalar",
                 "type": "JSON",
@@ -156,58 +130,32 @@
                 "description": "The order direction of a query",
                 "values": ["Ascending", "Descending"]
             },
-            "SupportTicketUpdateInput": {
+            "CreateFeedbackInput": {
                 "kind": "object",
-                "type": "SupportTicketUpdateInput",
+                "type": "CreateFeedbackInput",
                 "fields": [
                     {
                         "kind": "scalar",
                         "type": "String",
                         "required": true,
-                        "name": "id",
-                        "validation": [
-                            {
-                                "type": "isUuid"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "title",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "description"
-                    }
-                ]
-            },
-            "SupportTicketCommentCreateInput": {
-                "kind": "object",
-                "type": "SupportTicketCommentCreateInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "ticketIdentifier"
+                        "name": "subject"
                     },
                     {
                         "kind": "scalar",
                         "type": "String",
                         "required": true,
+                        "name": "identifier"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "reaction"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
                         "name": "content"
                     },
                     {
@@ -220,84 +168,7 @@
                         "kind": "scalar",
                         "type": "String",
                         "required": false,
-                        "name": "replyToCommentId",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "isUuid"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "enum",
-                        "type": "SupportTicketCommentVisibility",
-                        "required": false,
-                        "name": "visibility"
-                    }
-                ]
-            },
-            "SupportTicketCreateInput": {
-                "kind": "object",
-                "type": "SupportTicketCreateInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "title",
-                        "validation": [
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "description"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "type",
-                        "validation": [
-                            {
-                                "type": "maxLength",
-                                "constraints": [36]
-                            },
-                            {
-                                "type": "isIn",
-                                "constraints": [["Contact", "SupportArticleFeedback"]]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "emailAddress",
-                        "validation": [
-                            {
-                                "type": "isEmail"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "object",
-                        "type": "SupportTicketCommentCreateInput",
-                        "required": false,
-                        "name": "initialComment"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "Boolean",
-                        "required": false,
-                        "name": "notifyUser"
+                        "name": "emailAddress"
                     }
                 ]
             },

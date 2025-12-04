@@ -171,6 +171,7 @@ input SupportTicketCreateInput {
     description: String
     emailAddress: String!
     initialComment: SupportTicketCommentCreateInput
+    notifyUser: Boolean
     title: String!
     type: String!
 }

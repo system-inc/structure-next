@@ -12,6 +12,7 @@ export function usePostRequest(
         gql(`
             query Post($identifier: String!) {
                 post(identifier: $identifier) {
+                    id
                     identifier
                     slug
                     status

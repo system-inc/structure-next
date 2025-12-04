@@ -39,6 +39,12 @@ type GqlMediaObject {
     variant: String
 }
 
+type GqlPostReaction {
+    content: String!
+    count: Int!
+    reacted: Boolean!
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -54,8 +60,8 @@ type Mutation {
     postCommentCreate(input: PostCommentCreateInput!): PostComment!
     postCommentDelete(id: String!): OperationResult!
     postCreatePrivileged(input: PostCreateInput!): Post!
-    postDelete(id: String!, note: String): String!
-    postDeletePrivileged(id: String!, note: String): String!
+    postDelete(id: String!, note: String): OperationResult!
+    postDeletePrivileged(id: String!, note: String): OperationResult!
     postDraft(id: String!): Post!
     postPublish(id: String!): Post!
     postPublishPrivileged(id: String!): Post!
@@ -134,7 +140,6 @@ input PaginationInput {
 }
 
 type Post {
-    commentsPaged: PagedPostComments
     content: String
     contentType: RichContentFormat!
     createdAt: DateTimeISO!
@@ -145,14 +150,13 @@ type Post {
     downvoteCount: Int!
     id: String!
     identifier: String!
-    latestRevisionId: String
     metadata: JSON
     note: String
     publishedAt: DateTimeISO
-    reactions: [PostReaction!]
+    reactions: [GqlPostReaction!]
     reportStatus: PostReportStatus
     reportedCount: Int!
-    revisionsPaged(pagination: PaginationInput!): PagedPostRevisions
+    revisionsPaged(pagination: PaginationInput!): PagedPostRevisions!
     settings: JSON
     slug: String!
     status: PostStatus!
@@ -171,13 +175,10 @@ type PostComment {
     contentType: RichContentFormat!
     createdAt: DateTimeISO!
     createdByAccountId: String!
-    createdByProfile: PublicProfile
     createdByProfileId: String!
     deleted: Boolean!
     downvoteCount: Int!
     id: String!
-    postId: String!
-    reactions: [PostReaction!]
     replyToCommentId: String
     reportStatus: PostReportStatus
     reportedCount: Int!
@@ -186,7 +187,6 @@ type PostComment {
     updatedByAccountId: String
     updatedByProfileId: String
     upvoteCount: Int!
-    voteType: PostVoteType
 }
 
 input PostCommentCreateInput {
@@ -210,12 +210,6 @@ input PostCreateInput {
     title: String!
     topicIds: [String!]
     type: String!
-}
-
-type PostReaction {
-    content: String!
-    count: Int!
-    reacted: Boolean!
 }
 
 type PostReactionProfile {
@@ -256,10 +250,8 @@ type PostRevision {
     createdByProfileId: String!
     description: String
     id: String!
-    metadata: JSON
     note: String
     postId: String!
-    settings: JSON
     slug: String
     status: PostStatus
     title: String
@@ -278,7 +270,8 @@ type PostTopic {
     description: String
     id: String!
     nextSiblingId: String
-    postCount: Int!
+    parentId: String
+    postCount: Float!
     previousSiblingId: String
     slug: String!
     title: String!
@@ -342,6 +335,9 @@ type PublicProfile {
 
 type Query {
     post(id: String, identifier: String, slug: String): Post!
+    postCommentCreatedByProfile(commentId: String!): PublicProfile
+    postCommentReactions(commentId: String!): [GqlPostReaction!]
+    postCommentVoteType(commentId: String!): PostVoteType
     postComments(pagination: PaginationInput!, postId: String!, threadId: String): PagedPostComments!
     postPrivileged(id: String, identifier: String): Post!
     postReactionProfiles(

@@ -49,7 +49,6 @@ export function usePostsDetailedRequest(
                         reportedCount
                         reportStatus
                         metadata
-                        latestRevisionId
                         updatedAt
                         createdAt
                     }

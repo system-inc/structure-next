@@ -8,7 +8,9 @@ export function usePostDeleteRequest(options?: InferUseGraphQlMutationOptions<ty
     return networkService.useGraphQlMutation(
         gql(`
             mutation PostDelete($id: String!) {
-                postDelete(id: $id)
+                postDelete(id: $id) {
+                    success
+                }
             }
         `),
         {
