@@ -7,8 +7,12 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import { sessionManager } from '@structure/source/modules/engagement/session/SessionManager';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
-import { DeviceOrientation, CreateEngagementEventInput } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService } from '@structure/source/services/network/NetworkService';
+import {
+    DeviceOrientation,
+    CreateEngagementEventInput,
+    EngagementEventsCreateDocument,
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { getThirdPartyAttributionForEvents } from '@structure/source/modules/engagement/services/engagement/utilities/EngagementServiceUtilities';
@@ -134,18 +138,9 @@ class EngagementService {
 
         try {
             // Send the batch of events
-            await networkService.graphQlRequest(
-                gql(`
-                    mutation EngagementEventsCreate($inputs: [CreateEngagementEventInput!]!) {
-                        engagementEventsCreate(inputs: $inputs) {
-                            success
-                        }
-                    }
-                `),
-                {
-                    inputs: eventsToSend,
-                },
-            );
+            await networkService.graphQlRequest(EngagementEventsCreateDocument, {
+                inputs: eventsToSend,
+            });
         }
         catch(error) {
             // Log error but don't throw - we don't want to break the user experience

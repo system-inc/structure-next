@@ -6,26 +6,14 @@ import { PublicProfilePage } from '@structure/source/modules/account/profiles/pa
 
 // Dependencies - API
 import { getServerSideNetworkService } from '@structure/source/services/network/NetworkServiceServerSide';
-import { gql } from '@structure/source/services/network/NetworkService';
+import { AccountProfilePublicDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Function to get server-side properties
 async function getServerSideProperties(username: string) {
     const serverSideNetworkService = await getServerSideNetworkService();
 
     const accountProfilePublicRequest = await serverSideNetworkService.graphQlRequest(
-        gql(`
-            query AccountProfilePublic($username: String!) {
-                accountProfilePublic(username: $username) {
-                    username
-                    displayName
-                    images {
-                        url
-                        variant
-                    }
-                    createdAt
-                }
-            }
-        `),
+        AccountProfilePublicDocument,
         {
             username: username,
         },

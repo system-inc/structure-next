@@ -8,7 +8,8 @@ import { DialogProperties, Dialog } from '@structure/source/components/dialogs/D
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { networkService } from '@structure/source/services/network/NetworkService';
+import { PostByIdentifierDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { usePostDeleteRequest } from '@structure/source/modules/post/hooks/usePostDeleteRequest';
 
 // Component - DeletePostDialog
@@ -46,18 +47,9 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
 
         try {
             // First, get the post by identifier
-            const postRequest = await networkService.graphQlRequest(
-                gql(`
-                    query PostByIdentifier($identifier: String!) {
-                        post(identifier: $identifier) {
-                            id
-                        }
-                    }
-                `),
-                {
-                    identifier: properties.postIdentifier,
-                },
-            );
+            const postRequest = await networkService.graphQlRequest(PostByIdentifierDocument, {
+                identifier: properties.postIdentifier,
+            });
 
             console.log('Post', postRequest);
 

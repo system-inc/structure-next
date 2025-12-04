@@ -51,8 +51,6 @@ type Documents = {
     '\n            query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {\n                dataInteractionDatabaseTables(databaseName: $databaseName, pagination: $pagination) {\n                    items {\n                        databaseName\n                        tableName\n                    }\n                    pagination {\n                        itemIndex\n                        itemIndexForPreviousPage\n                        itemIndexForNextPage\n                        itemsPerPage\n                        itemsTotal\n                        pagesTotal\n                        page\n                    }\n                }\n            }\n        ': typeof types.DataInteractionDatabaseTablesDocument;
     '\n            query DataInteractionDatabases($pagination: PaginationInput!) {\n                dataInteractionDatabases(pagination: $pagination) {\n                    items {\n                        databaseName\n                    }\n                    pagination {\n                        itemIndex\n                        itemIndexForPreviousPage\n                        itemIndexForNextPage\n                        itemsPerPage\n                        itemsTotal\n                        pagesTotal\n                        page\n                    }\n                }\n            }\n        ': typeof types.DataInteractionDatabasesDocument;
     '\n            mutation EngagementEventsCreate($inputs: [CreateEngagementEventInput!]!) {\n                engagementEventsCreate(inputs: $inputs) {\n                    success\n                }\n            }\n        ': typeof types.EngagementEventsCreateDocument;
-    '\n                    mutation EngagementEventsCreate($inputs: [CreateEngagementEventInput!]!) {\n                        engagementEventsCreate(inputs: $inputs) {\n                            success\n                        }\n                    }\n                ': typeof types.EngagementEventsCreateDocument;
-    '\n                    query PostByIdentifier($identifier: String!) {\n                        post(identifier: $identifier) {\n                            id\n                        }\n                    }\n                ': typeof types.PostByIdentifierDocument;
     '\n            query PostByIdentifier($identifier: String!) {\n                post(identifier: $identifier) {\n                    id\n                }\n            }\n        ': typeof types.PostByIdentifierDocument;
     '\n            mutation PostCreatePrivileged($input: PostCreateInput!) {\n                postCreatePrivileged(input: $input) {\n                    id\n                    status\n                    title\n                    contentType\n                    content\n                    settings\n                    upvoteCount\n                    downvoteCount\n                    metadata\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.PostCreatePrivilegedDocument;
     '\n            mutation PostCreate($input: PostCreateInput!) {\n                postCreatePrivileged(input: $input) {\n                    id\n                    status\n                    title\n                    contentType\n                    content\n                    settings\n                    upvoteCount\n                    downvoteCount\n                    metadata\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.PostCreateDocument;
@@ -158,10 +156,6 @@ const documents: Documents = {
         types.DataInteractionDatabasesDocument,
     '\n            mutation EngagementEventsCreate($inputs: [CreateEngagementEventInput!]!) {\n                engagementEventsCreate(inputs: $inputs) {\n                    success\n                }\n            }\n        ':
         types.EngagementEventsCreateDocument,
-    '\n                    mutation EngagementEventsCreate($inputs: [CreateEngagementEventInput!]!) {\n                        engagementEventsCreate(inputs: $inputs) {\n                            success\n                        }\n                    }\n                ':
-        types.EngagementEventsCreateDocument,
-    '\n                    query PostByIdentifier($identifier: String!) {\n                        post(identifier: $identifier) {\n                            id\n                        }\n                    }\n                ':
-        types.PostByIdentifierDocument,
     '\n            query PostByIdentifier($identifier: String!) {\n                post(identifier: $identifier) {\n                    id\n                }\n            }\n        ':
         types.PostByIdentifierDocument,
     '\n            mutation PostCreatePrivileged($input: PostCreateInput!) {\n                postCreatePrivileged(input: $input) {\n                    id\n                    status\n                    title\n                    contentType\n                    content\n                    settings\n                    upvoteCount\n                    downvoteCount\n                    metadata\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
@@ -446,18 +440,6 @@ export function graphql(
 export function graphql(
     source: '\n            mutation EngagementEventsCreate($inputs: [CreateEngagementEventInput!]!) {\n                engagementEventsCreate(inputs: $inputs) {\n                    success\n                }\n            }\n        ',
 ): typeof import('./graphql').EngagementEventsCreateDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-    source: '\n                    mutation EngagementEventsCreate($inputs: [CreateEngagementEventInput!]!) {\n                        engagementEventsCreate(inputs: $inputs) {\n                            success\n                        }\n                    }\n                ',
-): typeof import('./graphql').EngagementEventsCreateDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-    source: '\n                    query PostByIdentifier($identifier: String!) {\n                        post(identifier: $identifier) {\n                            id\n                        }\n                    }\n                ',
-): typeof import('./graphql').PostByIdentifierDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
