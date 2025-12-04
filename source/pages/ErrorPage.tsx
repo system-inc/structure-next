@@ -46,7 +46,7 @@ export function ErrorPage(properties: ErrorPageProperties) {
         <div className="flex h-screen w-full items-center justify-center px-4">
             <Notice variant="Negative" title="Error" className="max-w-2xl md:min-w-96">
                 <div className="flex flex-col gap-3.5">
-                    {properties.error.message && <p className="break-all">{properties.error.message}</p>}
+                    {properties.error.message && <p className="">{properties.error.message}</p>}
                     {properties.error.digest && (
                         <p>
                             <i>
