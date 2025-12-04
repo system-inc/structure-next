@@ -47,7 +47,7 @@ export const AccountNavigationBannerButton = React.forwardRef<
             ref={reference}
             variant="Ghost"
             className={mergeClassNames(
-                'flex w-full items-center justify-between px-2.5 hover:background--3 active:background--5! dark:hover:background--4 dark:active:background--6!',
+                'flex w-full items-center justify-between rounded-lg px-2.5 hover:background--3 active:background--5! dark:hover:background--4 dark:active:background--6!',
                 isActive && 'background--4! dark:background--5!',
                 properties.className,
             )}
