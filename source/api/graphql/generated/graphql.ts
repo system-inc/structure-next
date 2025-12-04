@@ -534,6 +534,38 @@ export type DevicePropertiesInput = {
     orientation?: InputMaybe<DeviceOrientation>;
 };
 
+export type DurableWorkerStoredTaskGql = {
+    __typename?: 'DurableWorkerStoredTaskGql';
+    rpc: Scalars['JSON']['output'];
+};
+
+export type DurableWorkerTaskExecutionGql = {
+    __typename?: 'DurableWorkerTaskExecutionGql';
+    attempt: Scalars['Float']['output'];
+    completedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+    createdAt: Scalars['DateTimeISO']['output'];
+    elapsedTime?: Maybe<Scalars['Float']['output']>;
+    error?: Maybe<Scalars['JSONObject']['output']>;
+    id: Scalars['String']['output'];
+    outcome?: Maybe<Scalars['String']['output']>;
+    result?: Maybe<Scalars['JSON']['output']>;
+    startedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+    state: DurableWorkerTaskState;
+    task?: Maybe<DurableWorkerStoredTaskGql>;
+    taskId: Scalars['String']['output'];
+    updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+/** The state of the durable worker task execution. */
+export enum DurableWorkerTaskState {
+    Canceled = 'Canceled',
+    Failed = 'Failed',
+    NotStarted = 'NotStarted',
+    Retry = 'Retry',
+    Running = 'Running',
+    Success = 'Success',
+}
+
 export type EmailVerification = {
     __typename?: 'EmailVerification';
     emailAddress: Scalars['String']['output'];
@@ -652,11 +684,168 @@ export type FeedbackPaginationResult = {
     pagination: Pagination;
 };
 
+export type GqlAssetMetadata = {
+    __typename?: 'GqlAssetMetadata';
+    altText?: Maybe<Scalars['String']['output']>;
+    createdAt: Scalars['DateTimeISO']['output'];
+    fileHash?: Maybe<Scalars['String']['output']>;
+    name?: Maybe<Scalars['String']['output']>;
+    path?: Maybe<Scalars['String']['output']>;
+    tags?: Maybe<Array<Scalars['String']['output']>>;
+    updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type GqlAssetVariant = {
+    __typename?: 'GqlAssetVariant';
+    extension: Scalars['String']['output'];
+    name: Scalars['String']['output'];
+    size?: Maybe<Scalars['Float']['output']>;
+    uploadedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+    url?: Maybe<Scalars['String']['output']>;
+};
+
+export type GqlBulkOperationResult = {
+    __typename?: 'GqlBulkOperationResult';
+    failedAssetIds: Array<Scalars['String']['output']>;
+    failureCount: Scalars['Float']['output'];
+    message?: Maybe<Scalars['String']['output']>;
+    successCount: Scalars['Float']['output'];
+};
+
+export type GqlDurableWorkerAvailableMigration = {
+    __typename?: 'GqlDurableWorkerAvailableMigration';
+    /** The migration index. */
+    idx: Scalars['Float']['output'];
+    /** The migration tag/name (e.g., "0001_initial_setup"). */
+    tag: Scalars['String']['output'];
+    /** The timestamp when the migration was created. */
+    when: Scalars['Float']['output'];
+};
+
+export type GqlDurableWorkerColumn = {
+    __typename?: 'GqlDurableWorkerColumn';
+    /** The default value for the column. */
+    defaultValue?: Maybe<Scalars['String']['output']>;
+    /** The column name. */
+    name: Scalars['String']['output'];
+    /** Whether the column is nullable. */
+    nullable: Scalars['Boolean']['output'];
+    /** Whether the column is a primary key. */
+    primaryKey: Scalars['Boolean']['output'];
+    /** The column type. */
+    type: Scalars['String']['output'];
+};
+
+export type GqlDurableWorkerDatabaseSizeResult = {
+    __typename?: 'GqlDurableWorkerDatabaseSizeResult';
+    /** The database size in bytes. */
+    databaseSize: Scalars['Float']['output'];
+};
+
+export type GqlDurableWorkerInput = {
+    /** The durable object ID. Either durableObjectId or durableObjectName must be provided. */
+    durableObjectId?: InputMaybe<Scalars['String']['input']>;
+    /** The durable object name. Either durableObjectId or durableObjectName must be provided. */
+    durableObjectName?: InputMaybe<Scalars['String']['input']>;
+    /** The namespace of the durable object. If not provided and only one namespace is configured, that namespace will be used as default. */
+    namespace?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GqlDurableWorkerMigration = {
+    __typename?: 'GqlDurableWorkerMigration';
+    /** The timestamp when the migration was applied. */
+    createdAt: Scalars['Float']['output'];
+    /** The migration ID. */
+    id: Scalars['Float']['output'];
+    /** The migration tag/name (e.g., "0001_initial_setup"). */
+    tag: Scalars['String']['output'];
+};
+
+export type GqlDurableWorkerMigrationsResult = {
+    __typename?: 'GqlDurableWorkerMigrationsResult';
+    /** The list of migrations that have been applied. */
+    appliedMigrations: Array<GqlDurableWorkerMigration>;
+    /** The list of all available migrations in the system. */
+    availableMigrations: Array<GqlDurableWorkerAvailableMigration>;
+};
+
+export type GqlDurableWorkerReasonInput = {
+    /** The durable object ID. Either durableObjectId or durableObjectName must be provided. */
+    durableObjectId?: InputMaybe<Scalars['String']['input']>;
+    /** The durable object name. Either durableObjectId or durableObjectName must be provided. */
+    durableObjectName?: InputMaybe<Scalars['String']['input']>;
+    /** The namespace of the durable object. If not provided and only one namespace is configured, that namespace will be used as default. */
+    namespace?: InputMaybe<Scalars['String']['input']>;
+    reason?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GqlDurableWorkerSchemaResult = {
+    __typename?: 'GqlDurableWorkerSchemaResult';
+    /** The tables in the database schema. */
+    tables: Array<GqlDurableWorkerTable>;
+};
+
+export type GqlDurableWorkerStatusResult = {
+    __typename?: 'GqlDurableWorkerStatusResult';
+    /** The tasks currently being processed. */
+    activeTasks: Array<Scalars['JSON']['output']>;
+    /** The timestamp of the last task processed. */
+    lastTaskResult?: Maybe<Scalars['JSON']['output']>;
+    /** The tasks currently scheduled for future execution. */
+    scheduledTasks: Array<Scalars['JSON']['output']>;
+    /** The current status of the durable worker. */
+    state: Scalars['String']['output'];
+    /** The tasks currently stored in the durable worker. */
+    storedTasks: Array<Scalars['JSON']['output']>;
+    /** The total number of tasks processed since the worker started. */
+    totalTasksProcessed: Scalars['Float']['output'];
+};
+
+export type GqlDurableWorkerTable = {
+    __typename?: 'GqlDurableWorkerTable';
+    /** The columns in the table. */
+    columns: Array<GqlDurableWorkerColumn>;
+    /** The table name. */
+    name: Scalars['String']['output'];
+};
+
+export type GqlDurableWorkerTaskHistoryResult = {
+    __typename?: 'GqlDurableWorkerTaskHistoryResult';
+    /** The task execution history items. */
+    items: Array<DurableWorkerTaskExecutionGql>;
+    pagination: Pagination;
+};
+
+export type GqlDurableWorkerTaskInput = {
+    /** The durable object ID. Either durableObjectId or durableObjectName must be provided. */
+    durableObjectId?: InputMaybe<Scalars['String']['input']>;
+    /** The durable object name. Either durableObjectId or durableObjectName must be provided. */
+    durableObjectName?: InputMaybe<Scalars['String']['input']>;
+    /** The namespace of the durable object. If not provided and only one namespace is configured, that namespace will be used as default. */
+    namespace?: InputMaybe<Scalars['String']['input']>;
+    /** Optional task ID to filter execution history. */
+    taskId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GqlManagedAsset = {
+    __typename?: 'GqlManagedAsset';
+    groupPath: Scalars['String']['output'];
+    id: Scalars['String']['output'];
+    metadata: GqlAssetMetadata;
+    variants: Array<GqlAssetVariant>;
+};
+
 export type GqlMediaObject = {
     __typename?: 'GqlMediaObject';
     type: MediaObjectType;
     url: Scalars['String']['output'];
     variant?: Maybe<Scalars['String']['output']>;
+};
+
+export type GqlPagedManagedAssets = {
+    __typename?: 'GqlPagedManagedAssets';
+    items: Array<GqlManagedAsset>;
+    pagination: Pagination;
 };
 
 export type GqlPostReaction = {
@@ -713,6 +902,11 @@ export type Mutation = {
     accountProfileUpdate: Profile;
     accountSessionDelete: OperationResult;
     accountSignOut: OperationResult;
+    assetManagementBulkDelete: GqlBulkOperationResult;
+    assetManagementChangePath: GqlManagedAsset;
+    assetManagementRemove: OperationResult;
+    assetManagementRemoveVariant: OperationResult;
+    assetManagementUpdateMetadata: GqlManagedAsset;
     contactListCreatePrivileged: ContactList;
     contactListDeletePrivileged: OperationResult;
     contactListEntryCreate: ContactListEntry;
@@ -723,10 +917,21 @@ export type Mutation = {
     dataInteractionDatabaseTableRowDelete: OperationResult;
     dataInteractionDatabaseTableRowUpdate: Scalars['JSON']['output'];
     dataInteractionDatabaseTableRowsDelete: Scalars['Int']['output'];
+    durableWorkerAbortPrivileged: OperationResult;
+    durableWorkerDisposePrivileged: OperationResult;
+    durableWorkerScheduleNextAlarmPrivileged: OperationResult;
+    durableWorkerShutdownPrivileged: OperationResult;
     engagementEventCreate: OperationResult;
     engagementEventsCreate: OperationResult;
     feedbackCreate: Feedback;
     feedbackDeletePrivileged: OperationResult;
+    notificationBindingCreate: NotificationBinding;
+    notificationBindingDelete: OperationResult;
+    notificationDestinationDelete: OperationResult;
+    notificationDestinationEmailCreate: NotificationDestination;
+    notificationDestinationEmailUpdate: NotificationDestination;
+    notificationDestinationEmailVerificationComplete: NotificationDestination;
+    notificationDestinationEmailVerificationSend: EmailVerification;
     postCommentCreate: PostComment;
     postCommentDelete: OperationResult;
     postCreatePrivileged: Post;
@@ -850,6 +1055,29 @@ export type MutationAccountSessionDeleteArgs = {
     input: AccountSessionDeleteInput;
 };
 
+export type MutationAssetManagementBulkDeleteArgs = {
+    assetIds: Array<Scalars['String']['input']>;
+    purge?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type MutationAssetManagementChangePathArgs = {
+    assetId: Scalars['String']['input'];
+    newPath: Scalars['String']['input'];
+};
+
+export type MutationAssetManagementRemoveArgs = {
+    assetId: Scalars['String']['input'];
+};
+
+export type MutationAssetManagementRemoveVariantArgs = {
+    assetId: Scalars['String']['input'];
+    variantName: Scalars['String']['input'];
+};
+
+export type MutationAssetManagementUpdateMetadataArgs = {
+    input: UpdateAssetMetadataInput;
+};
+
 export type MutationContactListCreatePrivilegedArgs = {
     data: ContactListCreationInput;
 };
@@ -899,6 +1127,22 @@ export type MutationDataInteractionDatabaseTableRowsDeleteArgs = {
     tableName: Scalars['String']['input'];
 };
 
+export type MutationDurableWorkerAbortPrivilegedArgs = {
+    input: GqlDurableWorkerReasonInput;
+};
+
+export type MutationDurableWorkerDisposePrivilegedArgs = {
+    input: GqlDurableWorkerInput;
+};
+
+export type MutationDurableWorkerScheduleNextAlarmPrivilegedArgs = {
+    input: GqlDurableWorkerInput;
+};
+
+export type MutationDurableWorkerShutdownPrivilegedArgs = {
+    input: GqlDurableWorkerReasonInput;
+};
+
 export type MutationEngagementEventCreateArgs = {
     input: CreateEngagementEventInput;
 };
@@ -913,6 +1157,34 @@ export type MutationFeedbackCreateArgs = {
 
 export type MutationFeedbackDeletePrivilegedArgs = {
     id: Scalars['String']['input'];
+};
+
+export type MutationNotificationBindingCreateArgs = {
+    input: NotificationBindingCreateInput;
+};
+
+export type MutationNotificationBindingDeleteArgs = {
+    input: NotificationBindingInput;
+};
+
+export type MutationNotificationDestinationDeleteArgs = {
+    input: NotificationDestinationDeleteInput;
+};
+
+export type MutationNotificationDestinationEmailCreateArgs = {
+    input: NotificationDestinationEmailCreateInput;
+};
+
+export type MutationNotificationDestinationEmailUpdateArgs = {
+    input: NotificationDestinationEmailUpdateInput;
+};
+
+export type MutationNotificationDestinationEmailVerificationCompleteArgs = {
+    input: NotificationDestinationEmailVerificationCompleteInput;
+};
+
+export type MutationNotificationDestinationEmailVerificationSendArgs = {
+    input: NotificationDestinationEmailVerificationSendInput;
 };
 
 export type MutationPostCommentCreateArgs = {
@@ -1048,6 +1320,84 @@ export type MutationSupportTicketUpdateStatusPrivilegedArgs = {
 
 export type MutationSystemLogCreateArgs = {
     input: SystemLogClientInput;
+};
+
+export type NotificationBinding = {
+    __typename?: 'NotificationBinding';
+    accountId: Scalars['String']['output'];
+    bindingId: Scalars['String']['output'];
+    bindingType: Scalars['String']['output'];
+    createdAt: Scalars['DateTimeISO']['output'];
+    destination?: Maybe<NotificationDestination>;
+    destinationId?: Maybe<Scalars['String']['output']>;
+    id: Scalars['String']['output'];
+    name?: Maybe<Scalars['String']['output']>;
+    systemDestinationType?: Maybe<SystemNotificationDestination>;
+};
+
+export type NotificationBindingCreateInput = {
+    bindingId: Scalars['String']['input'];
+    bindingType: Scalars['String']['input'];
+    destinationId?: InputMaybe<Scalars['String']['input']>;
+    name?: InputMaybe<Scalars['String']['input']>;
+    systemDestinationType?: InputMaybe<SystemNotificationDestination>;
+};
+
+export type NotificationBindingInput = {
+    id: Scalars['String']['input'];
+};
+
+export type NotificationBindingListInput = {
+    bindingId?: InputMaybe<Scalars['String']['input']>;
+    bindingType?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type NotificationDestination = {
+    __typename?: 'NotificationDestination';
+    accountId: Scalars['String']['output'];
+    bindings?: Maybe<Array<NotificationBinding>>;
+    channelType: Scalars['String']['output'];
+    createdAt: Scalars['DateTimeISO']['output'];
+    id: Scalars['String']['output'];
+    isEnabled: Scalars['Boolean']['output'];
+    name: Scalars['String']['output'];
+    settings?: Maybe<Scalars['JSON']['output']>;
+    systemDestinationType?: Maybe<SystemNotificationDestination>;
+    updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type NotificationDestinationDeleteInput = {
+    id: Scalars['String']['input'];
+};
+
+export type NotificationDestinationEmailCreateInput = {
+    emailAddress: Scalars['String']['input'];
+    isEnabled: Scalars['Boolean']['input'];
+    name: Scalars['String']['input'];
+};
+
+export type NotificationDestinationEmailUpdateInput = {
+    id: Scalars['String']['input'];
+    isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+    name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type NotificationDestinationEmailVerificationCompleteInput = {
+    code: Scalars['String']['input'];
+    destinationId: Scalars['String']['input'];
+};
+
+export type NotificationDestinationEmailVerificationSendInput = {
+    emailAddress: Scalars['String']['input'];
+};
+
+export type NotificationDestinationInput = {
+    id: Scalars['String']['input'];
+};
+
+export type NotificationDestinationListInput = {
+    channelType?: InputMaybe<Scalars['String']['input']>;
+    isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type OperationResult = {
@@ -1437,6 +1787,8 @@ export type Query = {
     accountProfileUsernameValidate: UniqueFieldValidationResult;
     accountSessions: Array<AccountSession>;
     accountsPrivileged: PagedAccounts;
+    assetManagementGet: GqlManagedAsset;
+    assetManagementList: GqlPagedManagedAssets;
     contactLists: ContactListResult;
     contactListsPrivileged: ContactListResult;
     dataInteractionDatabaseTable: DatabaseTableMetadata;
@@ -1446,9 +1798,19 @@ export type Query = {
     dataInteractionDatabaseTables: DatabaseTablesResult;
     dataInteractionDatabases: PagedDatabasesResult;
     deviceId: OperationResult;
+    durableWorkerDatabaseSizePrivileged: GqlDurableWorkerDatabaseSizeResult;
+    durableWorkerMigrationsPrivileged: GqlDurableWorkerMigrationsResult;
+    durableWorkerNamespacesPrivileged: Array<Scalars['String']['output']>;
+    durableWorkerSchemaPrivileged: GqlDurableWorkerSchemaResult;
+    durableWorkerStatusPrivileged: GqlDurableWorkerStatusResult;
+    durableWorkerTaskHistoryPrivileged: GqlDurableWorkerTaskHistoryResult;
     engagementEvents: Array<EngagementEvent>;
     engagementOverview: EngagementOverview;
     feedbackListPrivileged: FeedbackPaginationResult;
+    notificationBinding?: Maybe<NotificationBinding>;
+    notificationBindings: Array<NotificationBinding>;
+    notificationDestination?: Maybe<NotificationDestination>;
+    notificationDestinations: Array<NotificationDestination>;
     post: Post;
     postCommentCreatedByProfile?: Maybe<PublicProfile>;
     postCommentReactions?: Maybe<Array<GqlPostReaction>>;
@@ -1516,6 +1878,14 @@ export type QueryAccountsPrivilegedArgs = {
     pagination: PaginationInput;
 };
 
+export type QueryAssetManagementGetArgs = {
+    assetId: Scalars['String']['input'];
+};
+
+export type QueryAssetManagementListArgs = {
+    pagination: PaginationInput;
+};
+
 export type QueryContactListsArgs = {
     pagination: PaginationInput;
 };
@@ -1555,12 +1925,49 @@ export type QueryDataInteractionDatabasesArgs = {
     pagination: PaginationInput;
 };
 
+export type QueryDurableWorkerDatabaseSizePrivilegedArgs = {
+    input: GqlDurableWorkerInput;
+};
+
+export type QueryDurableWorkerMigrationsPrivilegedArgs = {
+    input: GqlDurableWorkerInput;
+};
+
+export type QueryDurableWorkerSchemaPrivilegedArgs = {
+    input: GqlDurableWorkerInput;
+};
+
+export type QueryDurableWorkerStatusPrivilegedArgs = {
+    input: GqlDurableWorkerInput;
+};
+
+export type QueryDurableWorkerTaskHistoryPrivilegedArgs = {
+    input: GqlDurableWorkerTaskInput;
+    pagination: PaginationInput;
+};
+
 export type QueryEngagementOverviewArgs = {
     input?: InputMaybe<EngagementOverviewInput>;
 };
 
 export type QueryFeedbackListPrivilegedArgs = {
     pagination: PaginationInput;
+};
+
+export type QueryNotificationBindingArgs = {
+    input: NotificationBindingInput;
+};
+
+export type QueryNotificationBindingsArgs = {
+    input?: InputMaybe<NotificationBindingListInput>;
+};
+
+export type QueryNotificationDestinationArgs = {
+    input: NotificationDestinationInput;
+};
+
+export type QueryNotificationDestinationsArgs = {
+    input?: InputMaybe<NotificationDestinationListInput>;
 };
 
 export type QueryPostArgs = {
@@ -1814,6 +2221,11 @@ export enum SystemLogSourceType {
     Server = 'Server',
 }
 
+/** An enum of system provided notification destinations. These do not require any configuration by the user. */
+export enum SystemNotificationDestination {
+    PrimaryAccountEmail = 'PrimaryAccountEmail',
+}
+
 /** Possible time intervals used to group time series data. */
 export enum TimeInterval {
     Day = 'Day',
@@ -1836,6 +2248,13 @@ export enum UniqueFieldValidationResult {
     Invalid = 'Invalid',
     Taken = 'Taken',
 }
+
+export type UpdateAssetMetadataInput = {
+    altText?: InputMaybe<Scalars['String']['input']>;
+    assetId: Scalars['String']['input'];
+    name?: InputMaybe<Scalars['String']['input']>;
+    tags?: InputMaybe<Array<Scalars['String']['input']>>;
+};
 
 export type NoOpQueryVariables = Exact<{ [key: string]: never }>;
 
