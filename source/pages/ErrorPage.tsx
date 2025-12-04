@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Notice } from '@structure/source/components/notices/Notice';
-import { Button } from '@structure/source/components/buttons/Button';
+// import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Services
 import { systemLogService } from '@structure/source/modules/system-log/services/SystemLogService';
@@ -45,7 +45,7 @@ export function ErrorPage(properties: ErrorPageProperties) {
     return (
         <div className="flex h-screen w-full items-center justify-center px-4">
             <Notice variant="Negative" title="Error" className="max-w-2xl md:min-w-96">
-                <div className="gap-2">
+                <div className="flex flex-col gap-3.5">
                     {properties.error.message && <p className="break-all">{properties.error.message}</p>}
                     {properties.error.digest && (
                         <p>
@@ -55,7 +55,7 @@ export function ErrorPage(properties: ErrorPageProperties) {
                         </p>
                     )}
                 </div>
-                <div className="mt-5">
+                {/* <div className="mt-5">
                     <Button
                         variant="Destructive"
                         onClick={function () {
@@ -64,7 +64,7 @@ export function ErrorPage(properties: ErrorPageProperties) {
                     >
                         Reset
                     </Button>
-                </div>
+                </div> */}
             </Notice>
         </div>
     );

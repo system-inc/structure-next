@@ -71,7 +71,7 @@ export const noticeTheme: NoticeThemeConfiguration = {
     // Sizes
     sizes: {
         Small: 'p-2 text-sm', // Minimal - 8px padding, compact inline notices
-        Base: 'px-4 py-3 text-sm', // Standard - 16/12px padding, most common notice size
+        Base: 'pl-4 pr-6 pt-3 pb-5', // Standard - 16/12px padding, most common notice size
         Large: 'px-6 py-5 text-base', // Prominent - 24/20px padding, hero notices
     },
 
@@ -79,7 +79,7 @@ export const noticeTheme: NoticeThemeConfiguration = {
     iconSizes: {
         Small: 'size-3.5',
         Base: 'size-4.5',
-        Large: 'size-6',
+        Large: 'size-5',
     },
 
     // Configuration

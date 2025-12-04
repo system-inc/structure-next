@@ -134,7 +134,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
                 {icon && <div className={variantIconContainerClassNames}>{themeIcon(icon, iconClassNames)}</div>}
                 <div className={variantTextContainerClassNames}>
                     {properties.title && <div className={titleClassNames}>{properties.title}</div>}
-                    {properties.children && <div className="mt-4">{properties.children}</div>}
+                    {properties.children && <div className="mt-3">{properties.children}</div>}
                 </div>
             </div>
         </div>
