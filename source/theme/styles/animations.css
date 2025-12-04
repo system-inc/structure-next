@@ -104,21 +104,3 @@
 @utility animate-blink-once {
     animation: var(--animate-blink-once);
 }
-@utility animate-shimmer {
-    animation: var(--animate-shimmer);
-}
-
-/* Shimmer Animation - Horizontal sweep effect for loading skeletons */
-/* Creates a subtle light sweep across placeholder content */
-/* Use cases: Skeleton loaders, loading cards, placeholder states */
-@theme {
-    --animate-shimmer: shimmer 5s infinite;
-}
-@keyframes shimmer {
-    0% {
-        transform: translateX(-50%);
-    }
-    100% {
-        transform: translateX(75%);
-    }
-}
