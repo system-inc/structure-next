@@ -11,13 +11,13 @@ import { PostControls } from '@structure/source/modules/post/components/controls
 import { PostComments } from '@structure/source/modules/post/comments/components/PostComments';
 
 // Dependencies - API
-import { PostVoteType, PostsQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { PostVoteType, PostsDetailedQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Type - Reactions
-export type PostReactionsType = NonNullable<PostsQuery['posts']['items'][0]['reactions']>;
+export type PostReactionsType = NonNullable<PostsDetailedQuery['posts']['items'][0]['reactions']>;
 
 // Component - Post
 export interface PostProperties {
@@ -38,8 +38,8 @@ export interface PostProperties {
     urlPath: string;
     editUrlPath?: string;
     createdByProfileId: string;
-    createdByProfile: PostsQuery['posts']['items'][0]['createdByProfile'];
-    content?: PostsQuery['posts']['items'][0]['content'];
+    createdByProfile: PostsDetailedQuery['posts']['items'][0]['createdByProfile'];
+    content?: PostsDetailedQuery['posts']['items'][0]['content'];
     upvoteCount: number;
     voteType: PostVoteType | null | undefined;
     reactions?: PostReactionsType;

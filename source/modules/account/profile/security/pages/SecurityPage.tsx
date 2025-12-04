@@ -9,7 +9,7 @@ import { Card } from '@structure/source/components/containers/Card';
 import { ManagePasswordDialog } from '@structure/source/modules/account/profile/security/components/ManagePasswordDialog';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { useAccountEnrolledChallengesRequest } from '@structure/source/modules/account/profile/hooks/useAccountEnrolledChallengesRequest';
 import { AccountMaintenanceDialog } from '@structure/source/modules/account/authentication/components/dialogs/AccountMaintenanceDialog';
 
 // Component - SecurityPage
@@ -19,15 +19,7 @@ export function SecurityPage() {
     const [showPasswordForm, setShowPasswordForm] = React.useState(false);
 
     // Hooks - API - Queries
-    const accountEnrolledChallengesRequest = networkService.useGraphQlQuery(
-        gql(`
-            query AccountEnrolledChallenges {
-                account {
-                    enrolledChallenges
-                }
-            }
-        `),
-    );
+    const accountEnrolledChallengesRequest = useAccountEnrolledChallengesRequest();
 
     // Check if the account has a password set
     const accountHasPasswordSet =

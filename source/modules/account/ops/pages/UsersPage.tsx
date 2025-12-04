@@ -16,8 +16,10 @@ import { AnimatedButton } from '@structure/source/components/buttons/AnimatedBut
 import { Notice } from '@structure/source/components/notices/Notice';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useAccountsPrivilegedRequest } from '@structure/source/modules/account/ops/hooks/useAccountsPrivilegedRequest';
+import { useAccountDeletePrivilegedRequest } from '@structure/source/modules/account/ops/hooks/useAccountDeletePrivilegedRequest';
+import { networkService } from '@structure/source/services/network/NetworkService';
 
 // Cache key constants
 export const accountsPrivilegedCacheKey = 'accountsPrivileged';
@@ -66,38 +68,7 @@ export function UsersPage() {
     const [deleteSuccess, setDeleteSuccess] = React.useState(false);
 
     // Query
-    const accountsPrivilegedRequest = networkService.useGraphQlQuery(
-        gql(`
-            query AccountsPrivileged($pagination: PaginationInput!) {
-                accountsPrivileged(pagination: $pagination) {
-                    items {
-                        emailAddress
-                        profiles {
-                            username
-                            displayName
-                            givenName
-                            familyName
-                            countryCode
-                            images {
-                                url
-                                variant
-                            }
-                            updatedAt
-                            createdAt
-                        }
-                    }
-                    pagination {
-                        itemsTotal
-                        itemsPerPage
-                        page
-                        pagesTotal
-                        itemIndex
-                        itemIndexForNextPage
-                        itemIndexForPreviousPage
-                    }
-                }
-            }
-        `),
+    const accountsPrivilegedRequest = useAccountsPrivilegedRequest(
         {
             pagination: {
                 itemsPerPage: itemsPerPage,
@@ -116,15 +87,7 @@ export function UsersPage() {
     );
 
     // Mutation
-    const accountDeletePrivilegedRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountDeletePrivileged($input: AccountDeleteInput!) {
-                accountDeletePrivileged(input: $input) {
-                    success
-                }
-            }
-        `),
-    );
+    const accountDeletePrivilegedRequest = useAccountDeletePrivilegedRequest();
 
     // Effects
     React.useEffect(

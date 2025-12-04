@@ -9,22 +9,8 @@ import { GraphQlQueryTable } from '@structure/source/components/tables/GraphQlQu
 import { GraphQlMutationForm } from '@structure/source/api/graphql/forms/GraphQlMutationForm';
 
 // Dependencies - API
-import { gql } from '@structure/source/services/network/NetworkService';
 import { ContactListCreatePrivilegedOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-
-// GraphQL Operations
-gql(`
-    mutation ContactListCreatePrivileged($data: ContactListCreationInput!) {
-        contactListCreatePrivileged(data: $data) {
-            id
-            identifier
-            title
-            description
-            updatedAt
-            createdAt
-        }
-    }
-`);
+import { ContactListsPrivilegedDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - UsersContactListsPage
 export function UsersContactListsPage() {
@@ -41,32 +27,7 @@ export function UsersContactListsPage() {
                 submitButtonProperties={{ children: 'Create Contact List' }}
             />
 
-            <GraphQlQueryTable
-                className=""
-                queryDocument={gql(`
-                    query ContactListsPrivileged($pagination: PaginationInput!) {
-                        contactListsPrivileged(pagination: $pagination) {
-                            pagination {
-                                itemIndex
-                                itemIndexForNextPage
-                                itemIndexForPreviousPage
-                                itemsPerPage
-                                itemsTotal
-                                page
-                                pagesTotal
-                            }
-                            items {
-                                id
-                                identifier
-                                title
-                                description
-                                updatedAt
-                                createdAt
-                            }
-                        }
-                    }
-                `)}
-            />
+            <GraphQlQueryTable className="" queryDocument={ContactListsPrivilegedDocument} />
         </div>
     );
 }

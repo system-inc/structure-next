@@ -21,12 +21,14 @@ import {
 import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import {
     AccessRoleStatus,
     OrderByDirection,
     AccountAccessRoleAssignmentsPrivilegedQuery,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useAccountAccessRoleAssignmentsPrivilegedRequest } from '@structure/source/modules/account/ops/hooks/useAccountAccessRoleAssignmentsPrivilegedRequest';
+import { useAccountAccessRoleAssignmentRevokePrivilegedRequest } from '@structure/source/modules/account/ops/hooks/useAccountAccessRoleAssignmentRevokePrivilegedRequest';
+import { networkService } from '@structure/source/services/network/NetworkService';
 
 // Cache key constants
 export const accountAccessRoleAssignmentsPrivilegedCacheKey = 'accountAccessRoleAssignmentsPrivileged';
@@ -47,44 +49,7 @@ export function UsersRolesPage() {
     const [revokeSuccess, setRevokeSuccess] = React.useState(false);
 
     // Hooks
-    const accountAccessRoleAssignmentsPrivilegedRequest = networkService.useGraphQlQuery(
-        gql(`
-            query AccountAccessRoleAssignmentsPrivileged($statuses: [AccessRoleStatus!]!, $pagination: PaginationInput!) {
-                accountAccessRoleAssignmentsPrivileged(statuses: $statuses, pagination: $pagination) {
-                    items {
-                        id
-                        accessRole {
-                            id
-                            type
-                            description
-                        }
-                        status
-                        emailAddress
-                        profile {
-                            username
-                            displayName
-                            images {
-                                url
-                                variant
-                            }
-                            createdAt
-                        }
-                        expiresAt
-                        createdAt
-                        updatedAt
-                    }
-                    pagination {
-                        itemsTotal
-                        itemsPerPage
-                        page
-                        pagesTotal
-                        itemIndex
-                        itemIndexForNextPage
-                        itemIndexForPreviousPage
-                    }
-                }
-            }
-        `),
+    const accountAccessRoleAssignmentsPrivilegedRequest = useAccountAccessRoleAssignmentsPrivilegedRequest(
         {
             statuses: [AccessRoleStatus.Active],
             pagination: {
@@ -102,15 +67,7 @@ export function UsersRolesPage() {
         },
     );
 
-    const accountAccessRoleAssignmentRevokePrivilegedRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountAccessRoleAssignmentRevokePrivileged($input: AccessRoleAssignmentRevokeInput!) {
-                accountAccessRoleAssignmentRevokePrivileged(input: $input) {
-                    success
-                }
-            }
-        `),
-    );
+    const accountAccessRoleAssignmentRevokePrivilegedRequest = useAccountAccessRoleAssignmentRevokePrivilegedRequest();
 
     // Function to handle role revocation
     async function handleRevokeConfirm() {

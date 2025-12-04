@@ -1,9 +1,11 @@
 // Dependencies - API
 import { networkService, gql, InferUseGraphQlQueryOptions } from '@structure/source/services/network/NetworkService';
-import { PaginationInput, PostsDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { PostsDocument, PostsQueryVariables } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
+// Hook - usePostsRequest
+// Returns essential post fields for cards, list items, and search results
 export function usePostsRequest(
-    pagination?: Partial<PaginationInput>,
+    variables: PostsQueryVariables,
     options?: InferUseGraphQlQueryOptions<typeof PostsDocument>,
 ) {
     return networkService.useGraphQlQuery(
@@ -20,48 +22,24 @@ export function usePostsRequest(
                         page
                     }
                     items {
-                        id
                         identifier
                         slug
                         status
                         title
-                        createdByProfileId
-                        createdByProfile {
-                            displayName
-                            username
-                            images {
-                                url
-                                type
-                                variant
-                            }
-                        }
+                        description
                         content
-                        reactions {
-                            content
-                            count
-                            reacted
+                        topics {
+                            id
+                            title
+                            slug
                         }
-                        upvoteCount
-                        downvoteCount
-                        voteType
-                        reportedCount
-                        reportStatus
-                        metadata
-                        latestRevisionId
                         updatedAt
                         createdAt
                     }
                 }
             }
         `),
-        {
-            pagination: {
-                itemIndex: pagination?.itemIndex ?? 0,
-                itemsPerPage: pagination?.itemsPerPage ?? 10,
-                filters: pagination?.filters,
-                orderBy: pagination?.orderBy,
-            },
-        },
+        variables,
         options,
     );
 }

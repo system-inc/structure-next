@@ -1,16 +1,16 @@
 // Dependencies - API
 import { networkService, gql, InferUseGraphQlQueryOptions } from '@structure/source/services/network/NetworkService';
-import { PostTopicByIdDocument, PostTopicByIdQueryVariables } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { PostTopicsDocument, PostTopicsQueryVariables } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-// Hook - usePostTopicByIdRequest
-export function usePostTopicByIdRequest(
-    variables: PostTopicByIdQueryVariables,
-    options?: InferUseGraphQlQueryOptions<typeof PostTopicByIdDocument>,
+// Hook - usePostTopicsRequest
+export function usePostTopicsRequest(
+    variables: PostTopicsQueryVariables,
+    options?: InferUseGraphQlQueryOptions<typeof PostTopicsDocument>,
 ) {
     return networkService.useGraphQlQuery(
         gql(`
-            query PostTopicById($id: String!) {
-                postTopicById(id: $id) {
+            query PostTopics($ids: [String!]) {
+                postTopics(ids: $ids) {
                     id
                     title
                     slug

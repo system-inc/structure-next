@@ -10,7 +10,7 @@ import { Notice } from '@structure/source/components/notices/Notice';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { useAccountDeleteRequest } from '@structure/source/modules/account/profile/hooks/useAccountDeleteRequest';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -25,15 +25,7 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
     const [success, setSuccess] = React.useState(false);
 
     // Hooks
-    const accountDeleteRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountDelete($reason: String) {
-                accountDelete(reason: $reason) {
-                    success
-                }
-            }
-        `),
-    );
+    const accountDeleteRequest = useAccountDeleteRequest();
 
     // Function to handle form submission
     async function handleSubmit(formValues: { reason?: string }): Promise<FormSubmitResponseInterface> {

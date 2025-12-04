@@ -11,7 +11,7 @@ import { Notice } from '@structure/source/components/notices/Notice';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { useAccountPasswordUpdateRequest } from '@structure/source/modules/account/profile/hooks/useAccountPasswordUpdateRequest';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -27,15 +27,7 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
     const [success, setSuccess] = React.useState(false);
 
     // Hooks
-    const accountPasswordUpdateRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
-                accountPasswordUpdate(input: $input) {
-                    success
-                }
-            }
-        `),
-    );
+    const accountPasswordUpdateRequest = useAccountPasswordUpdateRequest();
 
     // Function to handle form submission
     async function handleSubmit(formValues: { newPassword?: string }): Promise<FormSubmitResponseInterface> {

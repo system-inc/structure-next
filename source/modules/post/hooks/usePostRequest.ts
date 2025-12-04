@@ -1,63 +1,29 @@
 // Dependencies - API
 import { networkService, gql, InferUseGraphQlQueryOptions } from '@structure/source/services/network/NetworkService';
-import { PostDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { PostDocument, PostQueryVariables } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-export interface UsePostRequestInterface {
-    id?: string;
-    identifier?: string;
-    slug?: string;
-}
+// Hook - usePostRequest
+// Returns essential post fields for cards, list items, and links
 export function usePostRequest(
-    variables: UsePostRequestInterface,
+    variables: PostQueryVariables,
     options?: InferUseGraphQlQueryOptions<typeof PostDocument>,
 ) {
     return networkService.useGraphQlQuery(
         gql(`
-            query Post($id: String, $slug: String, $identifier: String) {
-                post(id: $id, slug: $slug, identifier: $identifier) {
-                    id
+            query Post($identifier: String!) {
+                post(identifier: $identifier) {
                     identifier
                     slug
                     status
                     title
-                    createdByProfileId
-                    createdByProfile {
-                        displayName
-                        username
-                        images {
-                            url
-                            type
-                            variant
-                        }
-                    }
-                    topics {
-                        id
-                        title
-                        slug
-                    }
+                    description
                     content
-                    reactions {
-                        content
-                        count
-                        reacted
-                    }
-                    upvoteCount
-                    downvoteCount
-                    voteType
-                    reportedCount
-                    reportStatus
-                    metadata
-                    latestRevisionId
                     updatedAt
                     createdAt
                 }
             }
         `),
-        {
-            id: variables.id,
-            slug: variables.slug,
-            identifier: variables.identifier,
-        },
+        variables,
         options,
     );
 }

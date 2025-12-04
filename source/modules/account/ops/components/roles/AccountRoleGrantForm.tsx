@@ -13,7 +13,9 @@ import { InputSelect } from '@structure/source/components/forms/InputSelect';
 import { ProfileImage } from '@structure/source/modules/account/components/profile-image/ProfileImage';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { useAccountAccessRolesPrivilegedRequest } from '@structure/source/modules/account/ops/hooks/useAccountAccessRolesPrivilegedRequest';
+import { useAccountPrivilegedRequest } from '@structure/source/modules/account/ops/hooks/useAccountPrivilegedRequest';
+import { useAccountAccessRoleAssignmentCreatePrivilegedRequest } from '@structure/source/modules/account/ops/hooks/useAccountAccessRoleAssignmentCreatePrivilegedRequest';
 
 // Dependencies - Utilities
 import { isEmailAddress } from '@structure/source/utilities/validation/Validation';
@@ -45,32 +47,9 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
     const debouncedEmail = useDebounce(emailInput, 500);
 
     // Queries and Mutations
-    const accountAccessRolesPrivilegedRequest = networkService.useGraphQlQuery(
-        gql(`
-            query AccountAccessRolesPrivileged {
-                accountAccessRolesPrivileged {
-                    type
-                    description
-                }
-            }
-        `),
-    );
+    const accountAccessRolesPrivilegedRequest = useAccountAccessRolesPrivilegedRequest();
 
-    const accountPrivilegedRequest = networkService.useGraphQlQuery(
-        gql(`
-            query AccountPrivileged($input: AccountInput!) {
-                accountPrivileged(input: $input) {
-                    profiles {
-                        username
-                        displayName
-                        images {
-                            url
-                            variant
-                        }
-                    }
-                }
-            }
-        `),
+    const accountPrivilegedRequest = useAccountPrivilegedRequest(
         {
             input: {
                 emailAddress: debouncedEmail,
@@ -81,33 +60,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
         },
     );
 
-    const accountAccessRoleAssignmentCreatePrivilegedRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {
-                accountAccessRoleAssignmentCreatePrivileged(input: $input) {
-                    id
-                    accessRole {
-                        id
-                        type
-                        description
-                    }
-                    status
-                    profile {
-                        username
-                        displayName
-                        images {
-                            url
-                            variant
-                        }
-                        createdAt
-                    }
-                    expiresAt
-                    createdAt
-                    updatedAt
-                }
-            }
-        `),
-    );
+    const accountAccessRoleAssignmentCreatePrivilegedRequest = useAccountAccessRoleAssignmentCreatePrivilegedRequest();
 
     // Effect to handle email validation
     React.useEffect(

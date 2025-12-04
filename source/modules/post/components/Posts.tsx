@@ -7,9 +7,9 @@ import React from 'react';
 import { Post, PostReactionsType } from '@structure/source/modules/post/components/Post';
 
 // Dependencies - API
-import { usePostsRequest } from '@structure/source/modules/post/hooks/usePostsRequest';
+import { usePostsDetailedRequest } from '@structure/source/modules/post/hooks/usePostsDetailedRequest';
 import {
-    PostsQuery,
+    PostsDetailedQuery,
     PostVoteType,
     ColumnFilterConditionOperator,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
@@ -28,17 +28,19 @@ export interface PostsProperties {
 }
 export function Posts(properties: PostsProperties) {
     // Hooks
-    const postsRequest = usePostsRequest({
-        itemsPerPage: properties.itemsPerPage ?? 10,
-        filters: [
-            {
-                column: 'type',
-                operator: ColumnFilterConditionOperator.Equal,
-                value: properties.type,
-            },
-        ],
+    const postsDetailedRequest = usePostsDetailedRequest({
+        pagination: {
+            itemsPerPage: properties.itemsPerPage ?? 10,
+            filters: [
+                {
+                    column: 'type',
+                    operator: ColumnFilterConditionOperator.Equal,
+                    value: properties.type,
+                },
+            ],
+        },
     });
-    console.log('postsRequest', postsRequest);
+    console.log('postsDetailedRequest', postsDetailedRequest);
 
     const posts: {
         id: string;
@@ -49,8 +51,8 @@ export function Posts(properties: PostsProperties) {
         urlPath: string;
         topics: string[];
         content: string;
-        createdByProfileId: PostsQuery['posts']['items'][0]['createdByProfileId'];
-        createdByProfile: PostsQuery['posts']['items'][0]['createdByProfile'];
+        createdByProfileId: PostsDetailedQuery['posts']['items'][0]['createdByProfileId'];
+        createdByProfile: PostsDetailedQuery['posts']['items'][0]['createdByProfile'];
         voteType: PostVoteType | null | undefined;
         upvoteCount: number;
         downvoteCount: number;
@@ -61,7 +63,7 @@ export function Posts(properties: PostsProperties) {
         createdAt: string;
     }[] = [];
 
-    postsRequest.data?.posts.items.forEach(function (post) {
+    postsDetailedRequest.data?.posts.items.forEach(function (post) {
         const contentTrimmed = post.content?.trim();
         let content = contentTrimmed && contentTrimmed.length > 0 ? contentTrimmed : '';
 
@@ -106,17 +108,17 @@ export function Posts(properties: PostsProperties) {
 
             <div className="mt-4">
                 {/* Loading */}
-                {postsRequest.isLoading && (
+                {postsDetailedRequest.isLoading && (
                     <div className="mt-10">
                         <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     </div>
                 )}
 
                 {/* Error */}
-                {postsRequest.error && <div>Error: {postsRequest.error.message}</div>}
+                {postsDetailedRequest.error && <div>Error: {postsDetailedRequest.error.message}</div>}
 
                 {/* Posts */}
-                {postsRequest.data &&
+                {postsDetailedRequest.data &&
                     posts.map(function (post) {
                         return (
                             <Post

@@ -45,6 +45,10 @@ export default {
                 'Hook "{{hookName}}" options parameter should use type {{expectedType}} instead of generic typing',
             noInvalidateCacheInOnSuccess:
                 'Do not call invalidateCache inside onSuccess. Use the invalidateOnSuccess option instead to automatically invalidate cache keys when the mutation succeeds.',
+            inlineVariablesType:
+                'Hook "{{hookName}}" should use an imported {{expectedType}} type from GraphQlGeneratedCode instead of defining variables inline. Import and use the generated type for type safety.',
+            unnecessaryVariablesDestructuring:
+                'Hook "{{hookName}}" is destructuring the variables parameter only to rebuild the same object. Pass "{{parameterName}}" directly instead of "{ {{properties}} }".',
         },
         schema: [],
     },
@@ -158,6 +162,32 @@ export default {
             }
 
             return false;
+        }
+
+        // Helper function to check if a variables parameter uses an imported type reference
+        // Returns { isValid: boolean, isInlineType: boolean }
+        function checkVariablesParameterType(parameter) {
+            if(!parameter.typeAnnotation || !parameter.typeAnnotation.typeAnnotation) {
+                return { isValid: true, isInlineType: false }; // No type annotation, skip check
+            }
+
+            const typeAnnotation = parameter.typeAnnotation.typeAnnotation;
+
+            // Check if it's an inline object type (TSTypeLiteral)
+            if(typeAnnotation.type === 'TSTypeLiteral') {
+                return { isValid: false, isInlineType: true };
+            }
+
+            // Check if it's a type reference (imported type)
+            if(typeAnnotation.type === 'TSTypeReference' && typeAnnotation.typeName) {
+                const typeName = typeAnnotation.typeName.name;
+                // Valid if it ends with QueryVariables or MutationVariables
+                const isValidVariablesType =
+                    typeName.endsWith('QueryVariables') || typeName.endsWith('MutationVariables');
+                return { isValid: isValidVariablesType, isInlineType: false };
+            }
+
+            return { isValid: true, isInlineType: false };
         }
 
         // Helper function to find NetworkService method calls and their details
@@ -292,6 +322,138 @@ export default {
                                 expectedType: expectedType,
                             },
                         });
+                    }
+                }
+
+                // Check variables parameter type (should use imported *QueryVariables or *MutationVariables)
+                // Variables parameter is typically the first parameter for hooks that take variables
+                if(parameters && parameters.length > 0) {
+                    // Find the variables parameter (first non-options parameter)
+                    for(const parameter of parameters) {
+                        // Skip options parameter
+                        const parameterName =
+                            parameter.type === 'Identifier'
+                                ? parameter.name
+                                : parameter.type === 'AssignmentPattern' && parameter.left?.type === 'Identifier'
+                                  ? parameter.left.name
+                                  : null;
+
+                        if(parameterName?.toLowerCase().includes('option')) continue;
+
+                        // Check if this parameter has a variables-like name or is passed to the network call
+                        const parameterNameLower = parameterName?.toLowerCase() || '';
+                        if(
+                            parameterNameLower.includes('variable') ||
+                            parameterNameLower === 'input' ||
+                            parameterNameLower === 'variables'
+                        ) {
+                            const variablesCheck = checkVariablesParameterType(parameter);
+                            if(!variablesCheck.isValid) {
+                                const expectedVariablesType = isQuery ? '*QueryVariables' : '*MutationVariables';
+                                context.report({
+                                    node: parameter,
+                                    messageId: 'inlineVariablesType',
+                                    data: {
+                                        hookName: functionName,
+                                        expectedType: expectedVariablesType,
+                                    },
+                                });
+                            }
+                        }
+                        // Also check if parameter type is an inline object literal (TSTypeLiteral)
+                        else if(parameter.typeAnnotation?.typeAnnotation?.type === 'TSTypeLiteral') {
+                            // This is an inline type definition - check if it looks like GraphQL variables
+                            const typeAnnotation = parameter.typeAnnotation.typeAnnotation;
+                            // If it has properties that look like GraphQL input (e.g., 'input', 'id', 'identifier', etc.)
+                            const hasGraphQlLikeProperties = typeAnnotation.members?.some(function (member) {
+                                const propertyName = member.key?.name?.toLowerCase() || '';
+                                return (
+                                    propertyName === 'input' ||
+                                    propertyName === 'id' ||
+                                    propertyName === 'identifier' ||
+                                    propertyName === 'slug' ||
+                                    propertyName === 'pagination'
+                                );
+                            });
+
+                            if(hasGraphQlLikeProperties) {
+                                const expectedVariablesType = isQuery ? '*QueryVariables' : '*MutationVariables';
+                                context.report({
+                                    node: parameter,
+                                    messageId: 'inlineVariablesType',
+                                    data: {
+                                        hookName: functionName,
+                                        expectedType: expectedVariablesType,
+                                    },
+                                });
+                            }
+                        }
+                    }
+                }
+
+                // Check for unnecessary destructuring of variables parameter
+                // Pattern: variables parameter exists, but the call passes { prop: variables.prop, ... } instead of just variables
+                if(isQuery && networkCallArguments.length >= 2) {
+                    const variablesArgument = networkCallArguments[1];
+
+                    // Check if the second argument is an object literal
+                    if(variablesArgument?.type === 'ObjectExpression' && variablesArgument.properties?.length > 0) {
+                        // Find the variables parameter name
+                        let variablesParameterName = null;
+                        for(const parameter of parameters || []) {
+                            const name =
+                                parameter.type === 'Identifier'
+                                    ? parameter.name
+                                    : parameter.type === 'AssignmentPattern' && parameter.left?.type === 'Identifier'
+                                      ? parameter.left.name
+                                      : null;
+
+                            if(name && (name.toLowerCase().includes('variable') || name === 'variables')) {
+                                variablesParameterName = name;
+                                break;
+                            }
+                        }
+
+                        if(variablesParameterName) {
+                            // Check if all properties are just accessing the variables parameter
+                            const allPropertiesFromVariables = variablesArgument.properties.every(function (property) {
+                                // Skip spread elements
+                                if(property.type === 'SpreadElement') return false;
+
+                                // Check if value is variables.propertyName
+                                const value = property.value;
+                                if(
+                                    value?.type === 'MemberExpression' &&
+                                    value.object?.type === 'Identifier' &&
+                                    value.object.name === variablesParameterName
+                                ) {
+                                    // Check if the property name matches the accessed property
+                                    const keyName = property.key?.name || property.key?.value;
+                                    const accessedName = value.property?.name || value.property?.value;
+                                    return keyName === accessedName;
+                                }
+                                return false;
+                            });
+
+                            if(allPropertiesFromVariables && variablesArgument.properties.length > 0) {
+                                const propertyNames = variablesArgument.properties
+                                    .map(function (property) {
+                                        return property.key?.name || property.key?.value;
+                                    })
+                                    .filter(Boolean)
+                                    .join(', ');
+
+                                context.report({
+                                    node: variablesArgument,
+                                    messageId: 'unnecessaryVariablesDestructuring',
+                                    data: {
+                                        hookName: functionName,
+                                        parameterName: variablesParameterName,
+                                        properties: propertyNames,
+                                    },
+                                });
+                            }
+                        }
                     }
                 }
 

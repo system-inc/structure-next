@@ -2,8 +2,12 @@
 import React from 'react';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { ColumnFilterConditionOperator, OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useSupportTicketsPrivilegedRequest } from '@structure/source/modules/support/tickets/hooks/useSupportTicketsPrivilegedRequest';
+import { useSupportAllSupportProfilesRequest } from '@structure/source/modules/support/tickets/hooks/useSupportAllSupportProfilesRequest';
+import { useSupportTicketCommentCreatePrivilegedRequest } from '@structure/source/modules/support/tickets/hooks/useSupportTicketCommentCreatePrivilegedRequest';
+import { useSupportTicketAssignRequest } from '@structure/source/modules/support/tickets/hooks/useSupportTicketAssignRequest';
+import { useSupportTicketUpdateStatusPrivilegedRequest } from '@structure/source/modules/support/tickets/hooks/useSupportTicketUpdateStatusPrivilegedRequest';
 
 // Cache key constants
 export const supportTicketsCacheKey = 'supportTickets';
@@ -46,162 +50,43 @@ export function useSupportTickets(
     const ticketsVariables = React.useMemo(
         function () {
             return {
-                pagination: {
-                    itemsPerPage,
-                    itemIndex: (page - 1) * itemsPerPage,
-                    orderBy: [
-                        {
-                            key: 'createdAt',
-                            direction: OrderByDirection.Descending,
-                        },
-                    ],
-                    filters,
-                },
+                itemsPerPage,
+                itemIndex: (page - 1) * itemsPerPage,
+                orderBy: [
+                    {
+                        key: 'createdAt',
+                        direction: OrderByDirection.Descending,
+                    },
+                ],
+                filters,
             };
         },
         [page, itemsPerPage, filters],
     );
 
     // Queries
-    const supportTicketsPrivilegedRequest = networkService.useGraphQlQuery(
-        gql(`
-            query SupportTicketsPrivileged($pagination: PaginationInput!) {
-                supportTicketsPrivileged(pagination: $pagination) {
-                    items {
-                        id
-                        identifier
-                        status
-                        type
-                        title
-                        description
-                        userEmailAddress
-                        assignedToProfileId
-                        assignedToProfile {
-                            username
-                            displayName
-                            images {
-                                type
-                                url
-                                variant
-                            }
-                        }
-                        attachments {
-                            type
-                            url
-                            variant
-                        }
-                        comments {
-                            id
-                            source
-                            visibility
-                            content
-                            contentType
-                            attachments {
-                                type
-                                url
-                                variant
-                            }
-                            createdAt
-                        }
-                        createdAt
-                        updatedAt
-                        lastUserCommentedAt
-                        answeredAt
-                        answered
-                    }
-                    pagination {
-                        itemIndex
-                        itemIndexForNextPage
-                        itemIndexForPreviousPage
-                        itemsPerPage
-                        itemsTotal
-                        page
-                        pagesTotal
-                    }
-                }
-            }
-        `),
-        ticketsVariables,
-        {
-            cache: 'SessionStorage',
-            cacheKey: [supportTicketsCacheKey, ticketsVariables],
-            // Poll every minute (60000ms)
-            refreshIntervalInMilliseconds: 60000,
-        },
-    );
+    const supportTicketsPrivilegedRequest = useSupportTicketsPrivilegedRequest(ticketsVariables, {
+        cache: 'SessionStorage',
+        cacheKey: [supportTicketsCacheKey, ticketsVariables],
+        // Poll every minute (60000ms)
+        refreshIntervalInMilliseconds: 60000,
+    });
 
     // Query for support profiles
-    const supportAllSupportProfilesRequest = networkService.useGraphQlQuery(
-        gql(`
-        query SupportAllSupportProfiles {
-            supportAllSupportProfiles {
-                username
-                displayName
-                images {
-                    type
-                    url
-                    variant
-                }
-            }
-        }
-    `),
-    );
+    const supportAllSupportProfilesRequest = useSupportAllSupportProfilesRequest();
 
     // Mutations
-    const supportTicketCommentCreatePrivilegedRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation SupportTicketCommentCreatePrivileged($input: SupportTicketCommentCreateInput!) {
-                supportTicketCommentCreatePrivileged(input: $input) {
-                    id
-                    content
-                    contentType
-                    source
-                    visibility
-                    createdAt
-                }
-            }
-        `),
-        {
-            invalidateOnSuccess: [[supportTicketsCacheKey, ticketsVariables]],
-        },
-    );
+    const supportTicketCommentCreatePrivilegedRequest = useSupportTicketCommentCreatePrivilegedRequest({
+        invalidateOnSuccess: [[supportTicketsCacheKey, ticketsVariables]],
+    });
 
-    const supportTicketAssignRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation SupportTicketAssign($ticketId: String!, $username: String) {
-                supportTicketAssign(ticketId: $ticketId, username: $username) {
-                    id
-                    assignedToProfileId
-                    assignedToProfile {
-                        username
-                        displayName
-                        images {
-                            type
-                            url
-                            variant
-                        }
-                    }
-                }
-            }
-        `),
-        {
-            invalidateOnSuccess: [[supportTicketsCacheKey, ticketsVariables]],
-        },
-    );
+    const supportTicketAssignRequest = useSupportTicketAssignRequest({
+        invalidateOnSuccess: [[supportTicketsCacheKey, ticketsVariables]],
+    });
 
-    const supportTicketUpdateStatusPrivilegedRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation SupportTicketUpdateStatusPrivileged($id: String!, $status: SupportTicketStatus!) {
-                supportTicketUpdateStatusPrivileged(id: $id, status: $status) {
-                    id
-                    status
-                }
-            }
-        `),
-        {
-            invalidateOnSuccess: [[supportTicketsCacheKey, ticketsVariables]],
-        },
-    );
+    const supportTicketUpdateStatusPrivilegedRequest = useSupportTicketUpdateStatusPrivilegedRequest({
+        invalidateOnSuccess: [[supportTicketsCacheKey, ticketsVariables]],
+    });
 
     // Function to handle manual refresh
     const handleManualRefresh = React.useCallback(
