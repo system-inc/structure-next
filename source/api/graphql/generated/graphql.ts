@@ -2918,6 +2918,53 @@ export type EngagementEventsCreateMutation = {
     engagementEventsCreate: { __typename?: 'OperationResult'; success: boolean };
 };
 
+export type FeedbackCreateMutationVariables = Exact<{
+    input: CreateFeedbackInput;
+}>;
+
+export type FeedbackCreateMutation = {
+    __typename?: 'Mutation';
+    feedbackCreate: {
+        __typename?: 'Feedback';
+        identifier: string;
+        subject: string;
+        reaction: string;
+        content?: string | null;
+        contentType: RichContentFormat;
+        emailAddress?: string | null;
+    };
+};
+
+export type FeedbackListPrivilegedQueryVariables = Exact<{
+    pagination: PaginationInput;
+}>;
+
+export type FeedbackListPrivilegedQuery = {
+    __typename?: 'Query';
+    feedbackListPrivileged: {
+        __typename?: 'FeedbackPaginationResult';
+        items: Array<{
+            __typename?: 'Feedback';
+            identifier: string;
+            subject: string;
+            reaction: string;
+            content?: string | null;
+            contentType: RichContentFormat;
+            emailAddress?: string | null;
+        }>;
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForNextPage?: number | null;
+            itemIndexForPreviousPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            page: number;
+            pagesTotal: number;
+        };
+    };
+};
+
 export type PostByIdentifierQueryVariables = Exact<{
     identifier: Scalars['String']['input'];
 }>;
@@ -4167,6 +4214,41 @@ export const EngagementEventsCreateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<EngagementEventsCreateMutation, EngagementEventsCreateMutationVariables>;
+export const FeedbackCreateDocument = new TypedDocumentString(`
+    mutation FeedbackCreate($input: CreateFeedbackInput!) {
+  feedbackCreate(input: $input) {
+    identifier
+    subject
+    reaction
+    content
+    contentType
+    emailAddress
+  }
+}
+    `) as unknown as TypedDocumentString<FeedbackCreateMutation, FeedbackCreateMutationVariables>;
+export const FeedbackListPrivilegedDocument = new TypedDocumentString(`
+    query FeedbackListPrivileged($pagination: PaginationInput!) {
+  feedbackListPrivileged(pagination: $pagination) {
+    items {
+      identifier
+      subject
+      reaction
+      content
+      contentType
+      emailAddress
+    }
+    pagination {
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<FeedbackListPrivilegedQuery, FeedbackListPrivilegedQueryVariables>;
 export const PostByIdentifierDocument = new TypedDocumentString(`
     query PostByIdentifier($identifier: String!) {
   post(identifier: $identifier) {
@@ -5834,16 +5916,59 @@ export const CreateEngagementEventInputMetadata: GraphQLInputObjectTypeMetadata 
     ],
 };
 
-export const PostStatusMetadata: GraphQLInputEnumTypeMetadata = {
-    kind: 'enum',
-    type: 'PostStatus',
-    values: ['Draft', 'Published', 'Deleted'],
-};
-
 export const RichContentFormatMetadata: GraphQLInputEnumTypeMetadata = {
     kind: 'enum',
     type: 'RichContentFormat',
     values: ['Markdown', 'Html', 'PlainText'],
+};
+
+export const CreateFeedbackInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'CreateFeedbackInput',
+    fields: [
+        {
+            name: 'subject',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'identifier',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'reaction',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+        },
+        {
+            name: 'content',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+        {
+            name: 'contentType',
+            kind: 'enum',
+            type: RichContentFormatMetadata,
+            required: false,
+        },
+        {
+            name: 'emailAddress',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+        },
+    ],
+};
+
+export const PostStatusMetadata: GraphQLInputEnumTypeMetadata = {
+    kind: 'enum',
+    type: 'PostStatus',
+    values: ['Draft', 'Published', 'Deleted'],
 };
 
 export const PostCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
@@ -6894,6 +7019,34 @@ export const EngagementEventsCreateOperation: GraphQLOperationMetadata<typeof En
             itemKind: 'object',
             type: CreateEngagementEventInputMetadata,
             allowsEmpty: false,
+        },
+    ],
+};
+
+export const FeedbackCreateOperation: GraphQLOperationMetadata<typeof FeedbackCreateDocument> = {
+    operation: 'FeedbackCreate',
+    operationType: 'mutation',
+    document: FeedbackCreateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: CreateFeedbackInputMetadata,
+        },
+    ],
+};
+
+export const FeedbackListPrivilegedOperation: GraphQLOperationMetadata<typeof FeedbackListPrivilegedDocument> = {
+    operation: 'FeedbackListPrivileged',
+    operationType: 'query',
+    document: FeedbackListPrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: PaginationInputMetadata,
         },
     ],
 };

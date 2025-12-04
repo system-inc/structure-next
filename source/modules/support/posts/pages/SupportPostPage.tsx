@@ -7,7 +7,7 @@ import React from 'react';
 import { Link } from '@structure/source/components/navigation/Link';
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { NavigationTrail } from '@structure/source/components/navigation/trail/NavigationTrail';
-import { SupportPostFeedback } from '@structure/source/modules/support/posts/components/SupportPostFeedback';
+import { Feedback } from '@structure/source/modules/feedback/components/Feedback';
 import { Button } from '@structure/source/components/buttons/Button';
 import { Markdown } from '@structure/source/components/markdown/Markdown';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
@@ -108,7 +108,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
 
             <HorizontalRule className="my-16" />
 
-            <SupportPostFeedback className="flex justify-center text-center" />
+            <Feedback className="flex justify-center text-center" />
 
             <HorizontalRule className="my-16" />
 

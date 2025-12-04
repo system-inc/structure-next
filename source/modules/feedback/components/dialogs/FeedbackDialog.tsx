@@ -3,11 +3,14 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - Types
+import { RichContentFormat } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+
 // Dependencies - Hooks
 import { useUrlPath } from '@structure/source/router/Navigation';
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { useForm } from '@structure/source/components/forms-new/useForm';
-import { useSupportTicketCreateRequest } from '@structure/source/modules/support/contact/hooks/useSupportTicketCreateRequest';
+import { useFeedbackCreateRequest } from '@structure/source/modules/feedback/hooks/useFeedbackCreateRequest';
 
 // Dependencies - Main Components
 import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
@@ -42,35 +45,39 @@ const categoryLabels: Record<string, string> = Object.fromEntries(
 );
 
 // Schema for the feedback form
-const supportFeedbackFormSchema = schema.object({
-    emailAddress: schema.string().emailAddress(),
+const feedbackFormSchema = schema.object({
+    emailAddress: schema.string().emailAddress().optional(),
     category: schema.string(),
     feedback: schema.string(),
 });
 
-// Component - SupportPostFeedbackDialog
-export interface SupportPostFeedbackDialogProperties
+// Component - FeedbackDialog
+export interface FeedbackDialogProperties
     extends Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'> {
+    identifier?: string; // Optional identifier override (defaults to URL path)
     selectedEmoji?: string;
 }
-export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogProperties) {
+export function FeedbackDialog(properties: FeedbackDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 
     // Hooks
     const account = useAccount();
     const urlPath = useUrlPath();
-    const supportTicketCreateRequest = useSupportTicketCreateRequest();
+    const feedbackCreateRequest = useFeedbackCreateRequest();
 
     // Form hook
     const form = useForm({
-        schema: supportFeedbackFormSchema,
+        schema: feedbackFormSchema,
         onSubmit: async function (formState) {
             const category = formState.value.category;
             const categoryLabel = categoryLabels[category] || category;
 
-            // Compose subject from category + URL
-            const subject = `Support Feedback: ${categoryLabel} - ${urlPath}`;
+            // Use provided identifier or default to URL path
+            const identifier = properties.identifier || urlPath;
+
+            // Compose subject from category + identifier
+            const subject = `Feedback: ${categoryLabel} - ${identifier}`;
 
             // Compose content with context
             const content = [
@@ -84,14 +91,15 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
                 .filter(Boolean)
                 .join('\n');
 
-            await supportTicketCreateRequest.execute({
-                title: subject,
-                emailAddress: formState.value.emailAddress,
-                content: content,
-                type: 'Contact',
-                contentType: 'Markdown',
-                description: undefined,
-                attachmentFiles: undefined,
+            await feedbackCreateRequest.execute({
+                input: {
+                    identifier: identifier,
+                    subject: subject,
+                    reaction: properties.selectedEmoji || 'none',
+                    content: content,
+                    contentType: RichContentFormat.Markdown,
+                    emailAddress: formState.value.emailAddress || undefined,
+                },
             });
         },
     });
@@ -134,14 +142,14 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
             variant="A"
             {...properties}
             accessibilityTitle="Help Us Improve"
-            accessibilityDescription="Submit feedback with email, issue type, and details"
+            accessibilityDescription="Submit feedback with email, issue type, and details."
             open={open}
             onOpenChange={onOpenChangeIntercept}
             header="Help Us Improve"
         >
             <form.Form className="flex flex-col">
                 <Dialog.Body>
-                    {supportTicketCreateRequest.isSuccess ? (
+                    {feedbackCreateRequest.data ? (
                         // Success state
                         <div className="flex flex-col items-center py-8 text-center">
                             <CheckCircleIcon className="mb-4 h-12 w-12 content--positive" weight="fill" />
@@ -165,6 +173,8 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
                             <form.Field identifier="category">
                                 <form.FieldLabel>What went wrong?</form.FieldLabel>
                                 <FieldInputSelect
+                                    variant="Outline"
+                                    className="rounded-lg text-sm"
                                     placeholder="Select a category"
                                     items={categoryOptions.map(function (option) {
                                         return {
@@ -189,22 +199,24 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
                 </Dialog.Body>
 
                 <Dialog.Footer>
-                    {supportTicketCreateRequest.isSuccess && (
+                    {feedbackCreateRequest.data && (
                         <Button variant="A" onClick={closeDialog}>
                             Close
                         </Button>
                     )}
                     {/* Submit Button - inside form to enable form submission */}
-                    <AnimatedButton
-                        variant="A"
-                        type="submit"
-                        iconRight={PaperPlaneRightIcon}
-                        isProcessing={supportTicketCreateRequest.isLoading}
-                        processingIcon={SpinnerIcon}
-                        animateIconPosition="iconRight"
-                    >
-                        Submit Feedback
-                    </AnimatedButton>
+                    {!feedbackCreateRequest.data && (
+                        <AnimatedButton
+                            variant="A"
+                            type="submit"
+                            iconRight={PaperPlaneRightIcon}
+                            isProcessing={feedbackCreateRequest.isLoading}
+                            processingIcon={SpinnerIcon}
+                            animateIconPosition="iconRight"
+                        >
+                            Submit Feedback
+                        </AnimatedButton>
+                    )}
                 </Dialog.Footer>
             </form.Form>
         </Dialog>
