@@ -12,8 +12,8 @@ import {
 import { LoadingAnimation } from '@structure/source/components/animations/LoadingAnimation';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { AuthenticationSessionStatus } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useAccountAuthenticationRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAuthenticationRequest';
 
 // Component - AccountMaintenanceDialog
 // This dialog provides a secure authentication layer for sensitive account operations.
@@ -37,25 +37,10 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
     // Check current authentication session - using query without cache for fresh data
     // We use cache: false to ensure we always get the latest auth status from the server
     // This is critical for security checks - we never want stale authentication data
-    const accountAuthenticationQuery = networkService.useGraphQlQuery(
-        gql(`
-            query AccountMaintenanceDialogAuthentication {
-                accountAuthentication {
-                    status
-                    scopeType
-                    currentChallenge {
-                        challengeType
-                        status
-                    }
-                }
-            }
-        `),
-        undefined,
-        {
-            cache: false, // Always fetch fresh authentication status
-            enabled: false, // We'll manually trigger with refresh()
-        },
-    );
+    const accountAuthenticationRequest = useAccountAuthenticationRequest({
+        cache: false, // Always fetch fresh authentication status
+        enabled: false, // We'll manually trigger with refresh()
+    });
 
     // Effect to handle dialog opening and closing
     React.useEffect(
@@ -79,8 +64,8 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
 
     // Extract the specific values we need for the effect
     // With cache: false, we still get refresh() since it's a query, not a mutation
-    const authenticationData = accountAuthenticationQuery.data;
-    const refreshAuthentication = accountAuthenticationQuery.refresh;
+    const authenticationData = accountAuthenticationRequest.data;
+    const refreshAuthentication = accountAuthenticationRequest.refresh;
     const onAuthenticated = properties.onAuthenticated;
     const onOpenChange = properties.onOpenChange;
 

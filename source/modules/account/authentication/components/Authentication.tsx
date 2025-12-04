@@ -23,8 +23,11 @@ import { useAccount, sessionIdHttpOnlyCookieExistsAtom } from '@structure/source
 import { globalStore } from '@structure/source/utilities/shared-state/SharedStateProvider';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { networkService } from '@structure/source/services/network/NetworkService';
 import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useAccountAuthenticationRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAuthenticationRequest';
+import { useAccountAuthenticationRegistrationCompleteRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAuthenticationRegistrationCompleteRequest';
+import { useAccountAuthenticationSignInCompleteRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAuthenticationSignInCompleteRequest';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -55,43 +58,12 @@ export function Authentication(properties: AuthenticationProperties) {
     const account = useAccount();
 
     // Hooks - API - Queries
-    const accountAuthenticationRequest = networkService.useGraphQlQuery(
-        gql(`
-            query AccountAuthentication {
-                accountAuthentication {
-                    status
-                    scopeType
-                    currentChallenge {
-                        challengeType
-                        status
-                    }
-                    updatedAt
-                    createdAt
-                }
-            }
-        `),
-    );
+    const accountAuthenticationRequest = useAccountAuthenticationRequest();
 
     // Hooks - API - Mutations
-    const accountAuthenticationRegistrationCompleteRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {
-                accountAuthenticationRegistrationComplete(input: $input) {
-                    success
-                }
-            }
-        `),
-    );
+    const accountAuthenticationRegistrationCompleteRequest = useAccountAuthenticationRegistrationCompleteRequest();
 
-    const accountAuthenticationSignInCompleteRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountAuthenticationSignInComplete {
-                accountAuthenticationSignInComplete {
-                    success
-                }
-            }
-        `),
-    );
+    const accountAuthenticationSignInCompleteRequest = useAccountAuthenticationSignInCompleteRequest();
 
     // Shared function to complete authentication after sign-in or registration
     const completeAuthentication = React.useCallback(

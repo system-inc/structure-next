@@ -15,7 +15,7 @@ import { FieldInputText } from '@structure/source/components/forms-new/fields/te
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
-import { useAccountProfileUpdateRequest } from '@structure/source/modules/account/hooks/useAccountProfileUpdateRequest';
+import { useAccountProfileUpdateRequest } from '@structure/source/modules/account/profile/hooks/useAccountProfileUpdateRequest';
 
 // Dependencies - API
 import { AccountProfileUsernameValidateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';

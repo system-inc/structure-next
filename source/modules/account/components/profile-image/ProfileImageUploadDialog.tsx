@@ -5,8 +5,8 @@ import React from 'react';
 
 // Dependencies - Hooks
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
-import { useAccountProfileImageUploadRequest } from '@structure/source/modules/account/hooks/useAccountProfileImageUploadRequest';
-import { useAccountProfileImageRemoveRequest } from '@structure/source/modules/account/hooks/useAccountProfileImageRemoveRequest';
+import { useAccountProfileImageUploadRequest } from '@structure/source/modules/account/profile/hooks/useAccountProfileImageUploadRequest';
+import { useAccountProfileImageRemoveRequest } from '@structure/source/modules/account/profile/hooks/useAccountProfileImageRemoveRequest';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';

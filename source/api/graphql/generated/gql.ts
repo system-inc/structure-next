@@ -14,21 +14,16 @@ import * as types from './graphql';
  */
 type Documents = {
     'query NoOp { __typename }': typeof types.NoOpDocument;
-    '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountMaintenanceSessionCreateDocument;
     '\n            mutation AccountAdministratorSessionCreate {\n                accountAdministratorSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountAdministratorSessionCreateDocument;
-    '\n            query AccountAuthenticatedSessionCheck {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ': typeof types.AccountAuthenticatedSessionCheckDocument;
-    '\n            query AccountAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountAuthenticationDocument;
-    '\n            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {\n                accountAuthenticationRegistrationComplete(input: $input) {\n                    success\n                }\n            }\n        ': typeof types.AccountAuthenticationRegistrationCompleteDocument;
-    '\n            mutation AccountAuthenticationSignInComplete {\n                accountAuthenticationSignInComplete {\n                    success\n                }\n            }\n        ': typeof types.AccountAuthenticationSignInCompleteDocument;
-    '\n            mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {\n                accountAuthenticationRegistrationOrSignInCreate(input: $input) {\n                    emailAddress\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ': typeof types.AccountAuthenticationRegistrationOrSignInCreateDocument;
-    '\n            mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {\n                accountAuthenticationPasswordVerify(input: $input) {\n                    success\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ': typeof types.AccountAuthenticationPasswordVerifyDocument;
-    '\n            mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {\n                accountAuthenticationEmailVerificationVerify(input: $input) {\n                    verification {\n                        status\n                        emailAddress\n                        lastEmailSentAt\n                    }\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ': typeof types.AccountAuthenticationEmailVerificationVerifyDocument;
     '\n            mutation AccountAuthenticationEmailVerificationSend {\n                accountAuthenticationEmailVerificationSend {\n                    verification {\n                        status\n                        emailAddress\n                        lastEmailSentAt\n                    }\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ': typeof types.AccountAuthenticationEmailVerificationSendDocument;
-    '\n            query AccountMaintenanceDialogAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ': typeof types.AccountMaintenanceDialogAuthenticationDocument;
-    '\n            mutation AccountProfileImageRemove {\n                accountProfileImageRemove {\n                    images {\n                        url\n                        variant\n                    }\n                }\n            }\n        ': typeof types.AccountProfileImageRemoveDocument;
-    '\n            query AccountEmails {\n                accountEmailAddresses {\n                    emailAddresses {\n                        id\n                        emailAddress\n                        type\n                        isVerified\n                    }\n                }\n            }\n        ': typeof types.AccountEmailsDocument;
-    '\n            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {\n                accountProfileUpdate(input: $input) {\n                    id\n                    username\n                    displayName\n                    givenName\n                    familyName\n                    images {\n                        url\n                        variant\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountProfileUpdateDocument;
-    '\n            query AccountProfileUsernameValidate($username: String!) {\n                accountProfileUsernameValidate(username: $username)\n            }\n        ': typeof types.AccountProfileUsernameValidateDocument;
+    '\n            mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {\n                accountAuthenticationEmailVerificationVerify(input: $input) {\n                    verification {\n                        status\n                        emailAddress\n                        lastEmailSentAt\n                    }\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ': typeof types.AccountAuthenticationEmailVerificationVerifyDocument;
+    '\n            mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {\n                accountAuthenticationPasswordVerify(input: $input) {\n                    success\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ': typeof types.AccountAuthenticationPasswordVerifyDocument;
+    '\n            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {\n                accountAuthenticationRegistrationComplete(input: $input) {\n                    success\n                }\n            }\n        ': typeof types.AccountAuthenticationRegistrationCompleteDocument;
+    '\n            mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {\n                accountAuthenticationRegistrationOrSignInCreate(input: $input) {\n                    emailAddress\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ': typeof types.AccountAuthenticationRegistrationOrSignInCreateDocument;
+    '\n            query AccountAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountAuthenticationDocument;
+    '\n            mutation AccountAuthenticationSignInComplete {\n                accountAuthenticationSignInComplete {\n                    success\n                }\n            }\n        ': typeof types.AccountAuthenticationSignInCompleteDocument;
+    '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountMaintenanceSessionCreateDocument;
+    '\n            mutation AccountSignOut {\n                accountSignOut {\n                    success\n                }\n            }\n        ': typeof types.AccountSignOutDocument;
     '\n            query AccountAccessRolesPrivileged {\n                accountAccessRolesPrivileged {\n                    type\n                    description\n                }\n            }\n        ': typeof types.AccountAccessRolesPrivilegedDocument;
     '\n            query AccountPrivileged($input: AccountInput!) {\n                accountPrivileged(input: $input) {\n                    profiles {\n                        username\n                        displayName\n                        images {\n                            url\n                            variant\n                        }\n                    }\n                }\n            }\n        ': typeof types.AccountPrivilegedDocument;
     '\n            mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {\n                accountAccessRoleAssignmentCreatePrivileged(input: $input) {\n                    id\n                    accessRole {\n                        id\n                        type\n                        description\n                    }\n                    status\n                    profile {\n                        username\n                        displayName\n                        images {\n                            url\n                            variant\n                        }\n                        createdAt\n                    }\n                    expiresAt\n                    createdAt\n                    updatedAt\n                }\n            }\n        ': typeof types.AccountAccessRoleAssignmentCreatePrivilegedDocument;
@@ -38,6 +33,10 @@ type Documents = {
     '\n            mutation AccountDeletePrivileged($input: AccountDeleteInput!) {\n                accountDeletePrivileged(input: $input) {\n                    success\n                }\n            }\n        ': typeof types.AccountDeletePrivilegedDocument;
     '\n            query AccountAccessRoleAssignmentsPrivileged($statuses: [AccessRoleStatus!]!, $pagination: PaginationInput!) {\n                accountAccessRoleAssignmentsPrivileged(statuses: $statuses, pagination: $pagination) {\n                    items {\n                        id\n                        accessRole {\n                            id\n                            type\n                            description\n                        }\n                        status\n                        emailAddress\n                        profile {\n                            username\n                            displayName\n                            images {\n                                url\n                                variant\n                            }\n                            createdAt\n                        }\n                        expiresAt\n                        createdAt\n                        updatedAt\n                    }\n                    pagination {\n                        itemsTotal\n                        itemsPerPage\n                        page\n                        pagesTotal\n                        itemIndex\n                        itemIndexForNextPage\n                        itemIndexForPreviousPage\n                    }\n                }\n            }\n        ': typeof types.AccountAccessRoleAssignmentsPrivilegedDocument;
     '\n            mutation AccountAccessRoleAssignmentRevokePrivileged($input: AccessRoleAssignmentRevokeInput!) {\n                accountAccessRoleAssignmentRevokePrivileged(input: $input) {\n                    success\n                }\n            }\n        ': typeof types.AccountAccessRoleAssignmentRevokePrivilegedDocument;
+    '\n            query AccountEmails {\n                accountEmailAddresses {\n                    emailAddresses {\n                        id\n                        emailAddress\n                        type\n                        isVerified\n                    }\n                }\n            }\n        ': typeof types.AccountEmailsDocument;
+    '\n            mutation AccountProfileImageRemove {\n                accountProfileImageRemove {\n                    images {\n                        url\n                        variant\n                    }\n                }\n            }\n        ': typeof types.AccountProfileImageRemoveDocument;
+    '\n            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {\n                accountProfileUpdate(input: $input) {\n                    id\n                    username\n                    displayName\n                    givenName\n                    familyName\n                    images {\n                        url\n                        variant\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountProfileUpdateDocument;
+    '\n            query AccountProfileUsernameValidate($username: String!) {\n                accountProfileUsernameValidate(username: $username)\n            }\n        ': typeof types.AccountProfileUsernameValidateDocument;
     '\n            mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {\n                accountPasswordUpdate(input: $input) {\n                    success\n                }\n            }\n        ': typeof types.AccountPasswordUpdateDocument;
     '\n            query AccountEnrolledChallenges {\n                account {\n                    enrolledChallenges\n                }\n            }\n        ': typeof types.AccountEnrolledChallengesDocument;
     '\n            mutation AccountDelete($reason: String) {\n                accountDelete(reason: $reason) {\n                    success\n                }\n            }\n        ': typeof types.AccountDeleteDocument;
@@ -78,36 +77,26 @@ type Documents = {
 };
 const documents: Documents = {
     'query NoOp { __typename }': types.NoOpDocument,
-    '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
-        types.AccountMaintenanceSessionCreateDocument,
     '\n            mutation AccountAdministratorSessionCreate {\n                accountAdministratorSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
         types.AccountAdministratorSessionCreateDocument,
-    '\n            query AccountAuthenticatedSessionCheck {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ':
-        types.AccountAuthenticatedSessionCheckDocument,
-    '\n            query AccountAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
-        types.AccountAuthenticationDocument,
-    '\n            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {\n                accountAuthenticationRegistrationComplete(input: $input) {\n                    success\n                }\n            }\n        ':
-        types.AccountAuthenticationRegistrationCompleteDocument,
-    '\n            mutation AccountAuthenticationSignInComplete {\n                accountAuthenticationSignInComplete {\n                    success\n                }\n            }\n        ':
-        types.AccountAuthenticationSignInCompleteDocument,
-    '\n            mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {\n                accountAuthenticationRegistrationOrSignInCreate(input: $input) {\n                    emailAddress\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ':
-        types.AccountAuthenticationRegistrationOrSignInCreateDocument,
-    '\n            mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {\n                accountAuthenticationPasswordVerify(input: $input) {\n                    success\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ':
-        types.AccountAuthenticationPasswordVerifyDocument,
-    '\n            mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {\n                accountAuthenticationEmailVerificationVerify(input: $input) {\n                    verification {\n                        status\n                        emailAddress\n                        lastEmailSentAt\n                    }\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ':
-        types.AccountAuthenticationEmailVerificationVerifyDocument,
     '\n            mutation AccountAuthenticationEmailVerificationSend {\n                accountAuthenticationEmailVerificationSend {\n                    verification {\n                        status\n                        emailAddress\n                        lastEmailSentAt\n                    }\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ':
         types.AccountAuthenticationEmailVerificationSendDocument,
-    '\n            query AccountMaintenanceDialogAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ':
-        types.AccountMaintenanceDialogAuthenticationDocument,
-    '\n            mutation AccountProfileImageRemove {\n                accountProfileImageRemove {\n                    images {\n                        url\n                        variant\n                    }\n                }\n            }\n        ':
-        types.AccountProfileImageRemoveDocument,
-    '\n            query AccountEmails {\n                accountEmailAddresses {\n                    emailAddresses {\n                        id\n                        emailAddress\n                        type\n                        isVerified\n                    }\n                }\n            }\n        ':
-        types.AccountEmailsDocument,
-    '\n            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {\n                accountProfileUpdate(input: $input) {\n                    id\n                    username\n                    displayName\n                    givenName\n                    familyName\n                    images {\n                        url\n                        variant\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
-        types.AccountProfileUpdateDocument,
-    '\n            query AccountProfileUsernameValidate($username: String!) {\n                accountProfileUsernameValidate(username: $username)\n            }\n        ':
-        types.AccountProfileUsernameValidateDocument,
+    '\n            mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {\n                accountAuthenticationEmailVerificationVerify(input: $input) {\n                    verification {\n                        status\n                        emailAddress\n                        lastEmailSentAt\n                    }\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ':
+        types.AccountAuthenticationEmailVerificationVerifyDocument,
+    '\n            mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {\n                accountAuthenticationPasswordVerify(input: $input) {\n                    success\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ':
+        types.AccountAuthenticationPasswordVerifyDocument,
+    '\n            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {\n                accountAuthenticationRegistrationComplete(input: $input) {\n                    success\n                }\n            }\n        ':
+        types.AccountAuthenticationRegistrationCompleteDocument,
+    '\n            mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {\n                accountAuthenticationRegistrationOrSignInCreate(input: $input) {\n                    emailAddress\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ':
+        types.AccountAuthenticationRegistrationOrSignInCreateDocument,
+    '\n            query AccountAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
+        types.AccountAuthenticationDocument,
+    '\n            mutation AccountAuthenticationSignInComplete {\n                accountAuthenticationSignInComplete {\n                    success\n                }\n            }\n        ':
+        types.AccountAuthenticationSignInCompleteDocument,
+    '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
+        types.AccountMaintenanceSessionCreateDocument,
+    '\n            mutation AccountSignOut {\n                accountSignOut {\n                    success\n                }\n            }\n        ':
+        types.AccountSignOutDocument,
     '\n            query AccountAccessRolesPrivileged {\n                accountAccessRolesPrivileged {\n                    type\n                    description\n                }\n            }\n        ':
         types.AccountAccessRolesPrivilegedDocument,
     '\n            query AccountPrivileged($input: AccountInput!) {\n                accountPrivileged(input: $input) {\n                    profiles {\n                        username\n                        displayName\n                        images {\n                            url\n                            variant\n                        }\n                    }\n                }\n            }\n        ':
@@ -126,6 +115,14 @@ const documents: Documents = {
         types.AccountAccessRoleAssignmentsPrivilegedDocument,
     '\n            mutation AccountAccessRoleAssignmentRevokePrivileged($input: AccessRoleAssignmentRevokeInput!) {\n                accountAccessRoleAssignmentRevokePrivileged(input: $input) {\n                    success\n                }\n            }\n        ':
         types.AccountAccessRoleAssignmentRevokePrivilegedDocument,
+    '\n            query AccountEmails {\n                accountEmailAddresses {\n                    emailAddresses {\n                        id\n                        emailAddress\n                        type\n                        isVerified\n                    }\n                }\n            }\n        ':
+        types.AccountEmailsDocument,
+    '\n            mutation AccountProfileImageRemove {\n                accountProfileImageRemove {\n                    images {\n                        url\n                        variant\n                    }\n                }\n            }\n        ':
+        types.AccountProfileImageRemoveDocument,
+    '\n            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {\n                accountProfileUpdate(input: $input) {\n                    id\n                    username\n                    displayName\n                    givenName\n                    familyName\n                    images {\n                        url\n                        variant\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
+        types.AccountProfileUpdateDocument,
+    '\n            query AccountProfileUsernameValidate($username: String!) {\n                accountProfileUsernameValidate(username: $username)\n            }\n        ':
+        types.AccountProfileUsernameValidateDocument,
     '\n            mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {\n                accountPasswordUpdate(input: $input) {\n                    success\n                }\n            }\n        ':
         types.AccountPasswordUpdateDocument,
     '\n            query AccountEnrolledChallenges {\n                account {\n                    enrolledChallenges\n                }\n            }\n        ':
@@ -210,56 +207,8 @@ export function graphql(source: 'query NoOp { __typename }'): typeof import('./g
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-    source: '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ',
-): typeof import('./graphql').AccountMaintenanceSessionCreateDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
     source: '\n            mutation AccountAdministratorSessionCreate {\n                accountAdministratorSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ',
 ): typeof import('./graphql').AccountAdministratorSessionCreateDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-    source: '\n            query AccountAuthenticatedSessionCheck {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ',
-): typeof import('./graphql').AccountAuthenticatedSessionCheckDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-    source: '\n            query AccountAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ',
-): typeof import('./graphql').AccountAuthenticationDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-    source: '\n            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {\n                accountAuthenticationRegistrationComplete(input: $input) {\n                    success\n                }\n            }\n        ',
-): typeof import('./graphql').AccountAuthenticationRegistrationCompleteDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-    source: '\n            mutation AccountAuthenticationSignInComplete {\n                accountAuthenticationSignInComplete {\n                    success\n                }\n            }\n        ',
-): typeof import('./graphql').AccountAuthenticationSignInCompleteDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-    source: '\n            mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {\n                accountAuthenticationRegistrationOrSignInCreate(input: $input) {\n                    emailAddress\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ',
-): typeof import('./graphql').AccountAuthenticationRegistrationOrSignInCreateDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-    source: '\n            mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {\n                accountAuthenticationPasswordVerify(input: $input) {\n                    success\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ',
-): typeof import('./graphql').AccountAuthenticationPasswordVerifyDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-    source: '\n            mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {\n                accountAuthenticationEmailVerificationVerify(input: $input) {\n                    verification {\n                        status\n                        emailAddress\n                        lastEmailSentAt\n                    }\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ',
-): typeof import('./graphql').AccountAuthenticationEmailVerificationVerifyDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -270,32 +219,50 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-    source: '\n            query AccountMaintenanceDialogAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ',
-): typeof import('./graphql').AccountMaintenanceDialogAuthenticationDocument;
+    source: '\n            mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {\n                accountAuthenticationEmailVerificationVerify(input: $input) {\n                    verification {\n                        status\n                        emailAddress\n                        lastEmailSentAt\n                    }\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ',
+): typeof import('./graphql').AccountAuthenticationEmailVerificationVerifyDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-    source: '\n            mutation AccountProfileImageRemove {\n                accountProfileImageRemove {\n                    images {\n                        url\n                        variant\n                    }\n                }\n            }\n        ',
-): typeof import('./graphql').AccountProfileImageRemoveDocument;
+    source: '\n            mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {\n                accountAuthenticationPasswordVerify(input: $input) {\n                    success\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ',
+): typeof import('./graphql').AccountAuthenticationPasswordVerifyDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-    source: '\n            query AccountEmails {\n                accountEmailAddresses {\n                    emailAddresses {\n                        id\n                        emailAddress\n                        type\n                        isVerified\n                    }\n                }\n            }\n        ',
-): typeof import('./graphql').AccountEmailsDocument;
+    source: '\n            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {\n                accountAuthenticationRegistrationComplete(input: $input) {\n                    success\n                }\n            }\n        ',
+): typeof import('./graphql').AccountAuthenticationRegistrationCompleteDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-    source: '\n            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {\n                accountProfileUpdate(input: $input) {\n                    id\n                    username\n                    displayName\n                    givenName\n                    familyName\n                    images {\n                        url\n                        variant\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ',
-): typeof import('./graphql').AccountProfileUpdateDocument;
+    source: '\n            mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {\n                accountAuthenticationRegistrationOrSignInCreate(input: $input) {\n                    emailAddress\n                    authentication {\n                        status\n                        scopeType\n                        currentChallenge {\n                            challengeType\n                            status\n                        }\n                        updatedAt\n                        createdAt\n                    }\n                }\n            }\n        ',
+): typeof import('./graphql').AccountAuthenticationRegistrationOrSignInCreateDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-    source: '\n            query AccountProfileUsernameValidate($username: String!) {\n                accountProfileUsernameValidate(username: $username)\n            }\n        ',
-): typeof import('./graphql').AccountProfileUsernameValidateDocument;
+    source: '\n            query AccountAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ',
+): typeof import('./graphql').AccountAuthenticationDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            mutation AccountAuthenticationSignInComplete {\n                accountAuthenticationSignInComplete {\n                    success\n                }\n            }\n        ',
+): typeof import('./graphql').AccountAuthenticationSignInCompleteDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ',
+): typeof import('./graphql').AccountMaintenanceSessionCreateDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            mutation AccountSignOut {\n                accountSignOut {\n                    success\n                }\n            }\n        ',
+): typeof import('./graphql').AccountSignOutDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -350,6 +317,30 @@ export function graphql(
 export function graphql(
     source: '\n            mutation AccountAccessRoleAssignmentRevokePrivileged($input: AccessRoleAssignmentRevokeInput!) {\n                accountAccessRoleAssignmentRevokePrivileged(input: $input) {\n                    success\n                }\n            }\n        ',
 ): typeof import('./graphql').AccountAccessRoleAssignmentRevokePrivilegedDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            query AccountEmails {\n                accountEmailAddresses {\n                    emailAddresses {\n                        id\n                        emailAddress\n                        type\n                        isVerified\n                    }\n                }\n            }\n        ',
+): typeof import('./graphql').AccountEmailsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            mutation AccountProfileImageRemove {\n                accountProfileImageRemove {\n                    images {\n                        url\n                        variant\n                    }\n                }\n            }\n        ',
+): typeof import('./graphql').AccountProfileImageRemoveDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {\n                accountProfileUpdate(input: $input) {\n                    id\n                    username\n                    displayName\n                    givenName\n                    familyName\n                    images {\n                        url\n                        variant\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ',
+): typeof import('./graphql').AccountProfileUpdateDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            query AccountProfileUsernameValidate($username: String!) {\n                accountProfileUsernameValidate(username: $username)\n            }\n        ',
+): typeof import('./graphql').AccountProfileUsernameValidateDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

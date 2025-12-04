@@ -8,7 +8,7 @@ import { useForm } from '@structure/source/components/forms-new/useForm';
 
 // Dependencies - API
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
-import { useAccountProfileUpdateRequest } from '@structure/source/modules/account/hooks/useAccountProfileUpdateRequest';
+import { useAccountProfileUpdateRequest } from '@structure/source/modules/account/profile/hooks/useAccountProfileUpdateRequest';
 import {
     AccountProfileUpdateInput,
     AccountProfileUpdateInputMetadata,

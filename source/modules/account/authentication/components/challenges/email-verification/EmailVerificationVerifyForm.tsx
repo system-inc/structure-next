@@ -9,8 +9,9 @@ import { Form, FormSubmitResponseInterface } from '@structure/source/components/
 import { FormInputText } from '@structure/source/components/forms/FormInputText';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useAccountAuthenticationEmailVerificationSendRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAuthenticationEmailVerificationSendRequest';
+import { useAccountAuthenticationEmailVerificationVerifyRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAuthenticationEmailVerificationVerifyRequest';
 
 // Component - EmailVerificationVerifyForm
 export interface EmailVerificationVerifyFormProperties {
@@ -19,53 +20,10 @@ export interface EmailVerificationVerifyFormProperties {
 }
 export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyFormProperties) {
     // Hooks - API - Mutations
-    const accountAuthenticationEmailVerificationVerifyRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {
-                accountAuthenticationEmailVerificationVerify(input: $input) {
-                    verification {
-                        status
-                        emailAddress
-                        lastEmailSentAt
-                    }
-                    authentication {
-                        status
-                        scopeType
-                        currentChallenge {
-                            challengeType
-                            status
-                        }
-                        updatedAt
-                        createdAt
-                    }
-                }
-            }
-        `),
-    );
+    const accountAuthenticationEmailVerificationVerifyRequest =
+        useAccountAuthenticationEmailVerificationVerifyRequest();
 
-    const accountAuthenticationEmailVerificationSendRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountAuthenticationEmailVerificationSend {
-                accountAuthenticationEmailVerificationSend {
-                    verification {
-                        status
-                        emailAddress
-                        lastEmailSentAt
-                    }
-                    authentication {
-                        status
-                        scopeType
-                        currentChallenge {
-                            challengeType
-                            status
-                        }
-                        updatedAt
-                        createdAt
-                    }
-                }
-            }
-        `),
-    );
+    const accountAuthenticationEmailVerificationSendRequest = useAccountAuthenticationEmailVerificationSendRequest();
 
     // State
     const [timeEmailSent] = React.useState<Date>(new Date());

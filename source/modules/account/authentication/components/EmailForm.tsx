@@ -12,8 +12,8 @@ import { Form, FormSubmitResponseInterface } from '@structure/source/components/
 import { FormInputText } from '@structure/source/components/forms/FormInputText';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useAccountAuthenticationRegistrationOrSignInCreateRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAuthenticationRegistrationOrSignInCreateRequest';
 
 // Dependencies - Assets
 import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
@@ -28,25 +28,8 @@ export interface EmailFormProperties {
 }
 export function EmailForm(properties: EmailFormProperties) {
     // Hooks
-    const accountAuthenticationRegistrationOrSignInCreateRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {
-                accountAuthenticationRegistrationOrSignInCreate(input: $input) {
-                    emailAddress
-                    authentication {
-                        status
-                        scopeType
-                        currentChallenge {
-                            challengeType
-                            status
-                        }
-                        updatedAt
-                        createdAt
-                    }
-                }
-            }
-        `),
-    );
+    const accountAuthenticationRegistrationOrSignInCreateRequest =
+        useAccountAuthenticationRegistrationOrSignInCreateRequest();
 
     // Render the component
     return (

@@ -2211,24 +2211,6 @@ export type NoOpQueryVariables = Exact<{ [key: string]: never }>;
 
 export type NoOpQuery = { __typename: 'Query' };
 
-export type AccountMaintenanceSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountMaintenanceSessionCreateMutation = {
-    __typename?: 'Mutation';
-    accountMaintenanceSessionCreate: {
-        __typename?: 'AuthenticationSession';
-        status: AuthenticationSessionStatus;
-        scopeType: string;
-        updatedAt: any;
-        createdAt: any;
-        currentChallenge?: {
-            __typename?: 'AuthenticationChallenge';
-            challengeType: string;
-            status: AuthenticationChallengeStatus;
-        } | null;
-    };
-};
-
 export type AccountAdministratorSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
 
 export type AccountAdministratorSessionCreateMutation = {
@@ -2247,89 +2229,18 @@ export type AccountAdministratorSessionCreateMutation = {
     };
 };
 
-export type AccountAuthenticatedSessionCheckQueryVariables = Exact<{ [key: string]: never }>;
+export type AccountAuthenticationEmailVerificationSendMutationVariables = Exact<{ [key: string]: never }>;
 
-export type AccountAuthenticatedSessionCheckQuery = {
-    __typename?: 'Query';
-    accountAuthentication?: {
-        __typename?: 'AuthenticationSession';
-        status: AuthenticationSessionStatus;
-        scopeType: string;
-        currentChallenge?: {
-            __typename?: 'AuthenticationChallenge';
-            challengeType: string;
-            status: AuthenticationChallengeStatus;
-        } | null;
-    } | null;
-};
-
-export type AccountAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountAuthenticationQuery = {
-    __typename?: 'Query';
-    accountAuthentication?: {
-        __typename?: 'AuthenticationSession';
-        status: AuthenticationSessionStatus;
-        scopeType: string;
-        updatedAt: any;
-        createdAt: any;
-        currentChallenge?: {
-            __typename?: 'AuthenticationChallenge';
-            challengeType: string;
-            status: AuthenticationChallengeStatus;
-        } | null;
-    } | null;
-};
-
-export type AccountAuthenticationRegistrationCompleteMutationVariables = Exact<{
-    input: AccountRegistrationCompleteInput;
-}>;
-
-export type AccountAuthenticationRegistrationCompleteMutation = {
+export type AccountAuthenticationEmailVerificationSendMutation = {
     __typename?: 'Mutation';
-    accountAuthenticationRegistrationComplete: { __typename?: 'AuthenticationOperationResult'; success: boolean };
-};
-
-export type AccountAuthenticationSignInCompleteMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountAuthenticationSignInCompleteMutation = {
-    __typename?: 'Mutation';
-    accountAuthenticationSignInComplete: { __typename?: 'AuthenticationOperationResult'; success: boolean };
-};
-
-export type AccountAuthenticationRegistrationOrSignInCreateMutationVariables = Exact<{
-    input: AccountRegistrationOrSignInCreateInput;
-}>;
-
-export type AccountAuthenticationRegistrationOrSignInCreateMutation = {
-    __typename?: 'Mutation';
-    accountAuthenticationRegistrationOrSignInCreate: {
-        __typename?: 'AuthenticationRegistrationOrSignIn';
-        emailAddress: string;
-        authentication: {
-            __typename?: 'AuthenticationSession';
-            status: AuthenticationSessionStatus;
-            scopeType: string;
-            updatedAt: any;
-            createdAt: any;
-            currentChallenge?: {
-                __typename?: 'AuthenticationChallenge';
-                challengeType: string;
-                status: AuthenticationChallengeStatus;
-            } | null;
+    accountAuthenticationEmailVerificationSend: {
+        __typename?: 'AuthenticationEmailVerification';
+        verification: {
+            __typename?: 'EmailVerification';
+            status: EmailVerificationStatus;
+            emailAddress: string;
+            lastEmailSentAt?: any | null;
         };
-    };
-};
-
-export type AccountAuthenticationPasswordVerifyMutationVariables = Exact<{
-    input: AccountPasswordVerifyInput;
-}>;
-
-export type AccountAuthenticationPasswordVerifyMutation = {
-    __typename?: 'Mutation';
-    accountAuthenticationPasswordVerify: {
-        __typename?: 'AuthenticationOperationResult';
-        success: boolean;
         authentication: {
             __typename?: 'AuthenticationSession';
             status: AuthenticationSessionStatus;
@@ -2374,18 +2285,15 @@ export type AccountAuthenticationEmailVerificationVerifyMutation = {
     };
 };
 
-export type AccountAuthenticationEmailVerificationSendMutationVariables = Exact<{ [key: string]: never }>;
+export type AccountAuthenticationPasswordVerifyMutationVariables = Exact<{
+    input: AccountPasswordVerifyInput;
+}>;
 
-export type AccountAuthenticationEmailVerificationSendMutation = {
+export type AccountAuthenticationPasswordVerifyMutation = {
     __typename?: 'Mutation';
-    accountAuthenticationEmailVerificationSend: {
-        __typename?: 'AuthenticationEmailVerification';
-        verification: {
-            __typename?: 'EmailVerification';
-            status: EmailVerificationStatus;
-            emailAddress: string;
-            lastEmailSentAt?: any | null;
-        };
+    accountAuthenticationPasswordVerify: {
+        __typename?: 'AuthenticationOperationResult';
+        success: boolean;
         authentication: {
             __typename?: 'AuthenticationSession';
             status: AuthenticationSessionStatus;
@@ -2401,14 +2309,49 @@ export type AccountAuthenticationEmailVerificationSendMutation = {
     };
 };
 
-export type AccountMaintenanceDialogAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
+export type AccountAuthenticationRegistrationCompleteMutationVariables = Exact<{
+    input: AccountRegistrationCompleteInput;
+}>;
 
-export type AccountMaintenanceDialogAuthenticationQuery = {
+export type AccountAuthenticationRegistrationCompleteMutation = {
+    __typename?: 'Mutation';
+    accountAuthenticationRegistrationComplete: { __typename?: 'AuthenticationOperationResult'; success: boolean };
+};
+
+export type AccountAuthenticationRegistrationOrSignInCreateMutationVariables = Exact<{
+    input: AccountRegistrationOrSignInCreateInput;
+}>;
+
+export type AccountAuthenticationRegistrationOrSignInCreateMutation = {
+    __typename?: 'Mutation';
+    accountAuthenticationRegistrationOrSignInCreate: {
+        __typename?: 'AuthenticationRegistrationOrSignIn';
+        emailAddress: string;
+        authentication: {
+            __typename?: 'AuthenticationSession';
+            status: AuthenticationSessionStatus;
+            scopeType: string;
+            updatedAt: any;
+            createdAt: any;
+            currentChallenge?: {
+                __typename?: 'AuthenticationChallenge';
+                challengeType: string;
+                status: AuthenticationChallengeStatus;
+            } | null;
+        };
+    };
+};
+
+export type AccountAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountAuthenticationQuery = {
     __typename?: 'Query';
     accountAuthentication?: {
         __typename?: 'AuthenticationSession';
         status: AuthenticationSessionStatus;
         scopeType: string;
+        updatedAt: any;
+        createdAt: any;
         currentChallenge?: {
             __typename?: 'AuthenticationChallenge';
             challengeType: string;
@@ -2417,58 +2360,36 @@ export type AccountMaintenanceDialogAuthenticationQuery = {
     } | null;
 };
 
-export type AccountProfileImageRemoveMutationVariables = Exact<{ [key: string]: never }>;
+export type AccountAuthenticationSignInCompleteMutationVariables = Exact<{ [key: string]: never }>;
 
-export type AccountProfileImageRemoveMutation = {
+export type AccountAuthenticationSignInCompleteMutation = {
     __typename?: 'Mutation';
-    accountProfileImageRemove: {
-        __typename?: 'Profile';
-        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
-    };
+    accountAuthenticationSignInComplete: { __typename?: 'AuthenticationOperationResult'; success: boolean };
 };
 
-export type AccountEmailsQueryVariables = Exact<{ [key: string]: never }>;
+export type AccountMaintenanceSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
 
-export type AccountEmailsQuery = {
-    __typename?: 'Query';
-    accountEmailAddresses: {
-        __typename?: 'AccountEmailAddressesResult';
-        emailAddresses: Array<{
-            __typename?: 'AccountEmail';
-            id: string;
-            emailAddress: string;
-            type: AccountEmailType;
-            isVerified: boolean;
-        }>;
-    };
-};
-
-export type AccountProfileUpdateMutationVariables = Exact<{
-    input: AccountProfileUpdateInput;
-}>;
-
-export type AccountProfileUpdateMutation = {
+export type AccountMaintenanceSessionCreateMutation = {
     __typename?: 'Mutation';
-    accountProfileUpdate: {
-        __typename?: 'Profile';
-        id: string;
-        username: string;
-        displayName?: string | null;
-        givenName?: string | null;
-        familyName?: string | null;
+    accountMaintenanceSessionCreate: {
+        __typename?: 'AuthenticationSession';
+        status: AuthenticationSessionStatus;
+        scopeType: string;
         updatedAt: any;
         createdAt: any;
-        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
+        currentChallenge?: {
+            __typename?: 'AuthenticationChallenge';
+            challengeType: string;
+            status: AuthenticationChallengeStatus;
+        } | null;
     };
 };
 
-export type AccountProfileUsernameValidateQueryVariables = Exact<{
-    username: Scalars['String']['input'];
-}>;
+export type AccountSignOutMutationVariables = Exact<{ [key: string]: never }>;
 
-export type AccountProfileUsernameValidateQuery = {
-    __typename?: 'Query';
-    accountProfileUsernameValidate: UniqueFieldValidationResult;
+export type AccountSignOutMutation = {
+    __typename?: 'Mutation';
+    accountSignOut: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export type AccountAccessRolesPrivilegedQueryVariables = Exact<{ [key: string]: never }>;
@@ -2659,6 +2580,60 @@ export type AccountAccessRoleAssignmentRevokePrivilegedMutation = {
     accountAccessRoleAssignmentRevokePrivileged: { __typename?: 'OperationResult'; success: boolean };
 };
 
+export type AccountEmailsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountEmailsQuery = {
+    __typename?: 'Query';
+    accountEmailAddresses: {
+        __typename?: 'AccountEmailAddressesResult';
+        emailAddresses: Array<{
+            __typename?: 'AccountEmail';
+            id: string;
+            emailAddress: string;
+            type: AccountEmailType;
+            isVerified: boolean;
+        }>;
+    };
+};
+
+export type AccountProfileImageRemoveMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AccountProfileImageRemoveMutation = {
+    __typename?: 'Mutation';
+    accountProfileImageRemove: {
+        __typename?: 'Profile';
+        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
+    };
+};
+
+export type AccountProfileUpdateMutationVariables = Exact<{
+    input: AccountProfileUpdateInput;
+}>;
+
+export type AccountProfileUpdateMutation = {
+    __typename?: 'Mutation';
+    accountProfileUpdate: {
+        __typename?: 'Profile';
+        id: string;
+        username: string;
+        displayName?: string | null;
+        givenName?: string | null;
+        familyName?: string | null;
+        updatedAt: any;
+        createdAt: any;
+        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
+    };
+};
+
+export type AccountProfileUsernameValidateQueryVariables = Exact<{
+    username: Scalars['String']['input'];
+}>;
+
+export type AccountProfileUsernameValidateQuery = {
+    __typename?: 'Query';
+    accountProfileUsernameValidate: UniqueFieldValidationResult;
+};
+
 export type AccountPasswordUpdateMutationVariables = Exact<{
     input: AccountPasswordUpdateInput;
 }>;
@@ -2721,13 +2696,6 @@ export type AccountQuery = {
             images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
         };
     };
-};
-
-export type AccountSignOutMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountSignOutMutation = {
-    __typename?: 'Mutation';
-    accountSignOut: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export type ContactListEntryCreateMutationVariables = Exact<{
@@ -3382,23 +3350,6 @@ export const NoOpDocument = new TypedDocumentString(`
   __typename
 }
     `) as unknown as TypedDocumentString<NoOpQuery, NoOpQueryVariables>;
-export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
-    mutation AccountMaintenanceSessionCreate {
-  accountMaintenanceSessionCreate {
-    status
-    scopeType
-    currentChallenge {
-      challengeType
-      status
-    }
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountMaintenanceSessionCreateMutation,
-    AccountMaintenanceSessionCreateMutationVariables
->;
 export const AccountAdministratorSessionCreateDocument = new TypedDocumentString(`
     mutation AccountAdministratorSessionCreate {
   accountAdministratorSessionCreate {
@@ -3415,119 +3366,6 @@ export const AccountAdministratorSessionCreateDocument = new TypedDocumentString
     `) as unknown as TypedDocumentString<
     AccountAdministratorSessionCreateMutation,
     AccountAdministratorSessionCreateMutationVariables
->;
-export const AccountAuthenticatedSessionCheckDocument = new TypedDocumentString(`
-    query AccountAuthenticatedSessionCheck {
-  accountAuthentication {
-    status
-    scopeType
-    currentChallenge {
-      challengeType
-      status
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAuthenticatedSessionCheckQuery,
-    AccountAuthenticatedSessionCheckQueryVariables
->;
-export const AccountAuthenticationDocument = new TypedDocumentString(`
-    query AccountAuthentication {
-  accountAuthentication {
-    status
-    scopeType
-    currentChallenge {
-      challengeType
-      status
-    }
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<AccountAuthenticationQuery, AccountAuthenticationQueryVariables>;
-export const AccountAuthenticationRegistrationCompleteDocument = new TypedDocumentString(`
-    mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {
-  accountAuthenticationRegistrationComplete(input: $input) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAuthenticationRegistrationCompleteMutation,
-    AccountAuthenticationRegistrationCompleteMutationVariables
->;
-export const AccountAuthenticationSignInCompleteDocument = new TypedDocumentString(`
-    mutation AccountAuthenticationSignInComplete {
-  accountAuthenticationSignInComplete {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAuthenticationSignInCompleteMutation,
-    AccountAuthenticationSignInCompleteMutationVariables
->;
-export const AccountAuthenticationRegistrationOrSignInCreateDocument = new TypedDocumentString(`
-    mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {
-  accountAuthenticationRegistrationOrSignInCreate(input: $input) {
-    emailAddress
-    authentication {
-      status
-      scopeType
-      currentChallenge {
-        challengeType
-        status
-      }
-      updatedAt
-      createdAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAuthenticationRegistrationOrSignInCreateMutation,
-    AccountAuthenticationRegistrationOrSignInCreateMutationVariables
->;
-export const AccountAuthenticationPasswordVerifyDocument = new TypedDocumentString(`
-    mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {
-  accountAuthenticationPasswordVerify(input: $input) {
-    success
-    authentication {
-      status
-      scopeType
-      currentChallenge {
-        challengeType
-        status
-      }
-      updatedAt
-      createdAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAuthenticationPasswordVerifyMutation,
-    AccountAuthenticationPasswordVerifyMutationVariables
->;
-export const AccountAuthenticationEmailVerificationVerifyDocument = new TypedDocumentString(`
-    mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {
-  accountAuthenticationEmailVerificationVerify(input: $input) {
-    verification {
-      status
-      emailAddress
-      lastEmailSentAt
-    }
-    authentication {
-      status
-      scopeType
-      currentChallenge {
-        challengeType
-        status
-      }
-      updatedAt
-      createdAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAuthenticationEmailVerificationVerifyMutation,
-    AccountAuthenticationEmailVerificationVerifyMutationVariables
 >;
 export const AccountAuthenticationEmailVerificationSendDocument = new TypedDocumentString(`
     mutation AccountAuthenticationEmailVerificationSend {
@@ -3553,8 +3391,82 @@ export const AccountAuthenticationEmailVerificationSendDocument = new TypedDocum
     AccountAuthenticationEmailVerificationSendMutation,
     AccountAuthenticationEmailVerificationSendMutationVariables
 >;
-export const AccountMaintenanceDialogAuthenticationDocument = new TypedDocumentString(`
-    query AccountMaintenanceDialogAuthentication {
+export const AccountAuthenticationEmailVerificationVerifyDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {
+  accountAuthenticationEmailVerificationVerify(input: $input) {
+    verification {
+      status
+      emailAddress
+      lastEmailSentAt
+    }
+    authentication {
+      status
+      scopeType
+      currentChallenge {
+        challengeType
+        status
+      }
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountAuthenticationEmailVerificationVerifyMutation,
+    AccountAuthenticationEmailVerificationVerifyMutationVariables
+>;
+export const AccountAuthenticationPasswordVerifyDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {
+  accountAuthenticationPasswordVerify(input: $input) {
+    success
+    authentication {
+      status
+      scopeType
+      currentChallenge {
+        challengeType
+        status
+      }
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountAuthenticationPasswordVerifyMutation,
+    AccountAuthenticationPasswordVerifyMutationVariables
+>;
+export const AccountAuthenticationRegistrationCompleteDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {
+  accountAuthenticationRegistrationComplete(input: $input) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountAuthenticationRegistrationCompleteMutation,
+    AccountAuthenticationRegistrationCompleteMutationVariables
+>;
+export const AccountAuthenticationRegistrationOrSignInCreateDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {
+  accountAuthenticationRegistrationOrSignInCreate(input: $input) {
+    emailAddress
+    authentication {
+      status
+      scopeType
+      currentChallenge {
+        challengeType
+        status
+      }
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountAuthenticationRegistrationOrSignInCreateMutation,
+    AccountAuthenticationRegistrationOrSignInCreateMutationVariables
+>;
+export const AccountAuthenticationDocument = new TypedDocumentString(`
+    query AccountAuthentication {
   accountAuthentication {
     status
     scopeType
@@ -3562,59 +3474,45 @@ export const AccountMaintenanceDialogAuthenticationDocument = new TypedDocumentS
       challengeType
       status
     }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountAuthenticationQuery, AccountAuthenticationQueryVariables>;
+export const AccountAuthenticationSignInCompleteDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationSignInComplete {
+  accountAuthenticationSignInComplete {
+    success
   }
 }
     `) as unknown as TypedDocumentString<
-    AccountMaintenanceDialogAuthenticationQuery,
-    AccountMaintenanceDialogAuthenticationQueryVariables
+    AccountAuthenticationSignInCompleteMutation,
+    AccountAuthenticationSignInCompleteMutationVariables
 >;
-export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
-    mutation AccountProfileImageRemove {
-  accountProfileImageRemove {
-    images {
-      url
-      variant
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
-export const AccountEmailsDocument = new TypedDocumentString(`
-    query AccountEmails {
-  accountEmailAddresses {
-    emailAddresses {
-      id
-      emailAddress
-      type
-      isVerified
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<AccountEmailsQuery, AccountEmailsQueryVariables>;
-export const AccountProfileUpdateDocument = new TypedDocumentString(`
-    mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
-  accountProfileUpdate(input: $input) {
-    id
-    username
-    displayName
-    givenName
-    familyName
-    images {
-      url
-      variant
+export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
+    mutation AccountMaintenanceSessionCreate {
+  accountMaintenanceSessionCreate {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
     }
     updatedAt
     createdAt
   }
 }
-    `) as unknown as TypedDocumentString<AccountProfileUpdateMutation, AccountProfileUpdateMutationVariables>;
-export const AccountProfileUsernameValidateDocument = new TypedDocumentString(`
-    query AccountProfileUsernameValidate($username: String!) {
-  accountProfileUsernameValidate(username: $username)
-}
     `) as unknown as TypedDocumentString<
-    AccountProfileUsernameValidateQuery,
-    AccountProfileUsernameValidateQueryVariables
+    AccountMaintenanceSessionCreateMutation,
+    AccountMaintenanceSessionCreateMutationVariables
 >;
+export const AccountSignOutDocument = new TypedDocumentString(`
+    mutation AccountSignOut {
+  accountSignOut {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<AccountSignOutMutation, AccountSignOutMutationVariables>;
 export const AccountAccessRolesPrivilegedDocument = new TypedDocumentString(`
     query AccountAccessRolesPrivileged {
   accountAccessRolesPrivileged {
@@ -3794,6 +3692,53 @@ export const AccountAccessRoleAssignmentRevokePrivilegedDocument = new TypedDocu
     AccountAccessRoleAssignmentRevokePrivilegedMutation,
     AccountAccessRoleAssignmentRevokePrivilegedMutationVariables
 >;
+export const AccountEmailsDocument = new TypedDocumentString(`
+    query AccountEmails {
+  accountEmailAddresses {
+    emailAddresses {
+      id
+      emailAddress
+      type
+      isVerified
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<AccountEmailsQuery, AccountEmailsQueryVariables>;
+export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
+    mutation AccountProfileImageRemove {
+  accountProfileImageRemove {
+    images {
+      url
+      variant
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
+export const AccountProfileUpdateDocument = new TypedDocumentString(`
+    mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
+  accountProfileUpdate(input: $input) {
+    id
+    username
+    displayName
+    givenName
+    familyName
+    images {
+      url
+      variant
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountProfileUpdateMutation, AccountProfileUpdateMutationVariables>;
+export const AccountProfileUsernameValidateDocument = new TypedDocumentString(`
+    query AccountProfileUsernameValidate($username: String!) {
+  accountProfileUsernameValidate(username: $username)
+}
+    `) as unknown as TypedDocumentString<
+    AccountProfileUsernameValidateQuery,
+    AccountProfileUsernameValidateQueryVariables
+>;
 export const AccountPasswordUpdateDocument = new TypedDocumentString(`
     mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
   accountPasswordUpdate(input: $input) {
@@ -3851,13 +3796,6 @@ export const AccountDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
-export const AccountSignOutDocument = new TypedDocumentString(`
-    mutation AccountSignOut {
-  accountSignOut {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<AccountSignOutMutation, AccountSignOutMutationVariables>;
 export const ContactListEntryCreateDocument = new TypedDocumentString(`
     mutation ContactListEntryCreate($data: ContactListEntryInput!) {
   contactListEntryCreate(data: $data) {
@@ -4461,6 +4399,42 @@ export interface GraphQLInputObjectFieldValidationMetadata {
     readonly options?: any;
 }
 
+export const AccountEmailVerificationVerifyInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountEmailVerificationVerifyInput',
+    fields: [
+        {
+            name: 'code',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isNotEmpty',
+                },
+            ],
+        },
+    ],
+};
+
+export const AccountPasswordVerifyInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountPasswordVerifyInput',
+    fields: [
+        {
+            name: 'password',
+            kind: 'scalar',
+            type: 'String',
+            required: true,
+            validation: [
+                {
+                    type: 'isNotEmpty',
+                },
+            ],
+        },
+    ],
+};
+
 export const SocialMediaProfileInputMetadata: GraphQLInputObjectTypeMetadata = {
     kind: 'object',
     type: 'SocialMediaProfileInput',
@@ -4617,186 +4591,6 @@ export const AccountRegistrationOrSignInCreateInputMetadata: GraphQLInputObjectT
             validation: [
                 {
                     type: 'isEmail',
-                },
-            ],
-        },
-    ],
-};
-
-export const AccountPasswordVerifyInputMetadata: GraphQLInputObjectTypeMetadata = {
-    kind: 'object',
-    type: 'AccountPasswordVerifyInput',
-    fields: [
-        {
-            name: 'password',
-            kind: 'scalar',
-            type: 'String',
-            required: true,
-            validation: [
-                {
-                    type: 'isNotEmpty',
-                },
-            ],
-        },
-    ],
-};
-
-export const AccountEmailVerificationVerifyInputMetadata: GraphQLInputObjectTypeMetadata = {
-    kind: 'object',
-    type: 'AccountEmailVerificationVerifyInput',
-    fields: [
-        {
-            name: 'code',
-            kind: 'scalar',
-            type: 'String',
-            required: true,
-            validation: [
-                {
-                    type: 'isNotEmpty',
-                },
-            ],
-        },
-    ],
-};
-
-export const AccountProfileUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
-    kind: 'object',
-    type: 'AccountProfileUpdateInput',
-    fields: [
-        {
-            name: 'username',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'isOptional',
-                },
-                {
-                    type: 'isLength',
-                    constraints: [3, 32],
-                },
-                {
-                    type: 'isString',
-                },
-            ],
-        },
-        {
-            name: 'displayName',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'isOptional',
-                },
-                {
-                    type: 'maxLength',
-                    constraints: [128],
-                },
-            ],
-        },
-        {
-            name: 'givenName',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'isOptional',
-                },
-                {
-                    type: 'maxLength',
-                    constraints: [128],
-                },
-            ],
-        },
-        {
-            name: 'familyName',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'isOptional',
-                },
-                {
-                    type: 'maxLength',
-                    constraints: [128],
-                },
-            ],
-        },
-        {
-            name: 'middleName',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'isOptional',
-                },
-                {
-                    type: 'maxLength',
-                    constraints: [128],
-                },
-            ],
-        },
-        {
-            name: 'preferredName',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'isOptional',
-                },
-                {
-                    type: 'maxLength',
-                    constraints: [128],
-                },
-            ],
-        },
-        {
-            name: 'phoneNumber',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'isOptional',
-                },
-                {
-                    type: 'IsPhoneNumberLite',
-                    constraints: [{}],
-                },
-            ],
-        },
-        {
-            name: 'birthday',
-            kind: 'scalar',
-            type: 'DateTimeISO',
-            required: false,
-            validation: [
-                {
-                    type: 'isOptional',
-                },
-                {
-                    type: 'isDate',
-                },
-            ],
-        },
-        {
-            name: 'gender',
-            kind: 'scalar',
-            type: 'String',
-            required: false,
-            validation: [
-                {
-                    type: 'isOptional',
-                },
-                {
-                    type: 'maxLength',
-                    constraints: [32],
                 },
             ],
         },
@@ -5077,6 +4871,150 @@ export const AccessRoleAssignmentRevokeInputMetadata: GraphQLInputObjectTypeMeta
             kind: 'scalar',
             type: 'String',
             required: true,
+        },
+    ],
+};
+
+export const AccountProfileUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'AccountProfileUpdateInput',
+    fields: [
+        {
+            name: 'username',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isLength',
+                    constraints: [3, 32],
+                },
+                {
+                    type: 'isString',
+                },
+            ],
+        },
+        {
+            name: 'displayName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'givenName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'familyName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'middleName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'preferredName',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [128],
+                },
+            ],
+        },
+        {
+            name: 'phoneNumber',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'IsPhoneNumberLite',
+                    constraints: [{}],
+                },
+            ],
+        },
+        {
+            name: 'birthday',
+            kind: 'scalar',
+            type: 'DateTimeISO',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'isDate',
+                },
+            ],
+        },
+        {
+            name: 'gender',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isOptional',
+                },
+                {
+                    type: 'maxLength',
+                    constraints: [32],
+                },
+            ],
         },
     ],
 };
@@ -6187,6 +6125,38 @@ export interface GraphQLOperationScalarListParameterMetadata extends BaseGraphQL
     readonly type: string;
 }
 
+export const AccountAuthenticationEmailVerificationVerifyOperation: GraphQLOperationMetadata<
+    typeof AccountAuthenticationEmailVerificationVerifyDocument
+> = {
+    operation: 'AccountAuthenticationEmailVerificationVerify',
+    operationType: 'mutation',
+    document: AccountAuthenticationEmailVerificationVerifyDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: AccountEmailVerificationVerifyInputMetadata,
+        },
+    ],
+};
+
+export const AccountAuthenticationPasswordVerifyOperation: GraphQLOperationMetadata<
+    typeof AccountAuthenticationPasswordVerifyDocument
+> = {
+    operation: 'AccountAuthenticationPasswordVerify',
+    operationType: 'mutation',
+    document: AccountAuthenticationPasswordVerifyDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: AccountPasswordVerifyInputMetadata,
+        },
+    ],
+};
+
 export const AccountAuthenticationRegistrationCompleteOperation: GraphQLOperationMetadata<
     typeof AccountAuthenticationRegistrationCompleteDocument
 > = {
@@ -6215,68 +6185,6 @@ export const AccountAuthenticationRegistrationOrSignInCreateOperation: GraphQLOp
             required: true,
             kind: 'object',
             type: AccountRegistrationOrSignInCreateInputMetadata,
-        },
-    ],
-};
-
-export const AccountAuthenticationPasswordVerifyOperation: GraphQLOperationMetadata<
-    typeof AccountAuthenticationPasswordVerifyDocument
-> = {
-    operation: 'AccountAuthenticationPasswordVerify',
-    operationType: 'mutation',
-    document: AccountAuthenticationPasswordVerifyDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: AccountPasswordVerifyInputMetadata,
-        },
-    ],
-};
-
-export const AccountAuthenticationEmailVerificationVerifyOperation: GraphQLOperationMetadata<
-    typeof AccountAuthenticationEmailVerificationVerifyDocument
-> = {
-    operation: 'AccountAuthenticationEmailVerificationVerify',
-    operationType: 'mutation',
-    document: AccountAuthenticationEmailVerificationVerifyDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: AccountEmailVerificationVerifyInputMetadata,
-        },
-    ],
-};
-
-export const AccountProfileUpdateOperation: GraphQLOperationMetadata<typeof AccountProfileUpdateDocument> = {
-    operation: 'AccountProfileUpdate',
-    operationType: 'mutation',
-    document: AccountProfileUpdateDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: AccountProfileUpdateInputMetadata,
-        },
-    ],
-};
-
-export const AccountProfileUsernameValidateOperation: GraphQLOperationMetadata<
-    typeof AccountProfileUsernameValidateDocument
-> = {
-    operation: 'AccountProfileUsernameValidate',
-    operationType: 'query',
-    document: AccountProfileUsernameValidateDocument,
-    parameters: [
-        {
-            parameter: 'username',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
         },
     ],
 };
@@ -6405,6 +6313,36 @@ export const AccountAccessRoleAssignmentRevokePrivilegedOperation: GraphQLOperat
             required: true,
             kind: 'object',
             type: AccessRoleAssignmentRevokeInputMetadata,
+        },
+    ],
+};
+
+export const AccountProfileUpdateOperation: GraphQLOperationMetadata<typeof AccountProfileUpdateDocument> = {
+    operation: 'AccountProfileUpdate',
+    operationType: 'mutation',
+    document: AccountProfileUpdateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: AccountProfileUpdateInputMetadata,
+        },
+    ],
+};
+
+export const AccountProfileUsernameValidateOperation: GraphQLOperationMetadata<
+    typeof AccountProfileUsernameValidateDocument
+> = {
+    operation: 'AccountProfileUsernameValidate',
+    operationType: 'query',
+    document: AccountProfileUsernameValidateDocument,
+    parameters: [
+        {
+            parameter: 'username',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
         },
     ],
 };

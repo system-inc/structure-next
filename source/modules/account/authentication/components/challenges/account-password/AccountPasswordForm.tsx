@@ -9,8 +9,8 @@ import { Form, FormSubmitResponseInterface } from '@structure/source/components/
 import { FormInputText } from '@structure/source/components/forms/FormInputText';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useAccountAuthenticationPasswordVerifyRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAuthenticationPasswordVerifyRequest';
 
 // Dependencies - Assets
 // import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
@@ -22,25 +22,7 @@ export interface AccountPasswordFormProperties {
 }
 export function AccountPasswordForm(properties: AccountPasswordFormProperties) {
     // Hooks - API - Mutations
-    const accountAuthenticationPasswordVerifyRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {
-                accountAuthenticationPasswordVerify(input: $input) {
-                    success
-                    authentication {
-                        status
-                        scopeType
-                        currentChallenge {
-                            challengeType
-                            status
-                        }
-                        updatedAt
-                        createdAt
-                    }
-                }
-            }
-        `),
-    );
+    const accountAuthenticationPasswordVerifyRequest = useAccountAuthenticationPasswordVerifyRequest();
 
     // Render the component
     return (

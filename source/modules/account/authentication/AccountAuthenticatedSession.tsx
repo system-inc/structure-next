@@ -12,11 +12,13 @@ import { AccountPasswordChallenge } from '@structure/source/modules/account/auth
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import {
     AccountAuthenticationQuery,
     AuthenticationSessionStatus,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useAccountAuthenticationRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAuthenticationRequest';
+import { useAccountAdministratorSessionCreateRequest } from '@structure/source/modules/account/authentication/hooks/useAccountAdministratorSessionCreateRequest';
+import { useAccountMaintenanceSessionCreateRequest } from '@structure/source/modules/account/authentication/hooks/useAccountMaintenanceSessionCreateRequest';
 
 // Enum for session scope types
 export enum AccountSessionScopeType {
@@ -45,40 +47,10 @@ export function AccountAuthenticatedSession(properties: AccountAuthenticatedSess
     const emailAddress = account.data?.emailAddress ?? '';
 
     // Hooks - API - Mutations for AccountMaintenance
-    const accountMaintenanceSessionCreateRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountMaintenanceSessionCreate {
-                accountMaintenanceSessionCreate {
-                    status
-                    scopeType
-                    currentChallenge {
-                        challengeType
-                        status
-                    }
-                    updatedAt
-                    createdAt
-                }
-            }
-        `),
-    );
+    const accountMaintenanceSessionCreateRequest = useAccountMaintenanceSessionCreateRequest();
 
     // Hooks - API - Mutations for Administrator
-    const accountAdministratorSessionCreateRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountAdministratorSessionCreate {
-                accountAdministratorSessionCreate {
-                    status
-                    scopeType
-                    currentChallenge {
-                        challengeType
-                        status
-                    }
-                    updatedAt
-                    createdAt
-                }
-            }
-        `),
-    );
+    const accountAdministratorSessionCreateRequest = useAccountAdministratorSessionCreateRequest();
 
     // Select the appropriate request based on scope type
     const sessionCreateRequest =
@@ -241,39 +213,26 @@ export function useAccountAuthenticatedSession(scopeType: AccountSessionScopeTyp
     const [isLoading, setIsLoading] = React.useState(false);
 
     // Hooks - API - Queries
-    const accountAuthenticationQuery = networkService.useGraphQlQuery(
-        gql(`
-            query AccountAuthenticatedSessionCheck {
-                accountAuthentication {
-                    status
-                    scopeType
-                    currentChallenge {
-                        challengeType
-                        status
-                    }
-                }
-            }
-        `),
-        undefined,
-    );
+    const accountAuthenticationRequest = useAccountAuthenticationRequest();
 
     // Effect to update authentication state based on query results
     React.useEffect(
         function () {
             // Check if the current authentication session is valid for the specified scope
-            const authData = accountAuthenticationQuery.data?.accountAuthentication;
             const isValidSession =
-                authData?.status === AuthenticationSessionStatus.Authenticated && authData?.scopeType === scopeType;
+                accountAuthenticationRequest.data?.accountAuthentication?.status ===
+                    AuthenticationSessionStatus.Authenticated &&
+                accountAuthenticationRequest.data?.accountAuthentication?.scopeType === scopeType;
 
             setIsAuthenticated(isValidSession);
-            setIsLoading(accountAuthenticationQuery.isLoading);
+            setIsLoading(accountAuthenticationRequest.isLoading);
         },
-        [accountAuthenticationQuery.data, accountAuthenticationQuery.isLoading, scopeType],
+        [accountAuthenticationRequest.data, accountAuthenticationRequest.isLoading, scopeType],
     );
 
     return {
         isAuthenticated,
         isLoading,
-        refresh: accountAuthenticationQuery.refresh,
+        refresh: accountAuthenticationRequest.refresh,
     };
 }
