@@ -1,29 +1,51 @@
-'use client'; // This component uses client-only features
+'use client'; // Error components must be client components
 
-// Dependencies - React and Next.js
+// Dependencies - React
 import React from 'react';
 
 // Dependencies - Main Components
 import { Notice } from '@structure/source/components/notices/Notice';
 import { Button } from '@structure/source/components/buttons/Button';
 
-// Component - Error
-export type ErrorPageProperties = { error: Error & { digest?: string }; reset: () => void };
+// Dependencies - Services
+import { systemLogService } from '@structure/source/modules/system-log/services/SystemLogService';
+
+// Component - ErrorPage
+// This catches errors in server components (but not the root layout)
+// Unlike GlobalErrorPage, this renders within the existing layout and has access to providers
+export interface ErrorPageProperties {
+    error: Error & { digest?: string };
+    reset: () => void;
+}
 export function ErrorPage(properties: ErrorPageProperties) {
-    // On mount
+    // Log error on mount
     React.useEffect(
         function () {
-            // TODO: Log the error to an error reporting service
+            // Log to console for debugging
             console.error(properties.error);
+
+            // Send error to logging service
+            systemLogService.log({
+                level: 'Error',
+                event: 'ClientError',
+                category: 'ErrorBoundary',
+                message: properties.error.message,
+                stackTrace: properties.error.stack,
+                source: 'ErrorPage',
+                data: {
+                    digest: properties.error.digest,
+                    url: typeof window !== 'undefined' ? window.location.href : undefined,
+                },
+            });
         },
         [properties.error],
     );
 
     // Render the component
     return (
-        <div className="flex h-screen w-full items-center justify-center">
-            <Notice variant="Negative" size="Large" title="Error" className="md:min-w-96">
-                <div className="space-y-2">
+        <div className="flex h-screen w-full items-center justify-center px-4">
+            <Notice variant="Negative" title="Error" className="max-w-2xl md:min-w-96">
+                <div className="gap-2">
                     {properties.error.message && <p className="break-all">{properties.error.message}</p>}
                     {properties.error.digest && (
                         <p>
@@ -33,11 +55,10 @@ export function ErrorPage(properties: ErrorPageProperties) {
                         </p>
                     )}
                 </div>
-                <div className="mt-4">
+                <div className="mt-5">
                     <Button
-                        className="w-24"
-                        variant="Contrast"
-                        onClick={async function () {
+                        variant="Destructive"
+                        onClick={function () {
                             properties.reset();
                         }}
                     >
