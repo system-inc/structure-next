@@ -33,6 +33,9 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
     const variant = properties.variant || noticeTheme.configuration.defaultVariant.variant;
     const size = properties.size || noticeTheme.configuration.defaultVariant.size;
 
+    // Determine if notice has children (content below title)
+    const hasChildren = Boolean(properties.children);
+
     // Create variant class names from theme
     const noticeVariantClassNames = createVariantClassNames(noticeTheme.configuration.baseClassNames, {
         variants: {
@@ -59,64 +62,31 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
         }
     }
 
-    // Variant icon wrapper class names
-    const variantIconContainerClassNames = mergeClassNames(
-        'flex justify-center',
-        properties.children ? 'pt-[3px]' : '',
+    // Get icon container class names from theme based on whether notice has children
+    const iconContainerClassNames = hasChildren
+        ? noticeTheme.iconContainerWithChildrenSizes?.[size!] || noticeTheme.configuration.iconContainerClassNames
+        : noticeTheme.configuration.iconContainerClassNames;
+
+    // Build icon class names from theme (size + variant color)
+    const iconClassNames = mergeClassNames(
+        noticeTheme.iconSizes?.[size!],
+        noticeTheme.iconVariants?.[variant!],
+        properties.iconClassName,
     );
 
-    // Build icon class names with variant colors and size
-    const iconSizeClassName = noticeTheme.iconSizes?.[size!] || noticeTheme.iconSizes?.Base || 'h-[22px] w-[22px]';
-    let iconClassNames = iconSizeClassName;
+    // Build title class names from theme (size + variant color)
+    const titleClassNames = mergeClassNames(noticeTheme.titleSizes?.[size!], noticeTheme.titleVariants?.[variant!]);
 
-    if(variant === 'Positive') {
-        iconClassNames = mergeClassNames('content--positive', iconClassNames);
-    }
-    else if(variant === 'Negative') {
-        iconClassNames = mergeClassNames('content--negative', iconClassNames);
-    }
-    else if(variant === 'Warning') {
-        iconClassNames = mergeClassNames('content--warning', iconClassNames);
-    }
-    else if(variant === 'Informative') {
-        iconClassNames = mergeClassNames('content--informative', iconClassNames);
-    }
+    // Build content class names from theme (size + variant color)
+    const contentClassNames = mergeClassNames(
+        noticeTheme.contentSizes?.[size!],
+        noticeTheme.contentVariants?.[variant!],
+    );
 
-    // Merge with custom icon className if provided
-    if(properties.iconClassName) {
-        iconClassNames = mergeClassNames(iconClassNames, properties.iconClassName);
-    }
-
-    // Variant title class names - Size determines text styling, variant determines color
-    let titleClassNames = 'font-medium';
-
-    // Size-based text styling
-    if(size === 'Large') {
-        titleClassNames = mergeClassNames(titleClassNames, 'text-base');
-    }
-    else if(size === 'Base') {
-        titleClassNames = mergeClassNames(titleClassNames, 'text-base');
-    }
-
-    // Variant-based color
-    if(variant === 'Positive') {
-        titleClassNames = mergeClassNames(titleClassNames, 'content--positive');
-    }
-    else if(variant === 'Negative') {
-        titleClassNames = mergeClassNames(titleClassNames, 'content--negative');
-    }
-    else if(variant === 'Warning') {
-        titleClassNames = mergeClassNames(titleClassNames, 'content--warning');
-    }
-    else if(variant === 'Informative') {
-        titleClassNames = mergeClassNames(titleClassNames, 'content--informative');
-    }
-
-    // Variant text wrapper class names
-    let variantTextContainerClassNames = '';
-    if(size === 'Base' || size === 'Large') {
-        variantTextContainerClassNames = '';
-    }
+    // Get layout class names from theme based on size and whether notice has children
+    const layoutClassNames = hasChildren
+        ? noticeTheme.layoutWithChildrenSizes?.[size!]
+        : noticeTheme.layoutSizes?.[size!];
 
     // Render the component
     return (
@@ -130,11 +100,20 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
                 properties.className,
             )}
         >
-            <div className={mergeClassNames('flex gap-3', properties.children ? 'items-start' : 'items-center')}>
-                {icon && <div className={variantIconContainerClassNames}>{themeIcon(icon, iconClassNames)}</div>}
-                <div className={variantTextContainerClassNames}>
+            <div className={layoutClassNames}>
+                {icon && <div className={iconContainerClassNames}>{themeIcon(icon, iconClassNames)}</div>}
+                <div>
                     {properties.title && <div className={titleClassNames}>{properties.title}</div>}
-                    {properties.children && <div className="mt-3">{properties.children}</div>}
+                    {properties.children && (
+                        <div
+                            className={mergeClassNames(
+                                noticeTheme.configuration.contentSpacingClassNames,
+                                contentClassNames,
+                            )}
+                        >
+                            {properties.children}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
