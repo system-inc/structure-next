@@ -16,10 +16,7 @@ export interface EngagementSectionProperties {
 }
 export function EngagementSection(properties: EngagementSectionProperties) {
     // Hooks
-    const sectionEngagementReference = useSectionEngagement(
-        properties.sectionIdentifier,
-        properties.sectionTitle,
-    );
+    const sectionEngagementReference = useSectionEngagement(properties.sectionIdentifier, properties.sectionTitle);
 
     // Render the component
     return (

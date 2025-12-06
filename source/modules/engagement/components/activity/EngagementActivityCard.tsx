@@ -264,6 +264,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                         const isSectionView = event.name === 'SectionView';
                                         const isOrderScheduleSelect = event.name === 'OrderScheduleSelect';
                                         const isAccordionItemExpand = event.name === 'AccordionItemExpand';
+                                        const isPopoverOpen = event.name === 'PopoverOpen';
 
                                         // Get section info for SectionView events
                                         const sectionIdentifier =
@@ -275,6 +276,10 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                         // Get accordion item identifier for AccordionItemExpand events
                                         const accordionItemIdentifier =
                                             event.data?.eventContext?.additionalData?.accordionItemIdentifier;
+
+                                        // Get popover identifier for PopoverOpen events
+                                        const popoverIdentifier =
+                                            event.data?.eventContext?.additionalData?.popoverIdentifier;
 
                                         // Get page duration for PageLeave events (supports both new and old naming)
                                         const pageDurationInMilliseconds =
@@ -299,6 +304,9 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                         else if(isAccordionItemExpand) {
                                             eventIcon = '▼';
                                         }
+                                        else if(isPopoverOpen) {
+                                            eventIcon = '◉';
+                                        }
 
                                         // Determine the display text
                                         let displayText = path;
@@ -317,6 +325,9 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                         else if(isAccordionItemExpand && accordionItemIdentifier) {
                                             displayText = `faq: ${accordionItemIdentifier}`;
                                         }
+                                        else if(isPopoverOpen && popoverIdentifier) {
+                                            displayText = `popover: ${popoverIdentifier}`;
+                                        }
 
                                         return (
                                             <div key={event.id} className="flex items-center gap-2 py-0.5 text-xs">
@@ -334,7 +345,9 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                                                   ? 'content--warning'
                                                                   : isAccordionItemExpand
                                                                     ? 'content--3'
-                                                                    : 'content--informative',
+                                                                    : isPopoverOpen
+                                                                      ? 'content--3'
+                                                                      : 'content--informative',
                                                     )}
                                                 >
                                                     {displayText}
