@@ -232,17 +232,49 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                         <div className="pb-2">
                             <ScrollArea className="max-h-64">
                                 <div className="pr-0">
-                                    {properties.visitorActivity.events.map(function (event) {
+                                    {properties.visitorActivity.events.map(function (event, index) {
                                         const path = truncatePath(event.viewIdentifier);
-                                        // Use createdAt (server timestamp) instead of loggedAt (client timestamp with potential clock skew)
-                                        const eventTime = formatTimeAgo(event.createdAt);
+                                        const events = properties.visitorActivity.events;
+                                        const isFirstEvent = index === 0; // Most recent (events are sorted newest first)
+                                        const isLastEvent = index === events.length - 1; // Oldest/entrance
+
+                                        // Determine the time display:
+                                        // - First event (most recent): time ago
+                                        // - Last event (entrance): time ago
+                                        // - Middle events: delta from previous event (the one after in array since sorted newest first)
+                                        let timeDisplay: string;
+                                        if(isFirstEvent || isLastEvent) {
+                                            timeDisplay = formatTimeAgo(event.createdAt);
+                                        }
+                                        else {
+                                            // Calculate delta from the previous event (next in array = older event)
+                                            const previousEvent = events[index + 1];
+                                            if(previousEvent) {
+                                                timeDisplay = calculateSessionDuration(
+                                                    previousEvent.createdAt,
+                                                    event.createdAt,
+                                                );
+                                            }
+                                            else {
+                                                timeDisplay = formatTimeAgo(event.createdAt);
+                                            }
+                                        }
                                         const isAddToCart = event.name === 'AddToCart';
                                         const isPageLeave = event.name === 'PageLeave';
                                         const isSectionView = event.name === 'SectionView';
+                                        const isOrderScheduleSelect = event.name === 'OrderScheduleSelect';
+                                        const isAccordionItemExpand = event.name === 'AccordionItemExpand';
 
                                         // Get section info for SectionView events
                                         const sectionIdentifier =
                                             event.data?.eventContext?.additionalData?.sectionIdentifier;
+
+                                        // Get order schedule for OrderScheduleSelect events
+                                        const orderSchedule = event.data?.eventContext?.additionalData?.orderSchedule;
+
+                                        // Get accordion item identifier for AccordionItemExpand events
+                                        const accordionItemIdentifier =
+                                            event.data?.eventContext?.additionalData?.accordionItemIdentifier;
 
                                         // Get page duration for PageLeave events (supports both new and old naming)
                                         const pageDurationInMilliseconds =
@@ -261,6 +293,12 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                         else if(isSectionView) {
                                             eventIcon = '◇';
                                         }
+                                        else if(isOrderScheduleSelect) {
+                                            eventIcon = '⏱';
+                                        }
+                                        else if(isAccordionItemExpand) {
+                                            eventIcon = '▼';
+                                        }
 
                                         // Determine the display text
                                         let displayText = path;
@@ -272,6 +310,12 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                         }
                                         else if(isSectionView && sectionIdentifier) {
                                             displayText = `#${sectionIdentifier}`;
+                                        }
+                                        else if(isOrderScheduleSelect && orderSchedule) {
+                                            displayText = `schedule: ${orderSchedule}`;
+                                        }
+                                        else if(isAccordionItemExpand && accordionItemIdentifier) {
+                                            displayText = `faq: ${accordionItemIdentifier}`;
                                         }
 
                                         return (
@@ -286,12 +330,16 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                                               ? 'content--2'
                                                               : isSectionView
                                                                 ? 'content--3'
-                                                                : 'content--informative',
+                                                                : isOrderScheduleSelect
+                                                                  ? 'content--warning'
+                                                                  : isAccordionItemExpand
+                                                                    ? 'content--3'
+                                                                    : 'content--informative',
                                                     )}
                                                 >
                                                     {displayText}
                                                 </span>
-                                                <span className="shrink-0 content--2">{eventTime}</span>
+                                                <span className="shrink-0 content--2">{timeDisplay}</span>
                                             </div>
                                         );
                                     })}
