@@ -41,6 +41,7 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
     const previousViewTitleReference = React.useRef('');
     const loadDurationInMillisecondsReference = React.useRef(0);
     const currentViewStartTimeReference = React.useRef(0);
+    const pageLeaveEventFiredReference = React.useRef(false);
 
     // Initialize session start time once
     React.useEffect(function () {
@@ -125,6 +126,50 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
         },
         [urlPath, urlSearchParameters],
     );
+
+    // PageLeave tracking - fires when page becomes hidden (tab switch, minimize, close, app switch, etc.)
+    // We use visibilitychange as the primary event because it's the most reliable signal in 2025 for detecting
+    // when users leave a page. The unload event is deprecated (breaks bfcache, doesn't fire on mobile), and
+    // beforeunload doesn't fire on iOS Safari. pagehide serves as a fallback for Safari edge cases.
+    // On mobile, we cannot distinguish "switched apps temporarily" from "closed browser forever" - the OS may
+    // silently kill the browser process without firing any events. So we treat every visibility:hidden as a
+    // potential session end and capture the engagement data immediately.
+    React.useEffect(function () {
+        // Function to handle page leave events
+        function handlePageLeave() {
+            if(pageLeaveEventFiredReference.current) return;
+            pageLeaveEventFiredReference.current = true;
+
+            const viewDurationInMilliseconds = Date.now() - currentViewStartTimeReference.current;
+
+            engagementService.collectEvent('PageLeave', 'Navigation', {
+                viewDurationInMilliseconds: viewDurationInMilliseconds || undefined,
+            });
+        }
+
+        // Function to handle visibility change events
+        function handleVisibilityChange() {
+            if(document.visibilityState === 'hidden') {
+                handlePageLeave();
+            }
+            else if(document.visibilityState === 'visible') {
+                // Reset so next leave fires again
+                pageLeaveEventFiredReference.current = false;
+                // Reset timer for the new engagement segment
+                currentViewStartTimeReference.current = Date.now();
+            }
+        }
+
+        // Add the event listeners
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('pagehide', handlePageLeave);
+
+        // On unmount, remove the event listeners
+        return function () {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('pagehide', handlePageLeave);
+        };
+    }, []);
 
     // Render the component
     return <EngagementContext.Provider value={{ path: urlPath }}>{properties.children}</EngagementContext.Provider>;

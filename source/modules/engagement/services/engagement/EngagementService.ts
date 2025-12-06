@@ -16,6 +16,7 @@ import {
 
 // Dependencies - Utilities
 import { getThirdPartyAttributionForEvents } from '@structure/source/modules/engagement/services/engagement/utilities/EngagementServiceUtilities';
+import { inProductionEnvironment } from '@structure/source/utilities/environment/Environment';
 
 // Class - EngagementService
 class EngagementService {
@@ -45,6 +46,11 @@ class EngagementService {
 
         // Return early if we are not in the browser
         if(typeof window !== 'object') {
+            return;
+        }
+
+        // Only send engagement events in production to avoid polluting analytics with dev data
+        if(!inProductionEnvironment()) {
             return;
         }
 
