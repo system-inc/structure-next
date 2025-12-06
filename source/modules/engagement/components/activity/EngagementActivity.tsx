@@ -306,8 +306,8 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                 </div>
 
                 {/* Visitors list - scrollable, takes remaining height */}
-                <ScrollArea containerClassName="flex-1" className="pr-3 pb-3">
-                    <div ref={containerReference} className="space-y-3 pb-6">
+                <ScrollArea containerClassName="flex-1" className="pb-6 md:pr-3 md:pb-3">
+                    <div ref={containerReference} className="space-y-3">
                         <AnimatePresence initial={false} propagate>
                             {sortedVisitors.map(function (visitor) {
                                 const isNew = newVisitorIds.has(visitor.visitorId);
