@@ -32,6 +32,22 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
         href: '/ops',
         icon: HomeIcon,
     },
+    // Analytics - Administrator only
+    {
+        title: 'Analytics',
+        href: '/ops/analytics',
+        icon: LineGraphIcon,
+        links: [
+            {
+                title: 'Live',
+                href: '/ops/analytics/live',
+            },
+            {
+                title: 'Reports',
+                href: '/ops/analytics/reports',
+            },
+        ],
+    },
     // Support - Support role
     {
         title: 'Support',
@@ -216,22 +232,6 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             {
                 title: 'Payout',
                 href: '/ops/finances/payout',
-            },
-        ],
-    },
-    // Analytics - Administrator only
-    {
-        title: 'Analytics',
-        href: '/ops/analytics',
-        icon: LineGraphIcon,
-        links: [
-            {
-                title: 'Live',
-                href: '/ops/analytics/live',
-            },
-            {
-                title: 'Reports',
-                href: '/ops/analytics/reports',
             },
         ],
     },
