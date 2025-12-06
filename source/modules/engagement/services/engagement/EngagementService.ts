@@ -66,11 +66,11 @@ class EngagementService {
             }
         }
 
-        // Get the view identifier
-        const viewIdentifier = window.location.pathname + window.location.search;
+        // Get the page identifier (URL path + query string)
+        const pageIdentifier = window.location.pathname + window.location.search;
 
-        // Get the view title
-        const viewTitle = document.title;
+        // Get the page title
+        const pageTitle = document.title;
 
         // Get third-party attribution data
         const thirdPartyAttributionData = getThirdPartyAttributionForEvents();
@@ -95,8 +95,9 @@ class EngagementService {
                         : 'Production',
             },
             eventContext: {
-                viewIdentifier: viewIdentifier,
-                viewTitle: viewTitle || null,
+                // Note: GraphQL schema uses 'viewIdentifier' and 'viewTitle' - rename pending backend update
+                viewIdentifier: pageIdentifier,
+                viewTitle: pageTitle || null,
                 referrer: document.referrer || undefined,
                 visitId: sessionManager.getVisitId(),
                 visitStartAt: sessionManager.getVisitStartAt(),

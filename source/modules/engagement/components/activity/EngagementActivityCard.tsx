@@ -238,20 +238,45 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                         const eventTime = formatTimeAgo(event.createdAt);
                                         const isAddToCart = event.name === 'AddToCart';
                                         const isPageLeave = event.name === 'PageLeave';
+                                        const isSectionView = event.name === 'SectionView';
 
-                                        // Get view duration for PageLeave events
+                                        // Get section info for SectionView events
+                                        const sectionIdentifier =
+                                            event.data?.eventContext?.additionalData?.sectionIdentifier;
+
+                                        // Get page duration for PageLeave events (supports both new and old naming)
+                                        const pageDurationInMilliseconds =
+                                            event.data?.eventContext?.additionalData?.pageDurationInMilliseconds ??
+                                            event.data?.eventContext?.additionalData?.viewDurationInMilliseconds;
                                         const viewDuration =
-                                            isPageLeave &&
-                                            event.data?.eventContext?.additionalData?.viewDurationInMilliseconds
-                                                ? calculateSessionDuration(
-                                                      event.data.eventContext.additionalData
-                                                          .viewDurationInMilliseconds as number,
-                                                  )
+                                            isPageLeave && pageDurationInMilliseconds
+                                                ? calculateSessionDuration(pageDurationInMilliseconds as number)
                                                 : null;
+
+                                        // Determine the icon/prefix for the event
+                                        let eventIcon = '→';
+                                        if(isPageLeave) {
+                                            eventIcon = '←';
+                                        }
+                                        else if(isSectionView) {
+                                            eventIcon = '◇';
+                                        }
+
+                                        // Determine the display text
+                                        let displayText = path;
+                                        if(isAddToCart) {
+                                            displayText = `🛒 ${path}`;
+                                        }
+                                        else if(isPageLeave) {
+                                            displayText = `${path}${viewDuration ? ` (${viewDuration})` : ''}`;
+                                        }
+                                        else if(isSectionView && sectionIdentifier) {
+                                            displayText = `#${sectionIdentifier}`;
+                                        }
 
                                         return (
                                             <div key={event.id} className="flex items-center gap-2 py-0.5 text-xs">
-                                                <span className="content--2">{isPageLeave ? '←' : '→'}</span>
+                                                <span className="content--2">{eventIcon}</span>
                                                 <span
                                                     className={mergeClassNames(
                                                         'min-w-0 flex-1 truncate font-mono',
@@ -259,14 +284,12 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                                             ? 'font-semibold content--positive'
                                                             : isPageLeave
                                                               ? 'content--2'
-                                                              : 'content--informative',
+                                                              : isSectionView
+                                                                ? 'content--3'
+                                                                : 'content--informative',
                                                     )}
                                                 >
-                                                    {isAddToCart
-                                                        ? `🛒 ${path}`
-                                                        : isPageLeave
-                                                          ? `${path}${viewDuration ? ` (${viewDuration})` : ''}`
-                                                          : path}
+                                                    {displayText}
                                                 </span>
                                                 <span className="shrink-0 content--2">{eventTime}</span>
                                             </div>

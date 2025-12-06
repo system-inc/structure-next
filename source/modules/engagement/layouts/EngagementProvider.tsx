@@ -37,18 +37,18 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
 
     // References
     const engagementEventsSentReference = React.useRef(0);
-    const previousViewIdentifierReference = React.useRef('');
-    const previousViewTitleReference = React.useRef('');
-    const loadDurationInMillisecondsReference = React.useRef(0);
-    const currentViewStartTimeReference = React.useRef(0);
+    const previousPageIdentifierReference = React.useRef('');
+    const previousPageTitleReference = React.useRef('');
+    const pageLoadDurationInMillisecondsReference = React.useRef(0);
+    const currentPageStartTimeReference = React.useRef(0);
     const pageLeaveEventFiredReference = React.useRef(false);
 
     // Initialize session start time once
     React.useEffect(function () {
         // Initialize the global session manager
         sessionManager.initializeSession();
-        // Initialize current view start time
-        currentViewStartTimeReference.current = Date.now();
+        // Initialize current page start time
+        currentPageStartTimeReference.current = Date.now();
         // console.log('🚀 Session initialized');
     }, []);
 
@@ -78,13 +78,13 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
             // Initialize third-party attribution tracking
             initializeThirdPartyAttribution(urlSearchParameters);
 
-            // Get the view load time in milliseconds
+            // Get the page load time in milliseconds
             if(performance && performance.getEntriesByType && engagementEventsSentReference.current === 0) {
                 const performanceEntries = performance.getEntriesByType('navigation');
                 if(performanceEntries.length > 0) {
                     const navigationEntry = performanceEntries[0];
                     if(navigationEntry) {
-                        loadDurationInMillisecondsReference.current = Math.round(navigationEntry.duration);
+                        pageLoadDurationInMillisecondsReference.current = Math.round(navigationEntry.duration);
                     }
                 }
             }
@@ -92,32 +92,32 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
             // https://github.com/vercel/next.js/discussions/64784
             else {
                 // Use 0 for now
-                loadDurationInMillisecondsReference.current = 0;
+                pageLoadDurationInMillisecondsReference.current = 0;
             }
-            // console.log('Load duration: ' + loadDurationInMillisecondsReference.current + ' milliseconds.');
+            // console.log('Page load duration: ' + pageLoadDurationInMillisecondsReference.current + ' milliseconds.');
 
-            // Get the time on the previous view
-            let previousViewDurationInMilliseconds = Date.now() - currentViewStartTimeReference.current;
+            // Get the time on the previous page
+            let previousPageDurationInMilliseconds = Date.now() - currentPageStartTimeReference.current;
             if(engagementEventsSentReference.current === 0) {
-                previousViewDurationInMilliseconds = 0;
+                previousPageDurationInMilliseconds = 0;
             }
-            // console.log('previousViewDurationInMilliseconds', previousViewDurationInMilliseconds);
+            // console.log('previousPageDurationInMilliseconds', previousPageDurationInMilliseconds);
 
             // Send the PageView engagement event with timing data
             engagementService.collectEvent('PageView', 'Navigation', {
-                loadDurationInMilliseconds: loadDurationInMillisecondsReference.current || undefined,
-                previousViewDurationInMilliseconds: previousViewDurationInMilliseconds || undefined,
-                previousViewTitle: previousViewTitleReference.current || undefined,
-                previousViewIdentifier: previousViewIdentifierReference.current || undefined,
+                pageLoadDurationInMilliseconds: pageLoadDurationInMillisecondsReference.current || undefined,
+                previousPageDurationInMilliseconds: previousPageDurationInMilliseconds || undefined,
+                previousPageTitle: previousPageTitleReference.current || undefined,
+                previousPageIdentifier: previousPageIdentifierReference.current || undefined,
             });
 
             // Increment the number of engagement events sent
             engagementEventsSentReference.current++;
 
             // Update references for the next event
-            previousViewIdentifierReference.current = urlPath;
-            previousViewTitleReference.current = document.title;
-            currentViewStartTimeReference.current = Date.now();
+            previousPageIdentifierReference.current = urlPath;
+            previousPageTitleReference.current = document.title;
+            currentPageStartTimeReference.current = Date.now();
 
             // Function which runs when component unmounts or before rerunning the effect
             return function () {
@@ -140,10 +140,10 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
             if(pageLeaveEventFiredReference.current) return;
             pageLeaveEventFiredReference.current = true;
 
-            const viewDurationInMilliseconds = Date.now() - currentViewStartTimeReference.current;
+            const pageDurationInMilliseconds = Date.now() - currentPageStartTimeReference.current;
 
             engagementService.collectEvent('PageLeave', 'Navigation', {
-                viewDurationInMilliseconds: viewDurationInMilliseconds || undefined,
+                pageDurationInMilliseconds: pageDurationInMilliseconds || undefined,
             });
 
             // Use beacon for reliable delivery during page unload
@@ -159,7 +159,7 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
                 // Reset so next leave fires again
                 pageLeaveEventFiredReference.current = false;
                 // Reset timer for the new engagement segment
-                currentViewStartTimeReference.current = Date.now();
+                currentPageStartTimeReference.current = Date.now();
             }
         }
 
