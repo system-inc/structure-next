@@ -34,6 +34,9 @@ export interface DrawerRootProperties {
     // Container
     className?: string;
     overlayClassName?: string;
+    headerClassName?: string;
+    bodyClassName?: string;
+    footerClassName?: string;
 
     // Behavior
     trigger?: React.ReactElement; // Convenience prop for trigger
@@ -182,7 +185,10 @@ export function DrawerRoot(properties: DrawerRootProperties) {
 
                             {/* Optional header section */}
                             {properties.header && (
-                                <DrawerHeader closeButton={properties.headerCloseButton}>
+                                <DrawerHeader
+                                    className={properties.headerClassName}
+                                    closeButton={properties.headerCloseButton}
+                                >
                                     {typeof properties.header === 'string' ? (
                                         <div className="font-medium">{properties.header}</div>
                                     ) : (
@@ -192,14 +198,19 @@ export function DrawerRoot(properties: DrawerRootProperties) {
                             )}
 
                             {/* Optional body section */}
-                            {properties.body && <DrawerBody>{properties.body}</DrawerBody>}
+                            {properties.body && (
+                                <DrawerBody className={properties.bodyClassName}>{properties.body}</DrawerBody>
+                            )}
 
                             {/* Custom children (rendered between body and footer) */}
                             {properties.children}
 
                             {/* Optional footer section - only rendered if there's content or a close button */}
                             {(properties.footer || properties.footerCloseButton) && (
-                                <DrawerFooter closeButton={properties.footerCloseButton}>
+                                <DrawerFooter
+                                    className={properties.footerClassName}
+                                    closeButton={properties.footerCloseButton}
+                                >
                                     {properties.footer}
                                 </DrawerFooter>
                             )}
