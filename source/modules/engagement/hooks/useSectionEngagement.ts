@@ -8,12 +8,13 @@ import { engagementService } from '@structure/source/modules/engagement/services
 
 // Hook - useSectionEngagement
 // Tracks when a section enters the viewport, firing a SectionView event.
+// Includes a delay before starting observation to avoid racing with PageView events.
 // Future: will also track SectionLeave and sectionDurationInMilliseconds.
-export function useSectionEngagement(
+export function useSectionEngagement<T extends HTMLElement = HTMLElement>(
     sectionIdentifier: string,
     sectionTitle?: string,
-): React.RefObject<HTMLElement | null> {
-    const sectionReference = React.useRef<HTMLElement | null>(null);
+): React.RefObject<T | null> {
+    const sectionReference = React.useRef<T | null>(null);
     const hasFiredReference = React.useRef(false);
 
     React.useEffect(
@@ -24,24 +25,31 @@ export function useSectionEngagement(
             // Check for IntersectionObserver support
             if(typeof IntersectionObserver === 'undefined') return;
 
-            const observer = new IntersectionObserver(
-                function (entries) {
-                    const entry = entries[0];
-                    if(entry?.isIntersecting && !hasFiredReference.current) {
-                        hasFiredReference.current = true;
-                        engagementService.collectEvent('SectionView', 'Navigation', {
-                            sectionIdentifier,
-                            sectionTitle,
-                        });
-                    }
-                },
-                { threshold: 0.5 }, // Fire when 50% of the section is visible
-            );
+            // Reference for storing observer for cleanup
+            let observer: IntersectionObserver | null = null;
 
-            observer.observe(element);
+            // Delay before starting observation to ensure PageView fires first
+            const delayTimeout = setTimeout(function () {
+                observer = new IntersectionObserver(
+                    function (entries) {
+                        const entry = entries[0];
+                        if(entry?.isIntersecting && !hasFiredReference.current) {
+                            hasFiredReference.current = true;
+                            engagementService.collectEvent('SectionView', 'Navigation', {
+                                sectionIdentifier,
+                                sectionTitle,
+                            });
+                        }
+                    },
+                    { threshold: 0.5 }, // Fire when 50% of the section is visible
+                );
+
+                observer.observe(element);
+            }, 500); // 500ms delay to ensure PageView fires first
 
             return function () {
-                observer.disconnect();
+                clearTimeout(delayTimeout);
+                observer?.disconnect();
             };
         },
         [sectionIdentifier, sectionTitle],
