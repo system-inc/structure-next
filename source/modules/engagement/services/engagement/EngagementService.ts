@@ -174,6 +174,30 @@ class EngagementService {
             this.processBatch();
         }
     }
+
+    // Flush events using sendBeacon for reliable delivery during page unload
+    // Unlike flush(), this uses navigator.sendBeacon which survives page termination
+    // Returns true if beacon was queued successfully, false otherwise
+    flushWithBeacon(): boolean {
+        if(this.eventQueue.length === 0) {
+            return true; // Nothing to send
+        }
+
+        // Cancel any pending timeout
+        if(this.batchTimeout !== null) {
+            clearTimeout(this.batchTimeout);
+        }
+        this.batchTimeout = null;
+
+        // Copy and clear the queue
+        const eventsToSend = [...this.eventQueue];
+        this.eventQueue = [];
+
+        // Send via beacon
+        return networkService.graphQlBeacon(EngagementEventsCreateDocument, {
+            inputs: eventsToSend,
+        });
+    }
 }
 
 // Export singleton instance

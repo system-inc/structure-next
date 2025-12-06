@@ -145,6 +145,9 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
             engagementService.collectEvent('PageLeave', 'Navigation', {
                 viewDurationInMilliseconds: viewDurationInMilliseconds || undefined,
             });
+
+            // Use beacon for reliable delivery during page unload
+            engagementService.flushWithBeacon();
         }
 
         // Function to handle visibility change events

@@ -237,18 +237,36 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                         // Use createdAt (server timestamp) instead of loggedAt (client timestamp with potential clock skew)
                                         const eventTime = formatTimeAgo(event.createdAt);
                                         const isAddToCart = event.name === 'AddToCart';
+                                        const isPageLeave = event.name === 'PageLeave';
+
+                                        // Get view duration for PageLeave events
+                                        const viewDuration =
+                                            isPageLeave &&
+                                            event.data?.eventContext?.additionalData?.viewDurationInMilliseconds
+                                                ? calculateSessionDuration(
+                                                      event.data.eventContext.additionalData
+                                                          .viewDurationInMilliseconds as number,
+                                                  )
+                                                : null;
 
                                         return (
                                             <div key={event.id} className="flex items-center gap-2 py-0.5 text-xs">
-                                                <span className="content--2">→</span>
+                                                <span className="content--2">{isPageLeave ? '←' : '→'}</span>
                                                 <span
-                                                    className={
+                                                    className={mergeClassNames(
+                                                        'min-w-0 flex-1 truncate font-mono',
                                                         isAddToCart
-                                                            ? 'min-w-0 flex-1 truncate font-mono font-semibold content--positive'
-                                                            : 'min-w-0 flex-1 truncate font-mono content--informative'
-                                                    }
+                                                            ? 'font-semibold content--positive'
+                                                            : isPageLeave
+                                                              ? 'content--2'
+                                                              : 'content--informative',
+                                                    )}
                                                 >
-                                                    {isAddToCart ? `🛒 ${path}` : path}
+                                                    {isAddToCart
+                                                        ? `🛒 ${path}`
+                                                        : isPageLeave
+                                                          ? `${path}${viewDuration ? ` (${viewDuration})` : ''}`
+                                                          : path}
                                                 </span>
                                                 <span className="shrink-0 content--2">{eventTime}</span>
                                             </div>

@@ -175,22 +175,14 @@ export function parseUtcDateString(dateString: string): Date {
     return new Date(formattedDateString);
 }
 
-// Calculates session duration from visit start time to last activity time
-export function calculateSessionDuration(visitStartAt?: string, lastActivityTime?: string): string {
-    if(!visitStartAt || !lastActivityTime) {
-        return 'Unknown';
-    }
-
-    const startTime = parseUtcDateString(visitStartAt);
-    const endTime = parseUtcDateString(lastActivityTime);
-    const seconds = differenceInSeconds(endTime, startTime);
-
-    if(seconds === 0) {
-        return 'New';
+// Formats a duration in seconds to a compact string (e.g., "45s", "2m", "1h")
+export function formatDurationCompact(seconds: number): string {
+    if(seconds < 1) {
+        return '<1s';
     }
 
     if(seconds < 60) {
-        return `${seconds}s`;
+        return `${Math.round(seconds)}s`;
     }
 
     const minutes = Math.floor(seconds / 60);
@@ -202,6 +194,38 @@ export function calculateSessionDuration(visitStartAt?: string, lastActivityTime
     const hours = Math.floor(minutes / 60);
 
     return `${hours}h`;
+}
+
+// Calculates session duration - accepts either two date strings or milliseconds directly
+export function calculateSessionDuration(visitStartAt?: string, lastActivityTime?: string): string;
+export function calculateSessionDuration(milliseconds: number): string;
+export function calculateSessionDuration(
+    visitStartAtOrMilliseconds?: string | number,
+    lastActivityTime?: string,
+): string {
+    // Overload: milliseconds directly
+    if(typeof visitStartAtOrMilliseconds === 'number') {
+        const seconds = visitStartAtOrMilliseconds / 1000;
+        if(seconds === 0) {
+            return 'New';
+        }
+        return formatDurationCompact(seconds);
+    }
+
+    // Overload: two date strings
+    if(!visitStartAtOrMilliseconds || !lastActivityTime) {
+        return 'Unknown';
+    }
+
+    const startTime = parseUtcDateString(visitStartAtOrMilliseconds);
+    const endTime = parseUtcDateString(lastActivityTime);
+    const seconds = differenceInSeconds(endTime, startTime);
+
+    if(seconds === 0) {
+        return 'New';
+    }
+
+    return formatDurationCompact(seconds);
 }
 
 // Formats time ago from a date string with "ago" suffix

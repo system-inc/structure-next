@@ -534,6 +534,37 @@ export class NetworkService {
         return graphQlResponse.data as TResult;
     }
 
+    // Send a GraphQL request via navigator.sendBeacon for reliable delivery during page unload
+    // Same signature as graphQlRequest but fire-and-forget (no response handling)
+    // Beacons automatically include cookies (including HTTP-only) for same-origin requests
+    // Returns true if queued successfully, false if beacon API unavailable or queue full
+    // Note: 64KB total limit shared across all pending beacons; keep payloads small
+    graphQlBeacon<TResult, TVariables = Record<string, never>>(
+        query: AppOrStructureTypedDocumentString<TResult, TVariables>,
+        variables?: TVariables,
+    ): boolean {
+        // Beacon API only available in browser
+        if(typeof navigator === 'undefined' || !navigator.sendBeacon) {
+            return false;
+        }
+
+        const graphqlEndpoint = ProjectSettings.apis?.base
+            ? `https://${ProjectSettings.apis.base.host}${ProjectSettings.apis.base.graphQlPath}`
+            : '/graphql';
+
+        const payload = JSON.stringify({ query: query.toString(), variables });
+
+        // Check payload size (64KB limit)
+        const payloadSize = new Blob([payload]).size;
+        if(payloadSize > 64000) {
+            console.warn('[NetworkService] GraphQL beacon payload exceeds 64KB limit:', payloadSize, 'bytes');
+            return false;
+        }
+
+        const blob = new Blob([payload], { type: 'application/json' });
+        return navigator.sendBeacon(graphqlEndpoint, blob);
+    }
+
     // Read request hook - for fetching/reading data from the server
     // Always returns a result with refresh() method for re-fetching
     // Supports both cached and uncached reads via the 'cache' option
