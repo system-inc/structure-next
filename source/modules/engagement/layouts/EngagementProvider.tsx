@@ -103,7 +103,7 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
             // console.log('previousViewDurationInMilliseconds', previousViewDurationInMilliseconds);
 
             // Send the PageView engagement event with timing data
-            engagementService.collect('PageView', 'Navigation', {
+            engagementService.collectEvent('PageView', 'Navigation', {
                 loadDurationInMilliseconds: loadDurationInMillisecondsReference.current || undefined,
                 previousViewDurationInMilliseconds: previousViewDurationInMilliseconds || undefined,
                 previousViewTitle: previousViewTitleReference.current || undefined,

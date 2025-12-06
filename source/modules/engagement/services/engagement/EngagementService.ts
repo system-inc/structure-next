@@ -37,7 +37,7 @@ class EngagementService {
     }
 
     // Main public method to track events
-    collect(eventName: string, eventCategory?: string, eventSpecificData?: Record<string, unknown>): void {
+    collectEvent(eventName: string, eventCategory?: string, eventSpecificData?: Record<string, unknown>): void {
         // Return early if the engagement module is not enabled
         if(!ProjectSettings.modules.engagement) {
             return;
