@@ -61,6 +61,30 @@ export function userTimeZone(): string {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
 
+/**
+ * Gets the abbreviated time zone name (e.g., "MST", "EST", "PDT").
+ *
+ * @param {string} timeZone - IANA time zone identifier (e.g., "America/Denver")
+ * @returns {string} The abbreviated time zone name
+ *
+ * @example
+ * timeZoneAbbreviation("America/Denver")    // Returns: "MST" or "MDT" depending on DST
+ * timeZoneAbbreviation("America/New_York")  // Returns: "EST" or "EDT" depending on DST
+ * timeZoneAbbreviation("UTC")               // Returns: "UTC"
+ */
+export function timeZoneAbbreviation(timeZone: string): string {
+    const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone,
+        timeZoneName: 'short',
+    });
+    const parts = formatter.formatToParts(new Date());
+    return (
+        parts.find(function (part) {
+            return part.type === 'timeZoneName';
+        })?.value || timeZone
+    );
+}
+
 // Type for time zone option
 export interface TimeZoneMenuItemInterface {
     value: string;
