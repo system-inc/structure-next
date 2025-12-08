@@ -27,8 +27,12 @@ export function ProfileImage(properties: ProfileImageProperties) {
         // Set the alternate text
         alternateText = properties.alternateText;
 
-        // If the alternate text is a username, use the first letter of the first word only, omitting the '@' symbol
-        shortHandMoniker = properties.alternateText.charAt(0).toUpperCase();
+        // If the alternate text starts with '@', use the second character (the first letter of the username)
+        // Otherwise, use the first character
+        const textForMoniker = properties.alternateText.startsWith('@')
+            ? properties.alternateText.charAt(1)
+            : properties.alternateText.charAt(0);
+        shortHandMoniker = textForMoniker.toUpperCase();
     }
 
     // Render the component
