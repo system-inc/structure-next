@@ -21,15 +21,77 @@ import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg
 // Component - EmailForm
 export interface EmailFormProperties {
     children?: React.ReactNode;
+    initialEmailAddress?: string;
     onSuccess: (
         emailAddress: string,
         authenticationSession: AccountAuthenticationQuery['accountAuthentication'],
     ) => void;
 }
 export function EmailForm(properties: EmailFormProperties) {
+    // State
+    const [hasAutoSubmitted, setHasAutoSubmitted] = React.useState(false);
+    const [isAutoSubmitting] = React.useState(!!properties.initialEmailAddress);
+
+    // Reference to track if we've started the auto-submit (prevents double submit in StrictMode)
+    const autoSubmitStartedReference = React.useRef(false);
+
     // Hooks
     const accountAuthenticationRegistrationOrSignInCreateRequest =
         useAccountAuthenticationRegistrationOrSignInCreateRequest();
+
+    // Extract properties for effect dependencies
+    const propertiesInitialEmailAddress = properties.initialEmailAddress;
+    const propertiesOnSuccess = properties.onSuccess;
+
+    // Effect to auto-submit when initialEmailAddress is provided
+    React.useEffect(
+        function () {
+            async function autoSubmit() {
+                if(propertiesInitialEmailAddress && !hasAutoSubmitted && !autoSubmitStartedReference.current) {
+                    autoSubmitStartedReference.current = true;
+                    setHasAutoSubmitted(true);
+
+                    try {
+                        // Run the mutation
+                        const mutationResult = await accountAuthenticationRegistrationOrSignInCreateRequest.execute({
+                            input: {
+                                emailAddress: propertiesInitialEmailAddress,
+                            },
+                        });
+
+                        // If there is data
+                        if(mutationResult?.accountAuthenticationRegistrationOrSignInCreate) {
+                            // Run the success callback
+                            propertiesOnSuccess(
+                                mutationResult.accountAuthenticationRegistrationOrSignInCreate.emailAddress,
+                                mutationResult.accountAuthenticationRegistrationOrSignInCreate.authentication,
+                            );
+                        }
+                    }
+                    catch(error) {
+                        console.error('Email form auto-submit error:', error);
+                    }
+                }
+            }
+
+            autoSubmit();
+        },
+        [
+            propertiesInitialEmailAddress,
+            propertiesOnSuccess,
+            hasAutoSubmitted,
+            accountAuthenticationRegistrationOrSignInCreateRequest,
+        ],
+    );
+
+    // If we're auto-submitting, show loading state
+    if(isAutoSubmitting) {
+        return (
+            <div className="mt-8 flex items-center justify-center">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border--0 border-t-transparent"></div>
+            </div>
+        );
+    }
 
     // Render the component
     return (
@@ -53,6 +115,7 @@ export function EmailForm(properties: EmailFormProperties) {
                         placeholder="email@domain.com"
                         type="email"
                         required={true}
+                        defaultValue={properties.initialEmailAddress}
                     />,
                 ]}
                 buttonProperties={{
@@ -75,9 +138,6 @@ export function EmailForm(properties: EmailFormProperties) {
                                 emailAddress: formValues.emailAddress,
                             },
                         });
-
-                        // Log the mutation state
-                        console.log('mutationResult', mutationResult);
 
                         // If there is data
                         if(mutationResult?.accountAuthenticationRegistrationOrSignInCreate) {

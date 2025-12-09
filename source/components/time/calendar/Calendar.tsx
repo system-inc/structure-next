@@ -25,7 +25,8 @@ export function Calendar(properties: CalendarProperties) {
     // Extract our custom props from react-day-picker props
     const { navigationConfiguration, ...dayPickerProperties } = properties;
 
-    const showOutsideDays = dayPickerProperties.showOutsideDays !== undefined ? dayPickerProperties.showOutsideDays : true;
+    const showOutsideDays =
+        dayPickerProperties.showOutsideDays !== undefined ? dayPickerProperties.showOutsideDays : true;
 
     // Get default class names from react-day-picker (for global.css single-day detection)
     const defaultClassNames = getDefaultClassNames();

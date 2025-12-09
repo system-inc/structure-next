@@ -8,6 +8,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from '@structure/source/router/Navigation';
 import { useUrlPath } from '@structure/source/router/Navigation';
+import { useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
@@ -42,20 +43,27 @@ export interface AuthenticationProperties {
     scope: 'SignIn' | 'Maintenance';
 }
 export function Authentication(properties: AuthenticationProperties) {
-    // State
+    // Hooks
+    const router = useRouter();
+    const urlPath = useUrlPath();
+    const account = useAccount();
+    const urlSearchParameters = useUrlSearchParameters();
+
+    // State - initialize with URL params
     const [authenticationSession, setAuthenticationSession] = React.useState<
         AccountAuthenticationQuery['accountAuthentication'] | undefined
     >(undefined);
     // const [authenticationSessionStartTime] = React.useState<number>(Date.now());
     const [authenticationSessionSuccess, setAuthenticationSessionSuccess] = React.useState<boolean>(false);
     const [authenticationSessionTimedOut] = React.useState<boolean>(false);
-    const [emailAddress, setEmailAddress] = React.useState<string | undefined>(undefined);
-    const [redirectUrl, setRedirectUrl] = React.useState<string | null>(null);
-
-    // Hooks
-    const router = useRouter();
-    const urlPath = useUrlPath();
-    const account = useAccount();
+    const [emailAddress, setEmailAddress] = React.useState<string | undefined>(function () {
+        // URLSearchParams.get() already decodes the value, no need for decodeURIComponent
+        return urlSearchParameters?.get('emailAddress') ?? undefined;
+    });
+    const [redirectUrl] = React.useState<string | null>(function () {
+        // URLSearchParams.get() already decodes the value, no need for decodeURIComponent
+        return urlSearchParameters?.get('redirectUrl') ?? null;
+    });
 
     // Hooks - API - Queries
     const accountAuthenticationRequest = useAccountAuthenticationRequest();
@@ -82,15 +90,6 @@ export function Authentication(properties: AuthenticationProperties) {
         },
         [account],
     );
-
-    // Effect to run on mount
-    React.useEffect(function () {
-        const urlParameters = new URLSearchParams(window.location.search);
-        const redirect = urlParameters.get('redirectUrl');
-        if(redirect) {
-            setRedirectUrl(decodeURIComponent(redirect));
-        }
-    }, []);
 
     // Effect to set authentication session when data is available
     React.useEffect(
@@ -176,7 +175,11 @@ export function Authentication(properties: AuthenticationProperties) {
                     console.log('redirecting to', redirectUrl);
                     router.push(redirectUrl);
                 }
-                // If no redirect URL is provided
+                // If on the sign-in page with no redirect URL, go to home
+                else if(urlPath === '/sign-in') {
+                    router.push('/');
+                }
+                // If no redirect URL is provided (e.g., in a dialog)
                 else {
                     // Close the authentication dialog
                     account.setAuthenticationDialogSettings({ open: false });
@@ -186,7 +189,7 @@ export function Authentication(properties: AuthenticationProperties) {
                 }
             }
         },
-        [account, redirectUrl, router],
+        [account, redirectUrl, router, urlPath],
     );
 
     // Effect to handle authentication success redirects
@@ -297,6 +300,7 @@ export function Authentication(properties: AuthenticationProperties) {
     else {
         currentAuthenticationComponent = (
             <EmailForm
+                initialEmailAddress={emailAddress}
                 onSuccess={function (emailAddress: string, authenticationSession) {
                     setEmailAddress(emailAddress);
                     setAuthenticationSession(authenticationSession);
@@ -313,25 +317,27 @@ export function Authentication(properties: AuthenticationProperties) {
     // Render the component
     return (
         <div className={mergeClassNames('', properties.className)}>
-            {/* Project Logo */}
-            <div className="mb-8">
-                <Image
-                    src={ProjectSettings.assets.favicon.dark.location}
-                    alt="Logo"
-                    height={32}
-                    width={32}
-                    priority={true}
-                    className="hidden dark:block"
-                />
-                <Image
-                    src={ProjectSettings.assets.favicon.light.location}
-                    alt="Logo"
-                    height={32}
-                    width={32}
-                    priority={true}
-                    className="block dark:hidden"
-                />
-            </div>
+            {/* Project Logo - hide when auto-submitting with email */}
+            {!(emailAddress && authenticationSession === undefined && !authenticationSessionSuccess) && (
+                <div className="mb-8">
+                    <Image
+                        src={ProjectSettings.assets.favicon.dark.location}
+                        alt="Logo"
+                        height={32}
+                        width={32}
+                        priority={true}
+                        className="hidden dark:block"
+                    />
+                    <Image
+                        src={ProjectSettings.assets.favicon.light.location}
+                        alt="Logo"
+                        height={32}
+                        width={32}
+                        priority={true}
+                        className="block dark:hidden"
+                    />
+                </div>
+            )}
 
             {/* The current authentication based on the authentication state */}
             {currentAuthenticationComponent}

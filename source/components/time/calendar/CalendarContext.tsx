@@ -40,9 +40,5 @@ export function CalendarProvider(properties: CalendarProviderProperties) {
         ...properties.navigationConfiguration,
     };
 
-    return (
-        <CalendarContext.Provider value={mergedConfiguration}>
-            {properties.children}
-        </CalendarContext.Provider>
-    );
+    return <CalendarContext.Provider value={mergedConfiguration}>{properties.children}</CalendarContext.Provider>;
 }
