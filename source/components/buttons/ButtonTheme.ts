@@ -415,8 +415,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Specialized Sizes
         MenuItem: 'p-1.5',
         MenuItemSelectable: 'pt-1.5 pr-1.5 pb-1.5',
-        InputSelectTrigger: 'px-4 h-9',
-        TableHeaderCell: 'h-8',
+        InputSelectTrigger: mergeClassNames('px-4 py-2'),
+        TableHeaderCell: mergeClassNames('py-2'),
     },
 
     // Icon dimensions for each button size
