@@ -5,8 +5,12 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InputProperties } from '@structure/source/components/forms/Input';
-import { Calendar } from '@structure/source/components/time/Calendar';
-import { PopoverProperties, Popover } from '@structure/source/components/popovers/Popover';
+import { Calendar } from '@structure/source/components/time/calendar/Calendar';
+import {
+    ResponsivePopoverDrawer,
+    ResponsivePopoverDrawerProperties,
+} from '@structure/source/components/popovers/responsive/ResponsivePopoverDrawer';
+import { PopoverProperties } from '@structure/source/components/popovers/Popover';
 import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
@@ -25,15 +29,39 @@ export interface InputDateReferenceInterface {
 
 // Component - InputDate
 export interface InputDateProperties extends Omit<InputProperties, 'defaultValue' | 'onChange' | 'onBlur'> {
+    // Value (controlled mode takes precedence over defaultValue)
+    value?: Date;
     defaultValue?: Date;
+
+    // Display
     placeholder?: string;
+    dateFormat?: string; // Default: 'MMMM d, y'
+    suffixText?: string; // Text displayed after the formatted date
+
+    // Behavior
     closeOnSelect?: boolean;
 
     // Events
     onChange?: (value: Date | undefined) => void;
     onBlur?: (value: Date | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
+    // Calendar configuration
+    calendarProperties?: Omit<React.ComponentPropsWithoutRef<typeof Calendar>, 'mode' | 'selected' | 'onSelect'>;
+
+    // Accessibility (for ResponsivePopoverDrawer)
+    accessibilityTitle?: string; // Default: 'Select Date'
+    accessibilityDescription?: string; // Default: 'Please select a date'
+
+    // ResponsivePopoverDrawer configuration
+    responsivePopoverDrawerProperties?: Omit<
+        ResponsivePopoverDrawerProperties,
+        'trigger' | 'content' | 'open' | 'onOpenChange' | 'accessibilityTitle' | 'accessibilityDescription'
+    >;
+
+    // Deprecated: Use responsivePopoverDrawerProperties.popoverProperties instead
     popoverProperties?: Omit<PopoverProperties, 'trigger' | 'children' | 'content'>;
+
+    // Button configuration
     buttonProperties?: Omit<ButtonProperties, 'icon' | 'iconLeft' | 'iconRight' | 'asChild' | 'href' | 'target'>;
 }
 export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDateProperties>(
@@ -43,101 +71,129 @@ export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDate
 
         // State
         const [open, setOpen] = React.useState<boolean>(false);
-        const [value, setValue] = React.useState<Date | undefined>(properties.defaultValue);
-        const [calendarMonth, setCalendarMonth] = React.useState<Date>(value ?? startOfToday());
+        const [internalValue, setInternalValue] = React.useState<Date | undefined>(properties.defaultValue);
+        const [calendarMonth, setCalendarMonth] = React.useState<Date>(
+            properties.value ?? properties.defaultValue ?? startOfToday(),
+        );
+
+        // Determine the current value (controlled mode takes precedence)
+        const currentValue = properties.value !== undefined ? properties.value : internalValue;
 
         // Defaults
-        const placeholder = properties.placeholder || 'Date';
+        const placeholder = properties.placeholder ?? 'Date';
         const closeOnSelect = properties.closeOnSelect ?? true;
+        const dateFormat = properties.dateFormat ?? 'MMMM d, y';
+
+        // Sync calendar month when controlled value changes
+        React.useEffect(
+            function () {
+                if(properties.value !== undefined) {
+                    setCalendarMonth(properties.value);
+                }
+            },
+            [properties.value],
+        );
 
         // Function to expose methods to parent components
         React.useImperativeHandle(reference, function () {
             return {
                 getValue: function () {
-                    return value;
+                    return currentValue;
                 },
                 setValue: function (newValue) {
-                    setValue(newValue);
+                    // Only update internal state - don't call onChange to avoid infinite loops
+                    // when used with FormInputDate which calls setValue from onChange
+                    if(properties.value === undefined) {
+                        setInternalValue(newValue);
+                    }
                 },
                 focus: function () {
-                    // Call the focus method on the button's DOM element
                     buttonReference.current?.focus();
                 },
             };
         });
 
         // Function to handle input value changes
-        const onChangeIntercept = React.useCallback(
-            function (date: Date | undefined) {
-                setValue(date);
+        function onChangeIntercept(date: Date | undefined) {
+            if(properties.value === undefined) {
+                // Only update internal state in uncontrolled mode
+                setInternalValue(date);
+            }
 
-                // Call the onChange callback if it exists
-                properties.onChange?.(date);
+            // Call the onChange callback if it exists
+            properties.onChange?.(date);
 
-                // Optionally close the popover
-                if(closeOnSelect) {
-                    setOpen(false);
-                }
-            },
-            [properties, closeOnSelect],
-        );
+            // Optionally close the popover
+            if(closeOnSelect) {
+                setOpen(false);
+            }
+        }
 
         // Function to handle blur events
-        const onBlurIntercept = React.useCallback(
-            function (event: React.FocusEvent<HTMLButtonElement>) {
-                // Run the provided form input onBlur function if provided
-                properties.onBlur?.(value, event);
-            },
-            [properties, value],
-        );
+        function onBlurIntercept(event: React.FocusEvent<HTMLButtonElement>) {
+            properties.onBlur?.(currentValue, event);
+        }
 
         // Function to handle when the user selects a date on the calendar
-        const handleCalendarSelection = React.useCallback(
-            function (date: Date | undefined) {
-                // Set the value
-                setValue(date);
-
-                // Invoke the onChange callback
-                onChangeIntercept(date);
-            },
-            [onChangeIntercept],
-        );
+        function handleCalendarSelection(date: Date | undefined) {
+            onChangeIntercept(date);
+        }
 
         // Render the component
         return (
-            <Popover
-                {...properties.popoverProperties}
+            <ResponsivePopoverDrawer
+                variant="A"
+                accessibilityTitle={properties.accessibilityTitle ?? 'Select Date'}
+                accessibilityDescription={properties.accessibilityDescription ?? 'Please select a date'}
                 open={open}
                 onOpenChange={setOpen}
+                trigger={
+                    <Button
+                        ref={buttonReference}
+                        variant="InputSelectTrigger"
+                        size="InputSelectTrigger"
+                        className={mergeClassNames(
+                            'min-w-[246px]',
+                            !currentValue && 'content--1',
+                            properties.buttonProperties?.className,
+                        )}
+                        iconLeft={CalendarIcon}
+                        onBlur={onBlurIntercept}
+                        tabIndex={properties.tabIndex}
+                        disabled={properties.disabled}
+                        {...properties.buttonProperties}
+                    >
+                        {currentValue ? (
+                            <>
+                                {format(currentValue, dateFormat)}
+                                {properties.suffixText && ` ${properties.suffixText}`}
+                            </>
+                        ) : (
+                            <span>{placeholder}</span>
+                        )}
+                    </Button>
+                }
                 content={
-                    <div className="flex w-auto">
+                    <div className="flex w-auto justify-center p-3">
                         <Calendar
                             mode="single"
                             showOutsideDays={false}
                             numberOfMonths={1}
                             month={calendarMonth}
                             onMonthChange={setCalendarMonth}
-                            selected={value}
+                            selected={currentValue}
                             onSelect={handleCalendarSelection}
+                            {...properties.calendarProperties}
                         />
                     </div>
                 }
-                trigger={
-                    <Button
-                        variant="InputSelectTrigger"
-                        size="InputSelectTrigger"
-                        className={mergeClassNames(
-                            'min-w-[246px]',
-                            !value && 'content--1',
-                            properties.buttonProperties?.className,
-                        )}
-                        iconLeft={CalendarIcon}
-                        onBlur={onBlurIntercept}
-                        {...properties.buttonProperties}
-                    >
-                        {value ? format(value, 'MMMM d, y') : <span>{placeholder}</span>}
-                    </Button>
-                }
+                popoverProperties={{
+                    align: 'Start',
+                    ...properties.popoverProperties,
+                    ...properties.responsivePopoverDrawerProperties?.popoverProperties,
+                }}
+                drawerProperties={properties.responsivePopoverDrawerProperties?.drawerProperties}
+                {...properties.responsivePopoverDrawerProperties}
             />
         );
     },

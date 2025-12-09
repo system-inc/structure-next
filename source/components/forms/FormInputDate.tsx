@@ -134,6 +134,7 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
                         key="inputDateLoaded"
                         ref={inputDateReference}
                         className={mergeClassNames('', properties.componentClassName)}
+                        value={properties.value}
                         defaultValue={properties.defaultValue}
                         required={properties.required}
                         disabled={properties.disabled}
@@ -142,7 +143,13 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
                         onBlur={properties.onBlur}
                         // Specific to InputDate
                         placeholder={properties.placeholder}
+                        dateFormat={properties.dateFormat}
+                        suffixText={properties.suffixText}
                         closeOnSelect={properties.closeOnSelect}
+                        calendarProperties={properties.calendarProperties}
+                        accessibilityTitle={properties.accessibilityTitle}
+                        accessibilityDescription={properties.accessibilityDescription}
+                        responsivePopoverDrawerProperties={properties.responsivePopoverDrawerProperties}
                         buttonProperties={properties.buttonProperties}
                         popoverProperties={properties.popoverProperties}
                     />

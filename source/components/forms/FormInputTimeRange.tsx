@@ -133,6 +133,7 @@ export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterf
                             key="inputTimeRangeLoaded"
                             ref={inputTimeRangeReference}
                             className={mergeClassNames('', properties.componentClassName)}
+                            value={properties.value}
                             defaultValue={properties.defaultValue}
                             required={properties.required}
                             disabled={properties.disabled}
@@ -141,7 +142,12 @@ export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterf
                             onBlur={properties.onBlur}
                             // Specific to InputTimeRange
                             placeholder={properties.placeholder}
+                            rangeFormat={properties.rangeFormat}
                             showTimeRangePresets={properties.showTimeRangePresets}
+                            calendarProperties={properties.calendarProperties}
+                            accessibilityTitle={properties.accessibilityTitle}
+                            accessibilityDescription={properties.accessibilityDescription}
+                            responsivePopoverDrawerProperties={properties.responsivePopoverDrawerProperties}
                             buttonProperties={properties.buttonProperties}
                             popoverProperties={properties.popoverProperties}
                         />
