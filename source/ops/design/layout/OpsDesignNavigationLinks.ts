@@ -1,5 +1,5 @@
 // Dependencies - Assets
-import { PaletteIcon, CursorClickIcon, StackIcon, NoteIcon } from '@phosphor-icons/react';
+import { PaletteIcon, CursorClickIcon, StackIcon, NoteIcon, CalendarIcon } from '@phosphor-icons/react';
 
 // Type
 export interface OpsDesignNavigationLinkInterface {
@@ -14,4 +14,5 @@ export const opsDesignNavigationLinks: OpsDesignNavigationLinkInterface[] = [
     { href: '/buttons', title: 'Buttons', icon: CursorClickIcon },
     { href: '/notices', title: 'Notices', icon: NoteIcon },
     { href: '/dialogs', title: 'Dialogs', icon: StackIcon },
+    { href: '/time', title: 'Time', icon: CalendarIcon },
 ];

@@ -21,7 +21,7 @@ import { AccountNavigationResponsivePopoverDrawer } from '@structure/source/modu
 // import { FormInputDate } from '@structure/source/components/forms/FormInputDate';
 // import { InputDate } from '@structure/source/components/forms/InputDate';
 // import { InputTimeRange } from '@structure/source/components/forms/InputTimeRange';
-// import { Calendar } from '@structure/source/components/time/Calendar';
+// import { Calendar } from '@structure/source/components/time/calendar/Calendar';
 // import { Table } from '@structure/source/components/tables/Table';
 // import { Tip } from '@structure/source/components/popovers/Tip';
 // import ChevronsUpDownIcon from '@structure/assets/icons/interface/ChevronsUpDownIcon.svg';
