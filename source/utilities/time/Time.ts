@@ -471,6 +471,60 @@ export function millisecondsToDuration(milliseconds: number): string {
 // ================================================================================================
 
 /**
+ * Full month names array (0-indexed: 0 = January, 11 = December).
+ * Use this when you need all month names, e.g., for dropdown menus.
+ */
+export const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+];
+
+/**
+ * Abbreviated month names array (0-indexed: 0 = Jan, 11 = Dec).
+ * Use this when you need all abbreviated month names.
+ */
+export const monthNamesAbbreviated = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+];
+
+/**
+ * Gets the full month name for a given month number (1-based).
+ *
+ * @param {number} month - The month number (1 = January, 12 = December)
+ * @returns {string} The full month name
+ *
+ * @example
+ * monthName(1)  // Returns: "January"
+ * monthName(6)  // Returns: "June"
+ * monthName(12) // Returns: "December"
+ */
+export function monthName(month: number): string {
+    // Convert from 1-based to 0-based index
+    return monthNames[month - 1] || '';
+}
+
+/**
  * Gets the abbreviated month name for a given month number (1-based).
  *
  * @param {number} month - The month number (1 = January, 12 = December)
@@ -482,9 +536,8 @@ export function millisecondsToDuration(milliseconds: number): string {
  * monthAbbreviation(12) // Returns: "Dec"
  */
 export function monthAbbreviation(month: number): string {
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     // Convert from 1-based to 0-based index
-    return monthNames[month - 1] || '';
+    return monthNamesAbbreviated[month - 1] || '';
 }
 
 // ================================================================================================
