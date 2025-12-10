@@ -76,7 +76,7 @@ export function OpsHomePageDashboard(properties: OpsHomePageDashboardProperties)
                                         Sessions
                                     </Button>
                                 }
-                                body={<EngagementActivity className="mt-6" databaseName="readonly" />}
+                                body={<EngagementActivity className="mt-6" cardClassName="max-w-80" databaseName="readonly" />}
                             />
                         )}
                     </div>

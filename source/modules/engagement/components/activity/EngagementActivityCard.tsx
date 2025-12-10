@@ -4,10 +4,11 @@
 import React from 'react';
 
 // Dependencies - Types
-import { VisitorActivityInterface } from '@structure/source/modules/engagement/components/activity/EngagementActivity';
+import { DeviceActivityInterface } from '@structure/source/modules/engagement/components/activity/EngagementActivity';
 
 // Dependencies - Main Components
 import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
+import { Link } from '@structure/source/components/navigation/Link';
 
 // Dependencies - Animation
 import { motion, AnimatePresence, cubicBezier } from 'motion/react';
@@ -34,6 +35,7 @@ import {
     LinkedinLogoIcon,
     MetaLogoIcon,
     PinterestLogoIcon,
+    ArrowSquareOutIcon,
 } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
@@ -47,17 +49,25 @@ import {
     formatTimeAgo,
 } from './utilities/EngagementActivityUtilities';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import {
+    engagementEventRegistry,
+    getEventDisplayText,
+    EngagementEventName,
+} from '@structure/source/modules/engagement/types/EngagementEventDefinitions';
 
 // Component - EngagementActivityCard
 export interface EngagementActivityCardProperties {
-    visitorActivity: VisitorActivityInterface;
+    className?: string;
+    deviceActivity: DeviceActivityInterface;
     isNew?: boolean;
     wasUpdated?: boolean;
-    visitorId: string; // Required for using layout animations for the components.
+    deviceId: string; // Required for using layout animations for the components.
+    truncatePaths?: boolean; // Whether to truncate long paths (default: true for sidebar, false for full-width)
+    defaultExpanded?: boolean; // Whether the card should be expanded by default
 }
 export function EngagementActivityCard(properties: EngagementActivityCardProperties) {
     // State
-    const [isExpanded, setIsExpanded] = React.useState(false);
+    const [isExpanded, setIsExpanded] = React.useState(properties.defaultExpanded ?? false);
     const [currentTime, setCurrentTime] = React.useState(new Date());
 
     // Effects - Update current time every second for live duration updates
@@ -70,33 +80,33 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
         };
     }, []);
 
-    // Extract data from visitor activity
-    const platformIconType = getPlatformIconType(properties.visitorActivity.device?.operatingSystem);
+    // Extract data from device activity
+    const platformIconType = getPlatformIconType(properties.deviceActivity.device?.operatingSystem);
     const deviceTypeIconType = getDeviceTypeIconType(
-        properties.visitorActivity.device?.deviceCategory,
-        properties.visitorActivity.device?.operatingSystem,
+        properties.deviceActivity.device?.deviceCategory,
+        properties.deviceActivity.device?.operatingSystem,
     );
-    const referrerIconType = getReferrerIconType(properties.visitorActivity.referrer);
-    const referrerName = getReferrerName(properties.visitorActivity.referrer);
-    const currentPath = truncatePath(properties.visitorActivity.currentPage);
+    const referrerIconType = getReferrerIconType(properties.deviceActivity.referrer);
+    const referrerName = getReferrerName(properties.deviceActivity.referrer);
+    const shouldTruncate = properties.truncatePaths !== false;
+    const currentPath = shouldTruncate
+        ? truncatePath(properties.deviceActivity.currentPage)
+        : properties.deviceActivity.currentPage || '/';
     // Calculate session duration from first event to now (not first to last event)
     // Uses currentTime state that updates every second for live ticking
-    const sessionDuration = calculateSessionDuration(
-        properties.visitorActivity.sessionStart,
-        currentTime.toISOString(),
-    );
+    const sessionDuration = calculateSessionDuration(properties.deviceActivity.sessionStart, currentTime.toISOString());
 
     // Get entrance page from oldest event
-    const oldestEvent = properties.visitorActivity.events[properties.visitorActivity.events.length - 1];
+    const oldestEvent = properties.deviceActivity.events[properties.deviceActivity.events.length - 1];
     const entrancePage = oldestEvent?.viewIdentifier?.split('?')[0] || '/';
 
-    // Check if visitor has added to cart
-    const hasAddedToCart = properties.visitorActivity.events.some(function (event) {
+    // Check if device has added to cart
+    const hasAddedToCart = properties.deviceActivity.events.some(function (event) {
         return event.name === 'AddToCart';
     });
 
     // Determine which browser icon to show
-    const browserName = properties.visitorActivity.device?.client || '';
+    const browserName = properties.deviceActivity.device?.client || '';
     const browserLower = browserName.toLowerCase();
     let BrowserIcon: typeof GlobeIcon = GlobeIcon;
 
@@ -139,7 +149,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
 
     // Check if this is a Meta ad (Facebook/Instagram ad campaign)
     const isMetaAd =
-        properties.visitorActivity.attribution?.includes(' Ad') &&
+        properties.deviceActivity.attribution?.includes(' Ad') &&
         (referrerIconType === 'facebook' || referrerIconType === 'instagram');
 
     // Determine which referrer icon to show
@@ -148,7 +158,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
 
     if(isMetaAd) {
         ReferrerIcon = MetaLogoIcon;
-        referrerDisplayText = properties.visitorActivity.attribution || null;
+        referrerDisplayText = properties.deviceActivity.attribution || null;
     }
     else if(referrerIconType === 'youtube') {
         ReferrerIcon = YoutubeLogoIcon;
@@ -179,7 +189,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
     return (
         <motion.div
             layout
-            layoutId={properties.visitorId}
+            layoutId={properties.deviceId}
             initial={properties.isNew ? { opacity: 0, y: -20, scale: 0.95 } : false}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
@@ -191,23 +201,33 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                 setIsExpanded(!isExpanded);
             }}
             className={mergeClassNames(
-                'max-w-80 cursor-pointer rounded-lg border p-3 transition-colors',
+                'cursor-pointer rounded-lg border p-3 transition-colors',
                 hasAddedToCart
                     ? 'border--positive'
                     : isExpanded
                       ? 'border--3 background--1'
                       : 'border--0 hover:border--2 active:border--4',
+                properties.className,
             )}
         >
-            {/* Top row: Location with browser, platform, and device type icons */}
+            {/* Top row: Location with browser, platform, device type icons, and link */}
             <div className="mb-2 flex items-center justify-between gap-2">
                 <span className="min-w-0 truncate text-sm font-medium content--1">
-                    {properties.visitorActivity.location}
+                    {properties.deviceActivity.location}
                 </span>
                 <div className="flex shrink-0 items-center gap-1.5">
                     <BrowserIcon className="h-3.5 w-3.5 content--2" />
                     {PlatformIcon && <PlatformIcon className="h-3.5 w-3.5 content--2" />}
                     {DeviceTypeIcon && <DeviceTypeIcon className="h-4 w-4 content--2" />}
+                    <Link
+                        href={`/ops/analytics/sessions/devices/${properties.deviceId}`}
+                        onClick={function (event) {
+                            event.stopPropagation();
+                        }}
+                        className="content--2 transition-colors hover:content--0"
+                    >
+                        <ArrowSquareOutIcon className="h-4 w-4" />
+                    </Link>
                 </div>
             </div>
 
@@ -215,8 +235,8 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
             <div className="mb-2 flex items-center justify-between gap-2">
                 <div className="min-w-0 flex-1 truncate font-mono text-xs content--informative">{currentPath}</div>
                 <div className="shrink-0 text-xs content--2">
-                    {properties.visitorActivity.pageCount}{' '}
-                    {properties.visitorActivity.pageCount === 1 ? 'event' : 'events'}
+                    {properties.deviceActivity.pageCount}{' '}
+                    {properties.deviceActivity.pageCount === 1 ? 'event' : 'events'}
                 </div>
             </div>
 
@@ -230,11 +250,10 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                         transition={{ duration: 0.2, ease: cubicBezier(0.075, 0.82, 0.165, 1) }}
                     >
                         <div className="pb-2">
-                            <ScrollArea className="max-h-64">
+                            <ScrollArea className={shouldTruncate ? 'max-h-64' : undefined}>
                                 <div className="pr-0">
-                                    {properties.visitorActivity.events.map(function (event, index) {
-                                        const path = truncatePath(event.viewIdentifier);
-                                        const events = properties.visitorActivity.events;
+                                    {properties.deviceActivity.events.map(function (event, index) {
+                                        const events = properties.deviceActivity.events;
                                         const isFirstEvent = index === 0; // Most recent (events are sorted newest first)
                                         const isLastEvent = index === events.length - 1; // Oldest/entrance
 
@@ -259,75 +278,40 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                                 timeDisplay = formatTimeAgo(event.createdAt);
                                             }
                                         }
+
+                                        // Normalize event name for backward compatibility
+                                        // AccordionItemExpand -> AccordionExpand, OrderScheduleSelect -> ToggleChange
+                                        let normalizedEventName = event.name;
+                                        if(event.name === 'AccordionItemExpand') {
+                                            normalizedEventName = 'AccordionExpand';
+                                        }
+                                        else if(event.name === 'OrderScheduleSelect') {
+                                            normalizedEventName = 'ToggleChange';
+                                        }
+
+                                        // Get event rendering info from registry
+                                        const eventRegistryEntry =
+                                            engagementEventRegistry[normalizedEventName as EngagementEventName];
+
+                                        // Use registry values with fallbacks for unknown events
+                                        const eventIcon = eventRegistryEntry?.icon || '→';
+                                        const colorClass = eventRegistryEntry?.colorClass || 'content--informative';
+
+                                        // Get the path for display
+                                        const path = shouldTruncate
+                                            ? truncatePath(event.viewIdentifier)
+                                            : event.viewIdentifier || '/';
+
+                                        // Get display text using the centralized function
+                                        const eventData = event.data?.eventContext?.additionalData || {};
+                                        const displayText = getEventDisplayText(
+                                            normalizedEventName,
+                                            eventData as Record<string, unknown>,
+                                            path,
+                                        );
+
+                                        // Special case: AddToCart gets bold styling
                                         const isAddToCart = event.name === 'AddToCart';
-                                        const isPageLeave = event.name === 'PageLeave';
-                                        const isSectionView = event.name === 'SectionView';
-                                        const isOrderScheduleSelect = event.name === 'OrderScheduleSelect';
-                                        const isAccordionItemExpand = event.name === 'AccordionItemExpand';
-                                        const isPopoverOpen = event.name === 'PopoverOpen';
-
-                                        // Get section info for SectionView events
-                                        const sectionIdentifier =
-                                            event.data?.eventContext?.additionalData?.sectionIdentifier;
-
-                                        // Get order schedule for OrderScheduleSelect events
-                                        const orderSchedule = event.data?.eventContext?.additionalData?.orderSchedule;
-
-                                        // Get accordion item identifier for AccordionItemExpand events
-                                        const accordionItemIdentifier =
-                                            event.data?.eventContext?.additionalData?.accordionItemIdentifier;
-
-                                        // Get popover identifier for PopoverOpen events
-                                        const popoverIdentifier =
-                                            event.data?.eventContext?.additionalData?.popoverIdentifier;
-
-                                        // Get page duration for PageLeave events (supports both new and old naming)
-                                        const pageDurationInMilliseconds =
-                                            event.data?.eventContext?.additionalData?.pageDurationInMilliseconds ??
-                                            event.data?.eventContext?.additionalData?.viewDurationInMilliseconds;
-                                        const viewDuration =
-                                            isPageLeave && pageDurationInMilliseconds
-                                                ? calculateSessionDuration(pageDurationInMilliseconds as number)
-                                                : null;
-
-                                        // Determine the icon/prefix for the event
-                                        let eventIcon = '→';
-                                        if(isPageLeave) {
-                                            eventIcon = '←';
-                                        }
-                                        else if(isSectionView) {
-                                            eventIcon = '◇';
-                                        }
-                                        else if(isOrderScheduleSelect) {
-                                            eventIcon = '⏱';
-                                        }
-                                        else if(isAccordionItemExpand) {
-                                            eventIcon = '▼';
-                                        }
-                                        else if(isPopoverOpen) {
-                                            eventIcon = '◉';
-                                        }
-
-                                        // Determine the display text
-                                        let displayText = path;
-                                        if(isAddToCart) {
-                                            displayText = `🛒 ${path}`;
-                                        }
-                                        else if(isPageLeave) {
-                                            displayText = `${path}${viewDuration ? ` (${viewDuration})` : ''}`;
-                                        }
-                                        else if(isSectionView && sectionIdentifier) {
-                                            displayText = `#${sectionIdentifier}`;
-                                        }
-                                        else if(isOrderScheduleSelect && orderSchedule) {
-                                            displayText = `schedule: ${orderSchedule}`;
-                                        }
-                                        else if(isAccordionItemExpand && accordionItemIdentifier) {
-                                            displayText = `faq: ${accordionItemIdentifier}`;
-                                        }
-                                        else if(isPopoverOpen && popoverIdentifier) {
-                                            displayText = `popover: ${popoverIdentifier}`;
-                                        }
 
                                         return (
                                             <div key={event.id} className="flex items-center gap-2 py-0.5 text-xs">
@@ -335,19 +319,8 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                                 <span
                                                     className={mergeClassNames(
                                                         'min-w-0 flex-1 truncate font-mono',
-                                                        isAddToCart
-                                                            ? 'font-semibold content--positive'
-                                                            : isPageLeave
-                                                              ? 'content--2'
-                                                              : isSectionView
-                                                                ? 'content--3'
-                                                                : isOrderScheduleSelect
-                                                                  ? 'content--warning'
-                                                                  : isAccordionItemExpand
-                                                                    ? 'content--3'
-                                                                    : isPopoverOpen
-                                                                      ? 'content--3'
-                                                                      : 'content--informative',
+                                                        isAddToCart ? 'font-semibold' : '',
+                                                        colorClass,
                                                     )}
                                                 >
                                                     {displayText}
