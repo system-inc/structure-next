@@ -13,6 +13,7 @@ import { Feedback } from '@structure/source/modules/feedback/components/Feedback
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 import { Markdown } from '@structure/source/components/markdown/Markdown';
 import { NavigationTrail } from '@structure/source/components/navigation/trail/NavigationTrail';
+import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
 
 // Dependencies - Assets
 import { PencilIcon } from '@phosphor-icons/react/dist/ssr';
@@ -55,7 +56,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
     }
 
     const postHref =
-        navigationTrailUrlPathname + '/articles/' + properties.post.identifier + '/' + properties.post.slug;
+        navigationTrailUrlPathname + '/articles/' + properties.post.slug + '-' + properties.post.identifier;
 
     const updateAtTimeInMilliseconds = new Date(properties.post.updatedAt).getTime();
     let updatedTimeAgoString = timeFromNow(updateAtTimeInMilliseconds);
@@ -105,14 +106,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
 
             <HorizontalRule className="my-16" />
 
-            <div className="flex justify-center">
-                <div>
-                    <p className="mb-4">Need more help?</p>
-                    <Button variant="A" size="Large" href="/contact">
-                        Contact Us
-                    </Button>
-                </div>
-            </div>
+            <SupportNeedMoreHelp />
         </div>
     );
 }

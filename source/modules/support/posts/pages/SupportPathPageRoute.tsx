@@ -27,25 +27,28 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
     // Valid paths:
     // Topics
     // /support/topic-slug
-    // Posts
-    // /support/topic-slug-a/topic-slug-b/articles/post-identifier/post-slug
-    // /support/articles/post-identifier/post-slug
+    // Posts (new format: slug-identifier combined)
+    // /support/topic-slug-a/topic-slug-b/articles/post-slug-identifier
+    // /support/articles/post-slug-identifier
 
-    // The path is a post if it has more than 2 parts and the second to last part is 'articles'
+    // The path is a post if it has 'articles' as second to last part or first part
     const isPost =
-        (supportPath.length > 3 && supportPath[supportPath.length - 3] === 'articles') || supportPath[0] === 'articles';
+        (supportPath.length > 2 && supportPath[supportPath.length - 2] === 'articles') || supportPath[0] === 'articles';
 
-    const postIdentifier = isPost ? supportPath[supportPath.length - 2] : undefined;
+    // Extract identifier from the end of the last path segment (e.g., "my-article-slug-abc123" -> "abc123")
+    const lastSegment = supportPath[supportPath.length - 1] ?? '';
+    const lastDashIndex = lastSegment.lastIndexOf('-');
+    const postIdentifier = isPost && lastDashIndex > 0 ? lastSegment.substring(lastDashIndex + 1) : undefined;
 
     const postTopicSlug = isPost
-        ? // If post, the topic is the fourth to last part of the path
-          supportPath[supportPath.length - 4]
+        ? // If post, the topic is the third to last part of the path (before 'articles' and 'slug-identifier')
+          supportPath[supportPath.length - 3]
         : // If not a post, the topic is the last part of the path
           supportPath[supportPath.length - 1];
 
     const parentPostTopicsSlugs = isPost
-        ? // If post, the parent topics are the path minus the last 4 parts
-          supportPath.slice(0, -4)
+        ? // If post, the parent topics are the path minus the last 3 parts
+          supportPath.slice(0, -3)
         : // If not a post, the parent topics are the path minus the last part
           supportPath.slice(0, -1);
 

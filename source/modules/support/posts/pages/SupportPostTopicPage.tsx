@@ -16,6 +16,7 @@ import { HorizontalRule } from '@structure/source/components/layout/HorizontalRu
 import { NavigationTrail } from '@structure/source/components/navigation/trail/NavigationTrail';
 import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
 import { Feedback } from '@structure/source/modules/feedback/components/Feedback';
+import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
 
 // Dependencies - Assets
 import { PlusIcon, PencilSimpleIcon, GearIcon, CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
@@ -35,7 +36,7 @@ export interface SupportPostTopicPageProperties {
         posts: PostTopicQuery['postTopic']['pagedPosts']['items'];
     }[];
     topicIconMapping?: {
-        [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+        [key: string]: React.ReactElement<{ className?: string }>;
     };
 }
 export function SupportPostTopicPage(properties: SupportPostTopicPageProperties) {
@@ -43,7 +44,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
     const account = useAccount();
 
     // Icon
-    const PostTopicIcon =
+    const postTopicIcon =
         properties.topicIconMapping && properties.postTopic.topic.id in properties.topicIconMapping
             ? properties.topicIconMapping[properties.postTopic.topic.id]
             : undefined;
@@ -78,12 +79,12 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
             )}
 
             <div className="mb-12">
-                <NavigationTrail className="mb-8" />
+                <NavigationTrail className="mb-6" />
 
                 <div className="max-w-2xl">
                     <Link href={'/support/' + properties.postTopic.topic.slug} className="">
-                        <h1 className="inline-flex items-center space-x-3 text-3xl font-medium">
-                            {PostTopicIcon && <PostTopicIcon className="h-8 w-8" />}
+                        <h1 className="inline-flex items-center space-x-3 text-2xl font-medium">
+                            {postTopicIcon && React.cloneElement(postTopicIcon, { className: 'size-6' })}
                             <span>{properties.postTopic.topic.title}</span>
                         </h1>
                     </Link>
@@ -119,7 +120,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                                 <div className="">
                                     {postTopicAndSubPostTopicsWithPosts.posts.map(function (post, postIndex) {
                                         const postHref =
-                                            postTopicHref + '/articles/' + post.identifier + '/' + post.slug;
+                                            postTopicHref + '/articles/' + post.slug + '-' + post.identifier;
 
                                         return (
                                             <div key={postIndex} className="mb-4">
@@ -148,14 +149,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
 
             <HorizontalRule className="my-16" />
 
-            <div className="flex justify-center">
-                <div>
-                    <p className="mb-4">Need more help?</p>
-                    <Button variant="A" size="Large" href="/contact">
-                        Contact Us
-                    </Button>
-                </div>
-            </div>
+            <SupportNeedMoreHelp />
         </div>
     );
 }

@@ -14,12 +14,11 @@ import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
-import { Button } from '@structure/source/components/buttons/Button';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 import { SupportSearch } from '@structure/source/modules/support/posts/components/SupportSearch';
 
 // Dependencies - Assets
-import { ArrowRightIcon, QuestionIcon } from '@phosphor-icons/react';
+import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -30,7 +29,7 @@ export interface SupportPageProperties {
     className?: string;
     postTopics: PostTopicsQuery['postTopics'];
     topicIconMapping?: {
-        [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+        [key: string]: React.ReactElement<{ className?: string; style?: React.CSSProperties }>;
     };
 }
 export function SupportPage(properties: SupportPageProperties) {
@@ -55,7 +54,7 @@ export function SupportPage(properties: SupportPageProperties) {
             {/* Post Topics */}
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {properties.postTopics.map(function (postTopic, postTopicIndex) {
-                    const PostTopicIcon =
+                    const postTopicIcon =
                         properties.topicIconMapping && postTopic.id in properties.topicIconMapping
                             ? properties.topicIconMapping[postTopic.id]
                             : undefined;
@@ -93,14 +92,11 @@ export function SupportPage(properties: SupportPageProperties) {
                                 event.currentTarget.style.borderColor = rainbowHexColorForTheme;
                             }}
                         >
-                            {PostTopicIcon && (
-                                <PostTopicIcon
-                                    className="h-6 w-6 content--4"
-                                    style={{
-                                        color: rainbowHexColorForTheme,
-                                    }}
-                                />
-                            )}
+                            {postTopicIcon &&
+                                React.cloneElement(postTopicIcon, {
+                                    className: 'h-6 w-6',
+                                    style: { color: rainbowHexColorForTheme },
+                                })}
 
                             <h2 className="mt-4 text-base">{postTopic.title}</h2>
 
@@ -116,21 +112,7 @@ export function SupportPage(properties: SupportPageProperties) {
 
             <HorizontalRule className="mt-20 mb-14" />
 
-            <div className="mx-auto max-w-170">
-                <h2 className="mb-12 text-center text-[2rem] font-medium">Need more help?</h2>
-
-                <div className="mb-12 rounded-2xl border border--0 background--2 p-8">
-                    <QuestionIcon className="mx-auto mb-4 size-6" />
-                    <p className="mb-2 text-center font-medium">Contact Us</p>
-                    <p className="text-center text-sm font-normal content--4">We&apos;d love to hear from you.</p>
-
-                    <div className="mt-8 flex flex-col items-center">
-                        <Button variant="B" iconRight={ArrowRightIcon} href="/contact">
-                            Contact Support
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            <SupportNeedMoreHelp />
         </div>
     );
 }

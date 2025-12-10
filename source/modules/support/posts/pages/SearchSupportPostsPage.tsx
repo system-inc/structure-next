@@ -5,15 +5,15 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
-import { Button } from '@structure/source/components/buttons/Button';
 import { SupportSearch } from '@structure/source/modules/support/posts/components/SupportSearch';
+import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 
 // Dependencies - API
 import { PostsQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
-import { ArrowRightIcon, CaretRightIcon, QuestionIcon } from '@phosphor-icons/react/dist/ssr';
+import { CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -48,7 +48,7 @@ export function SearchSupportPostsPage(properties: SearchSupportPostsPagePropert
 
             {/* Posts */}
             {properties.posts.map(function (post, postIndex) {
-                const postHref = '/support/articles/' + post.identifier + '/' + post.slug;
+                const postHref = '/support/articles/' + post.slug + '-' + post.identifier;
 
                 return (
                     <div key={postIndex} className="mb-4">
@@ -68,21 +68,7 @@ export function SearchSupportPostsPage(properties: SearchSupportPostsPagePropert
 
             <HorizontalRule className="mt-20 mb-14" />
 
-            <div className="mx-auto max-w-170">
-                <h2 className="mb-12 text-center text-[2rem] font-medium">Need more help?</h2>
-
-                <div className="mb-12 rounded-2xl border border--0 background--2 p-8">
-                    <QuestionIcon className="mx-auto mb-4 size-6" />
-                    <p className="mb-2 text-center font-medium">Contact Us</p>
-                    <p className="text-center text-sm font-normal content--4">We&apos;d love to hear from you.</p>
-
-                    <div className="mt-8 flex flex-col items-center">
-                        <Button variant="B" iconRight={ArrowRightIcon} href="/contact">
-                            Contact Support
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            <SupportNeedMoreHelp />
         </div>
     );
 }
