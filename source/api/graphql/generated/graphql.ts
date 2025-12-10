@@ -3340,6 +3340,8 @@ export type PostTopicQuery = {
         subTopics?: Array<{
             __typename?: 'PostTopic';
             id: string;
+            previousSiblingId?: string | null;
+            nextSiblingId?: string | null;
             title: string;
             slug: string;
             description?: string | null;
@@ -4548,6 +4550,8 @@ export const PostTopicDocument = new TypedDocumentString(`
     }
     subTopics {
       id
+      previousSiblingId
+      nextSiblingId
       title
       slug
       description

@@ -15,6 +15,38 @@ import { PostDocument, PostTopicDocument, PostTopicQuery } from '@structure/sour
 // Dependencies - Utilities
 import { slugToTitleCase } from '@structure/source/utilities/type/String';
 
+// Function to sort items by linked list order (using previousSiblingId/nextSiblingId)
+function sortByLinkedListOrder<
+    T extends { id: string; previousSiblingId?: string | null; nextSiblingId?: string | null },
+>(items: T[]): T[] {
+    if(items.length === 0) return [];
+
+    // Find the first item (one with no previousSiblingId)
+    const firstItem = items.find(function (item) {
+        return !item.previousSiblingId;
+    });
+
+    if(!firstItem) return items; // Fallback to original order if no head found
+
+    // Build the sorted array by following nextSiblingId
+    const sorted: T[] = [firstItem];
+    const itemMap = new Map(
+        items.map(function (item) {
+            return [item.id, item];
+        }),
+    );
+
+    let current = firstItem;
+    while(current.nextSiblingId) {
+        const next = itemMap.get(current.nextSiblingId);
+        if(!next) break;
+        sorted.push(next);
+        current = next;
+    }
+
+    return sorted;
+}
+
 // Interface for route configuration
 export interface SupportPathPageRouteConfiguration {
     topicIconMapping?: SupportPostTopicPageProperties['topicIconMapping'];
@@ -77,13 +109,27 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
     }
     // PostTopic
     else {
-        const postTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {
-            slug: postTopicSlug!,
-            type: 'SupportArticle',
-            pagination: {
-                itemsPerPage: 100,
-            },
-        });
+        // Build path for the topic query (handles duplicate slugs across different parents)
+        const topicPath =
+            parentPostTopicsSlugs.length > 0 ? parentPostTopicsSlugs.join('/') + '/' + postTopicSlug : undefined;
+
+        console.log('[SupportPathPageRoute] Fetching postTopic for slug:', postTopicSlug, 'with path:', topicPath);
+
+        let postTopicData;
+        try {
+            postTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {
+                slug: postTopicSlug!,
+                path: topicPath,
+                type: 'SupportArticle',
+                pagination: {
+                    itemsPerPage: 100,
+                },
+            });
+        }
+        catch(error) {
+            console.error('[SupportPathPageRoute] Error fetching postTopic:', JSON.stringify(error, null, 2));
+            throw error;
+        }
 
         // If the post topic is found
         if(postTopicData?.postTopic) {
@@ -101,17 +147,51 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
 
             // Check if there are sub topics
             if(postTopicData?.postTopic?.subTopics?.length) {
+                // Sort sub topics by linked list order
+                const sortedSubTopics = sortByLinkedListOrder(postTopicData.postTopic.subTopics);
+                console.log(
+                    '[SupportPathPageRoute] Sorted subTopics:',
+                    sortedSubTopics.map(function (t) {
+                        return { slug: t.slug, title: t.title };
+                    }),
+                );
+
+                // Build the path for sub-topic queries (parent path + current topic slug)
+                const parentPath =
+                    parentPostTopicsSlugs.length > 0
+                        ? parentPostTopicsSlugs.join('/') + '/' + postTopicSlug
+                        : postTopicSlug;
+
                 // If there are sub topics, get the posts for each one
                 const subPostTopics = await Promise.all(
                     // Query for each sub topic and get the posts
-                    postTopicData?.postTopic?.subTopics.map(async function (subTopic) {
-                        const postSubTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {
-                            slug: subTopic.slug,
-                            type: 'SupportArticle',
-                            pagination: {
-                                itemsPerPage: 100,
-                            },
-                        });
+                    sortedSubTopics.map(async function (subTopic) {
+                        const subTopicPath = parentPath + '/' + subTopic.slug;
+                        console.log(
+                            '[SupportPathPageRoute] Fetching subTopic:',
+                            subTopic.slug,
+                            'with path:',
+                            subTopicPath,
+                        );
+                        let postSubTopicData;
+                        try {
+                            postSubTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {
+                                slug: subTopic.slug,
+                                path: subTopicPath,
+                                type: 'SupportArticle',
+                                pagination: {
+                                    itemsPerPage: 100,
+                                },
+                            });
+                        }
+                        catch(error) {
+                            console.error(
+                                '[SupportPathPageRoute] Error fetching subTopic:',
+                                subTopic.slug,
+                                JSON.stringify(error, null, 2),
+                            );
+                            throw error;
+                        }
 
                         // If the sub topic is found
                         if(postSubTopicData) {

@@ -78,7 +78,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                 />
             )}
 
-            <div className="mb-12">
+            <div className="">
                 <NavigationTrail className="mb-6" />
 
                 <div className="max-w-2xl">
@@ -91,7 +91,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                 </div>
             </div>
 
-            <div className="flex flex-col">
+            <div className="mt-6 flex flex-col">
                 {properties.postTopicAndSubPostTopicsWithPosts.map(
                     function (postTopicAndSubPostTopicsWithPosts, postTopicAndSubPostTopicsWithPostsIndex) {
                         let postTopicHref = '/support';
@@ -112,7 +112,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                             <div key={postTopicAndSubPostTopicsWithPostsIndex}>
                                 {postTopicAndSubPostTopicsWithPosts.postTopicTitle !== 'General' && (
                                     <Link href={postTopicHref}>
-                                        <h2 className="mb-8 text-2xl font-medium">
+                                        <h2 className="mb-6 text-xl font-medium">
                                             {postTopicAndSubPostTopicsWithPosts.postTopicTitle}
                                         </h2>
                                     </Link>
@@ -138,7 +138,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                                         );
                                     })}
                                 </div>
-                                <HorizontalRule className="my-12" />
+                                <HorizontalRule className="my-6" />
                             </div>
                         );
                     },

@@ -22,6 +22,8 @@ export function usePostTopicRequest(
                     }
                     subTopics {
                         id
+                        previousSiblingId
+                        nextSiblingId
                         title
                         slug
                         description
