@@ -1,29 +1,29 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - React and Next.js
+// Dependencies - React
 import React from 'react';
+
+// Dependencies - Hooks
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
-import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
-import { NavigationTrail } from '@structure/source/components/navigation/trail/NavigationTrail';
-import { Feedback } from '@structure/source/modules/feedback/components/Feedback';
 import { Button } from '@structure/source/components/buttons/Button';
-import { Markdown } from '@structure/source/components/markdown/Markdown';
+import { Feedback } from '@structure/source/modules/feedback/components/Feedback';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
-
-// Dependencies - API
-// import { useQuery } from '@apollo/client';
+import { Markdown } from '@structure/source/components/markdown/Markdown';
+import { NavigationTrail } from '@structure/source/components/navigation/trail/NavigationTrail';
 
 // Dependencies - Assets
 import { PencilIcon } from '@phosphor-icons/react/dist/ssr';
 
 // Dependencies - Utilities
-// import { titleCase } from '@structure/source/utilities/String';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { timeFromNow } from '@structure/source/utilities/time/Time';
 
 // Component - SupportPostPage
 export interface SupportPostPageProperties {
+    className?: string;
     postTopicSlug?: string;
     parentPostTopicsSlugs?: string[];
     post: {
@@ -42,13 +42,6 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
 
     // Hooks
     const account = useAccount();
-
-    // Hooks - API
-    // const supportPostQueryState = useQuery(SupportPostDocument, {
-    //     variables: {
-    //         identifier: properties.postIdentifier,
-    //     },
-    // });
 
     // The URL pathname for the navigation trail
     let navigationTrailUrlPathname = '/support';
@@ -74,7 +67,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
 
     // Render the component
     return (
-        <div className="container pt-8 pb-32">
+        <div className={mergeClassNames('container', properties.className)}>
             {account.data?.isAdministrator() && (
                 <div className="float-end">
                     <Button
