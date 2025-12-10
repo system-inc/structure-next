@@ -13,88 +13,120 @@ import { Link } from '@structure/source/components/navigation/Link';
 import { CopyButton } from '@structure/source/components/buttons/CopyButton';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 
-// Dependencies - Styles
-// import '@project/app/_modules/chat/styles/night-owl.css';
-// import '@project/app/_modules/chat/styles/monokai.css';
-// import '@project/app/_modules/chat/styles/phi.css';
+// Dependencies - Utilities
+import { rehypeCustomFootnoteIds } from '@structure/source/components/markdown/utilities/MarkdownUtilities';
 
 // Function to get the inner text of a node
-function getInnerText(node: React.ReactNode): string {
+function getInnerText(reactNode: React.ReactNode): string {
     if(typeof window === 'undefined') return '';
 
-    const htmlString = renderToString(node);
+    const htmlString = renderToString(reactNode);
     const div = document.createElement('div');
     div.innerHTML = htmlString;
     return div.textContent || div.innerText || '';
 }
 
-interface ComponentsProperties {
-    [key: string]: (properties: React.HTMLAttributes<HTMLElement>) => React.JSX.Element;
+// Helper to strip the `node` prop that react-markdown passes (causes [object Object] in HTML)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function elementProperties<T extends Record<string, any>>(properties: T): Omit<T, 'node'> {
+    // eslint-disable-next-line
+    const { node, ...remainingProperties } = properties;
+    return remainingProperties;
 }
-const components: ComponentsProperties = {
-    h1: (properties) => (
+
+const components = {
+    h1: (properties: React.ComponentProps<'h1'>) => (
         <h1
             className="mb-6 text-3xl font-medium before:-mt-16 before:block before:h-16 first:before:hidden"
-            {...properties}
+            {...elementProperties(properties)}
         />
     ),
-    h2: (properties) => (
-        <h2 className="mt-6 mb-6 text-2xl font-medium before:-mt-16 before:block before:h-16" {...properties} />
+    h2: (properties: React.ComponentProps<'h2'>) => (
+        <h2
+            className="mt-6 mb-6 text-2xl font-medium before:-mt-16 before:block before:h-16"
+            {...elementProperties(properties)}
+        />
     ),
-    h3: (properties) => (
-        <h3 className="mt-6 mb-6 text-xl font-medium before:-mt-16 before:block before:h-16" {...properties} />
+    h3: (properties: React.ComponentProps<'h3'>) => (
+        <h3
+            className="mt-6 mb-6 text-xl font-medium before:-mt-16 before:block before:h-16"
+            {...elementProperties(properties)}
+        />
     ),
-    h4: (properties) => (
+    h4: (properties: React.ComponentProps<'h4'>) => (
         <h4
             className="mt-6 mb-6 text-[18px] leading-[26px] font-medium before:-mt-16 before:block before:h-16"
-            {...properties}
+            {...elementProperties(properties)}
         />
     ),
-    h5: (properties) => (
-        <h5 className="text-[16px] leading-[28px] font-medium before:-mt-16 before:block before:h-16" {...properties} />
+    h5: (properties: React.ComponentProps<'h5'>) => (
+        <h5
+            className="text-[16px] leading-7 font-medium before:-mt-16 before:block before:h-16"
+            {...elementProperties(properties)}
+        />
     ),
-    p: (properties) => <p className="mt-6 text-[16px] leading-[28px] first:mt-0" {...properties} />,
-    strong: (properties) => <strong className="font-medium" {...properties} />,
-    a: (properties: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-        <Link href={properties.href ?? ''} className="underline" {...properties} />
+    p: (properties: React.ComponentProps<'p'>) => (
+        <p className="mt-6 text-[16px] leading-7 first:mt-0" {...elementProperties(properties)} />
     ),
-    pre: (properties) => (
-        <pre className="relative mb-6 rounded-md border border--3 background--2 p-5 text-sm" {...properties}>
+    strong: (properties: React.ComponentProps<'strong'>) => (
+        <strong className="font-medium" {...elementProperties(properties)} />
+    ),
+    a: (properties: React.ComponentProps<'a'>) => (
+        <Link href={properties.href ?? ''} className="underline" {...elementProperties(properties)} />
+    ),
+    pre: (properties: React.ComponentProps<'pre'>) => (
+        <pre
+            className="relative mb-6 rounded-md border border--3 background--2 p-5 text-sm"
+            {...elementProperties(properties)}
+        >
             {properties.children}
             <span className="absolute top-3 right-3 font-sans">
                 <CopyButton className="" value={getInnerText(properties.children)} />
             </span>
         </pre>
     ),
-    code: (properties) => (
+    code: (properties: React.ComponentProps<'code'>) => (
         <code
             className="mb-6 rounded border border--3 background--2 px-1 py-px font-mono text-sm whitespace-pre-wrap"
-            {...properties}
+            {...elementProperties(properties)}
         />
     ),
-    ul: (properties) => <ul className="mt-6 mb-6 list-disc pl-[26px]" {...properties} />,
-    ol: (properties) => <ol className="mt-6 mb-6 list-decimal pl-[26px]" {...properties} />,
-    li: (properties) => (
-        <li className="my-2 pl-1.5 text-[16px] leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
+    ul: (properties: React.ComponentProps<'ul'>) => (
+        <ul className="mt-6 mb-6 list-disc pl-[26px]" {...elementProperties(properties)} />
     ),
-    blockquote: (properties) => <blockquote className="border-l-2 border--3 pl-4" {...properties} />,
+    ol: (properties: React.ComponentProps<'ol'>) => (
+        <ol className="mt-6 mb-6 list-decimal pl-[26px]" {...elementProperties(properties)} />
+    ),
+    li: (properties: React.ComponentProps<'li'>) => (
+        <li className="my-2 pl-1.5 text-[16px] leading-7 [&>ol]:my-0 [&>ul]:my-0" {...elementProperties(properties)} />
+    ),
+    blockquote: (properties: React.ComponentProps<'blockquote'>) => (
+        <blockquote className="border-l-2 border--3 pl-4" {...elementProperties(properties)} />
+    ),
     hr: () => <HorizontalRule className="my-10" />,
-    table: (properties) => (
-        <table className="relative mt-6 mb-6 w-full overflow-auto rounded border border--0" {...properties} />
-    ),
-    thead: (properties) => <thead className="border-b background--1" {...properties} />,
-    tbody: (properties) => <tbody className="" {...properties} />,
-    tr: (properties) => <tr className="border-b border--3 last:border-b-0" {...properties} />,
-    th: (properties) => (
-        <th
-            className="border-r border--3 px-4 py-2 text-[16px] leading-[28px] font-medium last:border-r-0"
-            {...properties}
+    table: (properties: React.ComponentProps<'table'>) => (
+        <table
+            className="relative mt-6 mb-6 w-full overflow-auto rounded border border--0"
+            {...elementProperties(properties)}
         />
     ),
-    td: (properties) => (
+    thead: (properties: React.ComponentProps<'thead'>) => (
+        <thead className="border-b background--1" {...elementProperties(properties)} />
+    ),
+    tbody: (properties: React.ComponentProps<'tbody'>) => <tbody className="" {...elementProperties(properties)} />,
+    tr: (properties: React.ComponentProps<'tr'>) => (
+        <tr className="border-b border--3 last:border-b-0" {...elementProperties(properties)} />
+    ),
+    th: (properties: React.ComponentProps<'th'>) => (
+        <th
+            className="border-r border--3 px-4 py-2 text-[16px] leading-7 font-medium last:border-r-0"
+            {...elementProperties(properties)}
+        />
+    ),
+    td: (properties: React.ComponentProps<'td'>) => (
         <td
-            className="border-r border--3 px-4 py-2 text-[16px] leading-[28px] font-light last:border-r-0"
-            {...properties}
+            className="border-r border--3 px-4 py-2 text-[16px] leading-7 font-light last:border-r-0"
+            {...elementProperties(properties)}
         />
     ),
 };
@@ -108,8 +140,12 @@ export function Markdown({ children, ...divProperties }: MarkdownProperties) {
     return (
         <div className="max-w-3xl" {...divProperties}>
             <ReactMarkdown
-                rehypePlugins={[rehypeHighlight]}
+                rehypePlugins={[rehypeHighlight, rehypeCustomFootnoteIds]}
                 remarkPlugins={[remarkCustomHeaderId, remarkGfm]}
+                remarkRehypeOptions={{
+                    clobberPrefix: 'citation-',
+                    footnoteLabel: 'Sources',
+                }}
                 components={components}
             >
                 {children}
