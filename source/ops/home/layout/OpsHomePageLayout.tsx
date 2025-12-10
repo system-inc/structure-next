@@ -41,7 +41,11 @@ export function OpsHomePageLayout(properties: OpsHomePageLayoutProperties) {
             {/* Sidebar - fixed width on right, hidden on small screens */}
             {showSidebar && (
                 <ScrollArea containerClassName="shrink-0 w-80">
-                    <EngagementActivity className="pt-6" cardClassName="max-w-80" databaseName={properties.databaseName ?? 'readonly'} />
+                    <EngagementActivity
+                        className="pt-6"
+                        cardClassName="max-w-80"
+                        databaseName={properties.databaseName ?? 'readonly'}
+                    />
                 </ScrollArea>
             )}
         </div>
