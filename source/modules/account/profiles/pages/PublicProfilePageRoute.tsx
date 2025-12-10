@@ -1,5 +1,6 @@
 // Dependencies - React and Next.js
 import { getRequestCookiesHeaderString } from '@structure/source/utilities/next/NextHeaders';
+import { notFound } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { PublicProfilePage } from '@structure/source/modules/account/profiles/pages/PublicProfilePage';
@@ -40,17 +41,24 @@ export async function generateMetadata(properties: {
     // Get the server-side properties
     const serverSideProperties = await getServerSideProperties(urlParameters.username);
 
+    // If no profile was found, return "Not Found" title
+    if(!serverSideProperties.profilePublic) {
+        return {
+            title: 'Not Found',
+        };
+    }
+
     // Build the title
     let title = '';
 
     // If there is a display name
-    if(serverSideProperties.profilePublic?.displayName) {
+    if(serverSideProperties.profilePublic.displayName) {
         title =
-            serverSideProperties.profilePublic?.displayName + ' (@' + serverSideProperties.profilePublic.username + ')';
+            serverSideProperties.profilePublic.displayName + ' (@' + serverSideProperties.profilePublic.username + ')';
     }
     // If there is no display name
     else {
-        title = '@' + serverSideProperties.profilePublic?.username;
+        title = '@' + serverSideProperties.profilePublic.username;
     }
 
     return {
@@ -70,6 +78,11 @@ export async function PublicProfilePageRoute(properties: PublicProfilePageRouteP
 
     // Get the server-side properties
     const serverSideProperties = await getServerSideProperties(urlParameters.username);
+
+    // If no profile was found, return 404
+    if(!serverSideProperties.profilePublic) {
+        notFound();
+    }
 
     // Render the component
     return <PublicProfilePage {...serverSideProperties} />;
