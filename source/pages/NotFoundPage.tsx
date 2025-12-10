@@ -7,10 +7,13 @@ import React from 'react';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 
 // Component - NotFoundPage
-export function NotFoundPage() {
+export interface NotFoundPageProperties {
+    className?: string;
+}
+export function NotFoundPage(properties: NotFoundPageProperties) {
     // Render the component
     return (
-        <div>
+        <div className={properties.className}>
             <h1>Page Not Found</h1>
 
             <HorizontalRule className="my-6" />
