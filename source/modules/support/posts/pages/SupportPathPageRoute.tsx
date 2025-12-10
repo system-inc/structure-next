@@ -89,21 +89,29 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
     const postTopicAndSubPostTopicsWithPosts: {
         postTopicTitle: string;
         postTopicSlug: string;
+        postTopicDescription?: string | null;
         posts: PostTopicQuery['postTopic']['pagedPosts']['items'];
     }[] = [];
 
     // Post
     if(postIdentifier) {
-        const postRequest = await serverSideNetworkService.graphQlRequest(PostDocument, {
-            identifier: postIdentifier,
-        });
+        try {
+            const postRequest = await serverSideNetworkService.graphQlRequest(PostDocument, {
+                identifier: postIdentifier,
+            });
 
-        // If the post is found
-        if(postRequest?.post) {
-            post = postRequest?.post;
+            // If the post is found
+            if(postRequest?.post) {
+                post = postRequest?.post;
+            }
+            // If the post is not found, return a 404
+            else {
+                return notFound();
+            }
         }
-        // If the post is not found, return a 404
-        else {
+        catch(error) {
+            // If the request fails (e.g., post not found validation error), return a 404
+            console.error('[SupportPathPageRoute] Error fetching post:', postIdentifier, error);
             return notFound();
         }
     }
@@ -156,62 +164,79 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
                     }),
                 );
 
-                // Build the path for sub-topic queries (parent path + current topic slug)
-                const parentPath =
-                    parentPostTopicsSlugs.length > 0
-                        ? parentPostTopicsSlugs.join('/') + '/' + postTopicSlug
-                        : postTopicSlug;
+                // Only fetch sub-topic posts if there are 5 or fewer sub-topics
+                // For topics with many sub-topics, we just show them as navigation links
+                const shouldFetchSubTopicPosts = sortedSubTopics.length <= 3;
 
-                // If there are sub topics, get the posts for each one
-                const subPostTopics = await Promise.all(
-                    // Query for each sub topic and get the posts
-                    sortedSubTopics.map(async function (subTopic) {
-                        const subTopicPath = parentPath + '/' + subTopic.slug;
-                        console.log(
-                            '[SupportPathPageRoute] Fetching subTopic:',
-                            subTopic.slug,
-                            'with path:',
-                            subTopicPath,
-                        );
-                        let postSubTopicData;
-                        try {
-                            postSubTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {
-                                slug: subTopic.slug,
-                                path: subTopicPath,
-                                type: 'SupportArticle',
-                                pagination: {
-                                    itemsPerPage: 100,
-                                },
+                if(shouldFetchSubTopicPosts) {
+                    // Build the path for sub-topic queries (parent path + current topic slug)
+                    const parentPath =
+                        parentPostTopicsSlugs.length > 0
+                            ? parentPostTopicsSlugs.join('/') + '/' + postTopicSlug
+                            : postTopicSlug;
+
+                    // If there are sub topics, get the posts for each one
+                    const subPostTopics = await Promise.all(
+                        // Query for each sub topic and get the posts
+                        sortedSubTopics.map(async function (subTopic) {
+                            const subTopicPath = parentPath + '/' + subTopic.slug;
+                            console.log(
+                                '[SupportPathPageRoute] Fetching subTopic:',
+                                subTopic.slug,
+                                'with path:',
+                                subTopicPath,
+                            );
+                            let postSubTopicData;
+                            try {
+                                postSubTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {
+                                    slug: subTopic.slug,
+                                    path: subTopicPath,
+                                    type: 'SupportArticle',
+                                    pagination: {
+                                        itemsPerPage: 100,
+                                    },
+                                });
+                            }
+                            catch(error) {
+                                console.error(
+                                    '[SupportPathPageRoute] Error fetching subTopic:',
+                                    subTopic.slug,
+                                    JSON.stringify(error, null, 2),
+                                );
+                                throw error;
+                            }
+
+                            // If the sub topic is found
+                            if(postSubTopicData) {
+                                return postSubTopicData.postTopic;
+                            }
+                        }),
+                    );
+
+                    // Add the sub topics and their posts
+                    subPostTopics.forEach(function (subPostTopic) {
+                        if(subPostTopic) {
+                            postTopicAndSubPostTopicsWithPosts.push({
+                                postTopicTitle: subPostTopic.topic.title,
+                                postTopicSlug: subPostTopic.topic.slug,
+                                posts: subPostTopic.pagedPosts.items.slice().sort(function (a, b) {
+                                    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+                                }),
                             });
                         }
-                        catch(error) {
-                            console.error(
-                                '[SupportPathPageRoute] Error fetching subTopic:',
-                                subTopic.slug,
-                                JSON.stringify(error, null, 2),
-                            );
-                            throw error;
-                        }
-
-                        // If the sub topic is found
-                        if(postSubTopicData) {
-                            return postSubTopicData.postTopic;
-                        }
-                    }),
-                );
-
-                // Add the sub topics and their posts
-                subPostTopics.forEach(function (subPostTopic) {
-                    if(subPostTopic) {
+                    });
+                }
+                else {
+                    // For many sub-topics, just add them without fetching posts
+                    sortedSubTopics.forEach(function (subTopic) {
                         postTopicAndSubPostTopicsWithPosts.push({
-                            postTopicTitle: subPostTopic.topic.title,
-                            postTopicSlug: subPostTopic.topic.slug,
-                            posts: subPostTopic.pagedPosts.items.slice().sort(function (a, b) {
-                                return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-                            }),
+                            postTopicTitle: subTopic.title,
+                            postTopicSlug: subTopic.slug,
+                            postTopicDescription: subTopic.description,
+                            posts: [], // Empty posts - will render as tile navigation only
                         });
-                    }
-                });
+                    });
+                }
             }
         }
         // If the post topic is not found, return a 404
