@@ -52,7 +52,10 @@ export interface InputTimeRangeProperties extends Omit<InputProperties, 'default
     onBlur?: (value: TimeRangeType | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
     // Calendar configuration
-    calendarProperties?: Omit<React.ComponentPropsWithoutRef<typeof Calendar>, 'mode' | 'selected' | 'onSelect'>;
+    calendarProperties?: Omit<
+        React.ComponentPropsWithoutRef<typeof Calendar>,
+        'variant' | 'mode' | 'selected' | 'onSelect'
+    >;
 
     // Accessibility (for ResponsivePopoverDrawer)
     accessibilityTitle?: string; // Default: 'Select Date Range'
@@ -358,6 +361,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                         )}
                     >
                         <Calendar
+                            variant="A"
                             mode="range"
                             showOutsideDays={true}
                             numberOfMonths={isMobile ? 1 : 2}

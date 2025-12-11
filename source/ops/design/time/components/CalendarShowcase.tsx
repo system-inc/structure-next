@@ -26,6 +26,7 @@ export function CalendarShowcase() {
                     <p className="mt-1 text-sm content--3">Select a single date from the calendar.</p>
                 </div>
                 <Calendar
+                    variant="A"
                     mode="single"
                     selected={singleDate}
                     onSelect={setSingleDate}
@@ -42,6 +43,7 @@ export function CalendarShowcase() {
                     <p className="mt-1 text-sm content--3">Select a range of dates.</p>
                 </div>
                 <Calendar
+                    variant="A"
                     mode="range"
                     selected={dateRange}
                     onSelect={function (range) {

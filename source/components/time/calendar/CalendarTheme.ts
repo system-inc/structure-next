@@ -43,6 +43,80 @@ export interface CalendarSizes {
 // Automatically includes both structure sizes and any project-added sizes
 export type CalendarSize = keyof CalendarSizes;
 
+// Common Class Names - Structural/layout only, no sizing or colors
+// Layout
+export const calendarCommonRootClassName = '';
+export const calendarCommonMonthsClassName = 'flex flex-col sm:flex-row';
+export const calendarCommonMonthClassName = '';
+
+// Navigation/Caption
+export const calendarCommonCaptionClassName = 'relative flex items-center justify-center';
+export const calendarCommonCaptionLabelClassName = 'font-medium';
+export const calendarCommonNavigationButtonClassName = 'absolute';
+export const calendarCommonNavigationButtonPreviousClassName = '';
+export const calendarCommonNavigationButtonNextClassName = '';
+
+// Grid
+export const calendarCommonMonthGridClassName = 'w-full border-collapse';
+export const calendarCommonWeekdaysClassName = 'flex';
+export const calendarCommonWeekdayClassName = 'font-normal';
+export const calendarCommonWeekClassName = 'flex w-full';
+
+// Day cells
+export const calendarCommonCellClassName = 'relative text-center focus-within:relative focus-within:z-20';
+export const calendarCommonDayClassName = 'h-full w-full cursor-pointer';
+export const calendarCommonDayButtonClassName = 'cursor-pointer';
+
+// Selection states (structural only)
+export const calendarCommonRangeStartClassName = '';
+export const calendarCommonRangeEndClassName = '';
+export const calendarCommonRangeMiddleClassName = '';
+export const calendarCommonSelectedClassName = '';
+
+// Other states
+export const calendarCommonTodayClassName = '';
+export const calendarCommonOutsideClassName = 'content--6';
+export const calendarCommonDisabledClassName = '';
+export const calendarCommonHiddenClassName = '';
+
+// Type - Calendar Size Configuration (per-part sizing classes)
+export interface CalendarSizeConfiguration {
+    // Layout
+    root: string;
+    months: string;
+    month: string;
+
+    // Navigation/Caption
+    caption: string;
+    captionLabel: string;
+    navigationButton: string;
+    navigationButtonPrevious: string;
+    navigationButtonNext: string;
+
+    // Grid
+    monthGrid: string;
+    weekdays: string;
+    weekday: string;
+    week: string;
+
+    // Day cells
+    cell: string;
+    day: string;
+    dayButton: string;
+
+    // Selection states
+    rangeStart: string;
+    rangeEnd: string;
+    rangeMiddle: string;
+    selected: string;
+
+    // Other states
+    today: string;
+    outside: string;
+    disabled: string;
+    hidden: string;
+}
+
 // Type - Calendar Theme Configuration
 // Structure must define all variants/sizes it declares in the interfaces above
 // Project extensions are optional (Partial)
@@ -50,46 +124,8 @@ export interface CalendarThemeConfiguration {
     // Container-level variant classes
     variants: Partial<Record<CalendarVariant, string>>;
 
-    // Sizes control dimensions
-    sizes: Partial<Record<CalendarSize, string>>;
-
-    // Base class names for calendar parts (structural/layout only - no colors)
-    classNames: {
-        // Layout
-        root: string;
-        months: string;
-        month: string;
-
-        // Navigation/Caption
-        caption: string;
-        captionLabel: string;
-        navigationButton: string;
-        navigationButtonPrevious: string;
-        navigationButtonNext: string;
-
-        // Grid structure
-        monthGrid: string;
-        weekdays: string;
-        weekday: string;
-        week: string;
-
-        // Day cells
-        cell: string;
-        day: string;
-        dayButton: string;
-
-        // Selection states
-        rangeStart: string;
-        rangeEnd: string;
-        rangeMiddle: string;
-        selected: string;
-
-        // Other states
-        today: string;
-        outside: string;
-        disabled: string;
-        hidden: string;
-    };
+    // Sizes control dimensions for each calendar part
+    sizes: Partial<Record<CalendarSize, CalendarSizeConfiguration>>;
 
     // Per-part variant classes (colors and visual styling)
     variantClassNames: Partial<
@@ -117,44 +153,6 @@ export interface CalendarThemeConfiguration {
 
 // Calendar Theme - Structure Default
 export const calendarTheme: CalendarThemeConfiguration = {
-    // Base class names for all calendar parts (structural/layout only - no colors or rounding)
-    classNames: {
-        // Layout
-        root: mergeClassNames(''),
-        months: mergeClassNames('flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4'),
-        month: mergeClassNames('space-y-4'),
-
-        // Navigation/Caption
-        caption: mergeClassNames('relative flex items-center justify-center pt-1'),
-        captionLabel: mergeClassNames('text-sm font-medium'),
-        navigationButton: mergeClassNames('absolute h-7 w-7 p-0'),
-        navigationButtonPrevious: mergeClassNames('left-1'),
-        navigationButtonNext: mergeClassNames('right-1'),
-
-        // Grid
-        monthGrid: mergeClassNames('w-full border-collapse space-y-1'),
-        weekdays: mergeClassNames('flex'),
-        weekday: mergeClassNames('w-8 text-xs font-normal'),
-        week: mergeClassNames('mt-2 flex w-full'),
-
-        // Day cells
-        cell: mergeClassNames('relative h-8 w-8 p-0 text-center text-sm focus-within:relative focus-within:z-20'),
-        day: mergeClassNames('h-full w-full cursor-pointer p-0'),
-        dayButton: mergeClassNames('h-8 w-8 cursor-pointer'),
-
-        // Selection states (structural only)
-        rangeStart: mergeClassNames(''),
-        rangeEnd: mergeClassNames(''),
-        rangeMiddle: mergeClassNames(''),
-        selected: mergeClassNames(''),
-
-        // Other states
-        today: mergeClassNames(''),
-        outside: mergeClassNames('invisible'),
-        disabled: mergeClassNames(''),
-        hidden: mergeClassNames(''),
-    },
-
     // Container-level variant classes
     variants: {
         A: mergeClassNames(''),
@@ -200,15 +198,49 @@ export const calendarTheme: CalendarThemeConfiguration = {
         },
     },
 
-    // Sizes control dimensions
+    // Sizes control dimensions for each calendar part
     sizes: {
-        Base: mergeClassNames(''),
+        Base: {
+            // Layout
+            root: mergeClassNames(calendarCommonRootClassName),
+            months: mergeClassNames(calendarCommonMonthsClassName, 'space-y-4 sm:space-y-0 sm:space-x-4'),
+            month: mergeClassNames(calendarCommonMonthClassName, 'space-y-4'),
+
+            // Navigation/Caption
+            caption: mergeClassNames(calendarCommonCaptionClassName, 'pt-1'),
+            captionLabel: mergeClassNames(calendarCommonCaptionLabelClassName, 'text-sm'),
+            navigationButton: mergeClassNames(calendarCommonNavigationButtonClassName, 'h-7 w-7 p-0'),
+            navigationButtonPrevious: mergeClassNames(calendarCommonNavigationButtonPreviousClassName, 'left-1'),
+            navigationButtonNext: mergeClassNames(calendarCommonNavigationButtonNextClassName, 'right-1'),
+
+            // Grid
+            monthGrid: mergeClassNames(calendarCommonMonthGridClassName, 'space-y-1'),
+            weekdays: mergeClassNames(calendarCommonWeekdaysClassName),
+            weekday: mergeClassNames(calendarCommonWeekdayClassName, 'w-8 text-xs'),
+            week: mergeClassNames(calendarCommonWeekClassName, 'mt-2'),
+
+            // Day cells
+            cell: mergeClassNames(calendarCommonCellClassName, 'h-8 w-8 p-0 text-sm'),
+            day: mergeClassNames(calendarCommonDayClassName, 'p-0'),
+            dayButton: mergeClassNames(calendarCommonDayButtonClassName, 'h-8 w-8'),
+
+            // Selection states
+            rangeStart: mergeClassNames(calendarCommonRangeStartClassName),
+            rangeEnd: mergeClassNames(calendarCommonRangeEndClassName),
+            rangeMiddle: mergeClassNames(calendarCommonRangeMiddleClassName),
+            selected: mergeClassNames(calendarCommonSelectedClassName),
+
+            // Other states
+            today: mergeClassNames(calendarCommonTodayClassName),
+            outside: mergeClassNames(calendarCommonOutsideClassName),
+            disabled: mergeClassNames(calendarCommonDisabledClassName),
+            hidden: mergeClassNames(calendarCommonHiddenClassName),
+        },
     },
 
     // Configuration
     configuration: {
         defaultVariant: {
-            variant: 'A',
             size: 'Base',
         },
     },

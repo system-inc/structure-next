@@ -12,18 +12,20 @@ import {
 } from '@structure/source/components/time/calendar/CalendarContext';
 
 // Dependencies - Theme
-import { calendarTheme } from '@structure/source/components/time/calendar/CalendarTheme';
+import { calendarTheme, CalendarVariant, CalendarSize } from '@structure/source/components/time/calendar/CalendarTheme';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - Calendar
 export type CalendarProperties = React.ComponentProps<typeof ReactDayPicker> & {
+    variant: CalendarVariant;
+    size?: CalendarSize;
     navigationConfiguration?: CalendarNavigationConfiguration;
 };
 export function Calendar(properties: CalendarProperties) {
     // Extract our custom props from react-day-picker props
-    const { navigationConfiguration, ...dayPickerProperties } = properties;
+    const { variant, size, navigationConfiguration, ...dayPickerProperties } = properties;
 
     const showOutsideDays =
         dayPickerProperties.showOutsideDays !== undefined ? dayPickerProperties.showOutsideDays : true;
@@ -31,79 +33,71 @@ export function Calendar(properties: CalendarProperties) {
     // Get default class names from react-day-picker (for global.css single-day detection)
     const defaultClassNames = getDefaultClassNames();
 
-    // Get variant classes (default to A)
-    const variantClasses = calendarTheme.variantClassNames.A;
+    // Get size classes
+    const resolvedSize = size ?? calendarTheme.configuration.defaultVariant?.size ?? 'Base';
+    const sizeClasses = calendarTheme.sizes[resolvedSize]!;
+
+    // Get variant classes
+    const variantClasses = calendarTheme.variantClassNames[variant];
 
     // Render the component
     return (
-        <CalendarProvider navigationConfiguration={navigationConfiguration}>
+        <CalendarProvider navigationConfiguration={navigationConfiguration} size={resolvedSize}>
             <ReactDayPicker
                 showOutsideDays={showOutsideDays}
                 fixedWeeks={true} // Ensures consistent height by always showing 6 weeks
                 hideNavigation={true} // Use our custom navigation caption
                 captionLayout="label"
-                className={mergeClassNames(calendarTheme.classNames.root, dayPickerProperties.className)}
+                className={mergeClassNames(sizeClasses.root, dayPickerProperties.className)}
                 classNames={{
-                    months: mergeClassNames(calendarTheme.classNames.months, dayPickerProperties.classNames?.months),
-                    month: mergeClassNames(calendarTheme.classNames.month, dayPickerProperties.classNames?.month),
-                    month_grid: mergeClassNames(
-                        calendarTheme.classNames.monthGrid,
-                        dayPickerProperties.classNames?.month_grid,
-                    ),
-                    weekdays: mergeClassNames(
-                        calendarTheme.classNames.weekdays,
-                        dayPickerProperties.classNames?.weekdays,
-                    ),
+                    months: mergeClassNames(sizeClasses.months, dayPickerProperties.classNames?.months),
+                    month: mergeClassNames(sizeClasses.month, dayPickerProperties.classNames?.month),
+                    month_grid: mergeClassNames(sizeClasses.monthGrid, dayPickerProperties.classNames?.month_grid),
+                    weekdays: mergeClassNames(sizeClasses.weekdays, dayPickerProperties.classNames?.weekdays),
                     weekday: mergeClassNames(
-                        calendarTheme.classNames.weekday,
+                        sizeClasses.weekday,
                         variantClasses?.weekday,
                         dayPickerProperties.classNames?.weekday,
                     ),
-                    week: mergeClassNames(calendarTheme.classNames.week, dayPickerProperties.classNames?.week),
-                    cell: mergeClassNames(calendarTheme.classNames.cell, dayPickerProperties.classNames?.cell),
-                    day: mergeClassNames(calendarTheme.classNames.day, dayPickerProperties.classNames?.day),
+                    week: mergeClassNames(sizeClasses.week, dayPickerProperties.classNames?.week),
+                    cell: mergeClassNames(sizeClasses.cell, dayPickerProperties.classNames?.cell),
+                    day: mergeClassNames(sizeClasses.day, dayPickerProperties.classNames?.day),
                     day_button: mergeClassNames(
-                        calendarTheme.classNames.dayButton,
+                        sizeClasses.dayButton,
                         variantClasses?.dayButton,
                         dayPickerProperties.classNames?.day_button,
                     ),
                     range_start: mergeClassNames(
                         defaultClassNames.range_start, // Keep default class for global.css single-day detection
-                        calendarTheme.classNames.rangeStart,
+                        sizeClasses.rangeStart,
                         variantClasses?.rangeStart,
                         dayPickerProperties.classNames?.range_start,
                     ),
                     range_end: mergeClassNames(
                         defaultClassNames.range_end, // Keep default class for global.css single-day detection
-                        calendarTheme.classNames.rangeEnd,
+                        sizeClasses.rangeEnd,
                         variantClasses?.rangeEnd,
                         dayPickerProperties.classNames?.range_end,
                     ),
                     range_middle: mergeClassNames(
-                        calendarTheme.classNames.rangeMiddle,
+                        sizeClasses.rangeMiddle,
                         variantClasses?.rangeMiddle,
                         dayPickerProperties.classNames?.range_middle,
                     ),
                     selected: mergeClassNames(
-                        calendarTheme.classNames.selected,
+                        sizeClasses.selected,
                         variantClasses?.selected,
                         dayPickerProperties.classNames?.selected,
                     ),
                     today: mergeClassNames(
-                        calendarTheme.classNames.today,
+                        sizeClasses.today,
                         variantClasses?.today,
                         dayPickerProperties.classNames?.today,
                     ),
-                    outside: mergeClassNames(calendarTheme.classNames.outside, dayPickerProperties.classNames?.outside),
-                    disabled: mergeClassNames(
-                        calendarTheme.classNames.disabled,
-                        dayPickerProperties.classNames?.disabled,
-                    ),
-                    hidden: mergeClassNames(calendarTheme.classNames.hidden, dayPickerProperties.classNames?.hidden),
-                    day_hidden: mergeClassNames(
-                        calendarTheme.classNames.hidden,
-                        dayPickerProperties.classNames?.day_hidden,
-                    ),
+                    outside: mergeClassNames(sizeClasses.outside, dayPickerProperties.classNames?.outside),
+                    disabled: mergeClassNames(sizeClasses.disabled, dayPickerProperties.classNames?.disabled),
+                    hidden: mergeClassNames(sizeClasses.hidden, dayPickerProperties.classNames?.hidden),
+                    day_hidden: mergeClassNames(sizeClasses.hidden, dayPickerProperties.classNames?.day_hidden),
                     ...dayPickerProperties.classNames,
                 }}
                 components={{

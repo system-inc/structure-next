@@ -11,9 +11,6 @@ import {
     InputSelectItemProperties,
 } from '@structure/source/components/forms-new/fields/select/InputSelect';
 
-// Dependencies - Theme
-import { calendarTheme } from '@structure/source/components/time/calendar/CalendarTheme';
-
 // Dependencies - Context
 import { useCalendarContext } from '@structure/source/components/time/calendar/CalendarContext';
 
@@ -33,6 +30,9 @@ export function CalendarMonthCaption(properties: MonthCaptionProperties) {
     // Hooks
     const dayPicker = useDayPicker();
     const calendarContext = useCalendarContext();
+
+    // Get size classes from context
+    const sizeClasses = calendarContext.sizeClasses;
 
     // Determine if the current month is the first or last in the displayed range
     const isFirst = displayIndex === 0;
@@ -82,15 +82,12 @@ export function CalendarMonthCaption(properties: MonthCaptionProperties) {
 
     // Render the component
     return (
-        <div {...divProperties} className={mergeClassNames(calendarTheme.classNames.caption, properties.className)}>
+        <div {...divProperties} className={mergeClassNames(sizeClasses.caption, properties.className)}>
             {/* Left chevron only on the first month */}
             {isFirst && dayPicker.previousMonth && (
                 <Button
                     variant="Outline"
-                    className={mergeClassNames(
-                        calendarTheme.classNames.navigationButton,
-                        calendarTheme.classNames.navigationButtonPrevious,
-                    )}
+                    className={mergeClassNames(sizeClasses.navigationButton, sizeClasses.navigationButtonPrevious)}
                     icon={ChevronLeftIcon}
                     aria-label={dayPicker.labels?.labelPrevious?.(dayPicker.previousMonth)}
                     onClick={function () {
@@ -102,7 +99,7 @@ export function CalendarMonthCaption(properties: MonthCaptionProperties) {
             )}
 
             {/* Caption label with optional dropdowns */}
-            <span className={mergeClassNames(calendarTheme.classNames.captionLabel, 'flex items-center')}>
+            <span className={mergeClassNames(sizeClasses.captionLabel, 'flex items-center')}>
                 {/* Month - either dropdown or plain text */}
                 {calendarContext.showMonthDropdown ? (
                     <InputSelect
@@ -136,10 +133,7 @@ export function CalendarMonthCaption(properties: MonthCaptionProperties) {
             {isLast && dayPicker.nextMonth && (
                 <Button
                     variant="Outline"
-                    className={mergeClassNames(
-                        calendarTheme.classNames.navigationButton,
-                        calendarTheme.classNames.navigationButtonNext,
-                    )}
+                    className={mergeClassNames(sizeClasses.navigationButton, sizeClasses.navigationButtonNext)}
                     icon={ChevronRightIcon}
                     aria-label={dayPicker.labels?.labelNext?.(dayPicker.nextMonth)}
                     onClick={function () {

@@ -46,7 +46,10 @@ export interface InputDateProperties extends Omit<InputProperties, 'defaultValue
     onBlur?: (value: Date | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
     // Calendar configuration
-    calendarProperties?: Omit<React.ComponentPropsWithoutRef<typeof Calendar>, 'mode' | 'selected' | 'onSelect'>;
+    calendarProperties?: Omit<
+        React.ComponentPropsWithoutRef<typeof Calendar>,
+        'variant' | 'mode' | 'selected' | 'onSelect'
+    >;
 
     // Accessibility (for ResponsivePopoverDrawer)
     accessibilityTitle?: string; // Default: 'Select Date'
@@ -176,8 +179,9 @@ export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDate
                 content={
                     <div className="flex w-auto justify-center p-3">
                         <Calendar
+                            variant="A"
                             mode="single"
-                            showOutsideDays={false}
+                            showOutsideDays={true}
                             numberOfMonths={1}
                             month={calendarMonth}
                             onMonthChange={setCalendarMonth}
