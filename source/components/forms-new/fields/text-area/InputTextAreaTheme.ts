@@ -4,7 +4,7 @@ import { mergeClassNames } from '../../../../utilities/style/ClassName';
 
 // Theme - InputTextAreaTheme
 // Common input styles
-export const commonInputTextAreaClassNames = mergeClassNames(
+export const inputTextAreaCommonClassNames = mergeClassNames(
     // Content
     'content--0',
     // Placeholder
@@ -17,16 +17,16 @@ export const commonInputTextAreaClassNames = mergeClassNames(
 
 // Background styles (matching InputText)
 // Background - keep the background a bit lighter in light mode and bit darker in dark mode
-export const backgroundInputTextAreaClassNames = 'background--2 inset-shadow-xs dark:background--3';
+export const inputTextAreaCommonBackgroundClassNames = 'background--2 inset-shadow-xs dark:background--3';
 
 // Border styles (matching InputText - using rounded-lg instead of rounded-sm)
-export const borderInputTextAreaStyleClassNames = 'rounded-lg border border--1';
+export const inputTextAreaCommonBorderClassNames = 'rounded-lg border border--1';
 
 // Focus styles: border color changes on focus, disable outline to prevent double border
-export const focusInputTextAreaStyleClassNames = 'focus:border--focus focus-visible:outline-none';
+export const inputTextAreaCommonFocusClassNames = 'focus:border--focus focus-visible:outline-none';
 
 // Autofill styles (matching InputText)
-export const autofillInputTextAreaStyleClassNames = 'autofill:bg-transparent dark:autofill:bg-transparent';
+export const inputTextAreaCommonAutofillClassNames = 'autofill:bg-transparent dark:autofill:bg-transparent';
 
 // InputTextArea Variants Interface - Source of truth for all textarea variants
 // Structure defines its base variants here, and projects can augment to add custom variants
@@ -99,29 +99,29 @@ export const inputTextAreaTheme: InputTextAreaThemeConfiguration = {
         // Variant A - Primary textarea (matches existing InputTextArea default variant)
         // Use for: Standard form textareas
         A: mergeClassNames(
-            commonInputTextAreaClassNames,
-            backgroundInputTextAreaClassNames,
-            borderInputTextAreaStyleClassNames,
-            focusInputTextAreaStyleClassNames,
-            autofillInputTextAreaStyleClassNames,
+            inputTextAreaCommonClassNames,
+            inputTextAreaCommonBackgroundClassNames,
+            inputTextAreaCommonBorderClassNames,
+            inputTextAreaCommonFocusClassNames,
+            inputTextAreaCommonAutofillClassNames,
         ),
 
         // Variant Outline - Transparent background with border only
         // Use for: Lighter, more subtle textareas, inline editing, or when background should show through
         Outline: mergeClassNames(
-            commonInputTextAreaClassNames,
-            autofillInputTextAreaStyleClassNames,
+            inputTextAreaCommonClassNames,
+            inputTextAreaCommonAutofillClassNames,
             // Border styling
-            borderInputTextAreaStyleClassNames,
-            focusInputTextAreaStyleClassNames,
+            inputTextAreaCommonBorderClassNames,
+            inputTextAreaCommonFocusClassNames,
         ),
 
         // Variant Error - Textarea with error state
         // Use for: Textareas with validation errors
         Error: mergeClassNames(
-            commonInputTextAreaClassNames,
-            backgroundInputTextAreaClassNames,
-            autofillInputTextAreaStyleClassNames,
+            inputTextAreaCommonClassNames,
+            inputTextAreaCommonBackgroundClassNames,
+            inputTextAreaCommonAutofillClassNames,
             // Border with error color
             'rounded-sm border border--negative',
             // Focus override to maintain error color
@@ -148,15 +148,15 @@ export const inputTextAreaTheme: InputTextAreaThemeConfiguration = {
     configuration: {
         // Base classes
         baseClassNames: mergeClassNames(
-            commonInputTextAreaClassNames,
-            backgroundInputTextAreaClassNames,
-            borderInputTextAreaStyleClassNames,
-            focusInputTextAreaStyleClassNames,
-            autofillInputTextAreaStyleClassNames,
+            inputTextAreaCommonClassNames,
+            inputTextAreaCommonBackgroundClassNames,
+            inputTextAreaCommonBorderClassNames,
+            inputTextAreaCommonFocusClassNames,
+            inputTextAreaCommonAutofillClassNames,
         ),
 
         // Focus classes
-        focusClasses: focusInputTextAreaStyleClassNames,
+        focusClasses: inputTextAreaCommonFocusClassNames,
 
         // Default properties when not specified
         defaultVariant: {

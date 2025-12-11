@@ -45,39 +45,39 @@ export type CalendarSize = keyof CalendarSizes;
 
 // Common Class Names - Structural/layout only, no sizing or colors
 // Layout
-export const calendarCommonRootClassName = '';
-export const calendarCommonMonthsClassName = 'flex flex-col sm:flex-row';
-export const calendarCommonMonthClassName = '';
+export const calendarCommonRootClassNames = '';
+export const calendarCommonMonthsClassNames = 'flex flex-col sm:flex-row';
+export const calendarCommonMonthClassNames = '';
 
 // Navigation/Caption
 export const calendarCommonCaptionClassName = 'relative flex items-center justify-center';
 export const calendarCommonCaptionLabelClassName = 'font-medium';
-export const calendarCommonNavigationButtonClassName = 'absolute';
-export const calendarCommonNavigationButtonPreviousClassName = '';
-export const calendarCommonNavigationButtonNextClassName = '';
+export const calendarCommonNavigationButtonClassNames = 'absolute';
+export const calendarCommonNavigationButtonPreviousClassNames = '';
+export const calendarCommonNavigationButtonNextClassNames = '';
 
 // Grid
-export const calendarCommonMonthGridClassName = 'w-full border-collapse';
-export const calendarCommonWeekdaysClassName = 'flex';
-export const calendarCommonWeekdayClassName = 'font-normal';
-export const calendarCommonWeekClassName = 'flex w-full';
+export const calendarCommonMonthGridClassNames = 'w-full border-collapse';
+export const calendarCommonWeekdaysClassNames = 'flex';
+export const calendarCommonWeekdayClassNames = 'font-normal';
+export const calendarCommonWeekClassNames = 'flex w-full';
 
 // Day cells
-export const calendarCommonCellClassName = 'relative text-center focus-within:relative focus-within:z-20';
-export const calendarCommonDayClassName = 'h-full w-full cursor-pointer';
-export const calendarCommonDayButtonClassName = 'cursor-pointer';
+export const calendarCommonCellClassNames = 'relative text-center focus-within:relative focus-within:z-20';
+export const calendarCommonDayClassNames = 'h-full w-full cursor-pointer';
+export const calendarCommonDayButtonClassNames = 'cursor-pointer';
 
 // Selection states (structural only)
-export const calendarCommonRangeStartClassName = '';
-export const calendarCommonRangeEndClassName = '';
-export const calendarCommonRangeMiddleClassName = '';
-export const calendarCommonSelectedClassName = '';
+export const calendarCommonRangeStartClassNames = '';
+export const calendarCommonRangeEndClassNames = '';
+export const calendarCommonRangeMiddleClassNames = '';
+export const calendarCommonSelectedClassNames = '';
 
 // Other states
-export const calendarCommonTodayClassName = '';
-export const calendarCommonOutsideClassName = 'content--6';
-export const calendarCommonDisabledClassName = '';
-export const calendarCommonHiddenClassName = '';
+export const calendarCommonTodayClassNames = '';
+export const calendarCommonOutsideClassNames = 'content--6';
+export const calendarCommonDisabledClassNames = '';
+export const calendarCommonHiddenClassNames = '';
 
 // Type - Calendar Size Configuration (per-part sizing classes)
 export interface CalendarSizeConfiguration {
@@ -202,39 +202,39 @@ export const calendarTheme: CalendarThemeConfiguration = {
     sizes: {
         Base: {
             // Layout
-            root: mergeClassNames(calendarCommonRootClassName),
-            months: mergeClassNames(calendarCommonMonthsClassName, 'space-y-4 sm:space-y-0 sm:space-x-4'),
-            month: mergeClassNames(calendarCommonMonthClassName, 'space-y-4'),
+            root: mergeClassNames(calendarCommonRootClassNames),
+            months: mergeClassNames(calendarCommonMonthsClassNames, 'space-y-4 sm:space-y-0 sm:space-x-4'),
+            month: mergeClassNames(calendarCommonMonthClassNames, 'space-y-4'),
 
             // Navigation/Caption
             caption: mergeClassNames(calendarCommonCaptionClassName, 'pt-1'),
             captionLabel: mergeClassNames(calendarCommonCaptionLabelClassName, 'text-sm'),
-            navigationButton: mergeClassNames(calendarCommonNavigationButtonClassName, 'h-7 w-7 p-0'),
-            navigationButtonPrevious: mergeClassNames(calendarCommonNavigationButtonPreviousClassName, 'left-1'),
-            navigationButtonNext: mergeClassNames(calendarCommonNavigationButtonNextClassName, 'right-1'),
+            navigationButton: mergeClassNames(calendarCommonNavigationButtonClassNames, 'h-7 w-7 p-0'),
+            navigationButtonPrevious: mergeClassNames(calendarCommonNavigationButtonPreviousClassNames, 'left-1'),
+            navigationButtonNext: mergeClassNames(calendarCommonNavigationButtonNextClassNames, 'right-1'),
 
             // Grid
-            monthGrid: mergeClassNames(calendarCommonMonthGridClassName, 'space-y-1'),
-            weekdays: mergeClassNames(calendarCommonWeekdaysClassName),
-            weekday: mergeClassNames(calendarCommonWeekdayClassName, 'w-8 text-xs'),
-            week: mergeClassNames(calendarCommonWeekClassName, 'mt-2'),
+            monthGrid: mergeClassNames(calendarCommonMonthGridClassNames, 'space-y-1'),
+            weekdays: mergeClassNames(calendarCommonWeekdaysClassNames),
+            weekday: mergeClassNames(calendarCommonWeekdayClassNames, 'w-8 text-xs'),
+            week: mergeClassNames(calendarCommonWeekClassNames, 'mt-2'),
 
             // Day cells
-            cell: mergeClassNames(calendarCommonCellClassName, 'h-8 w-8 p-0 text-sm'),
-            day: mergeClassNames(calendarCommonDayClassName, 'p-0'),
-            dayButton: mergeClassNames(calendarCommonDayButtonClassName, 'h-8 w-8'),
+            cell: mergeClassNames(calendarCommonCellClassNames, 'h-8 w-8 p-0 text-sm'),
+            day: mergeClassNames(calendarCommonDayClassNames, 'p-0'),
+            dayButton: mergeClassNames(calendarCommonDayButtonClassNames, 'h-8 w-8'),
 
             // Selection states
-            rangeStart: mergeClassNames(calendarCommonRangeStartClassName),
-            rangeEnd: mergeClassNames(calendarCommonRangeEndClassName),
-            rangeMiddle: mergeClassNames(calendarCommonRangeMiddleClassName),
-            selected: mergeClassNames(calendarCommonSelectedClassName),
+            rangeStart: mergeClassNames(calendarCommonRangeStartClassNames),
+            rangeEnd: mergeClassNames(calendarCommonRangeEndClassNames),
+            rangeMiddle: mergeClassNames(calendarCommonRangeMiddleClassNames),
+            selected: mergeClassNames(calendarCommonSelectedClassNames),
 
             // Other states
-            today: mergeClassNames(calendarCommonTodayClassName),
-            outside: mergeClassNames(calendarCommonOutsideClassName),
-            disabled: mergeClassNames(calendarCommonDisabledClassName),
-            hidden: mergeClassNames(calendarCommonHiddenClassName),
+            today: mergeClassNames(calendarCommonTodayClassNames),
+            outside: mergeClassNames(calendarCommonOutsideClassNames),
+            disabled: mergeClassNames(calendarCommonDisabledClassNames),
+            hidden: mergeClassNames(calendarCommonHiddenClassNames),
         },
     },
 

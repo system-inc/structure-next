@@ -50,7 +50,7 @@ export interface DrawerSides {
 export type DrawerSide = keyof DrawerSides;
 
 // Base styles for drawer close button
-export const baseDrawerCloseClassNames = mergeClassNames(
+export const drawerCommonCloseClassNames = mergeClassNames(
     // Position
     'absolute top-4 right-4',
     // Z-index to ensure it's above content
@@ -58,7 +58,7 @@ export const baseDrawerCloseClassNames = mergeClassNames(
 );
 
 // Base styles for drawer header (layout only, no padding - padding comes from variant)
-export const baseDrawerHeaderClassNames = mergeClassNames(
+export const drawerCommonHeaderClassNames = mergeClassNames(
     // Flex layout with vertical spacing
     'flex flex-col space-y-1.5',
     // Text alignment
@@ -66,10 +66,10 @@ export const baseDrawerHeaderClassNames = mergeClassNames(
 );
 
 // Base styles for drawer body (structural only, no padding - padding comes from variant)
-export const baseDrawerBodyClassNames = 'grow overflow-y-auto';
+export const drawerCommonBodyClassNames = 'grow overflow-y-auto';
 
 // Base styles for drawer footer (layout only, no padding - padding comes from variant)
-export const baseDrawerFooterClassNames = mergeClassNames(
+export const drawerCommonFooterClassNames = mergeClassNames(
     // Flex layout with spacing
     'flex flex-row justify-end space-x-2',
 );
@@ -180,16 +180,16 @@ export const drawerTheme: DrawerThemeConfiguration = {
         overlayClasses: mergeClassNames('fixed inset-0 z-40 bg-dark-500'),
 
         // Close button classes
-        closeClasses: baseDrawerCloseClassNames,
+        closeClasses: drawerCommonCloseClassNames,
 
         // Header base classes (layout only, no padding)
-        headerBaseClasses: baseDrawerHeaderClassNames,
+        headerBaseClasses: drawerCommonHeaderClassNames,
 
         // Body base classes (structural only, no padding)
-        bodyBaseClasses: baseDrawerBodyClassNames,
+        bodyBaseClasses: drawerCommonBodyClassNames,
 
         // Footer base classes (layout only, no padding)
-        footerBaseClasses: baseDrawerFooterClassNames,
+        footerBaseClasses: drawerCommonFooterClassNames,
 
         // Default properties when not specified
         defaultVariant: {

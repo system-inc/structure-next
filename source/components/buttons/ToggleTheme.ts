@@ -12,7 +12,7 @@
 import { mergeClassNames } from '../../utilities/style/ClassName';
 
 // Layout styles for styled toggles
-export const toggleLayoutClassNames =
+export const toggleCommonLayoutClassNames =
     // Flex layout with spacing between icons and text
     `inline-flex items-center justify-center gap-2`;
 
@@ -30,7 +30,7 @@ export const toggleCommonClassNames = mergeClassNames(
 );
 
 // Centered toggle styles: sizing and shape
-export const toggleCenteredClassNames = mergeClassNames(
+export const toggleCommonCenteredClassNames = mergeClassNames(
     // Shape
     'rounded-md',
     // Content
@@ -38,7 +38,7 @@ export const toggleCenteredClassNames = mergeClassNames(
 );
 
 // Focus styles for styled toggles
-export const toggleFocusClassNames = mergeClassNames(
+export const toggleCommonFocusClassNames = mergeClassNames(
     // Remove global outline
     'focus-visible:outline-none',
     // Ring pattern
@@ -96,9 +96,9 @@ export const toggleTheme: ToggleThemeConfiguration = {
         // Variant A - Primary styled toggle (replaces ToggleOn/ToggleOff from ButtonTheme)
         // Single variant that uses data-[state=on] for pressed state styling
         A: mergeClassNames(
-            toggleLayoutClassNames,
+            toggleCommonLayoutClassNames,
             toggleCommonClassNames,
-            toggleCenteredClassNames,
+            toggleCommonCenteredClassNames,
             'rounded-md border',
             // Unpressed state (ToggleOff equivalent)
             'border--3 background--0 content--2',
@@ -113,9 +113,9 @@ export const toggleTheme: ToggleThemeConfiguration = {
         // Variant Outline - Toggle with border emphasis
         // Stronger border contrast
         Outline: mergeClassNames(
-            toggleLayoutClassNames,
+            toggleCommonLayoutClassNames,
             toggleCommonClassNames,
-            toggleCenteredClassNames,
+            toggleCommonCenteredClassNames,
             'border',
             // Unpressed state
             'border--0 bg-transparent',
@@ -128,9 +128,9 @@ export const toggleTheme: ToggleThemeConfiguration = {
         // Variant Ghost - Minimal toggle without border
         // Most subtle appearance
         Ghost: mergeClassNames(
-            toggleLayoutClassNames,
+            toggleCommonLayoutClassNames,
             toggleCommonClassNames,
-            toggleCenteredClassNames,
+            toggleCommonCenteredClassNames,
             'bg-transparent',
             // Hover unpressed
             'hover:background--2 hover:content--1',
@@ -141,7 +141,7 @@ export const toggleTheme: ToggleThemeConfiguration = {
 
     sizes: {
         Small: mergeClassNames('h-8 w-8 p-2', '[&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0'),
-        Base: mergeClassNames('h-9 w-9 p-[10px]', '[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0'),
+        Base: mergeClassNames('h-9 w-9 p-2.5', '[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0'),
         Large: mergeClassNames('h-10 w-10 p-3', '[&_svg]:pointer-events-none [&_svg]:size-5 [&_svg]:shrink-0'),
     },
 
@@ -153,7 +153,7 @@ export const toggleTheme: ToggleThemeConfiguration = {
 
     configuration: {
         baseClassNames: toggleCommonClassNames,
-        focusClasses: toggleFocusClassNames,
+        focusClasses: toggleCommonFocusClassNames,
         disabledClasses: '',
         defaultVariant: {
             size: 'Base',

@@ -12,7 +12,7 @@
 import { mergeClassNames } from '../../utilities/style/ClassName';
 
 // Base styles for dialog overlay
-export const baseDialogOverlayClassNames = mergeClassNames(
+export const dialogCommonOverlayClassNames = mergeClassNames(
     // Position and z-index
     'fixed inset-0 z-50',
     // Background dim overlay
@@ -24,7 +24,7 @@ export const baseDialogOverlayClassNames = mergeClassNames(
 );
 
 // Base styles for dialog close button
-export const baseDialogCloseClassNames = mergeClassNames(
+export const dialogCommonCloseClassNames = mergeClassNames(
     // Position
     'absolute top-4 right-4',
     // Z-index to ensure it's above content
@@ -32,7 +32,7 @@ export const baseDialogCloseClassNames = mergeClassNames(
 );
 
 // Base styles for dialog header (layout only, no padding - padding comes from variant)
-export const baseDialogHeaderClassNames = mergeClassNames(
+export const dialogCommonHeaderClassNames = mergeClassNames(
     // Flex layout with vertical spacing
     'flex flex-col space-y-1.5',
     // Text alignment
@@ -42,15 +42,15 @@ export const baseDialogHeaderClassNames = mergeClassNames(
 // Base styles for dialog body (structural only, no padding - padding comes from variant)
 // grow: fills available space in dialog's flex layout
 // overflow-y-auto: required for ScrollArea to work properly in this context
-export const baseDialogBodyClassNames = 'grow overflow-y-auto';
+export const dialogCommonBodyClassNames = 'grow overflow-y-auto';
 
 // Base styles for dialog footer (layout only, no padding - padding comes from variant)
-export const baseDialogFooterClassNames =
+export const dialogCommonFooterClassNames =
     // Flex layout with spacing
     'flex flex-row justify-end space-x-2';
 
 // Positioning - Centered (for desktop dialog)
-export const dialogContentPositionCenteredClassNames = mergeClassNames(
+export const dialogCommonPositionCenteredClassNames = mergeClassNames(
     // Position, outline, and z-index
     'fixed top-[50%] left-[50%] z-50 outline-none',
     // Flex layout and alignment
@@ -64,7 +64,7 @@ export const dialogContentPositionCenteredClassNames = mergeClassNames(
 );
 
 // Positioning - Top Fixed
-export const dialogContentPositionTopFixedClassNames = mergeClassNames(
+export const dialogCommonPositionTopFixedClassNames = mergeClassNames(
     // Position, outline, and z-index
     'fixed top-[10%] left-[50%] z-50 outline-none',
     // Grid layout and alignment
@@ -184,11 +184,11 @@ export const dialogTheme: DialogThemeConfiguration = {
     positions: {
         // Centered position - Dialog centered in viewport
         // Use for: Standard modals, forms, confirmations
-        Centered: dialogContentPositionCenteredClassNames,
+        Centered: dialogCommonPositionCenteredClassNames,
 
         // Top fixed position - Dialog fixed near top of viewport
         // Use for: Notifications, search bars, quick actions
-        TopFixed: dialogContentPositionTopFixedClassNames,
+        TopFixed: dialogCommonPositionTopFixedClassNames,
     },
 
     // Sizes control dialog dimensions
@@ -209,19 +209,19 @@ export const dialogTheme: DialogThemeConfiguration = {
         baseClassNames: 'flex flex-col',
 
         // Overlay classes
-        overlayClasses: baseDialogOverlayClassNames,
+        overlayClasses: dialogCommonOverlayClassNames,
 
         // Close button classes
-        closeClasses: baseDialogCloseClassNames,
+        closeClasses: dialogCommonCloseClassNames,
 
         // Header base classes (layout only, no padding)
-        headerBaseClasses: baseDialogHeaderClassNames,
+        headerBaseClasses: dialogCommonHeaderClassNames,
 
         // Body base classes (structural only, no padding)
-        bodyBaseClasses: baseDialogBodyClassNames,
+        bodyBaseClasses: dialogCommonBodyClassNames,
 
         // Footer base classes (layout only, no padding)
-        footerBaseClasses: baseDialogFooterClassNames,
+        footerBaseClasses: dialogCommonFooterClassNames,
 
         // Default properties when not specified
         defaultVariant: {

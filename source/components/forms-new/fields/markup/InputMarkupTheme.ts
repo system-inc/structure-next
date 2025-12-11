@@ -3,7 +3,7 @@ import { mergeClassNames } from '../../../../utilities/style/ClassName';
 
 // Base Lexical Theme - Internal styling for editor content
 // Variants can override specific properties by spreading this and merging
-export const inputMarkupLexicalThemeBase = {
+export const inputMarkupCommonLexicalTheme = {
     ltr: '',
     rtl: '',
     paragraph: mergeClassNames('text-sm font-normal first:mt-0'),
@@ -76,6 +76,11 @@ export const inputMarkupLexicalThemeBase = {
     },
 };
 
+// Disabled styles - applied to container when disabled
+// Note: Unlike native inputs, div containers don't support :disabled pseudo-class
+// so we apply these conditionally via className
+export const inputMarkupCommonDisabledClassNames = 'cursor-not-allowed opacity-50';
+
 // InputMarkup Variants Interface
 export interface InputMarkupVariants {
     A: 'A'; // Card-like with shadow, good for standalone/chat use
@@ -102,11 +107,6 @@ export interface InputMarkupModes {
 // Type - InputMarkup Mode
 export type InputMarkupMode = keyof InputMarkupModes;
 
-// Disabled styles - applied to container when disabled
-// Note: Unlike native inputs, div containers don't support :disabled pseudo-class
-// so we apply these conditionally via className
-export const disabledStyleClassNames = 'cursor-not-allowed opacity-50';
-
 // Type - InputMarkup Theme Configuration
 export interface InputMarkupThemeConfiguration {
     variants: Record<
@@ -116,7 +116,7 @@ export interface InputMarkupThemeConfiguration {
             editor: string;
             placeholder: string;
             toolbar: string;
-            lexical: typeof inputMarkupLexicalThemeBase;
+            lexical: typeof inputMarkupCommonLexicalTheme;
         }
     >;
     sizes: Record<
@@ -144,7 +144,7 @@ export const inputMarkupTheme: InputMarkupThemeConfiguration = {
             editor: mergeClassNames('px-5 pt-5 pb-3'),
             placeholder: mergeClassNames('top-5 left-5'),
             toolbar: mergeClassNames('px-3 pt-1 pb-3'),
-            lexical: inputMarkupLexicalThemeBase,
+            lexical: inputMarkupCommonLexicalTheme,
         },
 
         // Variant Outline - Simple border, matches form inputs
@@ -154,7 +154,7 @@ export const inputMarkupTheme: InputMarkupThemeConfiguration = {
             editor: mergeClassNames('px-4 py-3'),
             placeholder: mergeClassNames('top-0 left-0 px-4 py-3'),
             toolbar: mergeClassNames('border-t border--2 px-1.5 py-1'),
-            lexical: inputMarkupLexicalThemeBase,
+            lexical: inputMarkupCommonLexicalTheme,
         },
     },
 
@@ -169,6 +169,6 @@ export const inputMarkupTheme: InputMarkupThemeConfiguration = {
             variant: 'Outline',
             size: 'Base',
         },
-        disabledClassNames: disabledStyleClassNames,
+        disabledClassNames: inputMarkupCommonDisabledClassNames,
     },
 };

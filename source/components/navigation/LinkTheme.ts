@@ -11,7 +11,7 @@
 import { mergeClassNames } from '../../utilities/style/ClassName';
 
 // Focus styles for styled buttons
-export const baseLinkClassNames = mergeClassNames(
+export const linkCommonClassNames = mergeClassNames(
     // Animation
     'transition-colors ease-out',
 );
@@ -58,19 +58,19 @@ export const linkTheme: LinkThemeConfiguration = {
         // A - Primary links in header and footer navigation
         // Base content color, mute slightly on hover, emphasize on active
         A: mergeClassNames(
-            baseLinkClassNames,
+            linkCommonClassNames,
             'hover:content--3 active:content---1 dark:hover:content--2 dark:active:content---1',
         ),
         // 'text-black-700 hover:text-black-0 active:text-black-1000 dark:text-white-800 dark:hover:text-white-0 dark:active:text-white-1000',
 
         // B - Great for text on a background (e.g., in menus)
         // Base content color, slight emphasis on hover, more emphasis on active
-        B: mergeClassNames(baseLinkClassNames, 'hover:content---1 active:content---3'),
+        B: mergeClassNames(linkCommonClassNames, 'hover:content---1 active:content---3'),
 
         // C - Great for links where the link is an icon instead of text, starts out more muted
         // Slightly muted base content, emphasize on hover, emphasize even more on active
         C: mergeClassNames(
-            baseLinkClassNames,
+            linkCommonClassNames,
             'content--3 hover:content--2 active:content--1 dark:content--1 dark:hover:content--0 dark:active:content---1',
         ),
 

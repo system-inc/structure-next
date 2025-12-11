@@ -11,7 +11,7 @@
 import { mergeClassNames } from '../../utilities/style/ClassName';
 
 // Base styles shared across all popovers
-export const basePopoverClassNames = mergeClassNames(
+export const popoverCommonClassNames = mergeClassNames(
     // Focus - Remove outline from popover container (focus should be on interactive elements inside)
     'outline-none',
 );
@@ -72,11 +72,11 @@ export interface PopoverThemeConfiguration {
 export const popoverTheme: PopoverThemeConfiguration = {
     // Variants control visual styling (colors, borders, shadows)
     variants: {
-        A: mergeClassNames(basePopoverClassNames, 'border border--0 background--0 shadow--6 dark:background--0'),
-        B: mergeClassNames(basePopoverClassNames, 'border border--1 background--0 shadow--6 dark:background--1'),
-        C: mergeClassNames(basePopoverClassNames, 'border border--2 background--0 shadow--6 dark:background--2'),
-        D: mergeClassNames(basePopoverClassNames, 'border border--3 background--0 shadow--6 dark:background--3'),
-        Tip: mergeClassNames(basePopoverClassNames, 'border border--3 background--0 content--0 shadow-lg'),
+        A: mergeClassNames(popoverCommonClassNames, 'border border--0 background--0 shadow--6 dark:background--0'),
+        B: mergeClassNames(popoverCommonClassNames, 'border border--1 background--0 shadow--6 dark:background--1'),
+        C: mergeClassNames(popoverCommonClassNames, 'border border--2 background--0 shadow--6 dark:background--2'),
+        D: mergeClassNames(popoverCommonClassNames, 'border border--3 background--0 shadow--6 dark:background--3'),
+        Tip: mergeClassNames(popoverCommonClassNames, 'border border--3 background--0 content--0 shadow-lg'),
     },
 
     // Sizes control dimensions (padding, width, text size, border radius)
