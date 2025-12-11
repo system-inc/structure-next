@@ -121,7 +121,7 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
         const topicPath =
             parentPostTopicsSlugs.length > 0 ? parentPostTopicsSlugs.join('/') + '/' + postTopicSlug : undefined;
 
-        console.log('[SupportPathPageRoute] Fetching postTopic for slug:', postTopicSlug, 'with path:', topicPath);
+        // console.log('[SupportPathPageRoute] Fetching postTopic for slug:', postTopicSlug, 'with path:', topicPath);
 
         let postTopicData;
         try {
@@ -157,12 +157,12 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
             if(postTopicData?.postTopic?.subTopics?.length) {
                 // Sort sub topics by linked list order
                 const sortedSubTopics = sortByLinkedListOrder(postTopicData.postTopic.subTopics);
-                console.log(
-                    '[SupportPathPageRoute] Sorted subTopics:',
-                    sortedSubTopics.map(function (t) {
-                        return { slug: t.slug, title: t.title };
-                    }),
-                );
+                // console.log(
+                //     '[SupportPathPageRoute] Sorted subTopics:',
+                //     sortedSubTopics.map(function (t) {
+                //         return { slug: t.slug, title: t.title };
+                //     }),
+                // );
 
                 // Only fetch sub-topic posts if there are 5 or fewer sub-topics
                 // For topics with many sub-topics, we just show them as navigation links
@@ -180,12 +180,12 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
                         // Query for each sub topic and get the posts
                         sortedSubTopics.map(async function (subTopic) {
                             const subTopicPath = parentPath + '/' + subTopic.slug;
-                            console.log(
-                                '[SupportPathPageRoute] Fetching subTopic:',
-                                subTopic.slug,
-                                'with path:',
-                                subTopicPath,
-                            );
+                            // console.log(
+                            //     '[SupportPathPageRoute] Fetching subTopic:',
+                            //     subTopic.slug,
+                            //     'with path:',
+                            //     subTopicPath,
+                            // );
                             let postSubTopicData;
                             try {
                                 postSubTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {

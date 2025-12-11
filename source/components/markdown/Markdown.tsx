@@ -76,7 +76,7 @@ const components = {
     ),
     pre: (properties: React.ComponentProps<'pre'>) => (
         <pre
-            className="relative mb-6 rounded-md border border--3 background--2 p-5 text-sm"
+            className="relative mt-6 mb-6 rounded-md border border--3 background--2 p-4 text-sm first:mt-0"
             {...elementProperties(properties)}
         >
             {properties.children}
@@ -86,8 +86,9 @@ const components = {
         </pre>
     ),
     code: (properties: React.ComponentProps<'code'>) => (
+        // Inline code styling - the [pre_&] variant removes styles when inside a <pre>
         <code
-            className="mb-6 rounded border border--3 background--2 px-1 py-px font-mono text-sm whitespace-pre-wrap"
+            className="rounded border border--3 background--2 px-1 py-px font-mono text-sm in-[pre]:rounded-none in-[pre]:border-0 in-[pre]:bg-transparent in-[pre]:p-0 in-[pre]:whitespace-pre-wrap"
             {...elementProperties(properties)}
         />
     ),

@@ -118,9 +118,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                 {/* Render general posts (Start Here section - only show heading when there are sub-topic tiles) */}
                 {generalPosts && generalPosts.posts.length > 0 && (
                     <div>
-                        {shouldRenderSubTopicsAsTiles && (
-                            <h2 className="mb-6 text-xl font-medium">Start Here</h2>
-                        )}
+                        {shouldRenderSubTopicsAsTiles && <h2 className="mb-6 text-xl font-medium">Start Here</h2>}
                         <div className="">
                             {generalPosts.posts.map(function (post, postIndex) {
                                 let postHref = '/support';
@@ -189,7 +187,8 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                                 </Link>
                                 <div className="">
                                     {subTopic.posts.map(function (post, postIndex) {
-                                        const postHref = subTopicHref + '/articles/' + post.slug + '-' + post.identifier;
+                                        const postHref =
+                                            subTopicHref + '/articles/' + post.slug + '-' + post.identifier;
 
                                         return (
                                             <div key={postIndex} className="mb-4">
