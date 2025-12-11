@@ -154,6 +154,7 @@ export function AnalyticsSessionPage() {
                 deviceActivity={deviceActivity}
                 truncatePaths={false}
                 defaultExpanded={true}
+                showUserAgent={true}
                 className="w-full"
             />
         );

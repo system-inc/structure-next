@@ -64,6 +64,7 @@ export interface EngagementActivityCardProperties {
     deviceId: string; // Required for using layout animations for the components.
     truncatePaths?: boolean; // Whether to truncate long paths (default: true for sidebar, false for full-width)
     defaultExpanded?: boolean; // Whether the card should be expanded by default
+    showUserAgent?: boolean; // Whether to show the user agent string when expanded (default: false)
 }
 export function EngagementActivityCard(properties: EngagementActivityCardProperties) {
     // State
@@ -250,6 +251,12 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                         transition={{ duration: 0.2, ease: cubicBezier(0.075, 0.82, 0.165, 1) }}
                     >
                         <div className="pb-2">
+                            {/* User Agent */}
+                            {properties.showUserAgent && properties.deviceActivity.device?.userAgent && (
+                                <div className="mb-2 rounded border border--0 bg-black/5 p-2 font-mono text-[10px] leading-relaxed break-all content--2 dark:bg-white/5">
+                                    {properties.deviceActivity.device.userAgent}
+                                </div>
+                            )}
                             <ScrollArea className={shouldTruncate ? 'max-h-64' : undefined}>
                                 <div className="pr-0">
                                     {properties.deviceActivity.events.map(function (event, index) {
