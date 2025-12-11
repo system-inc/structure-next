@@ -5,6 +5,9 @@ import { useRouter } from '@structure/source/router/Navigation';
 // Dependencies - Main Components
 import { InputText } from '@structure/source/components/forms-new/fields/text/InputText';
 
+// Dependencies - Assets
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
+
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
@@ -34,12 +37,15 @@ export function SupportSearch(properties: SupportSearchProperties) {
     return (
         <form className={mergeClassNames('w-full max-w-md', properties.className)} onSubmit={handleSubmit}>
             <InputText
-                id="searchTerm"
                 name="searchTerm"
                 variant="Outline"
+                size="Large"
+                className="w-full rounded-full border--6"
+                iconLeft={MagnifyingGlassIcon}
+                isClearable={true}
+                selectValueOnFocus={true}
                 placeholder="Search for answers"
                 defaultValue={properties.defaultValue}
-                className="w-full"
             />
         </form>
     );

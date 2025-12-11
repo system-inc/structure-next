@@ -31,12 +31,11 @@ export function SearchSupportPostsPage(properties: SearchSupportPostsPagePropert
             <h1 className="text-2xl font-medium">
                 <Link href="/support">Support</Link>
             </h1>
-            <HorizontalRule className="mt-6 mb-12" />
+            <SupportSearch className="mt-6 mb-8" defaultValue={properties.searchTerm} />
+            <HorizontalRule className="mt-6 mb-10" />
 
-            <SupportSearch className="mx-auto mb-8" defaultValue={properties.searchTerm} />
-
-            <p className="mb-8 text-center content--1">
-                Search results for: <span className="content--0">{properties.searchTerm}</span>
+            <p className="mb-10 content--1">
+                Search results for: <span className="font-medium content--0">{properties.searchTerm}</span>
             </p>
 
             {/* No Posts Found */}
