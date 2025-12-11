@@ -19,7 +19,7 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
     return (
         <div className="mx-auto mt-12">
             <div className="mx-auto flex size-8 items-center justify-center rounded-full bg-[#16A34A]">
-                <CheckIcon className="size-5" />
+                <CheckIcon className="size-5 text-white-1000" />
             </div>
 
             <h2 className="mt-6 text-center text-2xl font-medium">Message delivered.</h2>
