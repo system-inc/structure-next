@@ -113,9 +113,14 @@ export function uppercaseFirstCharacter(string: string): string {
 
 // Function to create a slug from a string
 // Default max length of 160 characters
-export function slug(string: string | undefined, maximumLength = 160): string {
+export function slug(string: string | undefined, maximumLength: number = 160): string {
     if(!string) {
         return '';
+    }
+
+    // Guard against non-number maximumLength (e.g., when called as a transform function with extra args)
+    if(typeof maximumLength !== 'number' || Number.isNaN(maximumLength)) {
+        maximumLength = 160;
     }
 
     // Remove all apostrophes
