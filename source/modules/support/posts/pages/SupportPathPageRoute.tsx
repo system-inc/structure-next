@@ -135,8 +135,9 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
             });
         }
         catch(error) {
-            console.error('[SupportPathPageRoute] Error fetching postTopic:', JSON.stringify(error, null, 2));
-            throw error;
+            // If the request fails (e.g., topic not found validation error), return a 404
+            console.error('[SupportPathPageRoute] Error fetching postTopic:', postTopicSlug, error);
+            return notFound();
         }
 
         // If the post topic is found
