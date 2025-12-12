@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
-import { SupportSearch } from '@structure/source/modules/support/posts/components/SupportSearch';
+import { PostSearch } from '@structure/source/modules/post/search/components/PostSearch';
 import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 
@@ -18,20 +18,24 @@ import { CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
-// Component - SearchSupportPostsPage
-export interface SearchSupportPostsPageProperties {
+// Component - SearchPostsPage
+export interface SearchPostsPageProperties {
     className?: string;
     searchTerm: string;
     posts: PostsQuery['posts']['items'];
+    basePath: string;
+    title: string;
+    searchPath: string;
+    showNeedMoreHelp?: boolean;
 }
-export function SearchSupportPostsPage(properties: SearchSupportPostsPageProperties) {
+export function SearchPostsPage(properties: SearchPostsPageProperties) {
     // Render the component
     return (
         <div className={mergeClassNames('container', properties.className)}>
             <h1 className="text-2xl font-medium">
-                <Link href="/support">Support</Link>
+                <Link href={properties.basePath}>{properties.title}</Link>
             </h1>
-            <SupportSearch className="mt-6 mb-8" defaultValue={properties.searchTerm} />
+            <PostSearch className="mt-6 mb-8" defaultValue={properties.searchTerm} searchPath={properties.searchPath} />
             <HorizontalRule className="mt-6 mb-10" />
 
             <p className="mb-10 content--1">
@@ -47,7 +51,7 @@ export function SearchSupportPostsPage(properties: SearchSupportPostsPagePropert
 
             {/* Posts */}
             {properties.posts.map(function (post, postIndex) {
-                const postHref = '/support/articles/' + post.slug + '-' + post.identifier;
+                const postHref = properties.basePath + '/articles/' + post.slug + '-' + post.identifier;
 
                 return (
                     <div key={postIndex} className="mb-4">
@@ -65,9 +69,12 @@ export function SearchSupportPostsPage(properties: SearchSupportPostsPagePropert
                 );
             })}
 
-            <HorizontalRule className="mt-20 mb-14" />
-
-            <SupportNeedMoreHelp />
+            {properties.showNeedMoreHelp !== false && (
+                <>
+                    <HorizontalRule className="mt-20 mb-14" />
+                    <SupportNeedMoreHelp />
+                </>
+            )}
         </div>
     );
 }

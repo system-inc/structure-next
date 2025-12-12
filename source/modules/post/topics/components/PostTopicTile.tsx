@@ -15,8 +15,8 @@ import { Link } from '@structure/source/components/navigation/Link';
 // Dependencies - Utilities
 import { getRainbowHexColorForTheme, lightenColor } from '@structure/source/utilities/style/Color';
 
-// Component - SupportTopicTile
-export interface SupportTopicTileProperties {
+// Component - PostTopicTile
+export interface PostTopicTileProperties {
     href: string;
     title: string;
     description?: string | null;
@@ -24,7 +24,7 @@ export interface SupportTopicTileProperties {
     icon?: React.ReactElement<{ className?: string; style?: React.CSSProperties }>;
     rainbowPosition: number; // 0-1 value for rainbow color position
 }
-export function SupportTopicTile(properties: SupportTopicTileProperties) {
+export function PostTopicTile(properties: PostTopicTileProperties) {
     // Hooks
     const themeSettings = useThemeSettings();
 

@@ -19,6 +19,8 @@ import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon
 export interface NavigationTrailLinkInterface {
     title: string;
     href: string;
+    // Supports both ReactElement (e.g., <BooksIcon weight="light" />) and FunctionComponent (e.g., HomeIcon)
+    icon?: React.ReactElement<{ className?: string }> | React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     links?: NavigationTrailLinkInterface[];
 }
 
@@ -101,8 +103,15 @@ export function NavigationTrail(properties: NavigationTrailProperties) {
                             <Link
                                 tabIndex={1}
                                 href={navigationTrailLink.href}
-                                className={index === lastTitleIndex ? 'link--a' : 'link--b'}
+                                className={mergeClassNames(
+                                    'inline-flex items-center gap-1.5',
+                                    index === lastTitleIndex ? 'link--a' : 'link--b',
+                                )}
                             >
+                                {navigationTrailLink.icon &&
+                                    (React.isValidElement(navigationTrailLink.icon)
+                                        ? React.cloneElement(navigationTrailLink.icon, { className: 'h-4 w-4' })
+                                        : React.createElement(navigationTrailLink.icon, { className: 'h-4 w-4' }))}
                                 {navigationTrailLink.title}
                             </Link>
                         )}

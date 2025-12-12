@@ -1,5 +1,5 @@
 // Dependencies - Main Components
-import { SearchSupportPostsPage } from '@structure/source/modules/support/posts/pages/SearchSupportPostsPage';
+import { SearchPostsPage } from '@structure/source/modules/post/search/pages/SearchPostsPage';
 
 // Dependencies - API
 import { getServerSideNetworkService } from '@structure/source/services/network/NetworkServiceServerSide';
@@ -7,7 +7,7 @@ import { ColumnFilterConditionOperator, PostsDocument } from '@structure/source/
 import { getRequestCookiesHeaderString } from '@structure/source/utilities/next/NextHeaders';
 
 // Function to get server-side properties
-export async function getSupportSearchServerSideProperties(searchTerm: string) {
+export async function getSearchPostsPageServerSideProperties(searchTerm: string) {
     const serverSideNetworkService = await getServerSideNetworkService();
 
     // Search
@@ -44,9 +44,9 @@ export async function getSupportSearchServerSideProperties(searchTerm: string) {
 }
 
 // Metadata generator
-export function generateSupportSearchPageMetadata(searchTerm: string) {
+export function generateSearchPostsPageMetadata(searchTerm: string, titleSuffix: string) {
     let title = searchTerm;
-    title += ' • Search • Support';
+    title += ' • Search • ' + titleSuffix;
 
     return {
         title: title,
@@ -54,18 +54,26 @@ export function generateSupportSearchPageMetadata(searchTerm: string) {
 }
 
 // Route component
-export interface SupportSearchPageRouteProperties {
+export interface SearchPostsPageRouteProperties {
     className?: string;
     searchTerm: string;
+    basePath: string;
+    title: string;
+    searchPath: string;
+    showNeedMoreHelp?: boolean;
 }
-export async function SupportSearchPageRoute(properties: SupportSearchPageRouteProperties) {
-    const serverSideProperties = await getSupportSearchServerSideProperties(properties.searchTerm);
+export async function SearchPostsPageRoute(properties: SearchPostsPageRouteProperties) {
+    const serverSideProperties = await getSearchPostsPageServerSideProperties(properties.searchTerm);
 
     return (
-        <SearchSupportPostsPage
+        <SearchPostsPage
             className={properties.className}
             searchTerm={properties.searchTerm}
             posts={serverSideProperties.posts}
+            basePath={properties.basePath}
+            title={properties.title}
+            searchPath={properties.searchPath}
+            showNeedMoreHelp={properties.showNeedMoreHelp}
         />
     );
 }

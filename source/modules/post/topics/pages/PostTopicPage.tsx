@@ -16,24 +16,29 @@ import { HorizontalRule } from '@structure/source/components/layout/HorizontalRu
 import { NavigationTrail } from '@structure/source/components/navigation/trail/NavigationTrail';
 import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
 import { Feedback } from '@structure/source/modules/feedback/components/Feedback';
-import { SupportTopicTile } from '@structure/source/modules/support/posts/components/SupportTopicTile';
+import { PostTopicTile } from '@structure/source/modules/post/topics/components/PostTopicTile';
 import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
-import { SupportSearch } from '@structure/source/modules/support/posts/components/SupportSearch';
+import { PostSearch } from '@structure/source/modules/post/search/components/PostSearch';
 
 // Dependencies - Assets
 import { PlusIcon, PencilSimpleIcon, GearIcon, CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import {
+    generatePostNavigationTrailLinks,
+    PostNavigationTrailIconMapping,
+} from '@structure/source/modules/post/utilities/PostNavigationTrail';
 
-// Component - SupportPostTopicPage
-export interface SupportPostTopicPageProperties {
+// Component - PostTopicPage
+export interface PostTopicPageProperties {
     className?: string;
     postTopicSlug: string;
     parentPostTopicsSlugs?: string[];
-    basePath?: string;
-    managementBasePath?: string; // Base path for management links (edit topic, create post, etc.) - defaults to '/support'
+    basePath: string;
+    managementBasePath: string; // Base path for management links (edit topic, create post, etc.)
     showNavigationTrail?: boolean; // Whether to show the breadcrumb trail - defaults to true
+    showTitle?: boolean; // Whether to show the title - defaults to true
     showNeedMoreHelp?: boolean;
     searchPath?: string; // Path for search - if provided, shows search bar
     searchPlaceholder?: string;
@@ -48,15 +53,16 @@ export interface SupportPostTopicPageProperties {
     topicIconMapping?: {
         [key: string]: React.ReactElement<{ className?: string }>;
     };
+    // Maps path slugs (e.g., 'library') to icons for the navigation trail
+    navigationTrailIconMapping?: PostNavigationTrailIconMapping;
 }
-export function SupportPostTopicPage(properties: SupportPostTopicPageProperties) {
+export function PostTopicPage(properties: PostTopicPageProperties) {
     // Hooks
     const account = useAccount();
 
     // Defaults
-    const basePath = properties.basePath ?? '/support';
-    const managementBasePath = properties.managementBasePath ?? '/support';
     const showNavigationTrail = properties.showNavigationTrail !== false;
+    const showTitle = properties.showTitle !== false;
 
     // Icon
     const postTopicIcon =
@@ -75,6 +81,14 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
     // Check if we should render sub-topics as tiles (when they have no posts, meaning > 5 sub-topics)
     const shouldRenderSubTopicsAsTiles = subTopics.length > 0 && subTopics[0]?.posts.length === 0;
 
+    // Generate navigation trail links with icons
+    const navigationTrailLinks = generatePostNavigationTrailLinks(
+        properties.parentPostTopicsSlugs,
+        properties.postTopicSlug,
+        properties.postTopic.topic.title,
+        properties.navigationTrailIconMapping,
+    );
+
     // Render the component
     return (
         <div className={mergeClassNames('container', properties.className)}>
@@ -88,40 +102,47 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                         {
                             iconLeft: PencilSimpleIcon,
                             children: 'Edit Topic',
-                            href: managementBasePath + '/post-topics/' + properties.postTopic.topic.id + '/edit',
+                            href:
+                                properties.managementBasePath +
+                                '/post-topics/' +
+                                properties.postTopic.topic.id +
+                                '/edit',
                         },
                         {
                             iconLeft: PlusIcon,
                             children: 'Create Sub Topic',
                             href:
-                                managementBasePath +
+                                properties.managementBasePath +
                                 '/post-topics/create?parentPostTopicId=' +
                                 properties.postTopic.topic.id,
                         },
                         {
                             iconLeft: PlusIcon,
                             children: 'Create Post',
-                            href: managementBasePath + '/posts/create?postTopicId=' + properties.postTopic.topic.id,
+                            href:
+                                properties.managementBasePath +
+                                '/posts/create?postTopicId=' +
+                                properties.postTopic.topic.id,
                         },
                     ]}
                 />
             )}
 
+            {showNavigationTrail && <NavigationTrail className="mb-6" links={navigationTrailLinks} />}
+
             {properties.searchPath && (
-                <SupportSearch
+                <PostSearch
                     className="mb-8"
                     placeholder={properties.searchPlaceholder}
                     searchPath={properties.searchPath}
                 />
             )}
 
-            <div className="">
-                {showNavigationTrail && <NavigationTrail className="mb-6" />}
-
+            {showTitle && (
                 <div className="max-w-2xl">
                     <Link
                         href={
-                            basePath +
+                            properties.basePath +
                             (properties.parentPostTopicsSlugs?.length
                                 ? '/' + properties.parentPostTopicsSlugs.join('/')
                                 : '') +
@@ -136,16 +157,16 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                         </h1>
                     </Link>
                 </div>
-            </div>
+            )}
 
-            <div className="mt-8 flex flex-col">
+            <div className={showTitle ? 'mt-8 flex flex-col' : 'flex flex-col'}>
                 {/* Render general posts (Start Here section - only show heading when there are sub-topic tiles) */}
                 {generalPosts && generalPosts.posts.length > 0 && (
                     <div>
                         {shouldRenderSubTopicsAsTiles && <h2 className="mb-6 text-xl font-medium">Start Here</h2>}
                         <div className="">
                             {generalPosts.posts.map(function (post, postIndex) {
-                                let postHref = basePath;
+                                let postHref = properties.basePath;
                                 if(properties.parentPostTopicsSlugs?.length) {
                                     postHref += '/' + properties.parentPostTopicsSlugs.join('/');
                                 }
@@ -177,7 +198,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                 {shouldRenderSubTopicsAsTiles && (
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {subTopics.map(function (subTopic, subTopicIndex) {
-                            let subTopicHref = basePath;
+                            let subTopicHref = properties.basePath;
                             if(properties.parentPostTopicsSlugs?.length) {
                                 subTopicHref += '/' + properties.parentPostTopicsSlugs.join('/');
                             }
@@ -192,7 +213,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                                     : undefined;
 
                             return (
-                                <SupportTopicTile
+                                <PostTopicTile
                                     key={subTopicIndex}
                                     href={subTopicHref}
                                     title={subTopic.postTopicTitle}
@@ -208,7 +229,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                 {/* Render sub-topics with posts (original behavior for 5 or fewer sub-topics) */}
                 {!shouldRenderSubTopicsAsTiles &&
                     subTopics.map(function (subTopic, subTopicIndex) {
-                        let subTopicHref = basePath;
+                        let subTopicHref = properties.basePath;
                         if(properties.parentPostTopicsSlugs?.length) {
                             subTopicHref += '/' + properties.parentPostTopicsSlugs.join('/');
                         }

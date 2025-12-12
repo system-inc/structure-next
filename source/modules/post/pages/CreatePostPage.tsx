@@ -16,8 +16,8 @@ import { usePostTopicByIdRequest } from '@structure/source/modules/post/hooks/us
 import { schema } from '@structure/source/utilities/schema/Schema';
 import { slug } from '@structure/source/utilities/type/String';
 
-// Component - CreateSupportPostPage
-export function CreateSupportPostPage() {
+// Component - CreatePostPage
+export function CreatePostPage() {
     // Hooks
     const urlSearchParameters = useUrlSearchParameters();
     const postTopicId = urlSearchParameters?.get('postTopicId');

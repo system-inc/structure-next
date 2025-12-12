@@ -2,11 +2,8 @@
 import { notFound } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import {
-    SupportPostTopicPage,
-    SupportPostTopicPageProperties,
-} from '@structure/source/modules/support/posts/pages/SupportPostTopicPage';
-import { SupportPostPage } from '@structure/source/modules/support/posts/pages/SupportPostPage';
+import { PostTopicPage, PostTopicPageProperties } from '@structure/source/modules/post/topics/pages/PostTopicPage';
+import { PostPage } from '@structure/source/modules/post/pages/PostPage';
 
 // Dependencies - API
 import { getServerSideNetworkService } from '@structure/source/services/network/NetworkServiceServerSide';
@@ -48,41 +45,40 @@ function sortByLinkedListOrder<
 }
 
 // Interface for route configuration
-export interface SupportPathPageRouteConfiguration {
-    topicIconMapping?: SupportPostTopicPageProperties['topicIconMapping'];
+export interface PostTopicPathPageRouteConfiguration {
+    topicIconMapping?: PostTopicPageProperties['topicIconMapping'];
 }
 
 // Function to get server-side properties
-export async function getSupportPathServerSideProperties(supportPath: string[]) {
+export async function getPostTopicPathServerSideProperties(postPath: string[]) {
     const serverSideNetworkService = await getServerSideNetworkService();
 
     // Valid paths:
     // Topics
-    // /support/topic-slug
+    // /[basePath]/topic-slug
     // Posts (new format: slug-identifier combined)
-    // /support/topic-slug-a/topic-slug-b/articles/post-slug-identifier
-    // /support/articles/post-slug-identifier
+    // /[basePath]/topic-slug-a/topic-slug-b/articles/post-slug-identifier
+    // /[basePath]/articles/post-slug-identifier
 
     // The path is a post if it has 'articles' as second to last part or first part
-    const isPost =
-        (supportPath.length > 2 && supportPath[supportPath.length - 2] === 'articles') || supportPath[0] === 'articles';
+    const isPost = (postPath.length > 2 && postPath[postPath.length - 2] === 'articles') || postPath[0] === 'articles';
 
     // Extract identifier from the end of the last path segment (e.g., "my-article-slug-abc123" -> "abc123")
-    const lastSegment = supportPath[supportPath.length - 1] ?? '';
+    const lastSegment = postPath[postPath.length - 1] ?? '';
     const lastDashIndex = lastSegment.lastIndexOf('-');
     const postIdentifier = isPost && lastDashIndex > 0 ? lastSegment.substring(lastDashIndex + 1) : undefined;
 
     const postTopicSlug = isPost
         ? // If post, the topic is the third to last part of the path (before 'articles' and 'slug-identifier')
-          supportPath[supportPath.length - 3]
+          postPath[postPath.length - 3]
         : // If not a post, the topic is the last part of the path
-          supportPath[supportPath.length - 1];
+          postPath[postPath.length - 1];
 
     const parentPostTopicsSlugs = isPost
         ? // If post, the parent topics are the path minus the last 3 parts
-          supportPath.slice(0, -3)
+          postPath.slice(0, -3)
         : // If not a post, the parent topics are the path minus the last part
-          supportPath.slice(0, -1);
+          postPath.slice(0, -1);
 
     let post = null;
     let postTopic = null;
@@ -112,7 +108,7 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
         }
         catch(error) {
             // If the request fails (e.g., post not found validation error), return a 404
-            console.error('[SupportPathPageRoute] Error fetching post:', postIdentifier, error);
+            console.error('[PostTopicPathPageRoute] Error fetching post:', postIdentifier, error);
             return notFound();
         }
     }
@@ -121,8 +117,6 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
         // Build path for the topic query (handles duplicate slugs across different parents)
         const topicPath =
             parentPostTopicsSlugs.length > 0 ? parentPostTopicsSlugs.join('/') + '/' + postTopicSlug : undefined;
-
-        // console.log('[SupportPathPageRoute] Fetching postTopic for slug:', postTopicSlug, 'with path:', topicPath);
 
         let postTopicData;
         try {
@@ -137,7 +131,7 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
         }
         catch(error) {
             // If the request fails (e.g., topic not found validation error), return a 404
-            console.error('[SupportPathPageRoute] Error fetching postTopic:', postTopicSlug, error);
+            console.error('[PostTopicPathPageRoute] Error fetching postTopic:', postTopicSlug, error);
             return notFound();
         }
 
@@ -159,12 +153,6 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
             if(postTopicData?.postTopic?.subTopics?.length) {
                 // Sort sub topics by linked list order
                 const sortedSubTopics = sortByLinkedListOrder(postTopicData.postTopic.subTopics);
-                // console.log(
-                //     '[SupportPathPageRoute] Sorted subTopics:',
-                //     sortedSubTopics.map(function (t) {
-                //         return { slug: t.slug, title: t.title };
-                //     }),
-                // );
 
                 // Only fetch sub-topic posts if there are 5 or fewer sub-topics
                 // For topics with many sub-topics, we just show them as navigation links
@@ -182,12 +170,6 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
                         // Query for each sub topic and get the posts
                         sortedSubTopics.map(async function (subTopic) {
                             const subTopicPath = parentPath + '/' + subTopic.slug;
-                            // console.log(
-                            //     '[SupportPathPageRoute] Fetching subTopic:',
-                            //     subTopic.slug,
-                            //     'with path:',
-                            //     subTopicPath,
-                            // );
                             let postSubTopicData;
                             try {
                                 postSubTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {
@@ -201,7 +183,7 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
                             }
                             catch(error) {
                                 console.error(
-                                    '[SupportPathPageRoute] Error fetching subTopic:',
+                                    '[PostTopicPathPageRoute] Error fetching subTopic:',
                                     subTopic.slug,
                                     JSON.stringify(error, null, 2),
                                 );
@@ -260,9 +242,8 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
 }
 
 // Metadata generator
-export async function generateSupportPathPageMetadata(supportPath: string[], titleSuffix?: string) {
-    const serverSideProperties = await getSupportPathServerSideProperties(supportPath);
-    const suffix = titleSuffix ?? 'Support';
+export async function generatePostTopicPathPageMetadata(postPath: string[], titleSuffix: string) {
+    const serverSideProperties = await getPostTopicPathServerSideProperties(postPath);
 
     let title = '';
 
@@ -275,7 +256,7 @@ export async function generateSupportPathPageMetadata(supportPath: string[], tit
         const topicTitle = serverSideProperties.postTopic.topic.title;
 
         // Only add topic title if it's different from the suffix (avoid "Library • Library")
-        if(topicTitle !== suffix) {
+        if(topicTitle !== titleSuffix) {
             title = topicTitle;
         }
 
@@ -283,7 +264,7 @@ export async function generateSupportPathPageMetadata(supportPath: string[], tit
         if(serverSideProperties.parentPostTopicsSlugs) {
             serverSideProperties.parentPostTopicsSlugs.forEach(function (parentPostTopicSlug) {
                 const parentTitle = slugToTitleCase(parentPostTopicSlug);
-                if(parentTitle !== suffix) {
+                if(parentTitle !== titleSuffix) {
                     title += ' • ' + parentTitle;
                 }
             });
@@ -292,10 +273,10 @@ export async function generateSupportPathPageMetadata(supportPath: string[], tit
 
     // Add suffix, handling case where title might be empty
     if(title) {
-        title += ' • ' + suffix;
+        title += ' • ' + titleSuffix;
     }
     else {
-        title = suffix;
+        title = titleSuffix;
     }
 
     return {
@@ -304,29 +285,34 @@ export async function generateSupportPathPageMetadata(supportPath: string[], tit
 }
 
 // Route component
-export interface SupportPathPageRouteProperties {
+export interface PostTopicPathPageRouteProperties {
     className?: string;
-    supportPath: string[];
-    topicIconMapping?: SupportPostTopicPageProperties['topicIconMapping'];
-    basePath?: string;
-    managementBasePath?: string;
+    postPath: string[];
+    topicIconMapping?: PostTopicPageProperties['topicIconMapping'];
+    navigationTrailIconMapping?: PostTopicPageProperties['navigationTrailIconMapping'];
+    basePath: string;
+    managementBasePath: string;
     showNavigationTrail?: boolean;
+    showTitle?: boolean;
     showNeedMoreHelp?: boolean;
     searchPath?: string;
     searchPlaceholder?: string;
 }
-export async function SupportPathPageRoute(properties: SupportPathPageRouteProperties) {
-    const serverSideProperties = await getSupportPathServerSideProperties(properties.supportPath);
+export async function PostTopicPathPageRoute(properties: PostTopicPathPageRouteProperties) {
+    const serverSideProperties = await getPostTopicPathServerSideProperties(properties.postPath);
 
     // Post
     if(serverSideProperties.post) {
         return (
-            <SupportPostPage
+            <PostPage
                 className={properties.className}
                 postTopicSlug={serverSideProperties.postTopicSlug}
                 parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
                 basePath={properties.basePath}
+                searchPath={properties.searchPath}
+                searchPlaceholder={properties.searchPlaceholder}
                 showNeedMoreHelp={properties.showNeedMoreHelp}
+                navigationTrailIconMapping={properties.navigationTrailIconMapping}
                 post={serverSideProperties.post}
             />
         );
@@ -338,19 +324,21 @@ export async function SupportPathPageRoute(properties: SupportPathPageRoutePrope
         serverSideProperties.parentPostTopicsSlugs
     ) {
         return (
-            <SupportPostTopicPage
+            <PostTopicPage
                 className={properties.className}
                 postTopicSlug={serverSideProperties.postTopicSlug}
                 parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
                 basePath={properties.basePath}
                 managementBasePath={properties.managementBasePath}
                 showNavigationTrail={properties.showNavigationTrail}
+                showTitle={properties.showTitle}
                 showNeedMoreHelp={properties.showNeedMoreHelp}
                 searchPath={properties.searchPath}
                 searchPlaceholder={properties.searchPlaceholder}
                 postTopic={serverSideProperties.postTopic}
                 postTopicAndSubPostTopicsWithPosts={serverSideProperties.postTopicAndSubPostTopicsWithPosts}
                 topicIconMapping={properties.topicIconMapping}
+                navigationTrailIconMapping={properties.navigationTrailIconMapping}
             />
         );
     }

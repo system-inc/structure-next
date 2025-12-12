@@ -9,50 +9,47 @@ import type { PostTopicsQuery } from '@structure/source/api/graphql/GraphQlGener
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
-import { SupportSearch } from '@structure/source/modules/support/posts/components/SupportSearch';
-import { SupportTopicTile } from '@structure/source/modules/support/posts/components/SupportTopicTile';
+import { PostSearch } from '@structure/source/modules/post/search/components/PostSearch';
+import { PostTopicTile } from '@structure/source/modules/post/topics/components/PostTopicTile';
 import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
-// Component - SupportPage
-export interface SupportPageProperties {
+// Component - PostTopicsPage
+export interface PostTopicsPageProperties {
     className?: string;
     postTopics: PostTopicsQuery['postTopics'];
     topicIconMapping?: {
         [key: string]: React.ReactElement<{ className?: string; style?: React.CSSProperties }>;
     };
-    basePath?: string;
-    title?: string;
-    heading?: string;
-    description?: string;
+    basePath: string;
+    title: string;
+    heading: string;
+    description: string;
+    searchPath: string;
     searchPlaceholder?: string;
     showNeedMoreHelp?: boolean;
 }
-export function SupportPage(properties: SupportPageProperties) {
+export function PostTopicsPage(properties: PostTopicsPageProperties) {
     // Defaults
-    const basePath = properties.basePath ?? '/support';
-    const title = properties.title || 'Support';
-    const heading = properties.heading || 'How can we help?';
-    const description = properties.description || "Browse our articles or connect with our team—we're here to help!";
     const showNeedMoreHelp = properties.showNeedMoreHelp !== false;
 
     // Render the component
     return (
         <div className={mergeClassNames('container', properties.className)}>
             <h1 className="text-2xl font-medium">
-                <Link href={basePath}>{title}</Link>
+                <Link href={properties.basePath}>{properties.title}</Link>
             </h1>
             <HorizontalRule className="mt-6 mb-12" />
 
-            <h2 className="mb-4 text-center text-4xl">{heading}</h2>
-            <p className="mb-6 text-center content--4">{description}</p>
+            <h2 className="mb-4 text-center text-4xl">{properties.heading}</h2>
+            <p className="mb-6 text-center content--4">{properties.description}</p>
 
-            <SupportSearch
+            <PostSearch
                 className="mx-auto mb-16"
                 placeholder={properties.searchPlaceholder}
-                searchPath={basePath + '/search'}
+                searchPath={properties.searchPath}
             />
 
             {/* Post Topics */}
@@ -64,9 +61,9 @@ export function SupportPage(properties: SupportPageProperties) {
                             : undefined;
 
                     return (
-                        <SupportTopicTile
+                        <PostTopicTile
                             key={postTopicIndex}
-                            href={basePath + '/' + postTopic.slug}
+                            href={properties.basePath + '/' + postTopic.slug}
                             title={postTopic.title}
                             description={postTopic.description}
                             postCount={postTopic.postCount}

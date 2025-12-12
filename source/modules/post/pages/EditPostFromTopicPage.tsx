@@ -19,11 +19,11 @@ import { slug } from '@structure/source/utilities/type/String';
 // Dependencies - Assets
 import { TrashIcon } from '@phosphor-icons/react/dist/ssr';
 
-// Component - EditSupportPostPage
-export interface EditSupportPostPageProperties {
+// Component - EditPostFromTopicPage
+export interface EditPostFromTopicPageProperties {
     postIdentifier: string;
 }
-export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
+export function EditPostFromTopicPage(properties: EditPostFromTopicPageProperties) {
     // State
     const [deletePostDialogOpen, setDeletePostDialogOpen] = React.useState(false);
 

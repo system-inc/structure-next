@@ -14,6 +14,7 @@ import { Feedback } from '@structure/source/modules/feedback/components/Feedback
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 import { Markdown } from '@structure/source/components/markdown/Markdown';
 import { NavigationTrail } from '@structure/source/components/navigation/trail/NavigationTrail';
+import { PostSearch } from '@structure/source/modules/post/search/components/PostSearch';
 import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
 
 // Dependencies - Assets
@@ -22,6 +23,10 @@ import { PencilIcon } from '@phosphor-icons/react/dist/ssr';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { timeFromNow } from '@structure/source/utilities/time/Time';
+import {
+    generatePostNavigationTrailLinks,
+    PostNavigationTrailIconMapping,
+} from '@structure/source/modules/post/utilities/PostNavigationTrail';
 
 // Interface - FAQ Item
 interface FaqItem {
@@ -117,13 +122,17 @@ function parseFaqFromContent(content: string): ParsedContent {
     };
 }
 
-// Component - SupportPostPage
-export interface SupportPostPageProperties {
+// Component - PostPage
+export interface PostPageProperties {
     className?: string;
     postTopicSlug?: string;
     parentPostTopicsSlugs?: string[];
-    basePath?: string;
+    basePath: string;
+    searchPath?: string;
+    searchPlaceholder?: string;
     showNeedMoreHelp?: boolean;
+    // Maps path slugs (e.g., 'library') to icons for the navigation trail
+    navigationTrailIconMapping?: PostNavigationTrailIconMapping;
     post: {
         identifier: string;
         slug: string;
@@ -135,17 +144,12 @@ export interface SupportPostPageProperties {
         createdAt: string | Date;
     };
 }
-export function SupportPostPage(properties: SupportPostPageProperties) {
-    // console.log('SupportPostPage', properties);
-
+export function PostPage(properties: PostPageProperties) {
     // Hooks
     const account = useAccount();
 
-    // Defaults
-    const basePath = properties.basePath ?? '/support';
-
     // The URL pathname for the navigation trail
-    let navigationTrailUrlPathname = basePath;
+    let navigationTrailUrlPathname = properties.basePath;
     if(properties.parentPostTopicsSlugs) {
         navigationTrailUrlPathname += properties.parentPostTopicsSlugs.length
             ? '/' + properties.parentPostTopicsSlugs.join('/')
@@ -154,6 +158,14 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
     if(properties.postTopicSlug) {
         navigationTrailUrlPathname += '/' + properties.postTopicSlug;
     }
+
+    // Generate navigation trail links with icons
+    const navigationTrailLinks = generatePostNavigationTrailLinks(
+        properties.parentPostTopicsSlugs,
+        properties.postTopicSlug,
+        undefined, // No topic title available, will generate from slug
+        properties.navigationTrailIconMapping,
+    );
 
     const postHref =
         navigationTrailUrlPathname + '/articles/' + properties.post.slug + '-' + properties.post.identifier;
@@ -179,7 +191,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
                         size="Icon"
                         icon={PencilIcon}
                         href={
-                            basePath +
+                            properties.basePath +
                             '/posts/' +
                             properties.post.identifier +
                             '/edit?postTopicSlug=' +
@@ -190,7 +202,15 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
             )}
 
             <div className="mb-12">
-                <NavigationTrail className="mb-8" urlPath={navigationTrailUrlPathname} />
+                <NavigationTrail className="mb-6" links={navigationTrailLinks} />
+
+                {properties.searchPath && (
+                    <PostSearch
+                        className="mb-8"
+                        placeholder={properties.searchPlaceholder}
+                        searchPath={properties.searchPath}
+                    />
+                )}
 
                 <div className="mb-4 max-w-2xl">
                     <Link href={postHref} className="">
