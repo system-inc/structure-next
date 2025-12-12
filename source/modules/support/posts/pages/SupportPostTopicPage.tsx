@@ -18,6 +18,7 @@ import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
 import { Feedback } from '@structure/source/modules/feedback/components/Feedback';
 import { SupportTopicTile } from '@structure/source/modules/support/posts/components/SupportTopicTile';
 import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
+import { SupportSearch } from '@structure/source/modules/support/posts/components/SupportSearch';
 
 // Dependencies - Assets
 import { PlusIcon, PencilSimpleIcon, GearIcon, CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
@@ -31,7 +32,11 @@ export interface SupportPostTopicPageProperties {
     postTopicSlug: string;
     parentPostTopicsSlugs?: string[];
     basePath?: string;
+    managementBasePath?: string; // Base path for management links (edit topic, create post, etc.) - defaults to '/support'
+    showNavigationTrail?: boolean; // Whether to show the breadcrumb trail - defaults to true
     showNeedMoreHelp?: boolean;
+    searchPath?: string; // Path for search - if provided, shows search bar
+    searchPlaceholder?: string;
     postTopic: PostTopicQuery['postTopic'];
     postTopicAndSubPostTopicsWithPosts: {
         postTopicId?: string;
@@ -50,6 +55,8 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
 
     // Defaults
     const basePath = properties.basePath ?? '/support';
+    const managementBasePath = properties.managementBasePath ?? '/support';
+    const showNavigationTrail = properties.showNavigationTrail !== false;
 
     // Icon
     const postTopicIcon =
@@ -81,24 +88,35 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                         {
                             iconLeft: PencilSimpleIcon,
                             children: 'Edit Topic',
-                            href: basePath + '/post-topics/' + properties.postTopic.topic.id + '/edit',
+                            href: managementBasePath + '/post-topics/' + properties.postTopic.topic.id + '/edit',
                         },
                         {
                             iconLeft: PlusIcon,
                             children: 'Create Sub Topic',
-                            href: basePath + '/post-topics/create?parentPostTopicId=' + properties.postTopic.topic.id,
+                            href:
+                                managementBasePath +
+                                '/post-topics/create?parentPostTopicId=' +
+                                properties.postTopic.topic.id,
                         },
                         {
                             iconLeft: PlusIcon,
                             children: 'Create Post',
-                            href: basePath + '/posts/create?postTopicId=' + properties.postTopic.topic.id,
+                            href: managementBasePath + '/posts/create?postTopicId=' + properties.postTopic.topic.id,
                         },
                     ]}
                 />
             )}
 
+            {properties.searchPath && (
+                <SupportSearch
+                    className="mb-8"
+                    placeholder={properties.searchPlaceholder}
+                    searchPath={properties.searchPath}
+                />
+            )}
+
             <div className="">
-                <NavigationTrail className="mb-6" />
+                {showNavigationTrail && <NavigationTrail className="mb-6" />}
 
                 <div className="max-w-2xl">
                     <Link
@@ -150,7 +168,8 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                                 );
                             })}
                         </div>
-                        <HorizontalRule className="my-6" />
+                        {/* Only show HR if there are sub-topics following */}
+                        {subTopics.length > 0 && <HorizontalRule className="my-6" />}
                     </div>
                 )}
 
@@ -195,6 +214,8 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                         }
                         subTopicHref += '/' + properties.postTopicSlug + '/' + subTopic.postTopicSlug;
 
+                        const isLastSubTopic = subTopicIndex === subTopics.length - 1;
+
                         return (
                             <div key={subTopicIndex}>
                                 <Link href={subTopicHref}>
@@ -221,7 +242,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                                         );
                                     })}
                                 </div>
-                                <HorizontalRule className="my-6" />
+                                {!isLastSubTopic && <HorizontalRule className="my-6" />}
                             </div>
                         );
                     })}

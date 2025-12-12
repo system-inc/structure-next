@@ -12,6 +12,7 @@ import { renderToString } from 'react-dom/server';
 import { Link } from '@structure/source/components/navigation/Link';
 import { CopyButton } from '@structure/source/components/buttons/CopyButton';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
+import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 
 // Dependencies - Utilities
 import { rehypeCustomFootnoteIds } from '@structure/source/components/markdown/utilities/MarkdownUtilities';
@@ -75,15 +76,16 @@ const components = {
         <Link href={properties.href ?? ''} className="underline" {...elementProperties(properties)} />
     ),
     pre: (properties: React.ComponentProps<'pre'>) => (
-        <pre
-            className="relative mt-6 mb-6 rounded-md border border--3 background--2 p-4 text-sm first:mt-0"
-            {...elementProperties(properties)}
-        >
-            {properties.children}
+        <div className="relative mt-6 mb-6 rounded-md border border--3 background--2 text-sm first:mt-0">
+            <ScrollArea containerClassName="h-auto" horizontalScrollbar={true} verticalScrollbar={false}>
+                <pre className="p-4" {...elementProperties(properties)}>
+                    {properties.children}
+                </pre>
+            </ScrollArea>
             <span className="absolute top-3 right-3 font-sans">
-                <CopyButton className="" value={getInnerText(properties.children)} />
+                <CopyButton className="background--2" value={getInnerText(properties.children)} />
             </span>
-        </pre>
+        </div>
     ),
     code: (properties: React.ComponentProps<'code'>) => (
         // Inline code styling - the [pre_&] variant removes styles when inside a <pre>

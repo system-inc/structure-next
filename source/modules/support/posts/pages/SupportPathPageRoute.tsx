@@ -294,7 +294,11 @@ export interface SupportPathPageRouteProperties {
     supportPath: string[];
     topicIconMapping?: SupportPostTopicPageProperties['topicIconMapping'];
     basePath?: string;
+    managementBasePath?: string;
+    showNavigationTrail?: boolean;
     showNeedMoreHelp?: boolean;
+    searchPath?: string;
+    searchPlaceholder?: string;
 }
 export async function SupportPathPageRoute(properties: SupportPathPageRouteProperties) {
     const serverSideProperties = await getSupportPathServerSideProperties(properties.supportPath);
@@ -324,7 +328,11 @@ export async function SupportPathPageRoute(properties: SupportPathPageRoutePrope
                 postTopicSlug={serverSideProperties.postTopicSlug}
                 parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
                 basePath={properties.basePath}
+                managementBasePath={properties.managementBasePath}
+                showNavigationTrail={properties.showNavigationTrail}
                 showNeedMoreHelp={properties.showNeedMoreHelp}
+                searchPath={properties.searchPath}
+                searchPlaceholder={properties.searchPlaceholder}
                 postTopic={serverSideProperties.postTopic}
                 postTopicAndSubPostTopicsWithPosts={serverSideProperties.postTopicAndSubPostTopicsWithPosts}
                 topicIconMapping={properties.topicIconMapping}
