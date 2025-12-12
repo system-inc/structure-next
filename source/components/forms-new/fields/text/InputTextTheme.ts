@@ -153,7 +153,7 @@ export const inputTextTheme: InputTextThemeConfiguration = {
             containerRight: 'right-0 mr-2.5',
             inputPaddingLeft: 'pl-9',
             inputPaddingRight: 'pr-9',
-            clearButton: mergeClassNames(inputTextCommonClearButtonClassNames, 'size-7'),
+            clearButton: mergeClassNames(inputTextCommonClearButtonClassNames, 'size-7 rounded-full'),
         },
         Base: {
             icon: 'size-4',
@@ -161,7 +161,7 @@ export const inputTextTheme: InputTextThemeConfiguration = {
             containerRight: 'right-0 mr-3',
             inputPaddingLeft: 'pl-10',
             inputPaddingRight: 'pr-10',
-            clearButton: mergeClassNames(inputTextCommonClearButtonClassNames, 'size-8'),
+            clearButton: mergeClassNames(inputTextCommonClearButtonClassNames, 'size-8 rounded-full'),
         },
         Large: {
             icon: 'size-4.5',
@@ -169,7 +169,7 @@ export const inputTextTheme: InputTextThemeConfiguration = {
             containerRight: 'right-0 mr-2',
             inputPaddingLeft: 'pl-11',
             inputPaddingRight: 'pr-11',
-            clearButton: mergeClassNames(inputTextCommonClearButtonClassNames, 'size-8'),
+            clearButton: mergeClassNames(inputTextCommonClearButtonClassNames, 'size-8 rounded-full'),
         },
     },
 

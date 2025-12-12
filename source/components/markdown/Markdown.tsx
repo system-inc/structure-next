@@ -106,27 +106,26 @@ const components = {
     ),
     hr: () => <HorizontalRule className="my-10" />,
     table: (properties: React.ComponentProps<'table'>) => (
-        <table
-            className="relative mt-6 mb-6 w-full overflow-auto rounded border border--0"
-            {...elementProperties(properties)}
-        />
+        <div className="relative mt-6 mb-6 w-full overflow-hidden rounded-lg border border--0">
+            <table className="w-full" {...elementProperties(properties)} />
+        </div>
     ),
     thead: (properties: React.ComponentProps<'thead'>) => (
-        <thead className="border-b background--1" {...elementProperties(properties)} />
+        <thead className="border-b border--0 background--1" {...elementProperties(properties)} />
     ),
     tbody: (properties: React.ComponentProps<'tbody'>) => <tbody className="" {...elementProperties(properties)} />,
     tr: (properties: React.ComponentProps<'tr'>) => (
-        <tr className="border-b border--3 last:border-b-0" {...elementProperties(properties)} />
+        <tr className="border-b border--0 last:border-b-0" {...elementProperties(properties)} />
     ),
     th: (properties: React.ComponentProps<'th'>) => (
         <th
-            className="border-r border--3 px-4 py-2 text-[16px] leading-7 font-medium last:border-r-0"
+            className="border-r border--0 px-4 py-2 text-left text-base font-medium last:border-r-0"
             {...elementProperties(properties)}
         />
     ),
     td: (properties: React.ComponentProps<'td'>) => (
         <td
-            className="border-r border--3 px-4 py-2 text-[16px] leading-7 font-light last:border-r-0"
+            className="border-r border--0 px-4 py-2 text-base font-light last:border-r-0"
             {...elementProperties(properties)}
         />
     ),

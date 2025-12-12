@@ -3065,6 +3065,37 @@ export type PostDetailedQuery = {
     };
 };
 
+export type PostPrivilegedQueryVariables = Exact<{
+    id?: InputMaybe<Scalars['String']['input']>;
+    identifier?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type PostPrivilegedQuery = {
+    __typename?: 'Query';
+    postPrivileged: {
+        __typename?: 'Post';
+        id: string;
+        identifier: string;
+        title: string;
+        slug: string;
+        description?: string | null;
+        content?: string | null;
+        contentType: RichContentFormat;
+        status: PostStatus;
+        type: string;
+        metadata?: any | null;
+        createdAt: any;
+        updatedAt: any;
+        topics?: Array<{
+            __typename?: 'PostTopic';
+            id: string;
+            title: string;
+            slug: string;
+            parentId?: string | null;
+        }> | null;
+    };
+};
+
 export type PostQueryVariables = Exact<{
     identifier: Scalars['String']['input'];
 }>;
@@ -3109,6 +3140,30 @@ export type PostUnvoteMutationVariables = Exact<{
 export type PostUnvoteMutation = {
     __typename?: 'Mutation';
     postUnvote: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostUpdatePrivilegedMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+    input: PostUpdateInput;
+}>;
+
+export type PostUpdatePrivilegedMutation = {
+    __typename?: 'Mutation';
+    postUpdatePrivileged: {
+        __typename?: 'Post';
+        id: string;
+        identifier: string;
+        title: string;
+        slug: string;
+        description?: string | null;
+        content?: string | null;
+        contentType: RichContentFormat;
+        status: PostStatus;
+        type: string;
+        metadata?: any | null;
+        createdAt: any;
+        updatedAt: any;
+    };
 };
 
 export type PostUpdateMutationVariables = Exact<{
@@ -3197,6 +3252,49 @@ export type PostsDetailedQuery = {
                 reacted: boolean;
             }> | null;
         }>;
+    };
+};
+
+export type PostsPrivilegedQueryVariables = Exact<{
+    pagination: PaginationInput;
+}>;
+
+export type PostsPrivilegedQuery = {
+    __typename?: 'Query';
+    postsPrivileged: {
+        __typename?: 'PagedPosts';
+        items: Array<{
+            __typename?: 'Post';
+            id: string;
+            identifier: string;
+            title: string;
+            slug: string;
+            description?: string | null;
+            content?: string | null;
+            contentType: RichContentFormat;
+            status: PostStatus;
+            type: string;
+            metadata?: any | null;
+            createdAt: any;
+            updatedAt: any;
+            topics?: Array<{
+                __typename?: 'PostTopic';
+                id: string;
+                title: string;
+                slug: string;
+                parentId?: string | null;
+            }> | null;
+        }>;
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            pagesTotal: number;
+            page: number;
+        };
     };
 };
 
@@ -4339,6 +4437,30 @@ export const PostDetailedDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostDetailedQuery, PostDetailedQueryVariables>;
+export const PostPrivilegedDocument = new TypedDocumentString(`
+    query PostPrivileged($id: String, $identifier: String) {
+  postPrivileged(id: $id, identifier: $identifier) {
+    id
+    identifier
+    title
+    slug
+    description
+    content
+    contentType
+    status
+    type
+    metadata
+    createdAt
+    updatedAt
+    topics {
+      id
+      title
+      slug
+      parentId
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<PostPrivilegedQuery, PostPrivilegedQueryVariables>;
 export const PostDocument = new TypedDocumentString(`
     query Post($identifier: String!) {
   post(identifier: $identifier) {
@@ -4373,6 +4495,24 @@ export const PostUnvoteDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostUnvoteMutation, PostUnvoteMutationVariables>;
+export const PostUpdatePrivilegedDocument = new TypedDocumentString(`
+    mutation PostUpdatePrivileged($id: String!, $input: PostUpdateInput!) {
+  postUpdatePrivileged(id: $id, input: $input) {
+    id
+    identifier
+    title
+    slug
+    description
+    content
+    contentType
+    status
+    type
+    metadata
+    createdAt
+    updatedAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostUpdatePrivilegedMutation, PostUpdatePrivilegedMutationVariables>;
 export const PostUpdateDocument = new TypedDocumentString(`
     mutation PostUpdate($id: String!, $input: PostUpdateInput!) {
   postUpdate(id: $id, input: $input) {
@@ -4443,6 +4583,41 @@ export const PostsDetailedDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostsDetailedQuery, PostsDetailedQueryVariables>;
+export const PostsPrivilegedDocument = new TypedDocumentString(`
+    query PostsPrivileged($pagination: PaginationInput!) {
+  postsPrivileged(pagination: $pagination) {
+    items {
+      id
+      identifier
+      title
+      slug
+      description
+      content
+      contentType
+      status
+      type
+      metadata
+      createdAt
+      updatedAt
+      topics {
+        id
+        title
+        slug
+        parentId
+      }
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<PostsPrivilegedQuery, PostsPrivilegedQueryVariables>;
 export const PostsDocument = new TypedDocumentString(`
     query Posts($pagination: PaginationInput!) {
   posts(pagination: $pagination) {
@@ -7137,6 +7312,26 @@ export const PostDetailedOperation: GraphQLOperationMetadata<typeof PostDetailed
     ],
 };
 
+export const PostPrivilegedOperation: GraphQLOperationMetadata<typeof PostPrivilegedDocument> = {
+    operation: 'PostPrivileged',
+    operationType: 'query',
+    document: PostPrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: false,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'identifier',
+            required: false,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
 export const PostOperation: GraphQLOperationMetadata<typeof PostDocument> = {
     operation: 'Post',
     operationType: 'query',
@@ -7175,6 +7370,26 @@ export const PostUnvoteOperation: GraphQLOperationMetadata<typeof PostUnvoteDocu
             required: true,
             kind: 'scalar',
             type: 'String',
+        },
+    ],
+};
+
+export const PostUpdatePrivilegedOperation: GraphQLOperationMetadata<typeof PostUpdatePrivilegedDocument> = {
+    operation: 'PostUpdatePrivileged',
+    operationType: 'mutation',
+    document: PostUpdatePrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: PostUpdateInputMetadata,
         },
     ],
 };
@@ -7223,6 +7438,20 @@ export const PostsDetailedOperation: GraphQLOperationMetadata<typeof PostsDetail
     operation: 'PostsDetailed',
     operationType: 'query',
     document: PostsDetailedDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: PaginationInputMetadata,
+        },
+    ],
+};
+
+export const PostsPrivilegedOperation: GraphQLOperationMetadata<typeof PostsPrivilegedDocument> = {
+    operation: 'PostsPrivileged',
+    operationType: 'query',
+    document: PostsPrivilegedDocument,
     parameters: [
         {
             parameter: 'pagination',

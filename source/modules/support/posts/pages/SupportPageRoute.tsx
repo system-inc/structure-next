@@ -15,9 +15,9 @@ export interface SupportPageRouteConfiguration {
 export async function getSupportPageServerSideProperties(configuration: SupportPageRouteConfiguration) {
     const serverSideNetworkService = await getServerSideNetworkService();
 
-    console.log('[SupportPageRoute] configuration.topicIds:', configuration.topicIds);
-    console.log('[SupportPageRoute] typeof topicIds:', typeof configuration.topicIds);
-    console.log('[SupportPageRoute] Array.isArray(topicIds):', Array.isArray(configuration.topicIds));
+    // console.log('[SupportPageRoute] configuration.topicIds:', configuration.topicIds);
+    // console.log('[SupportPageRoute] typeof topicIds:', typeof configuration.topicIds);
+    // console.log('[SupportPageRoute] Array.isArray(topicIds):', Array.isArray(configuration.topicIds));
 
     // PostTopics
     const postTopicsRequest = await serverSideNetworkService.graphQlRequest(PostTopicsDocument, {
