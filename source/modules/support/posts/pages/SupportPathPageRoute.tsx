@@ -291,6 +291,7 @@ export interface SupportPathPageRouteProperties {
     supportPath: string[];
     topicIconMapping?: SupportPostTopicPageProperties['topicIconMapping'];
     basePath?: string;
+    showNeedMoreHelp?: boolean;
 }
 export async function SupportPathPageRoute(properties: SupportPathPageRouteProperties) {
     const serverSideProperties = await getSupportPathServerSideProperties(properties.supportPath);
@@ -303,6 +304,7 @@ export async function SupportPathPageRoute(properties: SupportPathPageRoutePrope
                 postTopicSlug={serverSideProperties.postTopicSlug}
                 parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
                 basePath={properties.basePath}
+                showNeedMoreHelp={properties.showNeedMoreHelp}
                 post={serverSideProperties.post}
             />
         );
@@ -319,6 +321,7 @@ export async function SupportPathPageRoute(properties: SupportPathPageRoutePrope
                 postTopicSlug={serverSideProperties.postTopicSlug}
                 parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
                 basePath={properties.basePath}
+                showNeedMoreHelp={properties.showNeedMoreHelp}
                 postTopic={serverSideProperties.postTopic}
                 postTopicAndSubPostTopicsWithPosts={serverSideProperties.postTopicAndSubPostTopicsWithPosts}
                 topicIconMapping={properties.topicIconMapping}

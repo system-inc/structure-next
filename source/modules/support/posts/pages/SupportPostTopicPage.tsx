@@ -31,6 +31,7 @@ export interface SupportPostTopicPageProperties {
     postTopicSlug: string;
     parentPostTopicsSlugs?: string[];
     basePath?: string;
+    showNeedMoreHelp?: boolean;
     postTopic: PostTopicQuery['postTopic'];
     postTopicAndSubPostTopicsWithPosts: {
         postTopicTitle: string; // "General" will be the title root topic
@@ -47,7 +48,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
     const account = useAccount();
 
     // Defaults
-    const basePath = properties.basePath || '/support';
+    const basePath = properties.basePath ?? '/support';
 
     // Icon
     const postTopicIcon =
@@ -220,9 +221,13 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
 
             <Feedback className="flex justify-center text-center" />
 
-            <HorizontalRule className="mt-16 mb-16" />
+            {properties.showNeedMoreHelp !== false && (
+                <>
+                    <HorizontalRule className="mt-16 mb-16" />
 
-            <SupportNeedMoreHelp />
+                    <SupportNeedMoreHelp />
+                </>
+            )}
         </div>
     );
 }

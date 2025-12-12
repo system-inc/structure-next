@@ -32,7 +32,7 @@ export interface SupportPageProperties {
 }
 export function SupportPage(properties: SupportPageProperties) {
     // Defaults
-    const basePath = properties.basePath || '/support';
+    const basePath = properties.basePath ?? '/support';
     const title = properties.title || 'Support';
     const heading = properties.heading || 'How can we help?';
     const description = properties.description || "Browse our articles or connect with our team—we're here to help!";

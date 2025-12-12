@@ -123,6 +123,7 @@ export interface SupportPostPageProperties {
     postTopicSlug?: string;
     parentPostTopicsSlugs?: string[];
     basePath?: string;
+    showNeedMoreHelp?: boolean;
     post: {
         identifier: string;
         slug: string;
@@ -141,7 +142,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
     const account = useAccount();
 
     // Defaults
-    const basePath = properties.basePath || '/support';
+    const basePath = properties.basePath ?? '/support';
 
     // The URL pathname for the navigation trail
     let navigationTrailUrlPathname = basePath;
@@ -230,9 +231,13 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
 
             <Feedback className="flex justify-center text-center" />
 
-            <HorizontalRule className="my-16" />
+            {properties.showNeedMoreHelp !== false && (
+                <>
+                    <HorizontalRule className="my-16" />
 
-            <SupportNeedMoreHelp />
+                    <SupportNeedMoreHelp />
+                </>
+            )}
         </div>
     );
 }
