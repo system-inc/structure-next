@@ -260,8 +260,9 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
 }
 
 // Metadata generator
-export async function generateSupportPathPageMetadata(supportPath: string[]) {
+export async function generateSupportPathPageMetadata(supportPath: string[], titleSuffix?: string) {
     const serverSideProperties = await getSupportPathServerSideProperties(supportPath);
+    const suffix = titleSuffix ?? 'Support';
 
     let title = '';
 
@@ -271,17 +272,31 @@ export async function generateSupportPathPageMetadata(supportPath: string[]) {
     }
     // PostTopic
     else if(serverSideProperties.postTopicSlug && serverSideProperties.postTopic) {
-        title = serverSideProperties.postTopic.topic.title;
+        const topicTitle = serverSideProperties.postTopic.topic.title;
 
-        // Add the parent topic titles
+        // Only add topic title if it's different from the suffix (avoid "Library • Library")
+        if(topicTitle !== suffix) {
+            title = topicTitle;
+        }
+
+        // Add the parent topic titles (excluding any that match the suffix)
         if(serverSideProperties.parentPostTopicsSlugs) {
             serverSideProperties.parentPostTopicsSlugs.forEach(function (parentPostTopicSlug) {
-                title += ' • ' + slugToTitleCase(parentPostTopicSlug);
+                const parentTitle = slugToTitleCase(parentPostTopicSlug);
+                if(parentTitle !== suffix) {
+                    title += ' • ' + parentTitle;
+                }
             });
         }
     }
 
-    title += ' • Support';
+    // Add suffix, handling case where title might be empty
+    if(title) {
+        title += ' • ' + suffix;
+    }
+    else {
+        title = suffix;
+    }
 
     return {
         title: title,
