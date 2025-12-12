@@ -24,7 +24,7 @@ export async function getSearchPostsPageServerSideProperties(searchTerm: string)
                     },
                     {
                         operator: ColumnFilterConditionOperator.Like,
-                        column: 'content',
+                        column: 'title',
                         value: '%' + searchTerm + '%',
                     },
                 ],

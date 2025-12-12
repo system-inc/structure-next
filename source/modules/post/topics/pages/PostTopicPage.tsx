@@ -64,6 +64,12 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
     const showNavigationTrail = properties.showNavigationTrail !== false;
     const showTitle = properties.showTitle !== false;
 
+    // Filter out parent slugs that match the basePath to avoid duplication (e.g., /library/library)
+    const basePathSlug = properties.basePath.replace(/^\//, ''); // Remove leading slash
+    const filteredParentSlugs = properties.parentPostTopicsSlugs?.filter(function (slug) {
+        return slug !== basePathSlug;
+    });
+
     // Icon
     const postTopicIcon =
         properties.topicIconMapping && properties.postTopic.topic.id in properties.topicIconMapping
@@ -143,11 +149,10 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
                     <Link
                         href={
                             properties.basePath +
-                            (properties.parentPostTopicsSlugs?.length
-                                ? '/' + properties.parentPostTopicsSlugs.join('/')
-                                : '') +
-                            '/' +
-                            properties.postTopic.topic.slug
+                            (filteredParentSlugs?.length ? '/' + filteredParentSlugs.join('/') : '') +
+                            (properties.postTopic.topic.slug !== basePathSlug
+                                ? '/' + properties.postTopic.topic.slug
+                                : '')
                         }
                         className=""
                     >
@@ -166,10 +171,12 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
                         <div className="">
                             {generalPosts.posts.map(function (post, postIndex) {
                                 let postHref = properties.basePath;
-                                if(properties.parentPostTopicsSlugs?.length) {
-                                    postHref += '/' + properties.parentPostTopicsSlugs.join('/');
+                                if(filteredParentSlugs?.length) {
+                                    postHref += '/' + filteredParentSlugs.join('/');
                                 }
-                                postHref += '/' + properties.postTopicSlug;
+                                if(properties.postTopicSlug !== basePathSlug) {
+                                    postHref += '/' + properties.postTopicSlug;
+                                }
                                 postHref += '/articles/' + post.slug + '-' + post.identifier;
 
                                 return (
@@ -198,10 +205,13 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {subTopics.map(function (subTopic, subTopicIndex) {
                             let subTopicHref = properties.basePath;
-                            if(properties.parentPostTopicsSlugs?.length) {
-                                subTopicHref += '/' + properties.parentPostTopicsSlugs.join('/');
+                            if(filteredParentSlugs?.length) {
+                                subTopicHref += '/' + filteredParentSlugs.join('/');
                             }
-                            subTopicHref += '/' + properties.postTopicSlug + '/' + subTopic.postTopicSlug;
+                            if(properties.postTopicSlug !== basePathSlug) {
+                                subTopicHref += '/' + properties.postTopicSlug;
+                            }
+                            subTopicHref += '/' + subTopic.postTopicSlug;
 
                             // Get icon from mapping if available
                             const subTopicIcon =
@@ -229,10 +239,13 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
                 {!shouldRenderSubTopicsAsTiles &&
                     subTopics.map(function (subTopic, subTopicIndex) {
                         let subTopicHref = properties.basePath;
-                        if(properties.parentPostTopicsSlugs?.length) {
-                            subTopicHref += '/' + properties.parentPostTopicsSlugs.join('/');
+                        if(filteredParentSlugs?.length) {
+                            subTopicHref += '/' + filteredParentSlugs.join('/');
                         }
-                        subTopicHref += '/' + properties.postTopicSlug + '/' + subTopic.postTopicSlug;
+                        if(properties.postTopicSlug !== basePathSlug) {
+                            subTopicHref += '/' + properties.postTopicSlug;
+                        }
+                        subTopicHref += '/' + subTopic.postTopicSlug;
 
                         const isLastSubTopic = subTopicIndex === subTopics.length - 1;
 

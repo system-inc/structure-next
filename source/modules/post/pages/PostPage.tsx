@@ -54,13 +54,18 @@ export function PostPage(properties: PostPageProperties) {
     const account = useAccount();
 
     // The URL pathname for the navigation trail
+    // Filter out parent slugs that match the basePath to avoid duplication (e.g., /library/library)
+    const basePathSlug = properties.basePath.replace(/^\//, ''); // Remove leading slash
+    const filteredParentSlugs = properties.parentPostTopicsSlugs?.filter(function (slug) {
+        return slug !== basePathSlug;
+    });
+
     let navigationTrailUrlPathname = properties.basePath;
-    if(properties.parentPostTopicsSlugs) {
-        navigationTrailUrlPathname += properties.parentPostTopicsSlugs.length
-            ? '/' + properties.parentPostTopicsSlugs.join('/')
-            : '';
+    if(filteredParentSlugs) {
+        navigationTrailUrlPathname += filteredParentSlugs.length ? '/' + filteredParentSlugs.join('/') : '';
     }
-    if(properties.postTopicSlug) {
+    // Only add postTopicSlug if it doesn't match the basePath (avoid /library/library)
+    if(properties.postTopicSlug && properties.postTopicSlug !== basePathSlug) {
         navigationTrailUrlPathname += '/' + properties.postTopicSlug;
     }
 
@@ -93,8 +98,7 @@ export function PostPage(properties: PostPageProperties) {
                         size="Icon"
                         icon={PencilIcon}
                         href={
-                            '/' +
-                            (properties.parentPostTopicsSlugs?.[0] ?? '') +
+                            properties.basePath +
                             '/posts/' +
                             properties.post.identifier +
                             '/edit?postTopicSlug=' +
