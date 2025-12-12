@@ -9,6 +9,7 @@ import { DeviceActivityInterface } from '@structure/source/modules/engagement/co
 // Dependencies - Main Components
 import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 import { Link } from '@structure/source/components/navigation/Link';
+import { Tip } from '@structure/source/components/popovers/Tip';
 
 // Dependencies - Animation
 import { motion, AnimatePresence, cubicBezier } from 'motion/react';
@@ -26,6 +27,7 @@ import {
     CompassIcon,
     FireIcon,
     GlobeIcon,
+    GlobeHemisphereWestIcon,
     YoutubeLogoIcon,
     InstagramLogoIcon,
     XLogoIcon,
@@ -36,14 +38,15 @@ import {
     MetaLogoIcon,
     PinterestLogoIcon,
     ArrowSquareOutIcon,
+    CurrencyDollarIcon,
 } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import {
     getPlatformIconType,
     getDeviceTypeIconType,
-    getReferrerIconType,
     getReferrerName,
+    getTrafficSourceInfo,
     truncatePath,
     calculateSessionDuration,
     formatTimeAgo,
@@ -87,7 +90,13 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
         properties.deviceActivity.device?.deviceCategory,
         properties.deviceActivity.device?.operatingSystem,
     );
-    const referrerIconType = getReferrerIconType(properties.deviceActivity.referrer);
+
+    // Get traffic source from both referrer URL and UTM parameters in entrance page
+    const oldestEventForTrafficSource = properties.deviceActivity.events[properties.deviceActivity.events.length - 1];
+    const trafficSourceInfo = getTrafficSourceInfo(
+        properties.deviceActivity.referrer,
+        oldestEventForTrafficSource?.viewIdentifier,
+    );
     const referrerName = getReferrerName(properties.deviceActivity.referrer);
     const shouldTruncate = properties.truncatePaths !== false;
     const currentPath = shouldTruncate
@@ -150,10 +159,10 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
 
     // Check if this is a Meta ad (Facebook/Instagram ad campaign)
     const isMetaAd =
-        properties.deviceActivity.attribution?.includes(' Ad') &&
-        (referrerIconType === 'facebook' || referrerIconType === 'instagram');
+        trafficSourceInfo.isPaid &&
+        (trafficSourceInfo.source === 'facebook' || trafficSourceInfo.source === 'instagram');
 
-    // Determine which referrer icon to show
+    // Determine which referrer icon to show based on traffic source
     let ReferrerIcon: typeof YoutubeLogoIcon | null = null;
     let referrerDisplayText: string | null = null;
 
@@ -161,30 +170,54 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
         ReferrerIcon = MetaLogoIcon;
         referrerDisplayText = properties.deviceActivity.attribution || null;
     }
-    else if(referrerIconType === 'youtube') {
+    else if(trafficSourceInfo.source === 'youtube') {
         ReferrerIcon = YoutubeLogoIcon;
     }
-    else if(referrerIconType === 'instagram') {
+    else if(trafficSourceInfo.source === 'instagram') {
         ReferrerIcon = InstagramLogoIcon;
     }
-    else if(referrerIconType === 'x') {
+    else if(trafficSourceInfo.source === 'x') {
         ReferrerIcon = XLogoIcon;
     }
-    else if(referrerIconType === 'reddit') {
+    else if(trafficSourceInfo.source === 'reddit') {
         ReferrerIcon = RedditLogoIcon;
     }
-    else if(referrerIconType === 'facebook') {
+    else if(trafficSourceInfo.source === 'facebook') {
         ReferrerIcon = FacebookLogoIcon;
     }
-    else if(referrerIconType === 'google') {
+    else if(trafficSourceInfo.source === 'google') {
         ReferrerIcon = GoogleLogoIcon;
     }
-    else if(referrerIconType === 'linkedin') {
+    else if(trafficSourceInfo.source === 'linkedin') {
         ReferrerIcon = LinkedinLogoIcon;
     }
-    else if(referrerIconType === 'pinterest') {
+    else if(trafficSourceInfo.source === 'pinterest') {
         ReferrerIcon = PinterestLogoIcon;
     }
+    else if(referrerName) {
+        // Show globe icon for unknown referrers (e.g., yougetsignal.com)
+        ReferrerIcon = GlobeHemisphereWestIcon;
+    }
+
+    // Show paid indicator for paid traffic (excluding Meta ads which have their own display)
+    const showPaidIndicator = trafficSourceInfo.isPaid && !isMetaAd;
+
+    // Determine tooltip text for the referrer icon
+    const sourceDisplayNames: Record<string, string> = {
+        youtube: 'YouTube',
+        instagram: 'Instagram',
+        x: 'X (Twitter)',
+        reddit: 'Reddit',
+        facebook: 'Facebook',
+        google: 'Google',
+        linkedin: 'LinkedIn',
+        pinterest: 'Pinterest',
+    };
+    const referrerTooltip = isMetaAd
+        ? 'Meta Ads'
+        : trafficSourceInfo.source
+          ? sourceDisplayNames[trafficSourceInfo.source] + (showPaidIndicator ? ' (Paid)' : '')
+          : referrerName || null;
 
     // Render the component
     return (
@@ -346,8 +379,31 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
             {/* Bottom row: Referrer source + Attribution/Path on left, Session duration on right */}
             <div className="flex items-center justify-between gap-2 text-xs content--2">
                 <div className="flex items-center gap-1.5 truncate content--2">
-                    {ReferrerIcon ? (
-                        <ReferrerIcon className="h-3.5 w-3.5 shrink-0" />
+                    {ReferrerIcon && referrerTooltip ? (
+                        <Tip
+                            content={referrerTooltip}
+                            trigger={
+                                <div className="relative shrink-0">
+                                    <ReferrerIcon className="h-3.5 w-3.5" />
+                                    {showPaidIndicator && (
+                                        <CurrencyDollarIcon
+                                            weight="bold"
+                                            className="absolute -right-1 -bottom-1 h-2.5 w-2.5 rounded-full background--0 content--positive"
+                                        />
+                                    )}
+                                </div>
+                            }
+                        />
+                    ) : ReferrerIcon ? (
+                        <div className="relative shrink-0">
+                            <ReferrerIcon className="h-3.5 w-3.5" />
+                            {showPaidIndicator && (
+                                <CurrencyDollarIcon
+                                    weight="bold"
+                                    className="absolute -right-1 -bottom-1 h-2.5 w-2.5 rounded-full background--0 content--positive"
+                                />
+                            )}
+                        </div>
                     ) : referrerName ? (
                         <span className="shrink-0">{referrerName}</span>
                     ) : null}

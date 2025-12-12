@@ -2,50 +2,129 @@
 import { timeFromNow } from '@structure/source/utilities/time/Time';
 import { differenceInSeconds } from 'date-fns';
 
-// Creates attribution message from entrance page, referrer, and UTM parameters
-export function getAttributionMessage(referrer?: string, viewIdentifier?: string): string | null {
-    // Parse UTM parameters from viewIdentifier if available
-    let utmSource = '';
-    let utmMedium = '';
-    let utmCampaign = '';
+// Traffic source type for icons
+export type TrafficSourceType =
+    | 'youtube'
+    | 'instagram'
+    | 'x'
+    | 'reddit'
+    | 'facebook'
+    | 'google'
+    | 'linkedin'
+    | 'pinterest';
 
-    if(viewIdentifier && viewIdentifier.includes('?')) {
-        const queryString = viewIdentifier.split('?')[1];
-        if(queryString) {
-            const params = new URLSearchParams(queryString);
-            utmSource = params.get('utm_source') || '';
-            utmMedium = params.get('utm_medium') || '';
-            utmCampaign = params.get('utm_campaign') || '';
-        }
+// Parsed UTM parameters
+export interface UtmParameters {
+    source: string;
+    medium: string;
+    campaign: string;
+}
+
+// Traffic source info including paid status
+export interface TrafficSourceInfo {
+    source: TrafficSourceType | null;
+    isPaid: boolean;
+}
+
+// Parses UTM parameters from a URL (reusable utility)
+export function parseUtmParameters(viewIdentifier?: string): UtmParameters {
+    if(!viewIdentifier || !viewIdentifier.includes('?')) {
+        return { source: '', medium: '', campaign: '' };
     }
 
-    // Get entrance page path (without query params for cleaner display)
+    const queryString = viewIdentifier.split('?')[1];
+    if(!queryString) {
+        return { source: '', medium: '', campaign: '' };
+    }
+
+    const params = new URLSearchParams(queryString);
+    return {
+        source: params.get('utm_source') || '',
+        medium: params.get('utm_medium') || '',
+        campaign: params.get('utm_campaign') || '',
+    };
+}
+
+// Checks if UTM medium indicates paid traffic
+function isPaidMedium(medium: string): boolean {
+    const mediumLower = medium.toLowerCase();
+    return (
+        mediumLower === 'paidsocial' ||
+        mediumLower === 'cpc' ||
+        mediumLower === 'paid' ||
+        mediumLower === 'ppc' ||
+        mediumLower === 'display'
+    );
+}
+
+// Maps UTM source to traffic source type
+function mapUtmSourceToTrafficSource(source: string): TrafficSourceType | null {
+    const sourceLower = source.toLowerCase();
+
+    if(sourceLower === 'pinterest') return 'pinterest';
+    if(sourceLower === 'facebook' || sourceLower === 'fb') return 'facebook';
+    if(sourceLower === 'instagram' || sourceLower === 'ig') return 'instagram';
+    if(sourceLower === 'google') return 'google';
+    if(sourceLower === 'youtube') return 'youtube';
+    if(sourceLower === 'twitter' || sourceLower === 'x') return 'x';
+    if(sourceLower === 'linkedin') return 'linkedin';
+    if(sourceLower === 'reddit') return 'reddit';
+
+    return null;
+}
+
+// Gets traffic source info from referrer URL and/or UTM parameters
+export function getTrafficSourceInfo(referrer?: string, viewIdentifier?: string): TrafficSourceInfo {
+    // Try referrer-based detection first
+    const referrerSource = getReferrerIconType(referrer);
+    if(referrerSource) {
+        // Check if it's paid via UTM medium
+        const utm = parseUtmParameters(viewIdentifier);
+        return {
+            source: referrerSource,
+            isPaid: isPaidMedium(utm.medium),
+        };
+    }
+
+    // Fall back to UTM-based detection
+    const utm = parseUtmParameters(viewIdentifier);
+    const utmSource = mapUtmSourceToTrafficSource(utm.source);
+
+    return {
+        source: utmSource,
+        isPaid: isPaidMedium(utm.medium),
+    };
+}
+
+// Creates attribution message from entrance page, referrer, and UTM parameters
+export function getAttributionMessage(referrer?: string, viewIdentifier?: string): string | null {
+    const utm = parseUtmParameters(viewIdentifier);
     const entrancePage = viewIdentifier ? viewIdentifier.split('?')[0] : null;
 
     // Priority 1: UTM parameters (best attribution)
-    if(utmSource || utmCampaign) {
+    if(utm.source || utm.campaign) {
         const parts = [];
 
-        if(utmCampaign) {
-            parts.push(utmCampaign);
+        if(utm.campaign) {
+            parts.push(utm.campaign);
         }
-        else if(utmSource) {
-            const sourceName = utmSource.charAt(0).toUpperCase() + utmSource.slice(1);
+        else if(utm.source) {
+            const sourceName = utm.source.charAt(0).toUpperCase() + utm.source.slice(1);
             parts.push(sourceName);
         }
 
-        if(utmMedium) {
-            if(utmMedium === 'cpc' || utmMedium === 'paid') {
+        if(utm.medium) {
+            if(utm.medium === 'cpc' || utm.medium === 'paid') {
                 parts.push('Ad');
             }
-            else if(utmMedium === 'email') {
+            else if(utm.medium === 'email') {
                 parts.push('Email');
             }
-            else if(utmMedium === 'social') {
+            else if(utm.medium === 'social') {
                 parts.push('Social');
             }
             else {
-                parts.push(utmMedium);
+                parts.push(utm.medium);
             }
         }
 
@@ -112,9 +191,7 @@ export function getReferrerName(referrer?: string): string | null {
 }
 
 // Determines referrer icon based on referrer URL
-export function getReferrerIconType(
-    referrer?: string,
-): 'youtube' | 'instagram' | 'x' | 'reddit' | 'facebook' | 'google' | 'linkedin' | null {
+export function getReferrerIconType(referrer?: string): TrafficSourceType | null {
     if(!referrer) {
         return null;
     }
@@ -143,6 +220,9 @@ export function getReferrerIconType(
         }
         if(domain.includes('linkedin.com')) {
             return 'linkedin';
+        }
+        if(domain.includes('pinterest.com') || domain.includes('pin.it')) {
+            return 'pinterest';
         }
 
         return null;
