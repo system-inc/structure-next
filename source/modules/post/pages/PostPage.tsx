@@ -191,7 +191,8 @@ export function PostPage(properties: PostPageProperties) {
                         size="Icon"
                         icon={PencilIcon}
                         href={
-                            properties.basePath +
+                            '/' +
+                            (properties.parentPostTopicsSlugs?.[0] ?? '') +
                             '/posts/' +
                             properties.post.identifier +
                             '/edit?postTopicSlug=' +
