@@ -34,6 +34,7 @@ export interface SupportPostTopicPageProperties {
     showNeedMoreHelp?: boolean;
     postTopic: PostTopicQuery['postTopic'];
     postTopicAndSubPostTopicsWithPosts: {
+        postTopicId?: string;
         postTopicTitle: string; // "General" will be the title root topic
         postTopicSlug: string; // "general" will be the slug root topic
         postTopicDescription?: string | null;
@@ -163,12 +164,21 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                             }
                             subTopicHref += '/' + properties.postTopicSlug + '/' + subTopic.postTopicSlug;
 
+                            // Get icon from mapping if available
+                            const subTopicIcon =
+                                subTopic.postTopicId &&
+                                properties.topicIconMapping &&
+                                subTopic.postTopicId in properties.topicIconMapping
+                                    ? properties.topicIconMapping[subTopic.postTopicId]
+                                    : undefined;
+
                             return (
                                 <SupportTopicTile
                                     key={subTopicIndex}
                                     href={subTopicHref}
                                     title={subTopic.postTopicTitle}
                                     description={subTopic.postTopicDescription}
+                                    icon={subTopicIcon}
                                     rainbowPosition={subTopicIndex / subTopics.length}
                                 />
                             );

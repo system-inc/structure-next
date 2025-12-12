@@ -87,6 +87,7 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
     let post = null;
     let postTopic = null;
     const postTopicAndSubPostTopicsWithPosts: {
+        postTopicId?: string;
         postTopicTitle: string;
         postTopicSlug: string;
         postTopicDescription?: string | null;
@@ -231,6 +232,7 @@ export async function getSupportPathServerSideProperties(supportPath: string[]) 
                     // For many sub-topics, just add them without fetching posts
                     sortedSubTopics.forEach(function (subTopic) {
                         postTopicAndSubPostTopicsWithPosts.push({
+                            postTopicId: subTopic.id,
                             postTopicTitle: subTopic.title,
                             postTopicSlug: subTopic.slug,
                             postTopicDescription: subTopic.description,
