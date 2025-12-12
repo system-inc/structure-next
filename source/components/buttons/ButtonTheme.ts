@@ -186,7 +186,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonBehaviorClassNames,
             buttonCommonTypographyClassNames,
             buttonCommonFocusClassNames,
-            'rounded-lg border border--0 text-sm content--0',
+            'rounded-lg border border--0 content--0',
             // Hover - Emphasize border and content
             'hover:border--6 hover:content---1',
             // Active and open - Further emphasize border and content
@@ -400,7 +400,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ExtraSmall: mergeClassNames('px-2 py-1 text-xs'),
         Small: mergeClassNames('px-3 py-1.5 text-sm'),
         Base: mergeClassNames('px-4 py-2 text-sm'),
-        Large: mergeClassNames('px-6 py-2.5'),
+        Large: mergeClassNames('px-6 py-2.5 text-base'),
         ExtraLarge: mergeClassNames('px-10 py-4 text-lg'),
 
         // Icon-only Button Sizes (square buttons with no text, only an icon)

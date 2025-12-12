@@ -56,7 +56,7 @@ const components = {
     ),
     h4: (properties: React.ComponentProps<'h4'>) => (
         <h4
-            className="mt-6 mb-6 text-[18px] leading-[26px] font-medium before:-mt-16 before:block before:h-16"
+            className="mt-6 mb-6 text-[18px] leading-6.5 font-medium before:-mt-16 before:block before:h-16"
             {...elementProperties(properties)}
         />
     ),
@@ -95,10 +95,10 @@ const components = {
         />
     ),
     ul: (properties: React.ComponentProps<'ul'>) => (
-        <ul className="mt-6 mb-6 list-disc pl-[26px]" {...elementProperties(properties)} />
+        <ul className="mt-6 mb-6 list-disc pl-6.5" {...elementProperties(properties)} />
     ),
     ol: (properties: React.ComponentProps<'ol'>) => (
-        <ol className="mt-6 mb-6 list-decimal pl-[26px]" {...elementProperties(properties)} />
+        <ol className="mt-6 mb-6 list-decimal pl-6.5" {...elementProperties(properties)} />
     ),
     li: (properties: React.ComponentProps<'li'>) => (
         <li className="my-2 pl-1.5 text-[16px] leading-7 [&>ol]:my-0 [&>ul]:my-0" {...elementProperties(properties)} />
