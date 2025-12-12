@@ -15,10 +15,16 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 export interface SupportSearchProperties {
     className?: string;
     defaultValue?: string;
+    placeholder?: string;
+    searchPath?: string;
 }
 export function SupportSearch(properties: SupportSearchProperties) {
     // Hooks
     const router = useRouter();
+
+    // Defaults
+    const placeholder = properties.placeholder || 'Search for answers';
+    const searchPath = properties.searchPath || '/support/search';
 
     // Function to handle form submission
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -29,7 +35,7 @@ export function SupportSearch(properties: SupportSearchProperties) {
 
         if(searchTerm && searchTerm.trim()) {
             // Redirect to the search page
-            router.push(`/support/search?term=${encodeURIComponent(searchTerm.trim())}`);
+            router.push(`${searchPath}?term=${encodeURIComponent(searchTerm.trim())}`);
         }
     }
 
@@ -44,7 +50,7 @@ export function SupportSearch(properties: SupportSearchProperties) {
                 iconLeft={MagnifyingGlassIcon}
                 isClearable={true}
                 selectValueOnFocus={true}
-                placeholder="Search for answers"
+                placeholder={placeholder}
                 defaultValue={properties.defaultValue}
             />
         </form>

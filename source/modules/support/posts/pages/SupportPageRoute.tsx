@@ -33,9 +33,9 @@ export async function getSupportPageServerSideProperties(configuration: SupportP
 }
 
 // Metadata generator
-export function generateSupportPageMetadata() {
+export function generateSupportPageMetadata(title?: string) {
     return {
-        title: 'Support',
+        title: title || 'Support',
     };
 }
 
@@ -44,6 +44,12 @@ export interface SupportPageRouteProperties {
     className?: string;
     topicIds: string[];
     topicIconMapping?: SupportPageProperties['topicIconMapping'];
+    basePath?: string;
+    title?: string;
+    heading?: string;
+    description?: string;
+    searchPlaceholder?: string;
+    showNeedMoreHelp?: boolean;
 }
 export async function SupportPageRoute(properties: SupportPageRouteProperties) {
     const serverSideProperties = await getSupportPageServerSideProperties({
@@ -56,6 +62,12 @@ export async function SupportPageRoute(properties: SupportPageRouteProperties) {
             className={properties.className}
             postTopics={serverSideProperties.postTopics}
             topicIconMapping={properties.topicIconMapping}
+            basePath={properties.basePath}
+            title={properties.title}
+            heading={properties.heading}
+            description={properties.description}
+            searchPlaceholder={properties.searchPlaceholder}
+            showNeedMoreHelp={properties.showNeedMoreHelp}
         />
     );
 }

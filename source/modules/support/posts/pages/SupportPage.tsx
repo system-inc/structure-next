@@ -23,22 +23,37 @@ export interface SupportPageProperties {
     topicIconMapping?: {
         [key: string]: React.ReactElement<{ className?: string; style?: React.CSSProperties }>;
     };
+    basePath?: string;
+    title?: string;
+    heading?: string;
+    description?: string;
+    searchPlaceholder?: string;
+    showNeedMoreHelp?: boolean;
 }
 export function SupportPage(properties: SupportPageProperties) {
+    // Defaults
+    const basePath = properties.basePath || '/support';
+    const title = properties.title || 'Support';
+    const heading = properties.heading || 'How can we help?';
+    const description = properties.description || "Browse our articles or connect with our team—we're here to help!";
+    const showNeedMoreHelp = properties.showNeedMoreHelp !== false;
+
     // Render the component
     return (
         <div className={mergeClassNames('container', properties.className)}>
             <h1 className="text-2xl font-medium">
-                <Link href="/support">Support</Link>
+                <Link href={basePath}>{title}</Link>
             </h1>
             <HorizontalRule className="mt-6 mb-12" />
 
-            <h2 className="mb-4 text-center text-4xl">How can we help?</h2>
-            <p className="mb-6 text-center content--4">
-                Browse our articles or connect with our team—we&apos;re here to help!
-            </p>
+            <h2 className="mb-4 text-center text-4xl">{heading}</h2>
+            <p className="mb-6 text-center content--4">{description}</p>
 
-            <SupportSearch className="mx-auto mb-16" />
+            <SupportSearch
+                className="mx-auto mb-16"
+                placeholder={properties.searchPlaceholder}
+                searchPath={basePath + '/search'}
+            />
 
             {/* Post Topics */}
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -51,7 +66,7 @@ export function SupportPage(properties: SupportPageProperties) {
                     return (
                         <SupportTopicTile
                             key={postTopicIndex}
-                            href={'/support/' + postTopic.slug}
+                            href={basePath + '/' + postTopic.slug}
                             title={postTopic.title}
                             description={postTopic.description}
                             postCount={postTopic.postCount}
@@ -62,9 +77,12 @@ export function SupportPage(properties: SupportPageProperties) {
                 })}
             </div>
 
-            <HorizontalRule className="mt-20 mb-14" />
-
-            <SupportNeedMoreHelp />
+            {showNeedMoreHelp && (
+                <>
+                    <HorizontalRule className="mt-20 mb-14" />
+                    <SupportNeedMoreHelp />
+                </>
+            )}
         </div>
     );
 }

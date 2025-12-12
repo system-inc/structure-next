@@ -30,6 +30,7 @@ export interface SupportPostTopicPageProperties {
     className?: string;
     postTopicSlug: string;
     parentPostTopicsSlugs?: string[];
+    basePath?: string;
     postTopic: PostTopicQuery['postTopic'];
     postTopicAndSubPostTopicsWithPosts: {
         postTopicTitle: string; // "General" will be the title root topic
@@ -44,6 +45,9 @@ export interface SupportPostTopicPageProperties {
 export function SupportPostTopicPage(properties: SupportPostTopicPageProperties) {
     // Hooks
     const account = useAccount();
+
+    // Defaults
+    const basePath = properties.basePath || '/support';
 
     // Icon
     const postTopicIcon =
@@ -75,17 +79,17 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                         {
                             iconLeft: PencilSimpleIcon,
                             children: 'Edit Topic',
-                            href: '/support/post-topics/' + properties.postTopic.topic.id + '/edit',
+                            href: basePath + '/post-topics/' + properties.postTopic.topic.id + '/edit',
                         },
                         {
                             iconLeft: PlusIcon,
                             children: 'Create Sub Topic',
-                            href: '/support/post-topics/create?parentPostTopicId=' + properties.postTopic.topic.id,
+                            href: basePath + '/post-topics/create?parentPostTopicId=' + properties.postTopic.topic.id,
                         },
                         {
                             iconLeft: PlusIcon,
                             children: 'Create Post',
-                            href: '/support/posts/create?postTopicId=' + properties.postTopic.topic.id,
+                            href: basePath + '/posts/create?postTopicId=' + properties.postTopic.topic.id,
                         },
                     ]}
                 />
@@ -97,7 +101,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                 <div className="max-w-2xl">
                     <Link
                         href={
-                            '/support' +
+                            basePath +
                             (properties.parentPostTopicsSlugs?.length
                                 ? '/' + properties.parentPostTopicsSlugs.join('/')
                                 : '') +
@@ -121,7 +125,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                         {shouldRenderSubTopicsAsTiles && <h2 className="mb-6 text-xl font-medium">Start Here</h2>}
                         <div className="">
                             {generalPosts.posts.map(function (post, postIndex) {
-                                let postHref = '/support';
+                                let postHref = basePath;
                                 if(properties.parentPostTopicsSlugs?.length) {
                                     postHref += '/' + properties.parentPostTopicsSlugs.join('/');
                                 }
@@ -152,7 +156,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                 {shouldRenderSubTopicsAsTiles && (
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {subTopics.map(function (subTopic, subTopicIndex) {
-                            let subTopicHref = '/support';
+                            let subTopicHref = basePath;
                             if(properties.parentPostTopicsSlugs?.length) {
                                 subTopicHref += '/' + properties.parentPostTopicsSlugs.join('/');
                             }
@@ -174,7 +178,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageProperties)
                 {/* Render sub-topics with posts (original behavior for 5 or fewer sub-topics) */}
                 {!shouldRenderSubTopicsAsTiles &&
                     subTopics.map(function (subTopic, subTopicIndex) {
-                        let subTopicHref = '/support';
+                        let subTopicHref = basePath;
                         if(properties.parentPostTopicsSlugs?.length) {
                             subTopicHref += '/' + properties.parentPostTopicsSlugs.join('/');
                         }

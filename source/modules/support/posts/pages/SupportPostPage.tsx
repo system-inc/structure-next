@@ -122,6 +122,7 @@ export interface SupportPostPageProperties {
     className?: string;
     postTopicSlug?: string;
     parentPostTopicsSlugs?: string[];
+    basePath?: string;
     post: {
         identifier: string;
         slug: string;
@@ -139,8 +140,11 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
     // Hooks
     const account = useAccount();
 
+    // Defaults
+    const basePath = properties.basePath || '/support';
+
     // The URL pathname for the navigation trail
-    let navigationTrailUrlPathname = '/support';
+    let navigationTrailUrlPathname = basePath;
     if(properties.parentPostTopicsSlugs) {
         navigationTrailUrlPathname += properties.parentPostTopicsSlugs.length
             ? '/' + properties.parentPostTopicsSlugs.join('/')
@@ -174,7 +178,8 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
                         size="Icon"
                         icon={PencilIcon}
                         href={
-                            '/support/posts/' +
+                            basePath +
+                            '/posts/' +
                             properties.post.identifier +
                             '/edit?postTopicSlug=' +
                             (properties.postTopicSlug ?? '')

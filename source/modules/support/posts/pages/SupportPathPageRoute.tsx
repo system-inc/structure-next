@@ -290,6 +290,7 @@ export interface SupportPathPageRouteProperties {
     className?: string;
     supportPath: string[];
     topicIconMapping?: SupportPostTopicPageProperties['topicIconMapping'];
+    basePath?: string;
 }
 export async function SupportPathPageRoute(properties: SupportPathPageRouteProperties) {
     const serverSideProperties = await getSupportPathServerSideProperties(properties.supportPath);
@@ -301,6 +302,7 @@ export async function SupportPathPageRoute(properties: SupportPathPageRoutePrope
                 className={properties.className}
                 postTopicSlug={serverSideProperties.postTopicSlug}
                 parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
+                basePath={properties.basePath}
                 post={serverSideProperties.post}
             />
         );
@@ -316,6 +318,7 @@ export async function SupportPathPageRoute(properties: SupportPathPageRoutePrope
                 className={properties.className}
                 postTopicSlug={serverSideProperties.postTopicSlug}
                 parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
+                basePath={properties.basePath}
                 postTopic={serverSideProperties.postTopic}
                 postTopicAndSubPostTopicsWithPosts={serverSideProperties.postTopicAndSubPostTopicsWithPosts}
                 topicIconMapping={properties.topicIconMapping}
