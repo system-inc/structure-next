@@ -160,10 +160,9 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
             )}
 
             <div className={showTitle ? 'mt-8 flex flex-col' : 'flex flex-col'}>
-                {/* Render general posts (Start Here section - only show heading when there are sub-topic tiles) */}
+                {/* Render general posts */}
                 {generalPosts && generalPosts.posts.length > 0 && (
                     <div>
-                        {shouldRenderSubTopicsAsTiles && <h2 className="mb-6 text-xl font-medium">Start Here</h2>}
                         <div className="">
                             {generalPosts.posts.map(function (post, postIndex) {
                                 let postHref = properties.basePath;

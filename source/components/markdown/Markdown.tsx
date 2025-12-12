@@ -15,7 +15,13 @@ import { HorizontalRule } from '@structure/source/components/layout/HorizontalRu
 import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 
 // Dependencies - Utilities
-import { rehypeCustomFootnoteIds } from '@structure/source/components/markdown/utilities/MarkdownUtilities';
+import {
+    rehypeCustomFootnoteIds,
+    rehypeFaqAccordion,
+} from '@structure/source/components/markdown/utilities/MarkdownUtilities';
+
+// Dependencies - Components
+import { Accordion } from '@structure/source/components/containers/Accordion';
 
 // Function to get the inner text of a node
 function getInnerText(reactNode: React.ReactNode): string {
@@ -131,6 +137,47 @@ const components = {
             {...elementProperties(properties)}
         />
     ),
+    // FAQ Section - renders as an Accordion
+    div: function (properties: React.ComponentProps<'div'> & { className?: string; 'data-faq-title'?: string }) {
+        const className = properties.className;
+
+        // FAQ Section wrapper - render as Accordion
+        if(className === 'faq-section') {
+            const faqTitle = properties['data-faq-title'] || 'Frequently Asked Questions';
+
+            // Extract FAQ items from children
+            const items: { identifier: string; title: string; content: React.ReactNode }[] = [];
+            React.Children.forEach(properties.children, function (child, index) {
+                if(
+                    React.isValidElement<{ className?: string; 'data-faq-title'?: string; children?: React.ReactNode }>(
+                        child,
+                    ) &&
+                    child.props.className === 'faq-item'
+                ) {
+                    items.push({
+                        identifier: `faq-${index}`,
+                        title: child.props['data-faq-title'] || `Question ${index + 1}`,
+                        content: <div className="text-[16px] leading-7">{child.props.children}</div>,
+                    });
+                }
+            });
+
+            return (
+                <div className="mt-12">
+                    <h2 className="mb-6 text-2xl font-medium">{faqTitle}</h2>
+                    <Accordion items={items} />
+                </div>
+            );
+        }
+
+        // FAQ Item wrapper - handled by parent, but if rendered directly, just show content
+        if(className === 'faq-item') {
+            return <div>{properties.children}</div>;
+        }
+
+        // Default div rendering
+        return <div {...elementProperties(properties)} />;
+    },
 };
 
 // Component - Markdown
@@ -142,7 +189,7 @@ export function Markdown({ children, ...divProperties }: MarkdownProperties) {
     return (
         <div className="max-w-3xl" {...divProperties}>
             <ReactMarkdown
-                rehypePlugins={[rehypeHighlight, rehypeCustomFootnoteIds]}
+                rehypePlugins={[rehypeHighlight, rehypeFaqAccordion, rehypeCustomFootnoteIds]}
                 remarkPlugins={[remarkCustomHeaderId, remarkGfm]}
                 remarkRehypeOptions={{
                     clobberPrefix: 'citation-',
