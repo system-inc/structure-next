@@ -291,6 +291,7 @@ export interface PostTopicPathPageRouteProperties {
     topicIconMapping?: PostTopicPageProperties['topicIconMapping'];
     navigationTrailIconMapping?: PostTopicPageProperties['navigationTrailIconMapping'];
     basePath: string;
+    title: string; // Title for the navigation trail (e.g., "Support", "Library")
     managementBasePath: string;
     showNavigationTrail?: boolean;
     showTitle?: boolean;
@@ -309,6 +310,7 @@ export async function PostTopicPathPageRoute(properties: PostTopicPathPageRouteP
                 postTopicSlug={serverSideProperties.postTopicSlug}
                 parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
                 basePath={properties.basePath}
+                title={properties.title}
                 searchPath={properties.searchPath}
                 searchPlaceholder={properties.searchPlaceholder}
                 showNeedMoreHelp={properties.showNeedMoreHelp}
@@ -329,6 +331,7 @@ export async function PostTopicPathPageRoute(properties: PostTopicPathPageRouteP
                 postTopicSlug={serverSideProperties.postTopicSlug}
                 parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
                 basePath={properties.basePath}
+                title={properties.title}
                 managementBasePath={properties.managementBasePath}
                 showNavigationTrail={properties.showNavigationTrail}
                 showTitle={properties.showTitle}

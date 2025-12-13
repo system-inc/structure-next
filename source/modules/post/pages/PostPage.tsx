@@ -33,6 +33,7 @@ export interface PostPageProperties {
     postTopicSlug?: string;
     parentPostTopicsSlugs?: string[];
     basePath: string;
+    title: string; // Title for the navigation trail (e.g., "Support", "Library")
     searchPath?: string;
     searchPlaceholder?: string;
     showNeedMoreHelp?: boolean;
@@ -71,6 +72,8 @@ export function PostPage(properties: PostPageProperties) {
 
     // Generate navigation trail links with icons
     const navigationTrailLinks = generatePostNavigationTrailLinks(
+        properties.basePath,
+        properties.title,
         properties.parentPostTopicsSlugs,
         properties.postTopicSlug,
         undefined, // No topic title available, will generate from slug

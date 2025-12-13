@@ -36,6 +36,7 @@ export interface PostTopicPageProperties {
     postTopicSlug: string;
     parentPostTopicsSlugs?: string[];
     basePath: string;
+    title: string; // Title for the navigation trail (e.g., "Support", "Library")
     managementBasePath: string; // Base path for management links (edit topic, create post, etc.)
     showNavigationTrail?: boolean; // Whether to show the breadcrumb trail - defaults to true
     showTitle?: boolean; // Whether to show the title - defaults to true
@@ -89,6 +90,8 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
 
     // Generate navigation trail links with icons
     const navigationTrailLinks = generatePostNavigationTrailLinks(
+        properties.basePath,
+        properties.title,
         properties.parentPostTopicsSlugs,
         properties.postTopicSlug,
         properties.postTopic.topic.title,
