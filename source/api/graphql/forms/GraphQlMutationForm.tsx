@@ -51,18 +51,19 @@ const noOpQuery = gql(`query NoOp { __typename }`);
 function processFormValuesForSubmission(
     formValues: Record<string, unknown>,
     options: {
-        submitOnlyChangedFields?: boolean;
+        onlySubmitIfChangedFields?: string[];
         defaultValues?: Record<string, unknown>;
         transformFormValues?: (values: Record<string, unknown>) => Record<string, unknown>;
     },
 ): Record<string, unknown> {
     let processedValues = { ...formValues };
 
-    // If submitOnlyChangedFields is enabled, filter to only changed values
-    if(options.submitOnlyChangedFields && options.defaultValues) {
-        const changedValues: Record<string, unknown> = {};
+    // If onlySubmitIfChangedFields is provided, filter specified fields to only include changed values
+    // Fields NOT in this array are always included
+    if(options.onlySubmitIfChangedFields && options.onlySubmitIfChangedFields.length > 0 && options.defaultValues) {
+        const resultValues: Record<string, unknown> = {};
 
-        // Compare using dotted keys from defaultValues, but get actual values by traversing nested structure
+        // Iterate through all fields in defaultValues
         for(const [dottedKey, defaultValue] of Object.entries(options.defaultValues)) {
             // Traverse the dotted path to get the actual value (e.g., 'input.displayName' -> formValues['input']['displayName'])
             const pathParts = dottedKey.split('.');
@@ -70,17 +71,26 @@ function processFormValuesForSubmission(
             for(const part of pathParts) {
                 value = (value as Record<string, unknown>)?.[part];
             }
-            // Normalize empty strings and nullish values for comparison
-            const normalizedValue = value === '' || value === null || value === undefined ? '' : value;
-            const normalizedDefault =
-                defaultValue === '' || defaultValue === null || defaultValue === undefined ? '' : defaultValue;
-            // Include field if it differs from default value
-            if(normalizedValue !== normalizedDefault) {
-                changedValues[dottedKey] = value;
+
+            // Check if this field should only be submitted if changed
+            if(options.onlySubmitIfChangedFields.includes(dottedKey)) {
+                // Normalize empty strings and nullish values for comparison
+                const normalizedValue = value === '' || value === null || value === undefined ? '' : value;
+                const normalizedDefault =
+                    defaultValue === '' || defaultValue === null || defaultValue === undefined ? '' : defaultValue;
+
+                // Only include field if it differs from default value
+                if(normalizedValue !== normalizedDefault) {
+                    resultValues[dottedKey] = value;
+                }
+            }
+            else {
+                // Field is not in onlySubmitIfChangedFields, always include it
+                resultValues[dottedKey] = value;
             }
         }
 
-        processedValues = changedValues;
+        processedValues = resultValues;
     }
 
     // Apply value transformation if provided
@@ -134,7 +144,7 @@ export interface GraphQlMutationFormProperties<
         };
     };
     submitButtonProperties?: AnimatedButtonProperties;
-    submitOnlyChangedFields?: boolean; // Only submit fields that differ from defaultValues (default: false)
+    onlySubmitIfChangedFields?: DocumentFieldPathsType<TDocument>[]; // Only submit these fields if they differ from defaultValues
     isLoading?: boolean; // Loading State - shows placeholder skeletons for each field while loading
     resetOnSubmitSuccess?: boolean; // Reset form after successful submission (default: false)
     // Transform values before submission - receives form values (VariablesOf + extra fields), returns transformed values
@@ -181,7 +191,7 @@ export function GraphQlMutationForm<
         onSubmit: async function (formState) {
             // Process form values (filter changed fields, merge hidden fields, apply transformations)
             const formValues = processFormValuesForSubmission(formState.value as Record<string, unknown>, {
-                submitOnlyChangedFields: properties.submitOnlyChangedFields,
+                onlySubmitIfChangedFields: properties.onlySubmitIfChangedFields as string[] | undefined,
                 defaultValues: properties.defaultValues as Record<string, unknown>,
                 transformFormValues: properties.transformFormValues as
                     | ((values: Record<string, unknown>) => Record<string, unknown>)
@@ -407,7 +417,7 @@ export function GraphQlMutationForm<
     const graphQlMutationPreviewTip = properties.showPreviewGraphQlMutationTip
         ? (function () {
               const formValues = processFormValuesForSubmission(formValuesForPreview, {
-                  submitOnlyChangedFields: properties.submitOnlyChangedFields,
+                  onlySubmitIfChangedFields: properties.onlySubmitIfChangedFields as string[] | undefined,
                   defaultValues: properties.defaultValues as Record<string, unknown>,
                   transformFormValues: properties.transformFormValues as
                       | ((values: Record<string, unknown>) => Record<string, unknown>)
