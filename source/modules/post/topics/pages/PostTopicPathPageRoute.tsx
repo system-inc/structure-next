@@ -1,5 +1,8 @@
 // Dependencies - React and Next.js
-import { notFound } from '@structure/source/router/Navigation';
+import { notFound, permanentRedirect } from '@structure/source/router/Navigation';
+
+// Dependencies - Utilities
+import { parsePostUrl } from '@structure/source/modules/post/utilities/PostUrl';
 
 // Dependencies - Main Components
 import { PostTopicPage, PostTopicPageProperties } from '@structure/source/modules/post/topics/pages/PostTopicPage';
@@ -50,38 +53,26 @@ export interface PostTopicPathPageRouteConfiguration {
 }
 
 // Function to get server-side properties
-export async function getPostTopicPathServerSideProperties(postPath: string[]) {
+export async function getPostTopicPathServerSideProperties(postPath: string[], basePath: string, postType: string) {
     const serverSideNetworkService = await getServerSideNetworkService();
 
-    // Valid paths:
-    // Topics
-    // /[basePath]/topic-slug
-    // Posts (new format: slug-identifier combined)
-    // /[basePath]/topic-slug-a/topic-slug-b/articles/post-slug-identifier
-    // /[basePath]/articles/post-slug-identifier
+    // Redirect old URL format with /articles/ segment to new flat URL format
+    // Old: /library/topic/articles/slug-identifier
+    // New: /library/slug-identifier
+    const articlesIndex = postPath.indexOf('articles');
+    if(articlesIndex !== -1 && articlesIndex < postPath.length - 1) {
+        const articleSlugWithIdentifier = postPath[articlesIndex + 1];
+        const redirectBasePath = basePath ?? '/' + postPath.slice(0, articlesIndex).join('/');
+        permanentRedirect(`${redirectBasePath}/${articleSlugWithIdentifier}`);
+    }
 
-    // The path is a post if it has 'articles' as second to last part or first part
-    const isPost = (postPath.length > 2 && postPath[postPath.length - 2] === 'articles') || postPath[0] === 'articles';
-
-    // Extract identifier from the end of the last path segment (e.g., "my-article-slug-abc123" -> "abc123")
-    const lastSegment = postPath[postPath.length - 1] ?? '';
-    const lastDashIndex = lastSegment.lastIndexOf('-');
-    const postIdentifier = isPost && lastDashIndex > 0 ? lastSegment.substring(lastDashIndex + 1) : undefined;
-
-    const postTopicSlug = isPost
-        ? // If post, the topic is the third to last part of the path (before 'articles' and 'slug-identifier')
-          postPath[postPath.length - 3]
-        : // If not a post, the topic is the last part of the path
-          postPath[postPath.length - 1];
-
-    const parentPostTopicsSlugs = isPost
-        ? // If post, the parent topics are the path minus the last 3 parts
-          postPath.slice(0, -3)
-        : // If not a post, the parent topics are the path minus the last part
-          postPath.slice(0, -1);
+    // Valid paths (new format):
+    // Topics: /[basePath]/topic-slug or /[basePath]/topic-a/topic-b (can be nested)
+    // Posts: /[basePath]/slug-identifier (always flat - single segment only)
 
     let post = null;
     let postTopic = null;
+    let parsedPost: { slug: string; identifier: string } | null = null;
     const postTopicAndSubPostTopicsWithPosts: {
         postTopicId?: string;
         postTopicTitle: string;
@@ -90,30 +81,47 @@ export async function getPostTopicPathServerSideProperties(postPath: string[]) {
         posts: PostTopicQuery['postTopic']['pagedPosts']['items'];
     }[] = [];
 
-    // Post
-    if(postIdentifier) {
-        try {
-            const postRequest = await serverSideNetworkService.graphQlRequest(PostDocument, {
-                identifier: postIdentifier,
-            });
+    // Posts are always flat URLs - the postPath includes the basePath segment (e.g., 'library')
+    // so a post URL like /library/slug-id has postPath = ['library', 'slug-id'] (2 segments)
+    // Nested topic paths like /library/topic/subtopic have 3+ segments and are never posts
+    const isFlat = postPath.length === 2;
+    const lastSegment = postPath[postPath.length - 1] ?? '';
 
-            // If the post is found
-            if(postRequest?.post) {
-                post = postRequest?.post;
+    // Only check for post if it's a flat URL that looks like a post URL
+    if(isFlat) {
+        parsedPost = parsePostUrl(lastSegment);
+
+        if(parsedPost) {
+            try {
+                const postRequest = await serverSideNetworkService.graphQlRequest(PostDocument, {
+                    identifier: parsedPost.identifier,
+                });
+
+                // If the post is found
+                if(postRequest?.post) {
+                    post = postRequest?.post;
+                }
+            } catch {
+                // Post lookup failed - will fall through to topic lookup below
+                console.log('[PostTopicPathPageRoute] Post lookup failed, trying topic:', parsedPost.identifier);
             }
-            // If the post is not found, return a 404
-            else {
-                return notFound();
+
+            // If we found a post, check for slug mismatch redirect
+            // NOTE: This must be outside the try/catch because permanentRedirect() throws
+            // a special error that Next.js catches to perform the redirect
+            if(post && parsedPost.slug !== post.slug) {
+                const canonicalPath = basePath
+                    ? `${basePath}/${post.slug}-${post.identifier}`
+                    : `/${post.slug}-${post.identifier}`;
+                permanentRedirect(canonicalPath);
             }
-        }
-        catch(error) {
-            // If the request fails (e.g., post not found validation error), return a 404
-            console.error('[PostTopicPathPageRoute] Error fetching post:', postIdentifier, error);
-            return notFound();
         }
     }
-    // PostTopic
-    else {
+
+    // Topic lookup - either nested path, or single segment that wasn't a valid post
+    if(!post) {
+        const postTopicSlug = postPath[postPath.length - 1];
+        const parentPostTopicsSlugs = postPath.slice(0, -1);
         // Build path for the topic query (handles duplicate slugs across different parents)
         const topicPath =
             parentPostTopicsSlugs.length > 0 ? parentPostTopicsSlugs.join('/') + '/' + postTopicSlug : undefined;
@@ -123,7 +131,7 @@ export async function getPostTopicPathServerSideProperties(postPath: string[]) {
             postTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {
                 slug: postTopicSlug!,
                 path: topicPath,
-                type: 'SupportArticle',
+                type: postType,
                 pagination: {
                     itemsPerPage: 100,
                 },
@@ -175,7 +183,7 @@ export async function getPostTopicPathServerSideProperties(postPath: string[]) {
                                 postSubTopicData = await serverSideNetworkService.graphQlRequest(PostTopicDocument, {
                                     slug: subTopic.slug,
                                     path: subTopicPath,
-                                    type: 'SupportArticle',
+                                    type: postType,
                                     pagination: {
                                         itemsPerPage: 100,
                                     },
@@ -232,9 +240,9 @@ export async function getPostTopicPathServerSideProperties(postPath: string[]) {
 
     // Return the properties
     return {
-        postIdentifier: postIdentifier,
-        postTopicSlug: postTopicSlug,
-        parentPostTopicsSlugs: parentPostTopicsSlugs,
+        postIdentifier: parsedPost?.identifier,
+        postTopicSlug: post ? undefined : postPath[postPath.length - 1],
+        parentPostTopicsSlugs: post ? [] : postPath.slice(0, -1),
         post: post,
         postTopic: postTopic,
         postTopicAndSubPostTopicsWithPosts: postTopicAndSubPostTopicsWithPosts,
@@ -242,8 +250,13 @@ export async function getPostTopicPathServerSideProperties(postPath: string[]) {
 }
 
 // Metadata generator
-export async function generatePostTopicPathPageMetadata(postPath: string[], titleSuffix: string) {
-    const serverSideProperties = await getPostTopicPathServerSideProperties(postPath);
+export async function generatePostTopicPathPageMetadata(
+    postPath: string[],
+    titleSuffix: string,
+    basePath: string,
+    postType: string,
+) {
+    const serverSideProperties = await getPostTopicPathServerSideProperties(postPath, basePath, postType);
 
     let title = '';
 
@@ -288,6 +301,7 @@ export async function generatePostTopicPathPageMetadata(postPath: string[], titl
 export interface PostTopicPathPageRouteProperties {
     className?: string;
     postPath: string[];
+    postType: string; // Post type filter (e.g., "Article", "SupportArticle")
     topicIconMapping?: PostTopicPageProperties['topicIconMapping'];
     navigationTrailIconMapping?: PostTopicPageProperties['navigationTrailIconMapping'];
     basePath: string;
@@ -300,15 +314,17 @@ export interface PostTopicPathPageRouteProperties {
     searchPlaceholder?: string;
 }
 export async function PostTopicPathPageRoute(properties: PostTopicPathPageRouteProperties) {
-    const serverSideProperties = await getPostTopicPathServerSideProperties(properties.postPath);
+    const serverSideProperties = await getPostTopicPathServerSideProperties(
+        properties.postPath,
+        properties.basePath,
+        properties.postType,
+    );
 
     // Post
     if(serverSideProperties.post) {
         return (
             <PostPage
                 className={properties.className}
-                postTopicSlug={serverSideProperties.postTopicSlug}
-                parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
                 basePath={properties.basePath}
                 title={properties.title}
                 searchPath={properties.searchPath}
@@ -320,16 +336,10 @@ export async function PostTopicPathPageRoute(properties: PostTopicPathPageRouteP
         );
     }
     // PostTopic
-    else if(
-        serverSideProperties.postTopic &&
-        serverSideProperties.postTopicSlug &&
-        serverSideProperties.parentPostTopicsSlugs
-    ) {
+    else if(serverSideProperties.postTopic) {
         return (
             <PostTopicPage
                 className={properties.className}
-                postTopicSlug={serverSideProperties.postTopicSlug}
-                parentPostTopicsSlugs={serverSideProperties.parentPostTopicsSlugs}
                 basePath={properties.basePath}
                 title={properties.title}
                 managementBasePath={properties.managementBasePath}

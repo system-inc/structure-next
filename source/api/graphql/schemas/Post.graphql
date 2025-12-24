@@ -76,6 +76,7 @@ type Mutation {
     postTopicUpdatePosition(id: String!, input: PostTopicUpdatePositionInput!): PostTopic!
     postUnvote(commentId: String, postId: String, type: PostVoteType): OperationResult!
     postUpdate(id: String!, input: PostUpdateInput!): Post!
+    postUpdatePosition(id: String!, input: PostUpdatePositionInput!): Post!
     postUpdatePrivileged(id: String!, input: PostUpdateInput!): Post!
     postVote(commentId: String, postId: String, type: PostVoteType): OperationResult!
 }
@@ -151,7 +152,11 @@ type Post {
     id: String!
     identifier: String!
     metadata: JSON
+    nextSibling: Post
+    nextSiblingId: String
     note: String
+    previousSibling: Post
+    previousSiblingId: String
     publishedAt: DateTimeISO
     reactions: [GqlPostReaction!]
     reportStatus: PostReportStatus
@@ -266,6 +271,7 @@ enum PostStatus {
 }
 
 type PostTopic {
+    ancestors: [PostTopic!]!
     createdAt: DateTimeISO!
     description: String
     id: String!
@@ -288,6 +294,7 @@ input PostTopicCreateInput {
 }
 
 type PostTopicQueryResult {
+    ancestors: [PostTopic!]!
     pagedPosts: PagedPosts!
     subTopics: [PostTopic!]
     topic: PostTopic!
@@ -321,16 +328,31 @@ input PostUpdateInput {
     type: String
 }
 
+input PostUpdatePositionInput {
+    position: Float!
+}
+
 enum PostVoteType {
     Downvote
     Upvote
 }
 
+"""
+The type of profile - personal user or organization
+"""
+enum ProfileType {
+    Organization
+    Personal
+}
+
 type PublicProfile {
     createdAt: DateTimeISO
+    description: String
     displayName: String
     images: [GqlMediaObject!]
+    type: ProfileType!
     username: String!
+    website: String
 }
 
 type Query {

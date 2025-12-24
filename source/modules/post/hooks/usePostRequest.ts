@@ -21,6 +21,26 @@ export function usePostRequest(
                     content
                     updatedAt
                     createdAt
+                    topics {
+                        id
+                        title
+                        slug
+                        ancestors {
+                            id
+                            title
+                            slug
+                        }
+                    }
+                    previousSibling {
+                        identifier
+                        title
+                        slug
+                    }
+                    nextSibling {
+                        identifier
+                        title
+                        slug
+                    }
                 }
             }
         `),

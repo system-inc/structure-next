@@ -951,6 +951,7 @@ export type Mutation = {
     postTopicUpdatePosition: PostTopic;
     postUnvote: OperationResult;
     postUpdate: Post;
+    postUpdatePosition: Post;
     postUpdatePrivileged: Post;
     postVote: OperationResult;
     supportTicketAssign: SupportTicket;
@@ -1277,6 +1278,11 @@ export type MutationPostUpdateArgs = {
     input: PostUpdateInput;
 };
 
+export type MutationPostUpdatePositionArgs = {
+    id: Scalars['String']['input'];
+    input: PostUpdatePositionInput;
+};
+
 export type MutationPostUpdatePrivilegedArgs = {
     id: Scalars['String']['input'];
     input: PostUpdateInput;
@@ -1507,7 +1513,11 @@ export type Post = {
     id: Scalars['String']['output'];
     identifier: Scalars['String']['output'];
     metadata?: Maybe<Scalars['JSON']['output']>;
+    nextSibling?: Maybe<Post>;
+    nextSiblingId?: Maybe<Scalars['String']['output']>;
     note?: Maybe<Scalars['String']['output']>;
+    previousSibling?: Maybe<Post>;
+    previousSiblingId?: Maybe<Scalars['String']['output']>;
     publishedAt?: Maybe<Scalars['DateTimeISO']['output']>;
     reactions?: Maybe<Array<GqlPostReaction>>;
     reportStatus?: Maybe<PostReportStatus>;
@@ -1631,6 +1641,7 @@ export enum PostStatus {
 
 export type PostTopic = {
     __typename?: 'PostTopic';
+    ancestors: Array<PostTopic>;
     createdAt: Scalars['DateTimeISO']['output'];
     description?: Maybe<Scalars['String']['output']>;
     id: Scalars['String']['output'];
@@ -1654,6 +1665,7 @@ export type PostTopicCreateInput = {
 
 export type PostTopicQueryResult = {
     __typename?: 'PostTopicQueryResult';
+    ancestors: Array<PostTopic>;
     pagedPosts: PagedPosts;
     subTopics?: Maybe<Array<PostTopic>>;
     topic: PostTopic;
@@ -1685,6 +1697,10 @@ export type PostUpdateInput = {
     slug?: InputMaybe<Scalars['String']['input']>;
     title?: InputMaybe<Scalars['String']['input']>;
     type?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PostUpdatePositionInput = {
+    position: Scalars['Float']['input'];
 };
 
 export enum PostVoteType {
@@ -1753,12 +1769,21 @@ export enum ProfileEntitlementStatus {
     Revoked = 'Revoked',
 }
 
+/** The type of profile - personal user or organization */
+export enum ProfileType {
+    Organization = 'Organization',
+    Personal = 'Personal',
+}
+
 export type PublicProfile = {
     __typename?: 'PublicProfile';
     createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+    description?: Maybe<Scalars['String']['output']>;
     displayName?: Maybe<Scalars['String']['output']>;
     images?: Maybe<Array<GqlMediaObject>>;
+    type: ProfileType;
     username: Scalars['String']['output'];
+    website?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
@@ -3060,7 +3085,15 @@ export type PostDetailedQuery = {
                 variant?: string | null;
             }> | null;
         } | null;
-        topics?: Array<{ __typename?: 'PostTopic'; id: string; title: string; slug: string }> | null;
+        topics?: Array<{
+            __typename?: 'PostTopic';
+            id: string;
+            title: string;
+            slug: string;
+            ancestors: Array<{ __typename?: 'PostTopic'; id: string; title: string; slug: string }>;
+        }> | null;
+        previousSibling?: { __typename?: 'Post'; identifier: string; title: string; slug: string } | null;
+        nextSibling?: { __typename?: 'Post'; identifier: string; title: string; slug: string } | null;
         reactions?: Array<{ __typename?: 'GqlPostReaction'; content: string; count: number; reacted: boolean }> | null;
     };
 };
@@ -3113,6 +3146,15 @@ export type PostQuery = {
         content?: string | null;
         updatedAt: any;
         createdAt: any;
+        topics?: Array<{
+            __typename?: 'PostTopic';
+            id: string;
+            title: string;
+            slug: string;
+            ancestors: Array<{ __typename?: 'PostTopic'; id: string; title: string; slug: string }>;
+        }> | null;
+        previousSibling?: { __typename?: 'Post'; identifier: string; title: string; slug: string } | null;
+        nextSibling?: { __typename?: 'Post'; identifier: string; title: string; slug: string } | null;
     };
 };
 
@@ -3426,6 +3468,13 @@ export type PostTopicQuery = {
     __typename?: 'Query';
     postTopic: {
         __typename?: 'PostTopicQueryResult';
+        ancestors: Array<{
+            __typename?: 'PostTopic';
+            id: string;
+            title: string;
+            slug: string;
+            description?: string | null;
+        }>;
         topic: {
             __typename?: 'PostTopic';
             id: string;
@@ -4419,6 +4468,21 @@ export const PostDetailedDocument = new TypedDocumentString(`
       id
       title
       slug
+      ancestors {
+        id
+        title
+        slug
+      }
+    }
+    previousSibling {
+      identifier
+      title
+      slug
+    }
+    nextSibling {
+      identifier
+      title
+      slug
     }
     content
     reactions {
@@ -4473,6 +4537,26 @@ export const PostDocument = new TypedDocumentString(`
     content
     updatedAt
     createdAt
+    topics {
+      id
+      title
+      slug
+      ancestors {
+        id
+        title
+        slug
+      }
+    }
+    previousSibling {
+      identifier
+      title
+      slug
+    }
+    nextSibling {
+      identifier
+      title
+      slug
+    }
   }
 }
     `) as unknown as TypedDocumentString<PostQuery, PostQueryVariables>;
@@ -4715,6 +4799,12 @@ export const PostTopicDeleteDocument = new TypedDocumentString(`
 export const PostTopicDocument = new TypedDocumentString(`
     query PostTopic($slug: String!, $path: String, $type: String!, $pagination: PaginationInput!) {
   postTopic(slug: $slug, path: $path, type: $type, pagination: $pagination) {
+    ancestors {
+      id
+      title
+      slug
+      description
+    }
     topic {
       id
       title
@@ -6161,14 +6251,14 @@ export const PostCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
             required: false,
             validation: [
                 {
-                    type: 'isOptional',
-                },
-                {
                     type: 'isEnum',
                     constraints: [
                         { Draft: 'Draft', Published: 'Published', Deleted: 'Deleted' },
                         ['Draft', 'Published', 'Deleted'],
                     ],
+                },
+                {
+                    type: 'isOptional',
                 },
             ],
         },
@@ -6191,8 +6281,7 @@ export const PostCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
             required: true,
             validation: [
                 {
-                    type: 'isIn',
-                    constraints: [['Principle', 'Idea', 'SupportArticle']],
+                    type: 'isNotEmpty',
                 },
                 {
                     type: 'maxLength',
@@ -6306,11 +6395,10 @@ export const PostUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
             required: false,
             validation: [
                 {
-                    type: 'isOptional',
+                    type: 'isNotEmpty',
                 },
                 {
-                    type: 'isIn',
-                    constraints: [['Principle', 'Idea', 'SupportArticle']],
+                    type: 'isOptional',
                 },
                 {
                     type: 'maxLength',
@@ -6475,6 +6563,9 @@ export const PostTopicCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
                     type: 'maxLength',
                     constraints: [1024],
                 },
+                {
+                    type: 'isOptional',
+                },
             ],
         },
         {
@@ -6484,8 +6575,7 @@ export const PostTopicCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
             required: true,
             validation: [
                 {
-                    type: 'isIn',
-                    constraints: [['Principle', 'Idea', 'SupportArticle']],
+                    type: 'isNotEmpty',
                 },
                 {
                     type: 'maxLength',
@@ -6514,6 +6604,9 @@ export const PostTopicCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
                 {
                     type: 'isUuid',
                 },
+                {
+                    type: 'isOptional',
+                },
             ],
         },
         {
@@ -6524,6 +6617,9 @@ export const PostTopicCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
             validation: [
                 {
                     type: 'isInt',
+                },
+                {
+                    type: 'isOptional',
                 },
             ],
         },
@@ -6555,6 +6651,9 @@ export const PostTopicUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
                     type: 'maxLength',
                     constraints: [64],
                 },
+                {
+                    type: 'isOptional',
+                },
             ],
         },
         {
@@ -6567,6 +6666,9 @@ export const PostTopicUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
                     type: 'maxLength',
                     constraints: [1024],
                 },
+                {
+                    type: 'isOptional',
+                },
             ],
         },
         {
@@ -6578,6 +6680,9 @@ export const PostTopicUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
                 {
                     type: 'maxLength',
                     constraints: [160],
+                },
+                {
+                    type: 'isOptional',
                 },
             ],
         },

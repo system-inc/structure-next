@@ -5,20 +5,28 @@ import React from 'react';
 import { NavigationTrailLinkInterface } from '@structure/source/components/navigation/trail/NavigationTrail';
 
 // Dependencies - Utilities
-import { titleCase } from '@structure/source/utilities/type/String';
+import { generatePostUrl } from '@structure/source/modules/post/utilities/PostUrl';
 
 // Interface for icon mapping
 export interface PostNavigationTrailIconMapping {
     [key: string]: React.ReactElement<{ className?: string }>;
 }
 
-// Function to generate navigation trail links with icons
+// Interface for ancestor topics (matches PostTopic from GraphQL)
+export interface PostNavigationTrailAncestor {
+    id: string;
+    title: string;
+    slug: string;
+    description?: string | null;
+}
+
+// Function to generate navigation trail links from ancestors array
 export function generatePostNavigationTrailLinks(
     basePath: string,
     basePathTitle: string,
-    parentPostTopicsSlugs: string[] | undefined,
-    postTopicSlug: string | undefined,
-    postTopicTitle: string | undefined,
+    ancestors: PostNavigationTrailAncestor[] | undefined,
+    currentTopicSlug: string | undefined,
+    currentTopicTitle: string | undefined,
     navigationTrailIconMapping?: PostNavigationTrailIconMapping,
 ): NavigationTrailLinkInterface[] {
     const links: NavigationTrailLinkInterface[] = [];
@@ -34,30 +42,67 @@ export function generatePostNavigationTrailLinks(
         icon: navigationTrailIconMapping?.[basePathSlug],
     });
 
-    // Add parent topic slugs (filter out any that match basePath to avoid duplication)
-    if(parentPostTopicsSlugs) {
-        parentPostTopicsSlugs.forEach(function (parentSlug) {
-            if(parentSlug !== basePathSlug) {
-                hrefAccumulator += '/' + parentSlug;
+    // Add ancestor topics (these come from the API with actual titles)
+    // API returns ancestors with nearest parent first, root last - reverse for breadcrumb order
+    if(ancestors) {
+        const ancestorsRootFirst = ancestors.slice().reverse();
+        ancestorsRootFirst.forEach(function (ancestor) {
+            // Skip if ancestor slug matches basePath to avoid duplication
+            if(ancestor.slug !== basePathSlug) {
+                hrefAccumulator += '/' + ancestor.slug;
                 links.push({
-                    title: titleCase(parentSlug.replaceAll('-', ' ')),
+                    title: ancestor.title,
                     href: hrefAccumulator,
-                    icon: navigationTrailIconMapping?.[parentSlug],
+                    icon: navigationTrailIconMapping?.[ancestor.slug],
                 });
             }
         });
     }
 
     // Add current topic (skip if it matches basePath to avoid duplication)
-    if(postTopicSlug && postTopicSlug !== basePathSlug) {
-        hrefAccumulator += '/' + postTopicSlug;
+    if(currentTopicSlug && currentTopicSlug !== basePathSlug) {
+        hrefAccumulator += '/' + currentTopicSlug;
         links.push({
-            // Use provided title if available, otherwise generate from slug
-            title: postTopicTitle ?? titleCase(postTopicSlug.replaceAll('-', ' ')),
+            title: currentTopicTitle ?? currentTopicSlug,
             href: hrefAccumulator,
-            icon: navigationTrailIconMapping?.[postTopicSlug],
+            icon: navigationTrailIconMapping?.[currentTopicSlug],
         });
     }
+
+    return links;
+}
+
+// Function to generate navigation trail links for a post (article) page
+// This adds the post title as the final breadcrumb item
+export function generatePostArticleNavigationTrailLinks(
+    basePath: string,
+    basePathTitle: string,
+    ancestors: PostNavigationTrailAncestor[] | undefined,
+    currentTopicSlug: string | undefined,
+    currentTopicTitle: string | undefined,
+    postSlug: string,
+    postIdentifier: string,
+    postTitle: string,
+    navigationTrailIconMapping?: PostNavigationTrailIconMapping,
+): NavigationTrailLinkInterface[] {
+    // Start with the topic trail
+    const links = generatePostNavigationTrailLinks(
+        basePath,
+        basePathTitle,
+        ancestors,
+        currentTopicSlug,
+        currentTopicTitle,
+        navigationTrailIconMapping,
+    );
+
+    // Build the post href using flat URL format
+    const postHref = generatePostUrl(basePath, postSlug, postIdentifier);
+
+    // Add the post as the final breadcrumb
+    links.push({
+        title: postTitle,
+        href: postHref,
+    });
 
     return links;
 }

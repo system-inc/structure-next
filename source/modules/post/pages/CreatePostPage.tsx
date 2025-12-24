@@ -17,7 +17,10 @@ import { schema } from '@structure/source/utilities/schema/Schema';
 import { slug } from '@structure/source/utilities/type/String';
 
 // Component - CreatePostPage
-export function CreatePostPage() {
+export interface CreatePostPageProperties {
+    postType: string; // Post type (e.g., "Article", "SupportArticle")
+}
+export function CreatePostPage(properties: CreatePostPageProperties) {
     // Hooks
     const urlSearchParameters = useUrlSearchParameters();
     const postTopicId = urlSearchParameters?.get('postTopicId');
@@ -71,7 +74,7 @@ export function CreatePostPage() {
                     linkedFields={[{ sourceField: 'input.title', targetField: 'input.slug', transform: slug }]}
                     defaultValues={{
                         'input.status': PostStatus.Published,
-                        'input.type': 'SupportArticle',
+                        'input.type': properties.postType,
                         'input.allowReaction': true,
                         ...(postTopicId ? { 'input.topicIds': [postTopicId] } : {}),
                     }}

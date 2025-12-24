@@ -25,13 +25,13 @@ import { timeFromNow } from '@structure/source/utilities/time/Time';
 import {
     generatePostNavigationTrailLinks,
     PostNavigationTrailIconMapping,
+    PostNavigationTrailAncestor,
 } from '@structure/source/modules/post/utilities/PostNavigationTrail';
+import { generatePostUrl } from '@structure/source/modules/post/utilities/PostUrl';
 
 // Component - PostPage
 export interface PostPageProperties {
     className?: string;
-    postTopicSlug?: string;
-    parentPostTopicsSlugs?: string[];
     basePath: string;
     title: string; // Title for the navigation trail (e.g., "Support", "Library")
     searchPath?: string;
@@ -48,40 +48,35 @@ export interface PostPageProperties {
         content?: string | null;
         updatedAt: string | Date;
         createdAt: string | Date;
+        topics?:
+            | {
+                  id: string;
+                  title: string;
+                  slug: string;
+                  ancestors?: PostNavigationTrailAncestor[] | null;
+              }[]
+            | null;
     };
 }
 export function PostPage(properties: PostPageProperties) {
     // Hooks
     const account = useAccount();
 
-    // The URL pathname for the navigation trail
-    // Filter out parent slugs that match the basePath to avoid duplication (e.g., /library/library)
-    const basePathSlug = properties.basePath.replace(/^\//, ''); // Remove leading slash
-    const filteredParentSlugs = properties.parentPostTopicsSlugs?.filter(function (slug) {
-        return slug !== basePathSlug;
-    });
+    // Get the primary topic and its ancestors from the post data
+    const primaryTopic = properties.post.topics?.[0];
+    const ancestors = primaryTopic?.ancestors ?? undefined;
 
-    let navigationTrailUrlPathname = properties.basePath;
-    if(filteredParentSlugs) {
-        navigationTrailUrlPathname += filteredParentSlugs.length ? '/' + filteredParentSlugs.join('/') : '';
-    }
-    // Only add postTopicSlug if it doesn't match the basePath (avoid /library/library)
-    if(properties.postTopicSlug && properties.postTopicSlug !== basePathSlug) {
-        navigationTrailUrlPathname += '/' + properties.postTopicSlug;
-    }
-
-    // Generate navigation trail links with icons
+    // Generate navigation trail links using ancestors from the API
     const navigationTrailLinks = generatePostNavigationTrailLinks(
         properties.basePath,
         properties.title,
-        properties.parentPostTopicsSlugs,
-        properties.postTopicSlug,
-        undefined, // No topic title available, will generate from slug
+        ancestors,
+        primaryTopic?.slug,
+        primaryTopic?.title,
         properties.navigationTrailIconMapping,
     );
 
-    const postHref =
-        navigationTrailUrlPathname + '/articles/' + properties.post.slug + '-' + properties.post.identifier;
+    const postHref = generatePostUrl(properties.basePath, properties.post.slug, properties.post.identifier);
 
     const updateAtTimeInMilliseconds = new Date(properties.post.updatedAt).getTime();
     let updatedTimeAgoString = timeFromNow(updateAtTimeInMilliseconds);
@@ -105,7 +100,7 @@ export function PostPage(properties: PostPageProperties) {
                             '/posts/' +
                             properties.post.identifier +
                             '/edit?postTopicSlug=' +
-                            (properties.postTopicSlug ?? '')
+                            (primaryTopic?.slug ?? '')
                         }
                     />
                 </div>

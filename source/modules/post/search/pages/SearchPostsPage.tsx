@@ -17,6 +17,7 @@ import { CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { generatePostUrl } from '@structure/source/modules/post/utilities/PostUrl';
 
 // Component - SearchPostsPage
 export interface SearchPostsPageProperties {
@@ -51,7 +52,7 @@ export function SearchPostsPage(properties: SearchPostsPageProperties) {
 
             {/* Posts */}
             {properties.posts.map(function (post, postIndex) {
-                const postHref = properties.basePath + '/articles/' + post.slug + '-' + post.identifier;
+                const postHref = generatePostUrl(properties.basePath, post.slug, post.identifier);
 
                 return (
                     <div key={postIndex} className="mb-4">

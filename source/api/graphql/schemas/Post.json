@@ -1,6 +1,12 @@
 {
     "types": {
         "input": {
+            "ProfileType": {
+                "kind": "enum",
+                "type": "ProfileType",
+                "description": "The type of profile - personal user or organization",
+                "values": ["Personal", "Organization"]
+            },
             "String": {
                 "kind": "scalar",
                 "type": "String",
@@ -215,6 +221,9 @@
                             {
                                 "type": "maxLength",
                                 "constraints": [1024]
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -225,8 +234,7 @@
                         "name": "type",
                         "validation": [
                             {
-                                "type": "isIn",
-                                "constraints": [["Principle", "Idea", "SupportArticle"]]
+                                "type": "isNotEmpty"
                             },
                             {
                                 "type": "maxLength",
@@ -254,6 +262,9 @@
                         "validation": [
                             {
                                 "type": "isUuid"
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -265,6 +276,9 @@
                         "validation": [
                             {
                                 "type": "isInt"
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     }
@@ -294,6 +308,9 @@
                             {
                                 "type": "maxLength",
                                 "constraints": [64]
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -306,6 +323,9 @@
                             {
                                 "type": "maxLength",
                                 "constraints": [1024]
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -318,6 +338,9 @@
                             {
                                 "type": "maxLength",
                                 "constraints": [160]
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     }
@@ -335,6 +358,9 @@
                         "validation": [
                             {
                                 "type": "isInt"
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -346,6 +372,9 @@
                         "validation": [
                             {
                                 "type": "isUuid"
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -357,6 +386,9 @@
                         "validation": [
                             {
                                 "type": "isBoolean"
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     }
@@ -373,9 +405,6 @@
                         "name": "status",
                         "validation": [
                             {
-                                "type": "isOptional"
-                            },
-                            {
                                 "type": "isEnum",
                                 "constraints": [
                                     {
@@ -385,6 +414,9 @@
                                     },
                                     ["Draft", "Published", "Deleted"]
                                 ]
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -407,8 +439,7 @@
                         "name": "type",
                         "validation": [
                             {
-                                "type": "isIn",
-                                "constraints": [["Principle", "Idea", "SupportArticle"]]
+                                "type": "isNotEmpty"
                             },
                             {
                                 "type": "maxLength",
@@ -521,11 +552,10 @@
                         "name": "type",
                         "validation": [
                             {
-                                "type": "isOptional"
+                                "type": "isNotEmpty"
                             },
                             {
-                                "type": "isIn",
-                                "constraints": [["Principle", "Idea", "SupportArticle"]]
+                                "type": "isOptional"
                             },
                             {
                                 "type": "maxLength",
@@ -601,6 +631,23 @@
                         "type": "JSON",
                         "required": false,
                         "name": "metadata"
+                    }
+                ]
+            },
+            "PostUpdatePositionInput": {
+                "kind": "object",
+                "type": "PostUpdatePositionInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "Float",
+                        "required": true,
+                        "name": "position",
+                        "validation": [
+                            {
+                                "type": "isInt"
+                            }
+                        ]
                     }
                 ]
             },

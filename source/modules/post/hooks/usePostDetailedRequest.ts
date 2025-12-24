@@ -31,6 +31,21 @@ export function usePostDetailedRequest(
                         id
                         title
                         slug
+                        ancestors {
+                            id
+                            title
+                            slug
+                        }
+                    }
+                    previousSibling {
+                        identifier
+                        title
+                        slug
+                    }
+                    nextSibling {
+                        identifier
+                        title
+                        slug
                     }
                     content
                     reactions {

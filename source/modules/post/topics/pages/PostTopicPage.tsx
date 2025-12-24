@@ -28,13 +28,13 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import {
     generatePostNavigationTrailLinks,
     PostNavigationTrailIconMapping,
+    PostNavigationTrailAncestor,
 } from '@structure/source/modules/post/utilities/PostNavigationTrail';
+import { generatePostUrl } from '@structure/source/modules/post/utilities/PostUrl';
 
 // Component - PostTopicPage
 export interface PostTopicPageProperties {
     className?: string;
-    postTopicSlug: string;
-    parentPostTopicsSlugs?: string[];
     basePath: string;
     title: string; // Title for the navigation trail (e.g., "Support", "Library")
     managementBasePath: string; // Base path for management links (edit topic, create post, etc.)
@@ -65,11 +65,21 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
     const showNavigationTrail = properties.showNavigationTrail !== false;
     const showTitle = properties.showTitle !== false;
 
-    // Filter out parent slugs that match the basePath to avoid duplication (e.g., /library/library)
-    const basePathSlug = properties.basePath.replace(/^\//, ''); // Remove leading slash
-    const filteredParentSlugs = properties.parentPostTopicsSlugs?.filter(function (slug) {
-        return slug !== basePathSlug;
-    });
+    // Extract basePath slug for comparison
+    const basePathSlug = properties.basePath.replace(/^\//, '');
+
+    // Build the base href for this topic from ancestors
+    const topicBaseHref =
+        properties.basePath +
+        (properties.postTopic.ancestors ?? [])
+            .filter(function (ancestor) {
+                return ancestor.slug !== basePathSlug;
+            })
+            .map(function (ancestor) {
+                return '/' + ancestor.slug;
+            })
+            .join('') +
+        (properties.postTopic.topic.slug !== basePathSlug ? '/' + properties.postTopic.topic.slug : '');
 
     // Icon
     const postTopicIcon =
@@ -88,12 +98,12 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
     // Check if we should render sub-topics as tiles (when they have no posts, meaning > 5 sub-topics)
     const shouldRenderSubTopicsAsTiles = subTopics.length > 0 && subTopics[0]?.posts.length === 0;
 
-    // Generate navigation trail links with icons
+    // Generate navigation trail links using ancestors from the API
     const navigationTrailLinks = generatePostNavigationTrailLinks(
         properties.basePath,
         properties.title,
-        properties.parentPostTopicsSlugs,
-        properties.postTopicSlug,
+        properties.postTopic.ancestors as PostNavigationTrailAncestor[] | undefined,
+        properties.postTopic.topic.slug,
         properties.postTopic.topic.title,
         properties.navigationTrailIconMapping,
     );
@@ -149,16 +159,7 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
 
             {showTitle && (
                 <div className="max-w-2xl">
-                    <Link
-                        href={
-                            properties.basePath +
-                            (filteredParentSlugs?.length ? '/' + filteredParentSlugs.join('/') : '') +
-                            (properties.postTopic.topic.slug !== basePathSlug
-                                ? '/' + properties.postTopic.topic.slug
-                                : '')
-                        }
-                        className=""
-                    >
+                    <Link href={topicBaseHref} className="">
                         <h1 className="inline-flex items-center space-x-3 text-2xl font-medium">
                             {postTopicIcon && React.cloneElement(postTopicIcon, { className: 'size-6' })}
                             <span>{properties.postTopic.topic.title}</span>
@@ -173,14 +174,7 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
                     <div>
                         <div className="">
                             {generalPosts.posts.map(function (post, postIndex) {
-                                let postHref = properties.basePath;
-                                if(filteredParentSlugs?.length) {
-                                    postHref += '/' + filteredParentSlugs.join('/');
-                                }
-                                if(properties.postTopicSlug !== basePathSlug) {
-                                    postHref += '/' + properties.postTopicSlug;
-                                }
-                                postHref += '/articles/' + post.slug + '-' + post.identifier;
+                                const postHref = generatePostUrl(properties.basePath, post.slug, post.identifier);
 
                                 return (
                                     <div key={postIndex} className="mb-4">
@@ -207,14 +201,7 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
                 {shouldRenderSubTopicsAsTiles && (
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {subTopics.map(function (subTopic, subTopicIndex) {
-                            let subTopicHref = properties.basePath;
-                            if(filteredParentSlugs?.length) {
-                                subTopicHref += '/' + filteredParentSlugs.join('/');
-                            }
-                            if(properties.postTopicSlug !== basePathSlug) {
-                                subTopicHref += '/' + properties.postTopicSlug;
-                            }
-                            subTopicHref += '/' + subTopic.postTopicSlug;
+                            const subTopicHref = topicBaseHref + '/' + subTopic.postTopicSlug;
 
                             // Get icon from mapping if available
                             const subTopicIcon =
@@ -241,15 +228,7 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
                 {/* Render sub-topics with posts (original behavior for 5 or fewer sub-topics) */}
                 {!shouldRenderSubTopicsAsTiles &&
                     subTopics.map(function (subTopic, subTopicIndex) {
-                        let subTopicHref = properties.basePath;
-                        if(filteredParentSlugs?.length) {
-                            subTopicHref += '/' + filteredParentSlugs.join('/');
-                        }
-                        if(properties.postTopicSlug !== basePathSlug) {
-                            subTopicHref += '/' + properties.postTopicSlug;
-                        }
-                        subTopicHref += '/' + subTopic.postTopicSlug;
-
+                        const subTopicHref = topicBaseHref + '/' + subTopic.postTopicSlug;
                         const isLastSubTopic = subTopicIndex === subTopics.length - 1;
 
                         return (
@@ -259,8 +238,11 @@ export function PostTopicPage(properties: PostTopicPageProperties) {
                                 </Link>
                                 <div className="">
                                     {subTopic.posts.map(function (post, postIndex) {
-                                        const postHref =
-                                            subTopicHref + '/articles/' + post.slug + '-' + post.identifier;
+                                        const postHref = generatePostUrl(
+                                            properties.basePath,
+                                            post.slug,
+                                            post.identifier,
+                                        );
 
                                         return (
                                             <div key={postIndex} className="mb-4">

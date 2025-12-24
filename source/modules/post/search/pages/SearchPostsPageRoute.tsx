@@ -7,7 +7,7 @@ import { ColumnFilterConditionOperator, PostsDocument } from '@structure/source/
 import { getRequestCookiesHeaderString } from '@structure/source/utilities/next/NextHeaders';
 
 // Function to get server-side properties
-export async function getSearchPostsPageServerSideProperties(searchTerm: string) {
+export async function getSearchPostsPageServerSideProperties(searchTerm: string, postType: string) {
     const serverSideNetworkService = await getServerSideNetworkService();
 
     // Search
@@ -20,7 +20,7 @@ export async function getSearchPostsPageServerSideProperties(searchTerm: string)
                     {
                         operator: ColumnFilterConditionOperator.Equal,
                         column: 'type',
-                        value: 'SupportArticle',
+                        value: postType,
                     },
                     {
                         operator: ColumnFilterConditionOperator.Like,
@@ -57,13 +57,17 @@ export function generateSearchPostsPageMetadata(searchTerm: string, titleSuffix:
 export interface SearchPostsPageRouteProperties {
     className?: string;
     searchTerm: string;
+    postType: string; // Post type filter (e.g., "Article", "SupportArticle")
     basePath: string;
     title: string;
     searchPath: string;
     showNeedMoreHelp?: boolean;
 }
 export async function SearchPostsPageRoute(properties: SearchPostsPageRouteProperties) {
-    const serverSideProperties = await getSearchPostsPageServerSideProperties(properties.searchTerm);
+    const serverSideProperties = await getSearchPostsPageServerSideProperties(
+        properties.searchTerm,
+        properties.postType,
+    );
 
     return (
         <SearchPostsPage

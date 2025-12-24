@@ -12,6 +12,12 @@ export function usePostTopicRequest(
         gql(`
             query PostTopic($slug: String!, $path: String, $type: String!, $pagination: PaginationInput!) {
                 postTopic(slug: $slug, path: $path, type: $type, pagination: $pagination) {
+                    ancestors {
+                        id
+                        title
+                        slug
+                        description
+                    }
                     topic {
                         id
                         title

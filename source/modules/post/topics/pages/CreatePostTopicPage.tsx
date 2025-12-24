@@ -17,7 +17,10 @@ import { schema } from '@structure/source/utilities/schema/Schema';
 import { slug } from '@structure/source/utilities/type/String';
 
 // Component - CreatePostTopicPage
-export function CreatePostTopicPage() {
+export interface CreatePostTopicPageProperties {
+    postType: string; // Post type for this topic (e.g., "Article", "SupportArticle")
+}
+export function CreatePostTopicPage(properties: CreatePostTopicPageProperties) {
     // Hooks
     const urlSearchParameters = useUrlSearchParameters();
     const parentPostTopicId = urlSearchParameters?.get('parentPostTopicId');
@@ -68,7 +71,7 @@ export function CreatePostTopicPage() {
                     linkedFields={[{ sourceField: 'input.title', targetField: 'input.slug', transform: slug }]}
                     hiddenFields={['input.type', ...(parentPostTopicId ? (['input.parentId'] as const) : [])]}
                     defaultValues={{
-                        'input.type': 'SupportArticle',
+                        'input.type': properties.postType,
                         ...(parentPostTopicId ? { 'input.parentId': parentPostTopicId } : {}),
                     }}
                     submitButtonProperties={{ children: parentPostTopic ? 'Create Sub Topic' : 'Create Topic' }}
