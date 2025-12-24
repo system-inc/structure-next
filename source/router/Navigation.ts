@@ -12,6 +12,7 @@
 
 export {
     redirect,
+    permanentRedirect,
     useRouter,
     usePathname as useUrlPath,
     useParams as useUrlParameters,
