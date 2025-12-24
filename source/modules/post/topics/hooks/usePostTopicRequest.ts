@@ -39,6 +39,8 @@ export function usePostTopicRequest(
                     pagedPosts {
                         items {
                             id
+                            previousSiblingId
+                            nextSiblingId
                             identifier
                             slug
                             status

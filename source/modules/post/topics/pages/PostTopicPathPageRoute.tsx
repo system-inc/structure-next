@@ -16,17 +16,35 @@ import { PostDocument, PostTopicDocument, PostTopicQuery } from '@structure/sour
 import { slugToTitleCase } from '@structure/source/utilities/type/String';
 
 // Function to sort items by linked list order (using previousSiblingId/nextSiblingId)
+// Falls back to createdAt sort if no sibling relationships exist
 function sortByLinkedListOrder<
-    T extends { id: string; previousSiblingId?: string | null; nextSiblingId?: string | null },
+    T extends { id: string; createdAt: string; previousSiblingId?: string | null; nextSiblingId?: string | null },
 >(items: T[]): T[] {
     if(items.length === 0) return [];
+
+    // Check if any items have sibling relationships
+    const hasSiblingRelationships = items.some(function (item) {
+        return item.previousSiblingId || item.nextSiblingId;
+    });
+
+    // If no sibling relationships exist, fall back to createdAt sort
+    if(!hasSiblingRelationships) {
+        return items.slice().sort(function (a, b) {
+            return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        });
+    }
 
     // Find the first item (one with no previousSiblingId)
     const firstItem = items.find(function (item) {
         return !item.previousSiblingId;
     });
 
-    if(!firstItem) return items; // Fallback to original order if no head found
+    if(!firstItem) {
+        // Fallback to createdAt if no head found (broken chain)
+        return items.slice().sort(function (a, b) {
+            return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        });
+    }
 
     // Build the sorted array by following nextSiblingId
     const sorted: T[] = [firstItem];
@@ -100,6 +118,11 @@ export async function getPostTopicPathServerSideProperties(postPath: string[], b
                 // If the post is found
                 if(postRequest?.post) {
                     post = postRequest?.post;
+                    console.log('[PostTopicPathPageRoute] Post siblings:', {
+                        postTitle: post.title,
+                        previousSibling: post.previousSibling,
+                        nextSibling: post.nextSibling,
+                    });
                 }
             } catch {
                 // Post lookup failed - will fall through to topic lookup below
@@ -151,10 +174,8 @@ export async function getPostTopicPathServerSideProperties(postPath: string[], b
             postTopicAndSubPostTopicsWithPosts.push({
                 postTopicTitle: 'General',
                 postTopicSlug: 'general',
-                // Sort items by createdAt
-                posts: postTopicData?.postTopic.pagedPosts.items.slice().sort(function (a, b) {
-                    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-                }),
+                // Sort items by linked list order (previousSiblingId/nextSiblingId)
+                posts: sortByLinkedListOrder(postTopicData?.postTopic.pagedPosts.items.slice() ?? []),
             });
 
             // Check if there are sub topics
@@ -211,9 +232,7 @@ export async function getPostTopicPathServerSideProperties(postPath: string[], b
                             postTopicAndSubPostTopicsWithPosts.push({
                                 postTopicTitle: subPostTopic.topic.title,
                                 postTopicSlug: subPostTopic.topic.slug,
-                                posts: subPostTopic.pagedPosts.items.slice().sort(function (a, b) {
-                                    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-                                }),
+                                posts: sortByLinkedListOrder(subPostTopic.pagedPosts.items.slice()),
                             });
                         }
                     });

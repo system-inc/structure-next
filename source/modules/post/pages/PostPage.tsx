@@ -17,7 +17,7 @@ import { PostSearch } from '@structure/source/modules/post/search/components/Pos
 import { SupportNeedMoreHelp } from '@structure/source/modules/support/posts/components/SupportNeedMoreHelp';
 
 // Dependencies - Assets
-import { PencilIcon } from '@phosphor-icons/react/dist/ssr';
+import { CaretLeftIcon, CaretRightIcon, PencilIcon } from '@phosphor-icons/react/dist/ssr';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -56,6 +56,16 @@ export interface PostPageProperties {
                   ancestors?: PostNavigationTrailAncestor[] | null;
               }[]
             | null;
+        previousSibling?: {
+            identifier: string;
+            title: string;
+            slug: string;
+        } | null;
+        nextSibling?: {
+            identifier: string;
+            title: string;
+            slug: string;
+        } | null;
     };
 }
 export function PostPage(properties: PostPageProperties) {
@@ -127,6 +137,48 @@ export function PostPage(properties: PostPageProperties) {
 
                 {/* Post Content - FAQ sections are automatically transformed to accordions by the Markdown component */}
                 {properties.post.content && <Markdown className="mb-4 max-w-2xl">{properties.post.content}</Markdown>}
+
+                {/* Previous/Next Article Navigation */}
+                {(properties.post.previousSibling || properties.post.nextSibling) && (
+                    <div className="mt-12 flex items-stretch gap-4">
+                        {properties.post.previousSibling ? (
+                            <Link
+                                href={generatePostUrl(
+                                    properties.basePath,
+                                    properties.post.previousSibling.slug,
+                                    properties.post.previousSibling.identifier,
+                                )}
+                                className="flex flex-1 items-center gap-3 rounded-lg border border--0 p-4 transition-colors hover:background--1"
+                            >
+                                <CaretLeftIcon className="h-5 w-5 shrink-0 content--4" />
+                                <div className="min-w-0">
+                                    <p className="text-xs content--4">Previous</p>
+                                    <p className="truncate font-medium">{properties.post.previousSibling.title}</p>
+                                </div>
+                            </Link>
+                        ) : (
+                            <div className="flex-1" />
+                        )}
+                        {properties.post.nextSibling ? (
+                            <Link
+                                href={generatePostUrl(
+                                    properties.basePath,
+                                    properties.post.nextSibling.slug,
+                                    properties.post.nextSibling.identifier,
+                                )}
+                                className="flex flex-1 items-center justify-end gap-3 rounded-lg border border--0 p-4 text-right transition-colors hover:background--1"
+                            >
+                                <div className="min-w-0">
+                                    <p className="text-xs content--4">Next</p>
+                                    <p className="truncate font-medium">{properties.post.nextSibling.title}</p>
+                                </div>
+                                <CaretRightIcon className="h-5 w-5 shrink-0 content--4" />
+                            </Link>
+                        ) : (
+                            <div className="flex-1" />
+                        )}
+                    </div>
+                )}
             </div>
 
             <HorizontalRule className="my-16" />

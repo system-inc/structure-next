@@ -3184,6 +3184,23 @@ export type PostUnvoteMutation = {
     postUnvote: { __typename?: 'OperationResult'; success: boolean };
 };
 
+export type PostUpdatePositionMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+    input: PostUpdatePositionInput;
+}>;
+
+export type PostUpdatePositionMutation = {
+    __typename?: 'Mutation';
+    postUpdatePosition: {
+        __typename?: 'Post';
+        id: string;
+        identifier: string;
+        title: string;
+        previousSiblingId?: string | null;
+        nextSiblingId?: string | null;
+    };
+};
+
 export type PostUpdatePrivilegedMutationVariables = Exact<{
     id: Scalars['String']['input'];
     input: PostUpdateInput;
@@ -3239,6 +3256,41 @@ export type PostVoteMutationVariables = Exact<{
 export type PostVoteMutation = {
     __typename?: 'Mutation';
     postVote: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostsByTopicQueryVariables = Exact<{
+    id: Scalars['String']['input'];
+    pagination: PaginationInput;
+}>;
+
+export type PostsByTopicQuery = {
+    __typename?: 'Query';
+    postsByTopic: {
+        __typename?: 'PagedPosts';
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            pagesTotal: number;
+            page: number;
+        };
+        items: Array<{
+            __typename?: 'Post';
+            id: string;
+            identifier: string;
+            slug: string;
+            status: PostStatus;
+            title: string;
+            description?: string | null;
+            createdAt: any;
+            updatedAt: any;
+            previousSiblingId?: string | null;
+            nextSiblingId?: string | null;
+        }>;
+    };
 };
 
 export type PostsDetailedQueryVariables = Exact<{
@@ -3500,6 +3552,8 @@ export type PostTopicQuery = {
             items: Array<{
                 __typename?: 'Post';
                 id: string;
+                previousSiblingId?: string | null;
+                nextSiblingId?: string | null;
                 identifier: string;
                 slug: string;
                 status: PostStatus;
@@ -3521,6 +3575,23 @@ export type PostTopicQuery = {
                 page: number;
             };
         };
+    };
+};
+
+export type PostTopicUpdatePositionMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+    input: PostTopicUpdatePositionInput;
+}>;
+
+export type PostTopicUpdatePositionMutation = {
+    __typename?: 'Mutation';
+    postTopicUpdatePosition: {
+        __typename?: 'PostTopic';
+        id: string;
+        previousSiblingId?: string | null;
+        nextSiblingId?: string | null;
+        title: string;
+        slug: string;
     };
 };
 
@@ -4579,6 +4650,17 @@ export const PostUnvoteDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostUnvoteMutation, PostUnvoteMutationVariables>;
+export const PostUpdatePositionDocument = new TypedDocumentString(`
+    mutation PostUpdatePosition($id: String!, $input: PostUpdatePositionInput!) {
+  postUpdatePosition(id: $id, input: $input) {
+    id
+    identifier
+    title
+    previousSiblingId
+    nextSiblingId
+  }
+}
+    `) as unknown as TypedDocumentString<PostUpdatePositionMutation, PostUpdatePositionMutationVariables>;
 export const PostUpdatePrivilegedDocument = new TypedDocumentString(`
     mutation PostUpdatePrivileged($id: String!, $input: PostUpdateInput!) {
   postUpdatePrivileged(id: $id, input: $input) {
@@ -4621,6 +4703,33 @@ export const PostVoteDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostVoteMutation, PostVoteMutationVariables>;
+export const PostsByTopicDocument = new TypedDocumentString(`
+    query PostsByTopic($id: String!, $pagination: PaginationInput!) {
+  postsByTopic(id: $id, pagination: $pagination) {
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+    items {
+      id
+      identifier
+      slug
+      status
+      title
+      description
+      createdAt
+      updatedAt
+      previousSiblingId
+      nextSiblingId
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<PostsByTopicQuery, PostsByTopicQueryVariables>;
 export const PostsDetailedDocument = new TypedDocumentString(`
     query PostsDetailed($pagination: PaginationInput!) {
   posts(pagination: $pagination) {
@@ -4826,6 +4935,8 @@ export const PostTopicDocument = new TypedDocumentString(`
     pagedPosts {
       items {
         id
+        previousSiblingId
+        nextSiblingId
         identifier
         slug
         status
@@ -4849,6 +4960,17 @@ export const PostTopicDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostTopicQuery, PostTopicQueryVariables>;
+export const PostTopicUpdatePositionDocument = new TypedDocumentString(`
+    mutation PostTopicUpdatePosition($id: String!, $input: PostTopicUpdatePositionInput!) {
+  postTopicUpdatePosition(id: $id, input: $input) {
+    id
+    previousSiblingId
+    nextSiblingId
+    title
+    slug
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicUpdatePositionMutation, PostTopicUpdatePositionMutationVariables>;
 export const PostTopicUpdateDocument = new TypedDocumentString(`
     mutation PostTopicUpdate($input: PostTopicUpdateInput!) {
   postTopicUpdate(input: $input) {
@@ -6369,6 +6491,24 @@ export const PostCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
     ],
 };
 
+export const PostUpdatePositionInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PostUpdatePositionInput',
+    fields: [
+        {
+            name: 'position',
+            kind: 'scalar',
+            type: 'Float',
+            required: true,
+            validation: [
+                {
+                    type: 'isInt',
+                },
+            ],
+        },
+    ],
+};
+
 export const PostUpdateInputMetadata: GraphQLInputObjectTypeMetadata = {
     kind: 'object',
     type: 'PostUpdateInput',
@@ -6617,6 +6757,55 @@ export const PostTopicCreateInputMetadata: GraphQLInputObjectTypeMetadata = {
             validation: [
                 {
                     type: 'isInt',
+                },
+                {
+                    type: 'isOptional',
+                },
+            ],
+        },
+    ],
+};
+
+export const PostTopicUpdatePositionInputMetadata: GraphQLInputObjectTypeMetadata = {
+    kind: 'object',
+    type: 'PostTopicUpdatePositionInput',
+    fields: [
+        {
+            name: 'position',
+            kind: 'scalar',
+            type: 'Float',
+            required: false,
+            validation: [
+                {
+                    type: 'isInt',
+                },
+                {
+                    type: 'isOptional',
+                },
+            ],
+        },
+        {
+            name: 'parentId',
+            kind: 'scalar',
+            type: 'String',
+            required: false,
+            validation: [
+                {
+                    type: 'isUuid',
+                },
+                {
+                    type: 'isOptional',
+                },
+            ],
+        },
+        {
+            name: 'moveToRoot',
+            kind: 'scalar',
+            type: 'Boolean',
+            required: false,
+            validation: [
+                {
+                    type: 'isBoolean',
                 },
                 {
                     type: 'isOptional',
@@ -7479,6 +7668,26 @@ export const PostUnvoteOperation: GraphQLOperationMetadata<typeof PostUnvoteDocu
     ],
 };
 
+export const PostUpdatePositionOperation: GraphQLOperationMetadata<typeof PostUpdatePositionDocument> = {
+    operation: 'PostUpdatePosition',
+    operationType: 'mutation',
+    document: PostUpdatePositionDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: PostUpdatePositionInputMetadata,
+        },
+    ],
+};
+
 export const PostUpdatePrivilegedOperation: GraphQLOperationMetadata<typeof PostUpdatePrivilegedDocument> = {
     operation: 'PostUpdatePrivileged',
     operationType: 'mutation',
@@ -7535,6 +7744,26 @@ export const PostVoteOperation: GraphQLOperationMetadata<typeof PostVoteDocument
             required: true,
             kind: 'enum',
             type: PostVoteTypeMetadata,
+        },
+    ],
+};
+
+export const PostsByTopicOperation: GraphQLOperationMetadata<typeof PostsByTopicDocument> = {
+    operation: 'PostsByTopic',
+    operationType: 'query',
+    document: PostsByTopicDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: PaginationInputMetadata,
         },
     ],
 };
@@ -7717,6 +7946,26 @@ export const PostTopicOperation: GraphQLOperationMetadata<typeof PostTopicDocume
             required: true,
             kind: 'object',
             type: PaginationInputMetadata,
+        },
+    ],
+};
+
+export const PostTopicUpdatePositionOperation: GraphQLOperationMetadata<typeof PostTopicUpdatePositionDocument> = {
+    operation: 'PostTopicUpdatePosition',
+    operationType: 'mutation',
+    document: PostTopicUpdatePositionDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: PostTopicUpdatePositionInputMetadata,
         },
     ],
 };
